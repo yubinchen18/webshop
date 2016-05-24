@@ -27,7 +27,7 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
-
+    
     /**
      * Initialization hook method.
      *
@@ -45,6 +45,19 @@ class AppController extends Controller
         $this->loadComponent('Flash');
     }
 
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Basic' => [
+                ],
+            ],
+            'storage' => 'Memory',
+            'unauthorizedRedirect' => false
+        ]);
+    }
+
     /**
      * Before render callback.
      *
@@ -58,5 +71,15 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+    }
+    
+    public function isAuthorized($user = null)
+    {
+        if(stripos(env('HTTP_HOST'), 'hoogstraten.xseeding.nl')) {
+            return false;
+        }
+
+        // Default deny
+        return true;
     }
 }
