@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SSZ" default="build" basedir=".">
+    <description>Hoogstraten Webshop2016</description>
+    <property name="targetdir" location="${basedir}/build"/>
+
+    <target name="build" depends="prepare,composer-dev,phpcpd,phpcs,composer,create-artifacts"/>
+
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/tmp"/>
+        <delete dir="${basedir}/logs"/>
+        <delete dir="${basedir}/vendor" />
+        <delete dir="${targetdir}/build"/>
+        <delete dir="${targetdir}/reports"/>
+    </target>
+
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${targetdir}/build"/>
+        <mkdir dir="${targetdir}/reports"/>
+        <mkdir dir="${targetdir}/reports/coverage"/>
+        <mkdir dir="${targetdir}/reports/cs"/>
+
+        <mkdir dir="${basedir}/tmp/cache/models" />
+        <mkdir dir="${basedir}/tmp/cache/persistent" />
+        <mkdir dir="${basedir}/tmp/sessions" />
+        <mkdir dir="${basedir}/tmp/tests" />
+        <mkdir dir="${basedir}/logs" />
+    </target>
+
+    <target name="composer-dev" description="Run composer with all dev packages">
+        <exec executable="composer" dir="${basedir}">
+            <arg line="--no-interaction" />
+            <arg line="install" />
+        </exec>
+    </target>
+
+    <target name="composer" description="Run composer, but remove the dev packages">
+        <exec executable="composer" dir="${basedir}">
+            <arg line="--no-interaction" />
+            <arg line="--no-dev" />
+            <arg line="install" />
+        </exec>
+    </target>
+
+    <target name="create-artifacts" depends="composer"  description="Copies the files to the build folder" >
+        <copy todir="${targetdir}/build">
+            <fileset dir="${basedir}">
+                <exclude name="**/**/.editorconfig"/>
+                <exclude name="**/**/.travis.yml"/>
+                <exclude name="**/**/.xseeding.yml"/>
+                <exclude name="**/**/build.xml"/>
+                <exclude name="**/**/Gruntfile.js"/>
+                <exclude name="**/**/README.md"/>
+                <exclude name="**/**/composer.json"/>
+                <exclude name="**/**/composer.lock"/>
+                <exclude name="**/**/empty"/>
+                <exclude name="**/**/package.json"/>
+                <exclude name="**/**/phpcs.xml"/>
+                <exclude name="**/**/phpunit.xml.dist"/>
+                <exclude name="logs/*"/>
+                <exclude name="tests/**/**"/>
+                <exclude name="tmp/cache/models/*"/>
+                <exclude name="tmp/cache/persistent/*"/>
+                <exclude name="vendor/**/docs/**"/>
+                <exclude name="vendor/**/tests/**"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <exec executable="phpcpd">
+            <arg line="--log-pmd" />
+            <arg line="'${targetdir}/reports/pmd-cpd.xml'" />
+            <arg line="--exclude tests" />
+            <arg line="--exclude Migration" />
+            <arg line="'${basedir}/src'" />
+            <arg line="'${basedir}/plugins'" />
+        </exec>
+    </target>
+
+    <target name="phpcs" description="Make sure everything is PSR2">
+        <exec executable="phpcs">
+            <arg line="--standard='${basedir}/phpcs.xml'" />
+            <arg line="--report=checkstyle" />
+            <arg line="--report-file='${targetdir}/reports/cs/checkstyle.xml'" />
+            <arg line="-p" />
+            <arg line="'${basedir}'" />
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run unit tests with PHPUnit">
+        <exec executable="phpunit" failonerror="true">
+            <arg line="--stderr" />
+            <arg line="--log-junit '${targetdir}/reports/junit.xml'" />
+            <arg line="--coverage-clover '${targetdir}/reports/coverage/clover.xml'" />
+            <arg line="--coverage-html '${targetdir}/reports/coverage'" />
+        </exec>
+    </target>
+</project>

@@ -2,3 +2,6 @@
 /config/app.php
 /tmp/*
 /logs/*
+/node_modules/
+/webroot/css/
+/webroot/js/

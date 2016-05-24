@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="SSZ">
+    <description>Defaults to PSR2 but excludes some third party libs</description>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>tmp/*</exclude-pattern>
+    <exclude-pattern>config/Migrations/*</exclude-pattern>
+    <arg name="extensions" value="php"/>
+
+    <rule ref="PSR2" />
+    <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+        <severity>0</severity>
+    </rule>
+    <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+        <severity>0</severity>
+    </rule>
+</ruleset>
