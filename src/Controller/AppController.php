@@ -49,18 +49,6 @@ class AppController extends Controller
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
         
-        echo  'INSERT INTO `users` (`id`,`username`,`password`,`real_pass`,`email`,`type`,`created`,`modified`) '
-                . 'VALUES '
-                . '('
-                . 'UUID(),'
-                . '"hoogstraten",'
-                . '"$2y$10$dBK/7unj8TKx3amOUJjui.ImChzUBZTDYLFPtQuso3KMpsrbPQQZy",'
-                . '"staging",'
-                . '"admin@xseeding.nl",'
-                . '"basic",'
-                . 'NOW(),'
-                . 'NOW()'
-                . ')'; die;
         if(Configure::read('environment') == 'staging') {
             $this->loadComponent('Auth', [
                 'authenticate' => [
