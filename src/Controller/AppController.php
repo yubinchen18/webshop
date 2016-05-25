@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use Cake\Core\Configure;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -48,14 +49,27 @@ class AppController extends Controller
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
         
-        $this->loadComponent('Auth', [
-            'authenticate' => [
-                'Basic' => [
+        echo  'INSERT INTO `users` (`id`,`username`,`password`,`real_pass`,`email`,`type`,`created`,`modified`) '
+                . 'VALUES '
+                . '('
+                . 'UUID(),'
+                . '"hoogstraten",'
+                . '"$2y$10$dBK/7unj8TKx3amOUJjui.ImChzUBZTDYLFPtQuso3KMpsrbPQQZy",'
+                . '"staging",'
+                . '"admin@xseeding.nl",'
+                . '"basic",'
+                . 'NOW(),'
+                . 'NOW()'
+                . ')'; die;
+        if(Configure::read('environment') == 'staging') {
+            $this->loadComponent('Auth', [
+                'authenticate' => [
+                    'Basic' => ['finder' => 'auth']
                 ],
-            ],
-            'storage' => 'Memory',
-            'unauthorizedRedirect' => false
-        ]);
+                'storage' => 'Memory',
+                'unauthorizedRedirect' => false
+            ]);
+        }
     }
 
     /**
@@ -71,15 +85,5 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
-    }
-    
-    public function isAuthorized($user = null)
-    {
-        if(stripos(env('HTTP_HOST'), 'hoogstraten.xseeding.nl')) {
-            return false;
-        }
-
-        // Default deny
-        return true;
     }
 }
