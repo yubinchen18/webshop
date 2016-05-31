@@ -44,6 +44,42 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'],
+            'loginAction' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'loginRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'index',
+            ],
+            'logoutRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'unauthorizedRedirect' => '/admin/login',
+            'authError' => __('You are not allowed to enter this location.'),
+            'flash' => [
+                'element' => 'default',
+                'params' => [
+                    'class' => 'error',
+                ],
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password',
+                    ],
+                    'userModel' => 'Users'
+                ],
+            ]
+        ]);
     }
 
     public function beforeFilter(Event $event) {
@@ -73,5 +109,31 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+    }
+
+    public function isAuthorized($user)
+    {
+        //admin can access everything
+        if($user['type'] == 'admin') {
+            return true;
+        }
+
+        //photex is only allowed to the whielist: Controller [ allowedactions ]
+        if($user['type'] == 'photex') {
+            $allowed = [
+                'Users' => [
+                    'index'
+                ]
+            ];
+
+            if(isset($allowed[$this->request->params['controller']]) &&
+                   in_array($this->request->params['action'], $allowed[$this->request->params['controller']]) ) {
+                return true;
+            }
+            return false;
+        }
+
+        //by default nothing is allowed
+        return false;
     }
 }
