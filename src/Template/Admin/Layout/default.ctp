@@ -15,6 +15,7 @@
             '/admin/css/ace.css',
             '/admin/css/ace-part2.css',
             '/admin/css/ace-ie.css',
+             '/admin/css/cake.css',
         ]) ?>
 
          <?= $this->Html->script([
@@ -29,14 +30,11 @@
     </head>
 
     <body class="no-skin">
+        <?= $this->Flash->render() ?>
         <?php if($this->request->params['controller'] == 'Users' && $this->request->params['action'] == 'login'): ?>        
             <?= $this->element('login'); ?>
         <?php else: ?>
-        
-
-
-            <?= $this->element('top-menu'); ?>
-            <?= $this->Flash->render() ?>
+            <?= $this->element('top-menu'); ?>            
             <div class="main-container ace-save-state" id="main-container">
                 <?= $this->cell('Sidebar', ['admin']); ?>
 

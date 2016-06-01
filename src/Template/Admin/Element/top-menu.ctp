@@ -39,10 +39,11 @@
                         <li class="divider"></li>
 
                         <li>
-                            <a href="#">
-                                <i class="ace-icon fa fa-power-off"></i>
-                                Logout
-                            </a>
+                            <?= $this->Html->link('<i class="ace-icon fa fa-power-off"></i>' . __('Logout'), 
+                                    ['controller' => 'Users', 'action' => 'logout'],
+                                    ['escape' => false]
+                                )
+                            ?>
                         </li>
                     </ul>
                 </li>

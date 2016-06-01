@@ -2,7 +2,8 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
-
+use Cake\Utility\Security;
+use Cake\Core\Configure;
 /**
  * Users Controller
  *
@@ -14,7 +15,7 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow(['login', 'forgot','register']);
+        $this->Auth->allow(['login']);
     }
 
     /**
@@ -24,9 +25,8 @@ class UsersController extends AppController
      */
     public function index()
     {
-//        pr($this->request->session()->read());
         $this->paginate = [
-            'contain' => ['Addresses']
+            'contain' => []
         ];
         $users = $this->paginate($this->Users);
 
@@ -44,9 +44,8 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Addresses', 'Orders', 'OrdersOrderstatuses', 'Persons']
+            'contain' => []
         ]);
-
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
     }
@@ -60,9 +59,8 @@ class UsersController extends AppController
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-            $this->request->data['real_pass'] = $this->request->data['password'];
+            $this->request->data['genuine'] = $this->request->data['password'];
             $user = $this->Users->patchEntity($user, $this->request->data);
-            
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -70,8 +68,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $addresses = $this->Users->Addresses->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'addresses'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
@@ -87,12 +84,19 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
+        
         unset($user->password);
+        unset($user->genuine);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $this->request->data['real_pass'] = $this->request->data['password'];
+
+            if(isset($this->request->data['password'])) {
+                $this->request->data['genuine'] = $this->request->data['password'];
+            }
+            
             if(empty($this->request->data['password'])) {
                 unset($this->request->data['password']);
-                unset($this->request->data['real_pass']);
+                unset($this->request->data['genuine']);
             }
             
             $user = $this->Users->patchEntity($user, $this->request->data);
@@ -103,8 +107,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $addresses = $this->Users->Addresses->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'addresses'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
@@ -118,6 +121,11 @@ class UsersController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+        if ($id == $this->Auth->user('id')) {
+            $this->Flash->error(__('You cannot delete yourself. Please, try someone else.'));
+            return $this->redirect(['action' => 'index']);
+        }
+        
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
@@ -147,5 +155,13 @@ class UsersController extends AppController
            }
        }
         $this->render(false);
+    }
+
+    public function logout(){
+        $this->Flash->set(__('You have successfully signed out.'), [
+            'element' => 'default',
+            'params' => ['class' => 'success']
+        ]);
+        return $this->redirect($this->Auth->logout());
     }
 }

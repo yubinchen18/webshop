@@ -3,6 +3,8 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Utility\Security;
+use Cake\Core\Configure;
 
 /**
  * User Entity.
@@ -45,7 +47,8 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
+        'password',
+        'genuine'
     ];
     
     protected function _setPassword($password)
@@ -53,5 +56,12 @@ class User extends Entity
         if (strlen($password) > 0) {
           return (new DefaultPasswordHasher)->hash($password);
         }
+    }
+
+    protected function _setGenuine($password)
+    {
+        $key = Configure::read('EncryptionSalt');
+        $password = Security::encrypt($password, $key);
+        return $password;
     }
 }
