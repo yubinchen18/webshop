@@ -82,10 +82,11 @@ class AppController extends Controller
         ]);
     }
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(Event $event)
+    {
         parent::beforeFilter($event);
         
-        if(Configure::read('environment') == 'staging') {
+        if (Configure::read('environment') == 'staging') {
             $this->loadComponent('Auth', [
                 'authenticate' => [
                     'Basic' => ['finder' => 'auth']
@@ -114,19 +115,19 @@ class AppController extends Controller
     public function isAuthorized($user)
     {
         //admin can access everything
-        if($user['type'] == 'admin') {
+        if ($user['type'] == 'admin') {
             return true;
         }
 
         //photex is only allowed to the whielist: Controller [ allowedactions ]
-        if($user['type'] == 'photex') {
+        if ($user['type'] == 'photex') {
             $allowed = [
                 'Users' => [
                     'index'
                 ]
             ];
 
-            if(isset($allowed[$this->request->params['controller']]) &&
+            if (isset($allowed[$this->request->params['controller']]) &&
                    in_array($this->request->params['action'], $allowed[$this->request->params['controller']]) ) {
                 return true;
             }

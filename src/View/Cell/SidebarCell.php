@@ -2,6 +2,7 @@
 namespace App\View\Cell;
 
 use Cake\View\Cell;
+use Cake\Controller\Exception\AuthSecurityException;
 
 /**
  * Sidebar cell
@@ -24,9 +25,7 @@ class SidebarCell extends Cell
      */
     public function display($user)
     {
-//        $userrole = empty($user['userrole']['name']) ? 'default' : $user['userrole']['name'];
-        $userrole = 'admin';
-        $menu = $this->getMenu($userrole);
+        $menu = $this->getMenu($user['type']);
 
         $this->set(compact('menu'));
     }
@@ -49,23 +48,23 @@ class SidebarCell extends Cell
                         'name' => __('Users'),
                         'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin'],
                         'icon' => 'fa fa-users',
-//                        'children' => [
-//                            [
-//                                'name' => __('overview'),
-//                                'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin']
-//                            ],
-//                            [
-//                                'name' => __('add user'),
-//                                'url' => ['controller' => 'Users', 'action' => 'add', 'prefix' => 'admin']
-//                            ],
-//                        ]
+                        'children' => [
+                            [
+                                'name' => __('overview'),
+                                'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin']
+                            ],
+                            [
+                                'name' => __('add user'),
+                                'url' => ['controller' => 'Users', 'action' => 'add', 'prefix' => 'admin']
+                            ],
+                        ]
                     ]
                 ];
             case 'user':
                 return [
                     [
                         'name' => __('Dashboard'),
-                        'url' => ['controller' => 'Pages', 'action' => 'dashboard'],
+                        'url' => ['controller' => 'Pages', 'action' => 'display', 'prefix' => 'admin'],
                         'icon' => 'fa fa-tachometer'
                     ],
                 ];

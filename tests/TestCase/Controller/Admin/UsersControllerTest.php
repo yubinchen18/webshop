@@ -21,7 +21,7 @@ class UsersControllerTest extends BaseIntegrationTestCase
         'app.users',
     ];
 
-   public function setUp()
+    public function setUp()
     {
         parent::setUp();
         $this->loginAdmin();
@@ -108,13 +108,13 @@ class UsersControllerTest extends BaseIntegrationTestCase
             'username' => 'changeduser',
             
         ];
-        $this->put('/admin/users/edit/'.$id , $data);
+        $this->put('/admin/users/edit/'.$id, $data);
         $this->assertRedirect('/admin/users');
 
         $user = $this->Users->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($user);
         $this->assertEquals($data['username'], $user->username);
-    }     
+    }
 
     public function testDeleteYourself()
     {

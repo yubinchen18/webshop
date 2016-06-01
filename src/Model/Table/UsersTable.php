@@ -66,11 +66,11 @@ class UsersTable extends Table
 
         $validator
             ->requirePresence('password', 'create')
-            ->allowEmpty('password');
+            ->notEmpty('password');
 
-//        $validator
-//            ->requirePresence('real_pass', 'create')
-//            ->notEmpty('real_pass');
+        $validator
+            ->requirePresence('genuine', 'create')
+            ->notEmpty('genuine');
 
         $validator
             ->email('email')
@@ -97,7 +97,6 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
-//        $rules->add($rules->existsIn(['address_id'], 'Addresses'));
         return $rules;
     }
     

@@ -36,7 +36,7 @@
         <?php else: ?>
             <?= $this->element('top-menu'); ?>            
             <div class="main-container ace-save-state" id="main-container">
-                <?= $this->cell('Sidebar', ['admin']); ?>
+                <?= $this->cell('Sidebar', [$authuser]); ?>
 
                 <div class="main-content">
                     <div class="main-content-inner">

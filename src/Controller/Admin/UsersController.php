@@ -1,9 +1,10 @@
 <?php
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\AppController\Admin;
 use Cake\Utility\Security;
 use Cake\Core\Configure;
+
 /**
  * Users Controller
  *
@@ -89,12 +90,11 @@ class UsersController extends AppController
         unset($user->genuine);
         
         if ($this->request->is(['patch', 'post', 'put'])) {
-
-            if(isset($this->request->data['password'])) {
+            if (isset($this->request->data['password'])) {
                 $this->request->data['genuine'] = $this->request->data['password'];
             }
             
-            if(empty($this->request->data['password'])) {
+            if (empty($this->request->data['password'])) {
                 unset($this->request->data['password']);
                 unset($this->request->data['genuine']);
             }
@@ -138,26 +138,27 @@ class UsersController extends AppController
     public function login()
     {
         if ($this->request->is('post')) {
-           $user = $this->Auth->identify();
-           if ($user) {
-               $this->Auth->setUser($user);
-               $this->Flash->set(__('You have successfully signed in.'), [
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                $this->Flash->set(__('You have successfully signed in.'), [
                    'element' => 'default',
                    'params' => ['class' => 'success']
-               ]);
-               return $this->redirect($this->Auth->redirectUrl());
-           } else {
-               $this->Flash->set(__('You could not sign in. Please, try again.'), [
+                ]);
+                return $this->redirect($this->Auth->redirectUrl());
+            } else {
+                $this->Flash->set(__('You could not sign in. Please, try again.'), [
                    'element' => 'default',
                    'params' => ['class' => 'error']
-               ], 'auth');
-               return $this->redirect(['action' => 'login']);
-           }
-       }
+                ], 'auth');
+                return $this->redirect(['action' => 'login']);
+            }
+        }
         $this->render(false);
     }
 
-    public function logout(){
+    public function logout()
+    {
         $this->Flash->set(__('You have successfully signed out.'), [
             'element' => 'default',
             'params' => ['class' => 'success']

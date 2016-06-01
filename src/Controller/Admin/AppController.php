@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 use Cake\Core\Configure;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use App\Controller\AppController as BaseController;
 
 /**
  * Application Controller
@@ -13,7 +14,7 @@ use Cake\Event\Event;
  *
  * @link http://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
+class AppController extends BaseController
 {
     
     /**
@@ -28,37 +29,8 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-        $this->viewBuilder()->layout('default');
-        $this->loadComponent('RequestHandler');
-        $this->loadComponent('Flash');
-    }
 
-    public function beforeFilter(Event $event) {
-        parent::beforeFilter($event);
-        
-        if(Configure::read('environment') == 'staging') {
-            $this->loadComponent('Auth', [
-                'authenticate' => [
-                    'Basic' => ['finder' => 'auth']
-                ],
-                'storage' => 'Memory',
-                'unauthorizedRedirect' => false
-            ]);
-        }
-    }
-
-    /**
-     * Before render callback.
-     *
-     * @param \Cake\Event\Event $event The beforeRender event.
-     * @return void
-     */
-    public function beforeRender(Event $event)
-    {
-        if (!array_key_exists('_serialize', $this->viewVars) &&
-            in_array($this->response->type(), ['application/json', 'application/xml'])
-        ) {
-            $this->set('_serialize', true);
-        }
+        $authuser = $this->Auth->user();
+        $this->set(compact('authuser'));
     }
 }

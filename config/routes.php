@@ -13,15 +13,18 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
         $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
         $routes->connect('/users/add', ['controller' => 'Users', 'action' => 'add']);
-        $routes->connect('/users/view/:id',
+        $routes->connect(
+            '/users/view/:id',
             ['controller' => 'Users', 'action' => 'view'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-        $routes->connect('/users/edit/:id',
+        $routes->connect(
+            '/users/edit/:id',
             ['controller' => 'Users', 'action' => 'edit'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-        $routes->connect('/users/delete/:id',
+        $routes->connect(
+            '/users/delete/:id',
             ['controller' => 'Users', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
