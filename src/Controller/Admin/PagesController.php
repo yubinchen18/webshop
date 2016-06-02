@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Controller\Admin;
 
+use App\Controller\AppController\Admin;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;

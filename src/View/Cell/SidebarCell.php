@@ -58,6 +58,21 @@ class SidebarCell extends Cell
                                 'url' => ['controller' => 'Users', 'action' => 'add', 'prefix' => 'admin']
                             ],
                         ]
+                    ],
+                    [
+                        'name' => __('Schools'),
+                        'url' => ['controller' => 'Schools', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-users',
+                        'children' => [
+                            [
+                                'name' => __('overview'),
+                                'url' => ['controller' => 'Schools', 'action' => 'index', 'prefix' => 'admin']
+                            ],
+                            [
+                                'name' => __('add user'),
+                                'url' => ['controller' => 'Schools', 'action' => 'add', 'prefix' => 'admin']
+                            ],
+                        ]
                     ]
                 ];
             case 'user':

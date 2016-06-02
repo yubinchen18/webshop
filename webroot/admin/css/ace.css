@@ -20428,3 +20428,11 @@ input.typeahead.scrollable ~ .tt-menu {
     display: none !important;
   }
 }
+
+input:required {
+/*    background-image: url('../../img/cake.icon.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    box-shadow: none;*/
+    background:red;
+}

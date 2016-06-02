@@ -28,6 +28,25 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Users', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
+
+
+        $routes->connect('/schools', ['controller' => 'Schools', 'action' => 'index']);
+        $routes->connect('/schools/add', ['controller' => 'Schools', 'action' => 'add']);
+        $routes->connect(
+            '/schools/view/:id',
+            ['controller' => 'Schools', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/schools/edit/:id',
+            ['controller' => 'Schools', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/schools/delete/:id',
+            ['controller' => 'Schools', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
         
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
     });
