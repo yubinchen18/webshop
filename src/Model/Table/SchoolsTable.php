@@ -33,6 +33,7 @@ class SchoolsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Deletable');
 
         $this->belongsTo('Contacts', [
             'foreignKey' => 'contact_id',
@@ -77,5 +78,5 @@ class SchoolsTable extends Table
             ->allowEmpty('deleted');
 
         return $validator;
-    } 
+    }
 }

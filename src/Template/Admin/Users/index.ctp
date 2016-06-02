@@ -1,15 +1,15 @@
-<div class="table-header"><?=__('Users')?></div>
+<div class="table-header"><?=__('Gebruikers')?></div>
 <div>
     <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
         <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid"
                aria-describedby="dynamic-table_info">
             <thead>
             <tr role="row">
-                <th><?= $this->Paginator->sort('username', __('Username')) ?></th>
+                <th><?= $this->Paginator->sort('username', __('Gebruikersnaam')) ?></th>
                 <th><?= $this->Paginator->sort('email', __('Email')) ?></th>
-                <th><?= $this->Paginator->sort('created', __('Created')) ?></th>
-                <th><?= $this->Paginator->sort('modified', __('Modified')) ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
+                <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
+                <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
+                <th class="actions"><?= __('Acties') ?></th>
             </tr>
             </thead>
             <tbody>
@@ -20,9 +20,33 @@
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->username)]) ?>
+                        <?= $this->Html->link('<button class="btn btn-app btn-default btn-xs">
+                             <i class="ace-icon fa fa-eye bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'view',
+                                    $user->id
+                                ],['escape' => false]) ?>
+
+                        <?= $this->Html->link('<button class="btn btn-app btn-primary btn-xs">
+                             <i class="ace-icon fa fa-pencil-square-o  bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'edit',
+                                    $user->id
+                                ],['escape' => false]) ?>
+
+                        <?= $this->Form->postLink(' <button class="btn btn-app btn-danger btn-xs">
+                             <i class="ace-icon fa fa-trash-o bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'delete',
+                                    $user->id
+                                ],
+                                [
+                                    'confirm' => __('Weet je zeker dat je {0} wilt verwijderen?', $user->name),
+                                    'escape' => false
+                                ]) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -32,13 +56,13 @@
             <div class="col-xs-6">
                 <div class="paginator">
                     <ul class="pagination">
-                        <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                        <?= $this->Paginator->prev('< ' . __('Vorige')) ?>
                         <?= $this->Paginator->numbers() ?>
-                        <?= $this->Paginator->next(__('next') . ' >') ?>
+                        <?= $this->Paginator->next(__('Volgende') . ' >') ?>
                     </ul>
                     <p><?= $this->Paginator->counter() ?></p>
 
-                    <?= $this->Html->link(__('New user'),
+                    <?= $this->Html->link(__('Nieuwe gebruiker'),
                         [
                             'action' => 'add'
                         ],

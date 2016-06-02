@@ -8,15 +8,15 @@
                 </small>
             </a>
         </div>
-
+    
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="/admin/avatars/user.jpg" alt="Jason's Photo" />
+                        <img class="nav-user-photo" src="/admin/avatars/cor.png" alt="Jason's Photo" />
                         <span class="user-info">
-                            <small>Welcome,</small>
-                            Jason
+                            <small>Welkom,</small>
+                            <?= $this->request->session()->read('Auth.User.username'); ?>
                         </span>
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>
@@ -25,21 +25,13 @@
                         <li>
                             <a href="#">
                                 <i class="ace-icon fa fa-cog"></i>
-                                Settings
+                                Instellingen
                             </a>
                         </li>
-
-                        <li>
-                            <a href="profile.html">
-                                <i class="ace-icon fa fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-
                         <li class="divider"></li>
 
                         <li>
-                            <?= $this->Html->link('<i class="ace-icon fa fa-power-off"></i>' . __('Logout'), 
+                            <?= $this->Html->link('<i class="ace-icon fa fa-power-off"></i>' . __('Uitloggen'),
                                     ['controller' => 'Users', 'action' => 'logout'],
                                     ['escape' => false]
                                 )

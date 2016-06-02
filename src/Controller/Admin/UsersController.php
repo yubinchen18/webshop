@@ -63,10 +63,10 @@ class UsersController extends AppController
             $this->request->data['genuine'] = $this->request->data['password'];
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('De gebruiker is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                $this->Flash->error(__('De gebruiker kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('user'));
@@ -101,10 +101,10 @@ class UsersController extends AppController
             
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('De gebruiker is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                $this->Flash->error(__('De gebruiker kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('user'));
@@ -122,15 +122,15 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         if ($id == $this->Auth->user('id')) {
-            $this->Flash->error(__('You cannot delete yourself. Please, try someone else.'));
+            $this->Flash->error(__('Je kan niet jezelf verwijderen.'));
             return $this->redirect(['action' => 'index']);
         }
         
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $this->Flash->success(__('De gebruiker is verwijderd.'));
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error(__('De gebruiker kon niet verwijderd worden. Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -141,25 +141,25 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                $this->Flash->set(__('You have successfully signed in.'), [
+                $this->Flash->set(__('Je bent succesvol ingelogd'), [
                    'element' => 'default',
                    'params' => ['class' => 'success']
                 ]);
                 return $this->redirect($this->Auth->redirectUrl());
             } else {
-                $this->Flash->set(__('You could not sign in. Please, try again.'), [
+                $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                    'element' => 'default',
                    'params' => ['class' => 'error']
                 ], 'auth');
                 return $this->redirect(['action' => 'login']);
             }
         }
-        $this->render(false);
+        return $this->redirect(['action' => 'login']);
     }
 
     public function logout()
     {
-        $this->Flash->set(__('You have successfully signed out.'), [
+        $this->Flash->set(__('Het uitloggen is succesvol'), [
             'element' => 'default',
             'params' => ['class' => 'success']
         ]);

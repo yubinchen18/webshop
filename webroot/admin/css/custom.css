@@ -1,0 +1,23 @@
+.required label:after { content:" *"; color:red; }
+
+input {
+    margin: 0 0 10px 0;
+}
+.gender label {
+    margin-right:20px;
+}
+
+input[type=checkbox]{
+    margin:12px 0 0;
+}
+th{
+    width: 150px;
+}
+.btn.btn-app.btn-xs {
+    width: 28px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+.bigger-100{
+    font-size: 102% !important;
+}

@@ -39,7 +39,7 @@ class School extends Entity
     ];
 
     protected function _setName($name)
-    {               
+    {
         $this->set('slug', Inflector::slug($name));
         return $name;
     }

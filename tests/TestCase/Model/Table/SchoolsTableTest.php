@@ -26,12 +26,10 @@ class SchoolsTableTest extends TestCase
     public $fixtures = [
         'app.schools',
         'app.contacts',
-        'app.visitaddresses',
-        'app.mailaddresses',
-        'app.projects'
+        'app.addresses',
     ];
 
-    /**
+    /*
      * setUp method
      *
      * @return void
@@ -56,42 +54,14 @@ class SchoolsTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test validationDefault method
      *
      * @return void
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test defaultConnectionName method
-     *
-     * @return void
-     */
-    public function testDefaultConnectionName()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\Validation\Validator();
+        $validator = $this->Schools->validationDefault($mock);
+        $this->assertEquals($mock, $validator);
     }
 }

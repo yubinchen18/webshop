@@ -28,7 +28,7 @@ class ContactsTableTest extends TestCase
         'app.schools'
     ];
 
-    /**
+    /*
      * setUp method
      *
      * @return void
@@ -53,42 +53,14 @@ class ContactsTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test validationDefault method
      *
      * @return void
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test defaultConnectionName method
-     *
-     * @return void
-     */
-    public function testDefaultConnectionName()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\Validation\Validator();
+        $validator = $this->Contacts->validationDefault($mock);
+        $this->assertEquals($mock, $validator);
     }
 }

@@ -63,7 +63,7 @@ class AppController extends Controller
                 'action' => 'login',
             ],
             'unauthorizedRedirect' => '/admin/login',
-            'authError' => __('You are not allowed to enter this location.'),
+            'authError' => __('U heeft geen toegang tot deze locatie.'),
             'flash' => [
                 'element' => 'default',
                 'params' => [

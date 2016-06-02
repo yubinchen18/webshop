@@ -47,19 +47,34 @@ class AddressesFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '0862e3b0-2b04-440b-bf2b-d88352b8e940',
-            'street' => 'Lorem ipsum dolor sit amet',
-            'number' => 1,
-            'extension' => 'Lorem ipsum d',
-            'zipcode' => 'Lorem ipsum dolor sit amet',
-            'city' => 'Lorem ipsum dolor sit amet',
-            'gender' => 'Lorem ipsum dolor sit ame',
-            'firstname' => 'Lorem ipsum dolor sit amet',
-            'prefix' => 'Lorem ipsum dolor sit amet',
-            'lastname' => 'Lorem ipsum dolor sit amet',
+            'id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
+            'street' => 'Hoofdweg',
+            'number' => 7,
+            'extension' => '',
+            'zipcode' => '3333GG',
+            'city' => 'Spijkenisse',
+            'gender' => 'Man',
+            'firstname' => 'Joe',
+            'prefix' => 'van',
+            'lastname' => 'Horst',
             'created' => '2016-06-01 14:14:10',
             'modified' => '2016-06-01 14:14:10',
-            'deleted' => '2016-06-01 14:14:10'
+            'deleted' => null
+        ],
+        [
+            'id' => '8888b43c-68aa-4845-b7d6-6f50f6f7cece',
+            'street' => 'Hoofdweg',
+            'number' => 88,
+            'extension' => '',
+            'zipcode' => '3333GG',
+            'city' => 'Rotterdam',
+            'gender' => 'Man',
+            'firstname' => 'Joe',
+            'prefix' => 'van',
+            'lastname' => 'Horst',
+            'created' => '2016-06-01 14:14:10',
+            'modified' => '2016-06-01 14:14:10',
+            'deleted' => null
         ],
     ];
 }

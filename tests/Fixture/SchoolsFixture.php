@@ -49,14 +49,14 @@ class SchoolsFixture extends TestFixture
     public $records = [
         [
             'id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
-            'name' => 'Lorem ipsum dolor sit amet',
-            'slug' => 'Lorem ipsum dolor sit amet',
+            'name' => 'De ring van putten',
+            'slug' => 'de-ring-van-putten',
             'contact_id' => 'b552c2c1-3d94-4734-b974-c15d5e35fe7c',
             'visitaddress_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
             'mailaddress_id' => '8888b43c-68aa-4845-b7d6-6f50f6f7cece',
             'created' => '2016-06-01 14:18:27',
             'modified' => '2016-06-01 14:18:27',
-            'deleted' => '2016-06-01 14:18:27'
+            'deleted' => null
         ],
     ];
 }

@@ -1,0 +1,20 @@
+msgid "index"
+msgstr "overzicht"
+
+msgid "view"
+msgstr "details"
+
+msgid "edit"
+msgstr "wijzigen"
+
+msgid "add"
+msgstr "toevoegen"
+
+msgid "index"
+msgstr "overzicht"
+
+msgid "Users"
+msgstr "Gebruikers"
+
+msgid "Schools"
+msgstr "Scholen"

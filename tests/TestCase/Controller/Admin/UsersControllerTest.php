@@ -55,7 +55,6 @@ class UsersControllerTest extends BaseIntegrationTestCase
     public function testAdd()
     {
         $data = [
-            'id' => '5c420372-fcaf-4f4f-ba61-f38253df4f46',
             'username' => 'test',
             'password' => 'test',
             'email' => 'test@test.nl',
@@ -72,7 +71,6 @@ class UsersControllerTest extends BaseIntegrationTestCase
     public function testAddFailure()
     {
         $data = [
-            'id' => '5c420372-fcaf-4f4f-ba61-f38253df4f46',
             'username' => '',
             'password' => 'test',
             'email' => 'test@test.nl',
@@ -106,7 +104,6 @@ class UsersControllerTest extends BaseIntegrationTestCase
         $id = '7f04642a-34a2-4d3d-ae8a-c79e26f5bbfa';
         $data = [
             'username' => 'changeduser',
-            
         ];
         $this->put('/admin/users/edit/'.$id, $data);
         $this->assertRedirect('/admin/users');
@@ -145,6 +142,12 @@ class UsersControllerTest extends BaseIntegrationTestCase
         $this->post('/admin/login', $data);
 
         $this->assertRedirect('/admin/users');
+    }
+
+    public function testLogout()
+    {
+        $this->get('/admin/users/logout');
+        $this->assertRedirect('/admin/login');
     }
 
     public function testLoginWrong()

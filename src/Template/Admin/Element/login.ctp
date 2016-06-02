@@ -16,7 +16,7 @@
                                 <div class="widget-main">
                                     <h4 class="header blue lighter bigger">
                                         <i class="ace-icon fa fa-coffee green"></i>
-                                        Please Enter Your Information
+                                        Vul hier uw informatie in
                                     </h4>
 
                                     <div class="space-6"></div>                                    
@@ -37,9 +37,9 @@
                                                     [
                                                         'type' => 'text',
                                                         'class' => 'form-control',
-                                                        'placeholder' => __('username'),
-                                                        'required' => 'required'
-
+                                                        'placeholder' => __('Gebruikersnaam'),
+                                                        'required' => 'required',
+                                                        'label' => __('Gebruikersnaam')
                                                     ]);
                                                   ?>
                                                 <i class="ace-icon fa fa-user"></i>
@@ -52,9 +52,9 @@
                                                 [
                                                     'type' => 'password',
                                                     'class' => 'form-control',
-                                                    'placeholder' => __('password'),
-                                                    'required' => 'required'
-
+                                                    'placeholder' => __('Wachtwoord'),
+                                                    'required' => 'required',
+                                                    'label' => __('Wachtwoord')
                                                 ]);
                                               ?>
                                                 <i class="ace-icon fa fa-lock"></i>
@@ -64,10 +64,6 @@
                                         <div class="space"></div>
 
                                         <div class="clearfix">
-                                            <label class="inline">
-                                                <input type="checkbox" class="ace" />
-                                                <span class="lbl"> Remember Me</span>
-                                            </label>
 
                                             <?=$this->Form->button(__('Login'), ['type' => 'submit', 'class' => 'width-35 pull-right btn btn-sm btn-primary']); ?>
                                         </div>

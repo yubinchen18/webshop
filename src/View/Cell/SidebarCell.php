@@ -45,31 +45,31 @@ class SidebarCell extends Cell
                         'icon' => 'fa fa-tachometer'
                     ],
                     [
-                        'name' => __('Users'),
+                        'name' => __('Gebruikers'),
                         'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin'],
                         'icon' => 'fa fa-users',
                         'children' => [
                             [
-                                'name' => __('overview'),
+                                'name' => __('Overzicht'),
                                 'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin']
                             ],
                             [
-                                'name' => __('add user'),
+                                'name' => __('Gebruiker toevoegen'),
                                 'url' => ['controller' => 'Users', 'action' => 'add', 'prefix' => 'admin']
                             ],
                         ]
                     ],
                     [
-                        'name' => __('Schools'),
+                        'name' => __('Scholen'),
                         'url' => ['controller' => 'Schools', 'action' => 'index', 'prefix' => 'admin'],
                         'icon' => 'fa fa-users',
                         'children' => [
                             [
-                                'name' => __('overview'),
+                                'name' => __('Overzicht'),
                                 'url' => ['controller' => 'Schools', 'action' => 'index', 'prefix' => 'admin']
                             ],
                             [
-                                'name' => __('add user'),
+                                'name' => __('School toevoegen'),
                                 'url' => ['controller' => 'Schools', 'action' => 'add', 'prefix' => 'admin']
                             ],
                         ]

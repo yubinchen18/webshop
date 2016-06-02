@@ -33,19 +33,20 @@ class UsersTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
+        $this->addBehavior('Deletable');
+        
         $this->belongsTo('Addresses', [
             'foreignKey' => 'address_id'
         ]);
-        $this->hasMany('Orders', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('OrdersOrderstatuses', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('Persons', [
-            'foreignKey' => 'user_id'
-        ]);
+//        $this->hasMany('Orders', [
+//            'foreignKey' => 'user_id'
+//        ]);
+//        $this->hasMany('OrdersOrderstatuses', [
+//            'foreignKey' => 'user_id'
+//        ]);
+//        $this->hasMany('Persons', [
+//            'foreignKey' => 'user_id'
+//        ]);
     }
 
     /**
@@ -98,14 +99,5 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
         return $rules;
-    }
-    
-    public function findAuth($query, $options = [])
-    {
-        $query
-        ->select(['id', 'username', 'password'])
-        ->where(['Users.type' => 'basic']);
-
-        return $query;
     }
 }

@@ -8875,7 +8875,6 @@ fieldset[disabled] .btn-white.btn-grey.active {
 label {
   font-weight: normal;
   font-size: 14px;
-  width: 150px;
 }
 .form-group > label[class*="col-"] {
   margin-bottom: 4px;
@@ -20427,12 +20426,4 @@ input.typeahead.scrollable ~ .tt-menu {
   .label[class*=arrowed]:after {
     display: none !important;
   }
-}
-
-input:required {
-/*    background-image: url('../../img/cake.icon.png');
-    background-position: right top;
-    background-repeat: no-repeat;
-    box-shadow: none;*/
-    background:red;
 }

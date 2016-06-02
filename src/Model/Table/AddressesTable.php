@@ -32,16 +32,17 @@ class AddressesTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
-        $this->hasMany('Invoices', [
-            'foreignKey' => 'address_id'
-        ]);
-        $this->hasMany('Persons', [
-            'foreignKey' => 'address_id'
-        ]);
-        $this->hasMany('Users', [
-            'foreignKey' => 'address_id'
-        ]);
+        $this->addBehavior('Deletable');
+//
+//        $this->hasMany('Invoices', [
+//            'foreignKey' => 'address_id'
+//        ]);
+//        $this->hasMany('Persons', [
+//            'foreignKey' => 'address_id'
+//        ]);
+//        $this->hasMany('Users', [
+//            'foreignKey' => 'address_id'
+//        ]);
     }
 
     /**
@@ -94,5 +95,4 @@ class AddressesTable extends Table
 
         return $validator;
     }
-
 }

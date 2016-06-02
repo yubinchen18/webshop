@@ -52,14 +52,12 @@ class SchoolsController extends AppController
     {
         $school = $this->Schools->newEntity();
         if ($this->request->is('post')) {
-           
             $school = $this->Schools->patchEntity($school, $this->request->data);
-         
             if ($this->Schools->save($school)) {
-                $this->Flash->success(__('The school has been saved.'));
+                $this->Flash->success(__('De school is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The school could not be saved. Please, try again.'));
+                $this->Flash->error(__('De school kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('school'));
@@ -79,12 +77,17 @@ class SchoolsController extends AppController
             'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            if (isset($this->request->data['differentmail']) && $this->request->data['differentmail'] == 0) {
+                $this->Schools->Mailaddresses->delete($school->mailaddress);
+                $school->mailladdress = null;
+            }
+            
             $school = $this->Schools->patchEntity($school, $this->request->data);
             if ($this->Schools->save($school)) {
-                $this->Flash->success(__('The school has been saved.'));
+                $this->Flash->success(__('De school is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The school could not be saved. Please, try again.'));
+                $this->Flash->error(__('De school kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('school'));
@@ -105,9 +108,9 @@ class SchoolsController extends AppController
             'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']
         ]);
         if ($this->Schools->delete($school)) {
-            $this->Flash->success(__('The school has been deleted.'));
+            $this->Flash->success(__('De school is verwijderd.'));
         } else {
-            $this->Flash->error(__('The school could not be deleted. Please, try again.'));
+            $this->Flash->error(__('De school kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
     }

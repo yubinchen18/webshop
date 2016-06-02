@@ -45,17 +45,17 @@ class ContactsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => 'ec0019f3-4a04-42a3-b976-22640c6bf8b5',
-            'first_name' => 'Lorem ipsum dolor sit amet',
-            'prefix' => 1,
-            'last_name' => 'Lorem ipsum d',
-            'phone' => 'Lorem ipsum dolor sit amet',
-            'fax' => 'Lorem ipsum dolor sit amet',
-            'email' => 'Lorem ipsum dolor sit amet',
-            'gender' => 'Lorem ipsum dolor sit ame',
+            'id' => 'b552c2c1-3d94-4734-b974-c15d5e35fe7c',
+            'first_name' => 'Michiel',
+            'prefix' => 'de',
+            'last_name' => 'Ruiter',
+            'phone' => '0655555555',
+            'fax' => '0655555555',
+            'email' => 'test@test.ml',
+            'gender' => 'Vrouw',
             'created' => '2016-06-01 14:14:01',
             'modified' => '2016-06-01 14:14:01',
-            'deleted' => '2016-06-01 14:14:01'
+            'deleted' => null
         ],
     ];
 }

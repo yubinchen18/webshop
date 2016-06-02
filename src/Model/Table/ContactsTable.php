@@ -30,6 +30,7 @@ class ContactsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Deletable');
 
         $this->hasMany('Schools', [
             'foreignKey' => 'contact_id'

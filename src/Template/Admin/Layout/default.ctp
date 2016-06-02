@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta charset="utf-8" />
-        <title>Blank Page - Ace Admin</title>
+        <title>Hoogstraten Fotografie Admin - <?= __($this->request->params['controller']) .' - '. __($this->request->params['action']) ?></title>
 
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -15,7 +15,8 @@
             '/admin/css/ace.css',
             '/admin/css/ace-part2.css',
             '/admin/css/ace-ie.css',
-             '/admin/css/cake.css',
+            '/admin/css/cake.css',
+            '/admin/css/custom.css',
         ]) ?>
 
          <?= $this->Html->script([
@@ -44,10 +45,10 @@
                             <ul class="breadcrumb">
                                 <li>
                                     <i class="ace-icon fa fa-home home-icon"></i>
-                                    <a href="#"> <?= $this->request->params['controller'] ?></a>
+                                    <a href="#"> <?= __($this->request->params['controller']) ?></a>
                                 </li>
                                 <li>
-                                    <a href="#"><?= $this->request->params['action'] ?></a>
+                                    <a href="#"><?= __($this->request->params['action']) ?></a>
                                 </li>
                             </ul>
                         </div>
