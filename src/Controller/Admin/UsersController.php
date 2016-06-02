@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController\Admin;
 use Cake\Utility\Security;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -12,11 +13,18 @@ use Cake\Core\Configure;
  */
 class UsersController extends AppController
 {
-
-    public function initialize()
+    /**
+     * beforeFilter method
+     * @param  Event  $event
+     * @return void
+     */
+    public function beforeFilter(Event $event)
     {
-        parent::initialize();
-        $this->Auth->allow(['login']);
+        parent::beforeFilter($event);
+
+        $this->Auth->allow([
+            'login',
+        ]);
     }
 
     /**
@@ -154,7 +162,7 @@ class UsersController extends AppController
                 return $this->redirect(['action' => 'login']);
             }
         }
-        return $this->redirect(['action' => 'login']);
+        $this->render(false);
     }
 
     public function logout()
