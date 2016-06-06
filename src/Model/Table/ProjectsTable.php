@@ -1,21 +1,19 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\User;
+use App\Model\Entity\Project;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Users Model
+ * Projects Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Addresses
- * @property \Cake\ORM\Association\HasMany $Orders
- * @property \Cake\ORM\Association\HasMany $OrdersOrderstatuses
- * @property \Cake\ORM\Association\HasMany $Persons
+ * @property \Cake\ORM\Association\BelongsTo $Schools
+ * @property \Cake\ORM\Association\HasMany $Groups
  */
-class UsersTable extends Table
+class ProjectsTable extends Table
 {
 
     /**
@@ -28,24 +26,18 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('users');
-        $this->displayField('id');
+        $this->table('projects');
+        $this->displayField('name');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Deletable');
-        
-        $this->belongsTo('Addresses', [
-            'foreignKey' => 'address_id'
+
+        $this->belongsTo('Schools', [
+            'foreignKey' => 'school_id',
+            'joinType' => 'INNER'
         ]);
-        $this->hasMany('Orders', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('OrdersOrderstatuses', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('Persons', [
-            'foreignKey' => 'user_id'
+        $this->hasMany('Groups', [
+            'foreignKey' => 'project_id'
         ]);
     }
 
@@ -62,23 +54,15 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('username', 'create')
-            ->notEmpty('username');
+            ->requirePresence('name', 'create')
+            ->notEmpty('name');
 
         $validator
-            ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->requirePresence('slug', 'create')
+            ->notEmpty('slug');
 
         $validator
-            ->requirePresence('genuine', 'create')
-            ->notEmpty('genuine');
-
-        $validator
-            ->email('email')
-            ->allowEmpty('email');
-
-        $validator
-            ->allowEmpty('type');
+            ->allowEmpty('grouptext');
 
         $validator
             ->dateTime('deleted')
@@ -96,8 +80,7 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['username']));
-        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['school_id'], 'Schools'));
         return $rules;
     }
 }

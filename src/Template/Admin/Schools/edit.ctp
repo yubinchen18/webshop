@@ -37,4 +37,4 @@
     </div>
 </div>
 
-<?php echo $this->Html->script('/admin/js/users'); ?>
+<?php echo $this->Html->script('/admin/js/Controllers/users'); ?>

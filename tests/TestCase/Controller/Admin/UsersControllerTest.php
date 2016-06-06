@@ -33,7 +33,7 @@ class UsersControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/users');
         $this->assertResponseOk();
         $users = $this->viewVariable('users');
-        $this->assertEquals(2, $users->count());
+        $this->assertEquals(3, $users->count());
     }
 
     public function testView()

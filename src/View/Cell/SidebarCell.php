@@ -73,6 +73,51 @@ class SidebarCell extends Cell
                                 'url' => ['controller' => 'Schools', 'action' => 'add', 'prefix' => 'admin']
                             ],
                         ]
+                    ],
+                    [
+                        'name' => __('Projects'),
+                        'url' => ['controller' => 'Projects', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-users',
+                        'children' => [
+                            [
+                                'name' => __('Overzicht'),
+                                'url' => ['controller' => 'Projects', 'action' => 'index', 'prefix' => 'admin']
+                            ],
+                            [
+                                'name' => __('Project toevoegen'),
+                                'url' => ['controller' => 'Projects', 'action' => 'add', 'prefix' => 'admin']
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => __('Klassen'),
+                        'url' => ['controller' => 'Groups', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-users',
+                        'children' => [
+                            [
+                                'name' => __('Overzicht'),
+                                'url' => ['controller' => 'Groups', 'action' => 'index', 'prefix' => 'admin']
+                            ],
+                            [
+                                'name' => __('Klas toevoegen'),
+                                'url' => ['controller' => 'Groups', 'action' => 'add', 'prefix' => 'admin']
+                            ],
+                        ]
+                    ],
+                    [
+                        'name' => __('Personen'),
+                        'url' => ['controller' => 'Persons', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-users',
+                        'children' => [
+                            [
+                                'name' => __('Overzicht'),
+                                'url' => ['controller' => 'Persons', 'action' => 'index', 'prefix' => 'admin']
+                            ],
+                            [
+                                'name' => __('Persoon toevoegen'),
+                                'url' => ['controller' => 'Persons', 'action' => 'add', 'prefix' => 'admin']
+                            ],
+                        ]
                     ]
                 ];
             case 'user':

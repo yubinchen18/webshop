@@ -1,21 +1,21 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\User;
+use App\Model\Entity\Person;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Users Model
+ * Persons Model
  *
+ * @property \Cake\ORM\Association\BelongsTo $Groups
  * @property \Cake\ORM\Association\BelongsTo $Addresses
- * @property \Cake\ORM\Association\HasMany $Orders
- * @property \Cake\ORM\Association\HasMany $OrdersOrderstatuses
- * @property \Cake\ORM\Association\HasMany $Persons
+ * @property \Cake\ORM\Association\BelongsTo $Barcodes
+ * @property \Cake\ORM\Association\BelongsTo $Users
  */
-class UsersTable extends Table
+class PersonsTable extends Table
 {
 
     /**
@@ -28,24 +28,27 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('users');
+        $this->table('persons');
         $this->displayField('id');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Deletable');
-        
+
+        $this->belongsTo('Groups', [
+            'foreignKey' => 'group_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Addresses', [
-            'foreignKey' => 'address_id'
+            'foreignKey' => 'address_id',
+            'joinType' => 'INNER'
         ]);
-        $this->hasMany('Orders', [
-            'foreignKey' => 'user_id'
+        $this->belongsTo('Barcodes', [
+            'foreignKey' => 'barcode_id',
+            'joinType' => 'INNER'
         ]);
-        $this->hasMany('OrdersOrderstatuses', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('Persons', [
-            'foreignKey' => 'user_id'
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
         ]);
     }
 
@@ -62,16 +65,23 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('username', 'create')
-            ->notEmpty('username');
+            ->requirePresence('studentnumber', 'create')
+            ->notEmpty('studentnumber');
 
         $validator
-            ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->requirePresence('firstname', 'create')
+            ->notEmpty('firstname');
 
         $validator
-            ->requirePresence('genuine', 'create')
-            ->notEmpty('genuine');
+            ->allowEmpty('prefix');
+
+        $validator
+            ->requirePresence('lastname', 'create')
+            ->notEmpty('lastname');
+
+        $validator
+            ->requirePresence('slug', 'create')
+            ->notEmpty('slug');
 
         $validator
             ->email('email')
@@ -96,8 +106,9 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['group_id'], 'Groups'));
+        $rules->add($rules->existsIn(['barcode_id'], 'Barcodes'));
         return $rules;
     }
 }

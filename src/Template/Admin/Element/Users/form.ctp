@@ -1,5 +1,3 @@
-
-
 <div class="form-group">
     <?= $this->Form->label(_('Gebruikersnaam'), null, ['class' => 'col-sm-2 control-label no-padding-righ']);?>
     <div class="col-sm-9">

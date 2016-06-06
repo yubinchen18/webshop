@@ -34,7 +34,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
-
         $routes->connect('/schools', ['controller' => 'Schools', 'action' => 'index']);
         $routes->connect('/schools/add', ['controller' => 'Schools', 'action' => 'add']);
         $routes->connect(
@@ -52,9 +51,66 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Schools', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-        
+
+        $routes->connect('/projects', ['controller' => 'Projects', 'action' => 'index']);
+        $routes->connect('/projects/add', ['controller' => 'Projects', 'action' => 'add']);
+        $routes->connect(
+            '/projects/view/:id',
+            ['controller' => 'Projects', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/projects/edit/:id',
+            ['controller' => 'Projects', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/projects/delete/:id',
+            ['controller' => 'Projects', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
+        $routes->connect('/groups', ['controller' => 'Groups', 'action' => 'index']);
+        $routes->connect('/groups/add', ['controller' => 'Groups', 'action' => 'add']);
+        $routes->connect(
+            '/groups/view/:id',
+            ['controller' => 'Groups', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/groups/edit/:id',
+            ['controller' => 'Groups', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/groups/delete/:id',
+            ['controller' => 'Groups', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
+
+        $routes->connect('/persons', ['controller' => 'Persons', 'action' => 'index']);
+        $routes->connect('/persons/add', ['controller' => 'Persons', 'action' => 'add']);
+        $routes->connect(
+            '/persons/view/:id',
+            ['controller' => 'Persons', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/persons/edit/:id',
+            ['controller' => 'Persons', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/persons/delete/:id',
+            ['controller' => 'Persons', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
+
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
-    });    
+        $routes->connect('/', ['controller' => 'Pages', 'action' => 'display']);
+    });
 });
 
 Plugin::routes();

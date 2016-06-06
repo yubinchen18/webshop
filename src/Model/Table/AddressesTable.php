@@ -34,15 +34,15 @@ class AddressesTable extends Table
         $this->addBehavior('Timestamp');
         $this->addBehavior('Deletable');
 //
-//        $this->hasMany('Invoices', [
-//            'foreignKey' => 'address_id'
-//        ]);
-//        $this->hasMany('Persons', [
-//            'foreignKey' => 'address_id'
-//        ]);
-//        $this->hasMany('Users', [
-//            'foreignKey' => 'address_id'
-//        ]);
+        $this->hasMany('Invoices', [
+            'foreignKey' => 'address_id'
+        ]);
+        $this->hasMany('Persons', [
+            'foreignKey' => 'address_id'
+        ]);
+        $this->hasMany('Users', [
+            'foreignKey' => 'address_id'
+        ]);
     }
 
     /**
