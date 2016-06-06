@@ -13,7 +13,8 @@ class AlterUsers extends AbstractMigration
     public function change()
     {
         $table = $this->table('users');
-        $table->renameColumn('real_pass', 'genuine');
+        $table->removeColumn('real_pass');
+        $table->addColumn('genuine', 'varbinary', ['limit' => 200, 'after' => 'password']);
         $table->update();
     }
 }

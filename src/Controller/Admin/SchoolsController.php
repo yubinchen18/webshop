@@ -24,7 +24,6 @@ class SchoolsController extends AppController
         ];
         $schools = $this->paginate($this->Schools);
         $this->set(compact('schools'));
-        $this->set('_serialize', ['schools']);
     }
 
     /**
@@ -41,7 +40,6 @@ class SchoolsController extends AppController
         ]);
 
         $this->set('school', $school);
-        $this->set('_serialize', ['school']);
     }
 
     /**
@@ -62,7 +60,6 @@ class SchoolsController extends AppController
             }
         }
         $this->set(compact('school'));
-        $this->set('_serialize', ['school']);
     }
 
     /**
@@ -92,7 +89,6 @@ class SchoolsController extends AppController
             }
         }
         $this->set(compact('school'));
-        $this->set('_serialize', ['school']);
     }
 
     /**

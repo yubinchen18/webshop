@@ -27,7 +27,7 @@ class UsersTableTest extends TestCase
         'app.users',
     ];
 
-    /*
+    /**
      * setUp method
      *
      * @return void

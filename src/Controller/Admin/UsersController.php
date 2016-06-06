@@ -34,13 +34,10 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => []
-        ];
+        $this->paginate = [];
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
     }
 
     /**
@@ -52,11 +49,8 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
+        $user = $this->Users->get($id);
         $this->set('user', $user);
-        $this->set('_serialize', ['user']);
     }
 
     /**
@@ -78,7 +72,6 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user'));
-        $this->set('_serialize', ['user']);
     }
 
     /**
@@ -90,9 +83,7 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
+        $user = $this->Users->get($id);
         
         unset($user->password);
         unset($user->genuine);
@@ -116,7 +107,6 @@ class UsersController extends AppController
             }
         }
         $this->set(compact('user'));
-        $this->set('_serialize', ['user']);
     }
 
     /**

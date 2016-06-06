@@ -343,6 +343,4 @@ return [
     ],
     'EncryptionSalt' => '5xzrF9C7sZupjLWLf0KHSudPVtqiFnESX4kgZEgHL0631atB3CHJPXkRp7fV00vtxSUAofzt9yVCVppzFYikybwpXq'
     . 'LQgs3J4besy2dCzQcoqwOJPg1QvqfoVxBQ1eTBLS7ZCWxMRSrQozfUVYMlv7VpMKGX5m63HXEWh5IlrZP98iAwtqRVpm0RK5HIIrud6U1rxgp'
-    . 'UvTkP0vTelsOR9W23G7hRyia6zNlBPxS4so0eUnmMdnQSrt4YSfpFnYN8RhQOuuXSJGFu1FgwFSVycgZA9nox6mo54v4BEFrzCHiiuzofXnP'
-    . '3wT2VM7qnqc6sHzE7cOhTwPHomo7h6vC1'
 ];

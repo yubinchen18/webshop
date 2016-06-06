@@ -28,7 +28,7 @@ class UsersFixture extends TestFixture
         'deleted' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'address_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_indexes' => [
-//            'fk_users_addresses1_idx' => ['type' => 'index', 'columns' => ['address_id'], 'length' => []],
+            'fk_users_addresses1_idx' => ['type' => 'index', 'columns' => ['address_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],

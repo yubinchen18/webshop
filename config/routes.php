@@ -7,6 +7,11 @@ Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function (RouteBuilder $routes) {
 
+    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    $routes->fallbacks('DashedRoute');
+
     Router::prefix('Admin', function ($routes) {
 
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
@@ -49,12 +54,7 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
         
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
-    });
-
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-
-    $routes->fallbacks('DashedRoute');
+    });    
 });
 
 Plugin::routes();
