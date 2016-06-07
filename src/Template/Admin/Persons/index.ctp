@@ -1,4 +1,4 @@
-<div class="table-header"><?=__('Scholen')?></div>
+<div class="table-header"><?=__('Personen')?></div>
 <div>
     <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
         <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid"
@@ -64,7 +64,7 @@
                     </ul>
                     <p><?= $this->Paginator->counter() ?></p>
 
-                    <?= $this->Html->link(__('Nieuwe person'),
+                    <?= $this->Html->link(__('Nieuw persoon'),
                         [
                             'action' => 'add'
                         ],

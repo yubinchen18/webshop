@@ -58,7 +58,7 @@ class GroupsController extends AppController
                 $this->Flash->success(__('De group is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('De group kon niet opgeslagen worden. Probeer het nogmaals.'));
+                $this->Flash->error(__('De groep kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('group', 'projects', 'barcodes'));
@@ -84,10 +84,10 @@ class GroupsController extends AppController
             
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {
-                $this->Flash->success(__('De group is opgeslagen.'));
+                $this->Flash->success(__('De groep is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('De group kon niet opgeslagen worden. Probeer het nogmaals.'));
+                $this->Flash->error(__('De groep kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
         $this->set(compact('group', 'projects', 'barcodes'));
@@ -105,9 +105,9 @@ class GroupsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $group = $this->Groups->get($id);
         if ($this->Groups->delete($group)) {
-            $this->Flash->success(__('De group is verwijderd.'));
+            $this->Flash->success(__('De groep is verwijderd.'));
         } else {
-            $this->Flash->error(__('De group kon niet verwijderd worden.  Probeer het nogmaals.'));
+            $this->Flash->error(__('De groep kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
     }

@@ -64,7 +64,7 @@
                     </ul>
                     <p><?= $this->Paginator->counter() ?></p>
 
-                    <?= $this->Html->link(__('Nieuwe group'),
+                    <?= $this->Html->link(__('Nieuwe klas'),
                         [
                             'action' => 'add'
                         ],

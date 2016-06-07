@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="widget-box">
             <div class="widget-header">
-                <h4 class="widget-title"><?=__('School bewerken'); ?></h4>
+                <h4 class="widget-title"><?=__('Persoon bewerken'); ?></h4>
 
                 <div class="widget-toolbar">
                     <a href="#" data-action="collapse">

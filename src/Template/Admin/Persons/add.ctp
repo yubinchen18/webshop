@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="widget-box">
             <div class="widget-header">
-                <h4 class="widget-title"><?=__('Nieuwe person'); ?></h4>
+                <h4 class="widget-title"><?=__('Nieuw persoon'); ?></h4>
 
                 <div class="widget-toolbar">
                     <a href="#" data-action="collapse">

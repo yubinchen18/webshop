@@ -18,3 +18,12 @@ msgstr "Gebruikers"
 
 msgid "Schools"
 msgstr "Scholen"
+
+msgid "Projects"
+msgstr "Projecten"
+
+msgid "Groups"
+msgstr "Klassen"
+
+msgid "Persons"
+msgstr "Personen"

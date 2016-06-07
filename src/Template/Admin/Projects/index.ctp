@@ -1,4 +1,4 @@
-<div class="table-header"><?=__('Scholen')?></div>
+<div class="table-header"><?=__('Projecten')?></div>
 <div>
     <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
         <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid"
