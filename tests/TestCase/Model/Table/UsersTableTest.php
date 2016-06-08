@@ -25,10 +25,6 @@ class UsersTableTest extends TestCase
      */
     public $fixtures = [
         'app.users',
-        'app.addresses',
-        'app.orders',
-        'app.orders_orderstatuses',
-        'app.persons'
     ];
 
     /**
@@ -56,32 +52,14 @@ class UsersTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test validationDefault method
      *
      * @return void
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\Validation\Validator();
+        $validator = $this->Users->validationDefault($mock);
+        $this->assertEquals($mock, $validator);
     }
 }

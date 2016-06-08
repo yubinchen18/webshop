@@ -1,0 +1,130 @@
+<?php
+namespace App\Test\TestCase\Controller\Admin;
+
+use App\Controller\Admin\ProjectsController;
+use App\Test\TestCase\BaseIntegrationTestCase;
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\IntegrationTestCase;
+
+/**
+ * App\Controller\ProjectsController Test Case
+ */
+class ProjectsControllerTest extends BaseIntegrationTestCase
+{
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'app.projects',
+        'app.addresses',
+        'app.contacts',
+        'app.schools',
+    ];
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->loginAdmin();
+        $this->Projects = TableRegistry::get('Projects');
+    }
+
+    public function testIndex()
+    {
+        $this->get('/admin/projects');
+        $this->assertResponseOk();
+        $projects = $this->viewVariable('projects');
+        $this->assertEquals(1, $projects->count());
+    }
+
+    public function testView()
+    {
+        $this->get('/admin/projects/view/4a7d8a96-08f6-441c-a8d5-eb40440e7603');
+        $this->assertResponseOk();
+        $project = $this->viewVariable('project');
+        $this->assertEquals('4a7d8a96-08f6-441c-a8d5-eb40440e7603', $project->id);
+        $this->assertEquals('82199cab-fc52-4853-8f64-575a7721b8e7', $project->school->id);
+    }
+
+    public function testAddGet()
+    {
+        $this->get('/admin/projects/add');
+        $this->assertResponseOk();
+
+        $this->assertInstanceOf('App\Model\Entity\Project', $this->viewVariable('project'));
+    }
+
+    public function testAdd()
+    {
+        $data = [
+            'name' => 'New project',
+            'slug' => 'new-project',
+            'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+            'grouptext' => 'groepstekst'
+        ];
+        $this->post('/admin/projects/add', $data);
+        $this->assertRedirect('/admin/projects');
+
+        $project = $this->Projects->find()->where(['name' => 'New project'])->first();
+        $this->assertNotEmpty($project);
+        $this->assertUuid($project->id);
+    }
+
+    public function testAddFailure()
+    {
+        $data = [
+            'name' => '',
+            'slug' => 'new-project',
+            'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+            'grouptext' => 'groepstekst'
+        ];
+        $this->post('/admin/projects/add', $data);
+        $this->assertResponseOk();
+
+        $this->assertInstanceOf('App\Model\Entity\Project', $this->viewVariable('project'));
+        $errors = [
+            'name' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+        $this->assertEquals($errors, $this->viewVariable('project')->errors());
+    }
+
+    public function testEditGet()
+    {
+        $this->get('/admin/projects/edit/4a7d8a96-08f6-441c-a8d5-eb40440e7603');
+
+        $this->assertResponseOk();
+
+        $project = $this->viewVariable('project');
+
+        $this->assertEquals('4a7d8a96-08f6-441c-a8d5-eb40440e7603', $project->id);
+    }
+
+    public function testEdit()
+    {
+        $id = '4a7d8a96-08f6-441c-a8d5-eb40440e7603';
+        $data = [
+            'name' => 'changedproject',
+
+        ];
+        $this->put('/admin/projects/edit/'.$id, $data);
+        $this->assertRedirect('/admin/projects');
+
+        $project = $this->Projects->find()->where(['id' => $id])->first();
+        $this->assertNotEmpty($project);
+        $this->assertEquals($data['name'], $project->name);
+    }
+
+    public function testDelete()
+    {
+        $id = '4a7d8a96-08f6-441c-a8d5-eb40440e7603';
+        $project = $this->Projects->find()->where(['id' => $id])->first();
+        $this->assertNotEmpty($project);
+        $this->delete('/admin/projects/delete/'.$id);
+        $this->assertRedirect('/admin/projects');
+        $project = $this->Projects->find()->where(['id' => $id])->first();
+        $this->assertEmpty($project);
+    }
+}

@@ -1,17 +1,4 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link      http://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   http://www.opensource.org/licenses/mit-license.php MIT License
- */
 namespace App\Controller;
 
 use Cake\Core\Configure;
@@ -44,12 +31,49 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'],
+            'loginAction' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'loginRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'index',
+            ],
+            'logoutRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'unauthorizedRedirect' => '/admin/login',
+            'authError' => __('U heeft geen toegang tot deze locatie.'),
+            'flash' => [
+                'element' => 'default',
+                'params' => [
+                    'class' => 'error',
+                ],
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password',
+                    ],
+                    'userModel' => 'Users'
+                ],
+            ]
+        ]);
     }
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(Event $event)
+    {
         parent::beforeFilter($event);
         
-        if(Configure::read('environment') == 'staging') {
+        if (Configure::read('environment') == 'staging') {
             $this->loadComponent('Auth', [
                 'authenticate' => [
                     'Basic' => ['finder' => 'auth']
@@ -73,5 +97,31 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+    }
+
+    public function isAuthorized($user)
+    {
+        //admin can access everything
+        if ($user['type'] == 'admin') {
+            return true;
+        }
+
+        //photex is only allowed to the whielist: Controller [ allowedactions ]
+        if ($user['type'] == 'photex') {
+            $allowed = [
+                'Users' => [
+                    'index'
+                ]
+            ];
+
+            if (isset($allowed[$this->request->params['controller']]) &&
+                   in_array($this->request->params['action'], $allowed[$this->request->params['controller']]) ) {
+                return true;
+            }
+            return false;
+        }
+
+        //by default nothing is allowed
+        return false;
     }
 }

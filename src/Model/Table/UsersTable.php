@@ -33,7 +33,8 @@ class UsersTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
+        $this->addBehavior('Deletable');
+        
         $this->belongsTo('Addresses', [
             'foreignKey' => 'address_id'
         ]);
@@ -69,8 +70,8 @@ class UsersTable extends Table
             ->notEmpty('password');
 
         $validator
-            ->requirePresence('real_pass', 'create')
-            ->notEmpty('real_pass');
+            ->requirePresence('genuine', 'create')
+            ->notEmpty('genuine');
 
         $validator
             ->email('email')
@@ -97,16 +98,6 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['address_id'], 'Addresses'));
         return $rules;
-    }
-    
-    public function findAuth($query, $options = [])
-    {
-        $query
-        ->select(['id', 'username', 'password'])
-        ->where(['Users.type' => 'basic']);
-
-        return $query;
     }
 }

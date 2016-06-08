@@ -39,7 +39,7 @@ return [
     'App' => [
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
-        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
+        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'nl_NL'),
         'base' => false,
         'dir' => 'src',
         'webroot' => 'webroot',
@@ -220,12 +220,6 @@ return [
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
             'host' => 'localhost',
-            /**
-             * CakePHP will use the default DB port based on the driver selected
-             * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
-             * the following line and set the port accordingly
-             */
-            //'port' => 'non_standard_port_number',
             'username' => 'admin_hoogstrate',
             'password' => 'z7ZhrvvG9Nhmenf2',
             'database' => 'admin_hoogstraten',
@@ -234,26 +228,7 @@ return [
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
-
-            /**
-             * Set identifier quoting to true if you are using reserved words or
-             * special characters in your table or column names. Enabling this
-             * setting will result in queries built using the Query Builder having
-             * identifiers quoted when creating SQL. It should be noted that this
-             * decreases performance because each query needs to be traversed and
-             * manipulated before being executed.
-             */
             'quoteIdentifiers' => false,
-
-            /**
-             * During development, if using MySQL < 5.6, uncommenting the
-             * following line could boost the speed at which schema metadata is
-             * fetched from the database. It can also be set directly with the
-             * mysql configuration directive 'innodb_stats_on_metadata = 0'
-             * which is the recommended value in production environments
-             */
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
-            
             'url' => env('DATABASE_URL', null),
         ],
 
@@ -262,19 +237,17 @@ return [
          */
         'test' => [
             'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
+            'driver' => 'Cake\Database\Driver\Sqlite',
             'persistent' => false,
             'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
+            'username' => null,
+            'password' => null,
+            'database' => ':memory:',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false,
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             'url' => env('DATABASE_TEST_URL', null),
         ],
         'development' => [
@@ -368,4 +341,6 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+    'EncryptionSalt' => '5xzrF9C7sZupjLWLf0KHSudPVtqiFnESX4kgZEgHL0631atB3CHJPXkRp7fV00vtxSUAofzt9yVCVppzFYikybwpXq'
+    . 'LQgs3J4besy2dCzQcoqwOJPg1QvqfoVxBQ1eTBLS7ZCWxMRSrQozfUVYMlv7VpMKGX5m63HXEWh5IlrZP98iAwtqRVpm0RK5HIIrud6U1rxgp'
 ];

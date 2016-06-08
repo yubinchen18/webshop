@@ -35,6 +35,11 @@
         <whitelist>
             <directory suffix=".php">./src/</directory>
             <directory suffix=".php">./plugins/*/src/</directory>
+            <exclude>
+                <file>./src/Console/Installer.php</file>
+                <file>./src/Shell/ConsoleShell.php</file>
+                <file>./src/View/AjaxView.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
