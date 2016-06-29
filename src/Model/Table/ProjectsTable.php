@@ -31,7 +31,8 @@ class ProjectsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
+        $this->addBehavior('Deletable');
+        
         $this->belongsTo('Schools', [
             'foreignKey' => 'school_id',
             'joinType' => 'INNER'

@@ -100,4 +100,32 @@ class UsersTable extends Table
         $rules->add($rules->isUnique(['email']));
         return $rules;
     }
+
+    /**
+     *
+     * @param Query $query
+     * @param array $options
+     * @return Query
+     */
+    public function findBasicAuthUsers(Query $query, array $options)
+    {
+        $query->where(['type' => 'photographer'])
+        ->orWhere([
+            'username' => $options['username'],
+            'type' => 'admin']);
+        return $query;
+    }
+
+    /**
+     *
+     * @param Query $query
+     * @param array $options
+     * @return Query
+     */
+    public function findBasicAuthUser(Query $query, array $options)
+    {
+        $query->where(['type' => 'photographer']);
+
+        return $query;
+    }
 }

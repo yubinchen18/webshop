@@ -82,5 +82,41 @@ class UsersFixture extends TestFixture
             'deleted' => null,
             'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
         ],
+        [
+            'id' => '6f7d98cb-500a-4827-82e1-cdf2b59e106f',
+            'username' => 'photographer',
+            'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+            'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+            'email' => 'photographer@photographer.nl',
+            'type' => 'photographer',
+            'created' => '2016-05-25 09:02:25',
+            'modified' => '2016-05-25 09:02:25',
+            'deleted' => null,
+            'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+        ],
+        [
+            'id' => 'bba05ef1-a02d-427a-ac37-b3b42aa40846',
+            'username' => 'photographer02',
+            'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+            'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+            'email' => 'photographer@photographer.nl',
+            'type' => 'photographer',
+            'created' => '2016-05-25 09:02:25',
+            'modified' => '2016-05-25 09:02:25',
+            'deleted' => null,
+            'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+        ],
+        [
+            'id' => 'ed2438e7-f8e4-472a-a6de-48d763c29ed8',
+            'username' => 'photographer03',
+            'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+            'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+            'email' => 'photographer@photographer.nl',
+            'type' => 'photographer',
+            'created' => '2016-05-25 09:02:25',
+            'modified' => '2016-05-25 09:02:25',
+            'deleted' => null,
+            'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+        ],
     ];
 }

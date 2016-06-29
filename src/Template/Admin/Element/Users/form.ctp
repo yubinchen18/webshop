@@ -23,7 +23,14 @@
 <div class="form-group">
     <?= $this->Form->label(_('Rol'), null, ['class' => 'col-sm-2 control-label no-padding-righ']);?>
     <div class="col-sm-9">
-        <?= $this->Form->input('type', ['options' => ['admin' => 'admin', 'photex' => 'photex'], 'label' => false]); ?>
+        <?= $this->Form->input('type', [
+            'options' => [
+                'admin' => 'admin',
+                'photex' => 'photex',
+                'photographer' => 'photographer',
+            ],
+            'label' => false
+        ]); ?>
     </div>
 </div>
 
