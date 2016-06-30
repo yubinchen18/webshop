@@ -163,22 +163,9 @@ class QueuesController extends AppController
                         $oldPath
                     );
 
-//                    if( !file_exists( $newPath ) ) {
-//                        $this->chmodThroughFtp($oldPath);
-//                        $this->chmodThroughFtp($newPath);
-//
-//                        mkdir(dirname($oldPath), 0777, true);
-//                        mkdir(dirname($newPath), 0777, true);
-//                    }
-//
-//                    $folder = new Folder();
-//                    $folder->move(
-//                        array(
-//                                'to' => $newPath,
-//                                'from' => $oldPath,
-//                                'chmod' => 777
-//                        )
-//                    );
+                    if( !file_exists( $newPath ) ) {
+                        mkdir(dirname($newPath), 0777, true);
+                    }
                 }
             }
         }
