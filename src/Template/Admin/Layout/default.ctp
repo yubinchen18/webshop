@@ -17,6 +17,7 @@
             '/admin/css/ace-ie.css',
             '/admin/css/cake.css',
             '/admin/css/custom.css',
+            '/admin/css/dropzone.css'
         ]) ?>
 
          <?= $this->Html->script([

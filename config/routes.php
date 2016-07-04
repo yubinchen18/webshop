@@ -68,6 +68,12 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
+        $routes->connect(
+            '/schools/deleteproject/:id',
+            ['controller' => 'Schools', 'action' => 'deleteproject'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
         $routes->connect('/projects', ['controller' => 'Projects', 'action' => 'index']);
         $routes->connect('/projects/add', ['controller' => 'Projects', 'action' => 'add']);
         $routes->connect(

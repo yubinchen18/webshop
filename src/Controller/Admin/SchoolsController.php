@@ -72,15 +72,17 @@ class SchoolsController extends AppController
     public function edit($id = null)
     {
         $school = $this->Schools->get($id, [
-            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']
+            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (isset($this->request->data['differentmail']) && $this->request->data['differentmail'] == 0) {
                 $this->Schools->Mailaddresses->delete($school->mailaddress);
                 $school->mailladdress = null;
             }
-            
-            $school = $this->Schools->patchEntity($school, $this->request->data);
+            pr($this->request->data);exit;
+            $school = $this->Schools->patchEntity($school, $this->request->data, [
+                'associated' => ['Projects']
+            ]);
             if ($this->Schools->save($school)) {
                 $this->Flash->success(__('De school is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
@@ -88,7 +90,8 @@ class SchoolsController extends AppController
                 $this->Flash->error(__('De school kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
-        $this->set(compact('school'));
+        $projectEntity = $this->Schools->Projects->newEntity();
+        $this->set(compact('school', 'projectEntity'));
     }
 
     /**
@@ -110,5 +113,25 @@ class SchoolsController extends AppController
             $this->Flash->error(__('De school kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function deleteproject($id)
+    {
+        $success = false;
+        if($this->request->is('DELETE')) {
+            $project = $this->Schools->Projects->get($id);
+
+            if(!empty($project)) {
+                if($this->Schools->Projects->delete($project)) {
+                   $success = true;
+                }
+            }
+            $this->set('project', $project);
+        }
+        
+        $this->set('success', $success);
+        $this->RequestHandler->renderAs($this, 'json');
+        $this->response->type('application/json');
+        $this->set('_serialize', true);
     }
 }
