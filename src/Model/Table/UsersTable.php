@@ -6,6 +6,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Model
@@ -125,7 +127,33 @@ class UsersTable extends Table
     public function findBasicAuthUser(Query $query, array $options)
     {
         $query->where(['type' => 'photographer']);
-
         return $query;
+    }
+
+    public function processUsers($object, $username)
+    {
+        $this->Downloadqueues = TableRegistry::get('Downloadqueues');
+
+        unset($object['Users']['modified']);
+        unset($object['Users']['created']);
+
+        $userId = $object['Users']['online_id'];
+        if ($object['Users']['online_id'] === 0) {
+            unset($object['Users']['id']);
+
+            $object['Users']['password'] = (new DefaultPasswordHasher)->hash($object['Users']['real_pass']);
+            $object['Users']['genuine'] = $object['Users']['real_pass'];
+
+            $entity = $this->newEntity($object['Users']);
+            $savedEntity = $this->save($entity);
+            $userId = $savedEntity->id;
+
+        }
+
+        $this->Downloadqueues->addDownloadQueueItem('Users', $userId, $username);
+
+        unset($object['Users']);
+
+        return [$object, $userId,];
     }
 }

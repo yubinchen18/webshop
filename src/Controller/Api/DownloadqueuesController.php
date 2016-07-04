@@ -9,18 +9,12 @@ use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 
 /**
- * Users Controller
+ * Downloadqueues Controller
  *
  * @property \App\Model\Table\UsersTable $Users
  */
-class QueuesController extends AppController
+class DownloadqueuesController extends AppController
 {
-    public function initialize()
-    {
-        parent::initialize();
-        $this->Downloadqueues = TableRegistry::get('Downloadqueues');
-    }
-
     /**
      * Index method
      *
@@ -70,33 +64,6 @@ class QueuesController extends AppController
                 return false;
             }
         }
-        return $object;
-    }
-
-    private function processUsers($object)
-    {
-        if (isset($object['Users'])) {
-            unset($object['Users']['modified']);
-            unset($object['Users']['created']);
-
-            $userId = $object['Users']['online_id'];
-            if ($object['Users']['online_id'] === 0) {
-                unset($object['Users']['id']);
-               
-                $object['Users']['password'] = (new DefaultPasswordHasher)->hash($object['Users']['real_pass']);
-                $object['Users']['genuine'] = $object['Users']['real_pass'];
-
-                $entity = $this->Users->newEntity($object['Users']);
-                $savedEntity = $this->Users->save($entity);
-                $userId = $savedEntity->id;
-            }
-
-            $this->Downloadqueues->addDownloadQueueItem('Users', $userId, $this->getUser());
-            unset($object['Users']);
-            $this->userId = $userId;
-            $this->result[] = $userId;
-        }
-        
         return $object;
     }
 
@@ -165,10 +132,12 @@ class QueuesController extends AppController
 
                     if( !file_exists( $newPath ) ) {
                         mkdir(dirname($newPath), 0777, true);
+                        return true;
                     }
                 }
             }
         }
+        return true;
     }
 
     private function process($object)
@@ -225,9 +194,15 @@ class QueuesController extends AppController
         $this->userId =0;
         $this->barcodeId =0;
         $this->objectId =0;
-
+        
         if ($this->checkGroups($object)) {
-            $object = $this->processUsers($object);
+
+            if (isset($object['Users'])) {
+                list($object, $userId) = $this->Users->processUsers($object, $this->getUser());
+                $this->userId = $userId;
+                $this->result[] = $userId;
+            }
+
             $object = $this->processBarcodes($object);
             $object = $this->process($object);
             $this->set('result', $this->result);

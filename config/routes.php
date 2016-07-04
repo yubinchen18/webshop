@@ -15,9 +15,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     Router::prefix('Api', function ($routes) {
         $routes->extensions(['json']);
 
-        $routes->connect('/v1/get_download_queue', ['controller' => 'Queues', 'action' => 'index', '_ext' => 'json']);
-        $routes->connect('/v1/remove_queue_items', ['controller' => 'Queues', 'action' => 'remove', '_ext' => 'json']);
-        $routes->connect('/v1/upload_item', ['controller' => 'Queues', 'action' => 'add', '_ext' => 'json']);
+        $routes->connect('/v1/get_download_queue', ['controller' => 'Downloadqueues', 'action' => 'index', '_ext' => 'json']);
+        $routes->connect('/v1/remove_queue_items', ['controller' => 'Downloadqueues', 'action' => 'remove', '_ext' => 'json']);
+        $routes->connect('/v1/upload_item', ['controller' => 'Downloadqueues', 'action' => 'add', '_ext' => 'json']);
 
         $routes->connect('/v1/get_ftp_login', ['controller' => 'Ftp', 'action' => 'index', '_ext' => 'json']);
         $routes->connect('/v1/check_update', ['controller' => 'Update', 'action' => 'index', '_ext' => 'json']);
