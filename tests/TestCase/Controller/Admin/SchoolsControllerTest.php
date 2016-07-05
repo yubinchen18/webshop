@@ -36,7 +36,7 @@ class SchoolsControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/schools');
         $this->assertResponseOk();
         $schools = $this->viewVariable('schools');
-        $this->assertEquals(1, $schools->count());
+        $this->assertEquals(2, $schools->count());
     }
 
     public function testView()

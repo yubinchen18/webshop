@@ -33,7 +33,7 @@ class AddressesTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Deletable');
-//
+
         $this->hasMany('Invoices', [
             'foreignKey' => 'address_id'
         ]);

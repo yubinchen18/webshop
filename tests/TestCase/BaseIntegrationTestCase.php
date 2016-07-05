@@ -62,6 +62,16 @@ class BaseIntegrationTestCase extends IntegrationTestCase
         ]);
     }
 
+    public function setBasicAuth($username = 'photographer', $password = 'photex')
+    {
+        $this->configRequest([
+            'environment' => [
+                'PHP_AUTH_USER' => $username,
+                'PHP_AUTH_PW' => $password,
+            ]
+        ]);
+    }
+
     public function assertUuid($text)
     {
         $this->assertEquals(preg_match('/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/', $text), 1);
@@ -73,5 +83,65 @@ class BaseIntegrationTestCase extends IntegrationTestCase
         $actionlog = $actionlogstable->find()
             ->where(['Actionlogs.action' => $action, 'Actionlogs.created >=' => new \DateTime('-1 minute')])->first();
         $this->assertNotEmpty($actionlog);
+    }
+
+    protected function assertDecodedResponseEquals($expected, $message = '')
+    {
+        $decodedResponse = $this->getDecodedResponse($message, false);
+        $this->assertEquals($expected, $decodedResponse);
+    }
+
+    protected function assertDecodedResponseContains($expected)
+    {
+        $decodedResponse = $this->getDecodedResponse(null, true);
+        array_walk($expected, [$this, 'responseContains'], $decodedResponse);
+    }
+
+    protected function responseContains($expected, $key, $response)
+    {
+        if (is_array($expected)) {
+            foreach ($expected as $subkey => $subvalue) {
+                $this->responseContains($subvalue, $subkey, $response[$key]);
+            }
+
+            return;
+        }
+        $this->assertEquals($expected, $response[$key]);
+    }
+
+    protected function assertDecodedResponseRelations($expected)
+    {
+        $decodedResponse = $this->getDecodedResponse(null, true);
+
+        if (isset($decodedResponse[0])) {
+            $decodedResponse = $decodedResponse[0];
+        }
+        foreach ($expected as $value) {
+            if (! Hash::check($decodedResponse, $value)) {
+                $this->fail('Missing relation: ' . $value);
+            }
+            $this->assertTrue(Hash::check($decodedResponse, $value));
+            $this->assertNotEmpty(Hash::get($decodedResponse, $value));
+        }
+    }
+
+    protected function assertDecodedResponseCount($expected)
+    {
+        $decodedResponse = $this->getResponse(null, true);
+        $this->assertCount($expected, $decodedResponse);
+    }
+
+    public function getDecodedResponse($message = null, $escapeDataKey = false)
+    {
+        if (! $this->_response) {
+            $this->fail('No response set, cannot assert content. ' . $message);
+        }
+
+        $decodedResponse = json_decode($this->_response->body(), true);
+        if ($escapeDataKey && isset($decodedResponse['data'])) {
+            $decodedResponse = $decodedResponse['data'];
+        }
+
+        return $decodedResponse;
     }
 }

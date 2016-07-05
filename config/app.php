@@ -9,7 +9,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => false,
 
     /**
      * Configure basic information about the application.
@@ -220,9 +220,9 @@ return [
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
             'host' => 'localhost',
-            'username' => 'admin_hoogstrate',
+            'username' => 'hoogstraten_webs',
             'password' => 'z7ZhrvvG9Nhmenf2',
-            'database' => 'admin_hoogstraten',
+            'database' => 'hoogstraten_webshop',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'flags' => [],
@@ -255,9 +255,9 @@ return [
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
             'host' => 'localhost',
-            'username' => 'admin_hoogstrate',
+            'username' => 'hoogstraten_webs',
             'password' => 'z7ZhrvvG9Nhmenf2',
-            'database' => 'admin_hoogstraten',
+            'database' => 'hoogstraten_webshop',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
@@ -269,9 +269,9 @@ return [
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
             'host' => 'localhost',
-            'username' => 'admin_hoogstrate',
+            'username' => 'hoogstraten_webs',
             'password' => 'S2Nwz3v0GGFfFzcrQ',
-            'database' => 'admin_hoogstraten',
+            'database' => 'hoogstraten_webshop',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'cacheMetadata' => true,

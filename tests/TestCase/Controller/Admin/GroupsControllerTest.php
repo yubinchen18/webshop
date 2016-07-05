@@ -37,7 +37,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/groups');
         $this->assertResponseOk();
         $groups = $this->viewVariable('groups');
-        $this->assertEquals(2, $groups->count());
+        $this->assertEquals(4, $groups->count());
     }
 
     public function testView()
@@ -47,7 +47,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $group = $this->viewVariable('group');
         $this->assertEquals('e5b778cd-68cd-469f-88b3-37846b984868', $group->id);
         $this->assertEquals('4a7d8a96-08f6-441c-a8d5-eb40440e7603', $group->project->id);
-        $this->assertEquals('c78338d8-b286-4b9e-8486-6bd3de3be695', $group->barcode->id);
+        $this->assertEquals('0e46688d-02a9-4da4-9f91-ed61a3e7246e', $group->barcode->id);
     }
 
     public function testAddGet()
@@ -64,7 +64,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
             'name' => 'Nieuwe Klas',
             'slug' => 'nieuwe-klas',
             'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-            'barcode_id' => 'c78338d8-b286-4b9e-8486-6bd3de3be695'
+            'barcode_id' => 'ba0f3313-757a-430a-bda3-908082dea691'
         ];
         $this->post('/admin/groups/add', $data);
         $this->assertRedirect('/admin/groups');
