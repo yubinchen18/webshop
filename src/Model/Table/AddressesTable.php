@@ -62,9 +62,7 @@ class AddressesTable extends Table
             ->notEmpty('street');
 
         $validator
-            ->integer('number')
-            ->requirePresence('number', 'create')
-            ->notEmpty('number');
+            ->allowEmpty('number');
 
         $validator
             ->allowEmpty('extension');

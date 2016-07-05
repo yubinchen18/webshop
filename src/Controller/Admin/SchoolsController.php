@@ -80,8 +80,7 @@ class SchoolsController extends AppController
                 $school->mailladdress = null;
             }
 
-            new GroupImporter($this->request->data, $id);
-            exit;
+            new GroupImporter($this->request->data, $id);            
             $school = $this->Schools->patchEntity($school, $this->request->data, [
                 'associated' => ['Projects']
             ]);

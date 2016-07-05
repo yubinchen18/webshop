@@ -70,4 +70,25 @@ class BarcodesTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Type standard is anonymous
+     * @param type $type
+     * @return type
+     */
+    public function generateBarcode($type = '*ano_')
+    {
+        $unique = base_convert(rand(10e16, 10e20), 10, 36);
+        $barcode = $type . $unique;
+
+        $barcodeExisting = $this->find()
+            ->where(['barcode' => $barcode])
+            ->first();
+
+        if(!empty($barcodeExisting)) {
+            $barcode = $this->generateBarcode($type);
+        }
+
+        return $barcode;
+    }
 }

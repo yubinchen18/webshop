@@ -41,7 +41,7 @@ class PersonsTable extends Table
         ]);
         $this->belongsTo('Addresses', [
             'foreignKey' => 'address_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
         $this->belongsTo('Barcodes', [
             'foreignKey' => 'barcode_id',
