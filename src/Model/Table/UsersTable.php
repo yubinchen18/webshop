@@ -156,4 +156,41 @@ class UsersTable extends Table
 
         return [$object, $userId,];
     }
+
+    public function checkUsername($username)
+    {
+        $users = $this->find('list', [
+                'keyField' => 'username',
+                'valueField' => 'id'
+            ])
+            ->where(['username LIKE' => $username.'%'])
+            ->toArray();
+
+        if(empty($users)) {
+            return $username;
+        }
+
+        $found = false;
+        while($found == false) {
+            $newUsername = $username . $this->generateRandom(3);
+            if(!isset($users[$newUsername])) {
+                $found = true;
+                $username = $newUsername;
+            }
+        }
+
+        return $username;
+    }
+
+    public function generateRandom($length = 8)
+    {
+        $password = "";
+        $chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+        $charlength = strlen($chars) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $password .= substr($chars, mt_rand(0, $charlength), 1);
+        }
+
+        return $password;
+    }
 }

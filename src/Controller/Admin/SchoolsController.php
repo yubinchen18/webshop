@@ -3,7 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
-
+use App\Lib\GroupImporter;
 /**
  * Schools Controller
  *
@@ -79,7 +79,9 @@ class SchoolsController extends AppController
                 $this->Schools->Mailaddresses->delete($school->mailaddress);
                 $school->mailladdress = null;
             }
-            pr($this->request->data);exit;
+
+            new GroupImporter($this->request->data, $id);
+            exit;
             $school = $this->Schools->patchEntity($school, $this->request->data, [
                 'associated' => ['Projects']
             ]);

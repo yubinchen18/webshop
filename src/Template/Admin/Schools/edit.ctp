@@ -100,7 +100,7 @@
             </div>
             <?php $count = 0; ?>
             <?php foreach($school->projects as $project): ?>
-                <div class="widget-box <?php echo ($count != 0) ? '' :''; ?> project">
+                <div class="widget-box <?php echo ($count != 0) ? 'collapsed' :''; ?> project">
                     <div class="widget-header">
                         <h4 class="widget-title"><?= $project->name ?></h4>
 
@@ -162,9 +162,12 @@
                             <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
                             
                             <br><br>
-                        <label class="btn btn-default btn-file">
-                            Browse <input type="file" name="test" style="">
-                        </label>
+
+                            <?= $this->Form->input('projects.'. $count .'.file', [
+                                'label' => false,
+                                'class' => '',
+                                'type' => 'file'
+                            ]); ?>                            
                             
                         </div>
                     </div>
