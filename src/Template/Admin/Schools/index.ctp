@@ -74,7 +74,16 @@
                             'class' => 'btn btn-sm btn-purple'
                         ]
                     ) ?>
-
+                    
+                    <?= $this->Html->link(__('Scholen exporteren'),
+                        [
+                            'action' => 'export',
+                            '_ext' => 'csv'
+                        ],
+                        [
+                            'class' => 'btn btn-sm btn-purple',
+                        ]
+                    ) ?>
 
                 </div>
             </div>

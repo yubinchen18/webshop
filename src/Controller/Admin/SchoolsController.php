@@ -27,6 +27,46 @@ class SchoolsController extends AppController
     }
 
     /**
+     * Export method
+     * 
+     * @return CSV
+     */
+    public function export()
+    {
+        $schools = $this->Schools->find('all', ['contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']])->orderAsc('name');      
+        $this->set(compact('schools'));        
+        $this->set('_serialize', 'schools');
+        $this->set('_csvMap', function ($school) {
+            return [
+                $school->name,
+                $school->contact->phone,
+                $school->contact->fax,
+                $school->contact->email,
+                $school->visitaddress->street,
+                $school->visitaddress->city,
+                $school->visitaddress->zipcode,
+                $school->mailaddress->street,
+                $school->mailaddress->city,
+                $school->mailaddress->zipcode,
+                $school->contact->first_name.' '.$school->contact->last_name               
+                ];
+            });
+        $this->set('_headerCsv', [
+            __('Organisatie'),
+            __('Telefoonnummer'),
+            __('Faxnummer'),
+            __('Emailadres'),
+            __('Bezoekadres (Straat)'),
+            __('Bezoekadres (Plaats)'),
+            __('Bezoekadres (Postcode)'),
+            __('Postadres (Straat)'),
+            __('Postadres (Plaats)'),
+            __('Postadres (Postcode)'),
+            __('Contactpersoon')
+        ]);
+    }
+    
+    /**
      * View method
      *
      * @param string|null $id School id.
