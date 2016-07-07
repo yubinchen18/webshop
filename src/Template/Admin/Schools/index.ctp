@@ -81,7 +81,7 @@
                             '_ext' => 'csv'
                         ],
                         [
-                            'class' => 'btn btn-sm btn-success pull-right',
+                            'class' => 'btn btn-sm btn-pink pull-right',
                         ]
                     ) ?>
                 </div>
