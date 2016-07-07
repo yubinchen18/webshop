@@ -117,19 +117,7 @@ class UsersTable extends Table
             'type' => 'admin']);
         return $query;
     }
-
-    /**
-     *
-     * @param Query $query
-     * @param array $options
-     * @return Query
-     */
-    public function findBasicAuthUser(Query $query, array $options)
-    {
-        $query->where(['type' => 'photographer']);
-        return $query;
-    }
-
+    
     public function processUsers($object, $username)
     {
         $this->Downloadqueues = TableRegistry::get('Downloadqueues');

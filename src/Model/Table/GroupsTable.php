@@ -40,7 +40,7 @@ class GroupsTable extends Table
         ]);
         $this->belongsTo('Barcodes', [
             'foreignKey' => 'barcode_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
         $this->hasMany('Persons', [
             'foreignKey' => 'group_id'
@@ -84,5 +84,25 @@ class GroupsTable extends Table
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
         $rules->add($rules->existsIn(['barcode_id'], 'Barcodes'));
         return $rules;
+    }
+
+    public function checkGroups($object)
+    {
+        $existingGroup = $this->find()
+                ->where([
+                    'Groups.project_id' => $object['Groups']['project_id'],
+                    'Groups.name' => 'Onbekend'])
+                ->first();
+
+        if (!empty($existingGroup)) {
+            $data = [
+                'BarcodeId' => $existingGroup->barcode_id,
+                'GroupId' => $existingGroup->id
+            ];
+
+            return $data;
+        }
+        
+        return false;
     }
 }

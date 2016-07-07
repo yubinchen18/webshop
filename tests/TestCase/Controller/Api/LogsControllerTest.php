@@ -21,7 +21,9 @@ class LogsControllerTest extends BaseIntegrationTestCase
         'app.persons',
         'app.photos',
         'app.barcodes',
-        'app.groups'
+        'app.groups',
+        'app.projects',
+        'app.downloadqueues'
     ];
 
     public function setUp()

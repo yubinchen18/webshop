@@ -6,7 +6,7 @@ use PHPExcel_Style_NumberFormat;
 use PHPExcel_Cell;
 use PHPExcel_Cell_DataType;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 class GroupImporter
 {
@@ -55,6 +55,7 @@ class GroupImporter
             ->toArray();
 
             $excel = $this->checkFile($project['file']);
+            
             if($excel !== false) {
                 $this->processFile($excel, $project['id']);
             }
@@ -65,10 +66,11 @@ class GroupImporter
     {
         foreach ($excel->getWorksheetIterator() as $worksheet) {
             $highestRow = $worksheet->getHighestRow();
-            $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
+            $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
-            $data = [];
+            
             for ($row = 2; $row <= $highestRow; ++ $row) {
+                $data = [];
                 for ($col = 0; $col < $highestColumnIndex; ++ $col) {
                     $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
                     $column = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
@@ -78,14 +80,20 @@ class GroupImporter
                 }
                 $data['barcode'] = [
                     'barcode' => $this->Barcodes->generateBarcode(),
-                    'type' => 'group'
+                    'type' => 'person'
                 ];
 
+                $type = 'student';
+                if(!empty($data['docent'])) {
+                    $type = 'docent';
+                }
+                $data['type'] = $type;
+                
                 $password = $this->Users->generateRandom();
 
-                $username =  Inflector::slug(substr($data['lastname'], 0, 5))
-                        . Inflector::slug(substr($data['prefix'], 0, 3))
-                        . Inflector::slug(substr($data['firstname'], 0, 5));
+                $username =  Text::slug(substr($data['lastname'], 0, 5))
+                        . Text::slug(substr($data['prefix'], 0, 3))
+                        . Text::slug(substr($data['firstname'], 0, 5));
 
                 $username = $this->Users->checkUsername($username);
                 
@@ -96,32 +104,22 @@ class GroupImporter
                     'type' => 'student'
                 ];
 
-                $data = $this->processAddress($data);
+                list($address, $data) = $this->processAddress($data);
+                unset($data['address']);
+                if($address !== false) {
+                    $data['address'] = $address;
+                }
                 $data = $this->getGroupId($data, $project_id);
-                $data['slug'] = Inflector::slug($data['firstname'] . $data['prefix'] . $data['lastname']);
+                $data['slug'] = Text::slug($data['firstname'] . $data['prefix'] . $data['lastname']);
                 
                 $entity = $this->Persons->newEntity($data,[
-                    'associated' => ['Users', 'Groups.Barcodes', 'Addresses', 'Barcodes']
+                    'associated' => ['Users', 'Groups.Barcodes', 'Barcodes', 'Addresses']
                 ]);
-
+                
                 $this->Persons->save($entity);
-                $errors = $entity->errors();
-
-                //if address has errors, save without address, not important
-                if(isset($errors['address'])) {
-                    $errors = [];
-                    unset($entity->address);
-                    $this->Persons->save($entity);
-                    $errors = $entity->errors();
-                }
-
-                if(!empty($errors)) {
-                    pr($errors);
-                }
             }
         }
     }
-
 
     private function processAddress($data)
     {
@@ -129,14 +127,21 @@ class GroupImporter
         $streets = explode(' ', $address);
         $streetsLength =max(array_keys($streets));
 
+        if(empty($address) || empty($data['zipcode']) || empty($data['city'])) {
+            unset($data['address']);
+            unset($data['zipcode']);
+            unset($data['city']);
+            return [false, $data];;
+        }
+
         if(is_numeric($streets[$streetsLength])) {
             $number = $streets[$streetsLength];
             unset($streets[$streetsLength]);
             $street = implode(' ', $streets);            
         }   
 
-        $data['address'] = [
-//            'street' => (isset($street)) ? $street : '',
+        $address = [
+            'street' => (isset($street)) ? $street : '',
             'number' => (isset($number)) ? $number : '',
             'zipcode' => (isset($data['zipcode'])) ? $data['zipcode'] : '',
             'city' => (isset($data['city'])) ? $data['city'] : '',
@@ -145,27 +150,26 @@ class GroupImporter
             'lastname' => (isset($data['lastname'])) ? $data['lastname'] : '',
         ];
 
-        return $data;
+        return [$address, $data];
     }
-
     
     private function getGroupId($data, $project_id)
     {
         //existing group
-        if(isset($data['group_name'], $this->groupsData[$data['group_name']])) {
+        if(isset($this->groupsData[$data['group_name']])) {
             $data['group_id'] = $this->groupsData[$data['group_name']];
             unset($data['group_name']);
             return $data;
         }
-        
         //new group
         $data['group']['name'] = $data['group_name'];
-        $data['group']['slug'] = Inflector::slug($data['group_name']);
+        $data['group']['slug'] = Text::slug($data['group_name']);
         $data['group']['project_id'] = $project_id;
         $data['group']['barcode'] = [
             'barcode' => $this->Barcodes->generateBarcode(),
             'type' => 'group'
         ];
+        unset($data['group_name']);
         return $data;
     }
 

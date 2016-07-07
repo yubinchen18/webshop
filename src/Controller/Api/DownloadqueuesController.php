@@ -46,100 +46,49 @@ class DownloadqueuesController extends AppController
         }
         
         $this->set(compact('removingItems'));
-    }
+    }   
 
-
-    private function checkGroups($object)
+    public function add()
     {
-        if (!empty($object['Groups']) && $object['Groups']['name'] == 'Onbekend') {
-            $existingGroup = $this->Groups->find()
-                    ->where([
-                        'Groups.project_id' => $object['Groups']['project_id'],
-                        'Groups.name' => 'Onbekend'])
-                    ->first();
+        $this->Groups = TableRegistry::get('Groups');
+        $this->Photos = TableRegistry::get('Photos');
+        $this->Users = TableRegistry::get('Users');
+        $this->Barcodes = TableRegistry::get('Barcodes');
+        $this->Addresses = TableRegistry::get('Addresses');
 
-            if (!empty($existingGroup)) {
-                $this->set('BarcodeId', $existingGroup->barcode_id);
-                $this->set('ObjectId', $existingGroup->id);
-                return false;
+        $object = $this->Downloadqueues->formatInput($this->request->data());
+
+        $this->result = [];
+        $this->userId =0;
+        $this->barcodeId =0;
+        $this->objectId =0;
+
+        if(isset($object['Groups']['name']) && $object['Groups']['name'] == 'Onbekend') {
+            $object = $this->Downloadqueues->formatInput($this->request->data());
+            $groupCheck = $this->Groups->checkGroups($object);
+            if($groupCheck !== false) {
+                $this->set('BarcodeId', $groupCheck['BarcodeId']);
+                $this->set('GroupId', $groupCheck['GroupId']);
+                return;
             }
         }
-        return $object;
-    }
 
-    private function processBarcodes($object)
-    {
+        if (!empty($object['Users'])) {
+            list($object, $userId) = $this->Users->processUsers($object, $this->getUser());
+            $this->userId = $userId;
+            $this->result[] = $userId;
+        }
+
         if (!empty($object['Barcodes'])) {
-            unset($object['Barcodes']['modified']);
-            unset($object['Barcodes']['created']);
-
-            $barcodeId = $object['Barcodes']['online_id'];
-            if ($object['Barcodes']['online_id'] === 0) {
-                unset($object['Barcodes']['id']);
-
-                $entity = $this->Barcodes->newEntity($object['Barcodes']);
-                $savedEntity = $this->Barcodes->save($entity);
-                $barcodeId = $savedEntity->id;
-            }
-            
-            $this->Downloadqueues->addDownloadQueueItem('Barcodes', $barcodeId, $this->getUser());
-            unset($object['Barcodes']);
-            $this->barcodeId = $barcodeId;
-            $this->result[] = $barcodeId;
-        }
-
-        return $object;
-    }
-
-    private function setAddress($data)
-    {
-        return [
-            'street' => $data['address'],
-            'number' => 0,
-            'extension' => null,
-            'city' => $data['city'],
-            'zipcode' => $data['zipcode'],
-            'gender' => null,
-            'firstname' => $data['firstname'],
-            'prefix' => $data['prefix'],
-            'lastname' => $data['lastname']
-        ];
-    }
-
-    private function processPersons($model, $data)
-    {
-        $existingItem = $this->{$model}->find()
-            ->where(['Persons.id' => $data['id']])
-            ->first();
-
-        if (!empty($existingItem)) {
-            if ($existingItem->group_id != $data['group_id']) {
-                $oldGroup = $this->Groups->find()
-                    ->where(['id' => $existingItem->group_id])
-                    ->first();
-
-                $newGroup = $this->Groups->find()
-                    ->where(['id' => $data['group_id']])
-                    ->first();
-
-                if (!empty($oldGroup) && !empty($newGroup)) {
-                    $oldPath = APP . "userphotos" . DS . $this->Photos->getPath($data['barcode_id']);
-                    $newPath = str_replace(
-                        $oldGroup->id . '_' . $oldGroup->slug,
-                        $newGroup->id . '_' . $newGroup->slug,
-                        $oldPath
-                    );
-
-                    if( !file_exists( $newPath ) ) {
-                        mkdir(dirname($newPath), 0777, true);
-                        return true;
-                    }
-                }
+            list($object, $barcodeId) = $this->Barcodes->processBarcodes($object, $this->getUser());
+            if(isset($barcodeId)) {
+                $this->result[] = $barcodeId;
             }
         }
-        return true;
+        $object = $this->process($object);
+        $this->set('result', $this->result);
     }
-
+    
     private function process($object)
     {
         foreach ($object as $model => $data) {
@@ -154,7 +103,7 @@ class DownloadqueuesController extends AppController
             
             if ($model == "Persons") {
                 $data['user_id'] = $this->userId;
-                $data['address'] = $this->setAddress($data);
+                $data['address'] = $this->Addresses->setEntityData($data);
             }
            
             if ($data['online_id'] === 0) { //new
@@ -162,9 +111,9 @@ class DownloadqueuesController extends AppController
                 $entity = $this->{$model}->newEntity($data);
             } else {
                 $data['id'] = $data['online_id']; //existing
-
+                
                 if ($model == "Persons") {
-                    $this->processPersons($model, $data);
+                    $this->Persons->processPersons($data);
                 }
                 $entity = $this->{$model}->get($data['id']);
                 $entity = $this->{$model}->patchEntity($entity, $data);
@@ -172,6 +121,9 @@ class DownloadqueuesController extends AppController
 
             $savedEntity = $this->{$model}->save($entity);
             
+            if($savedEntity === false) {
+                pr($entity->errors);
+            }
             $objectId = $savedEntity->id;
             $this->result[] = $objectId;
             if ($model != 'Photos') {
@@ -179,33 +131,5 @@ class DownloadqueuesController extends AppController
             }
         }
         return $object;
-    }
-
-    public function add()
-    {
-        $this->Groups = TableRegistry::get('Groups');
-        $this->Photos = TableRegistry::get('Photos');
-        $this->Users = TableRegistry::get('Users');
-        $this->Barcodes = TableRegistry::get('Barcodes');
-        
-        $object = $this->Downloadqueues->formatInput($this->request->data());
-
-        $this->result = [];
-        $this->userId =0;
-        $this->barcodeId =0;
-        $this->objectId =0;
-        
-        if ($this->checkGroups($object)) {
-
-            if (isset($object['Users'])) {
-                list($object, $userId) = $this->Users->processUsers($object, $this->getUser());
-                $this->userId = $userId;
-                $this->result[] = $userId;
-            }
-
-            $object = $this->processBarcodes($object);
-            $object = $this->process($object);
-            $this->set('result', $this->result);
-        }
     }
 }

@@ -2,7 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 /**
  * School Entity.
@@ -40,7 +40,7 @@ class School extends Entity
 
     protected function _setName($name)
     {
-        $this->set('slug', Inflector::slug($name));
+        $this->set('slug', Text::slug($name));
         return $name;
     }
 }

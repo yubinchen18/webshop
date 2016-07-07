@@ -6,7 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\ORM\TableRegistry;
 /**
  * Persons Model
  *
@@ -77,6 +77,9 @@ class PersonsTable extends Table
             ->allowEmpty('prefix');
 
         $validator
+            ->allowEmpty('address_id');
+
+        $validator
             ->requirePresence('lastname', 'create')
             ->notEmpty('lastname');
 
@@ -111,5 +114,40 @@ class PersonsTable extends Table
         $rules->add($rules->existsIn(['group_id'], 'Groups'));
         $rules->add($rules->existsIn(['barcode_id'], 'Barcodes'));
         return $rules;
+    }
+
+    public function processPersons($data)
+    {
+        $this->Photos = TableRegistry::get('Photos');
+        $existingItem = $this->find()
+            ->where(['Persons.id' => $data['id']])
+            ->first();
+
+        if (!empty($existingItem)) {
+            if ($existingItem->group_id != $data['group_id']) {
+                $oldGroup = $this->Groups->find()
+                    ->where(['id' => $existingItem->group_id])
+                    ->first();
+
+                $newGroup = $this->Groups->find()
+                    ->where(['id' => $data['group_id']])
+                    ->first();
+
+                if (!empty($oldGroup) && !empty($newGroup)) {
+                    $oldPath = APP . "userphotos" . DS . $this->Photos->getPath($data['barcode_id']);
+                    $newPath = str_replace(
+                        $oldGroup->id . '_' . $oldGroup->slug,
+                        $newGroup->id . '_' . $newGroup->slug,
+                        $oldPath
+                    );
+
+                    if( !file_exists( dirname($newPath) ) ) {
+                        mkdir(dirname($newPath), 0777, true);
+                        return true;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

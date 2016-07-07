@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Barcodes Model
@@ -90,5 +91,27 @@ class BarcodesTable extends Table
         }
 
         return $barcode;
+    }
+
+    public function processBarcodes($object, $user)
+    {
+        $barcodeId = null;
+        $this->Downloadqueues = TableRegistry::get('Downloadqueues');
+        unset($object['Barcodes']['modified']);
+        unset($object['Barcodes']['created']);
+
+        $barcodeId = $object['Barcodes']['online_id'];
+        if ($object['Barcodes']['online_id'] === 0) {
+            unset($object['Barcodes']['id']);
+
+            $entity = $this->newEntity($object['Barcodes']);
+            $savedEntity = $this->save($entity);
+            $barcodeId = $savedEntity->id;
+        }
+
+        $this->Downloadqueues->addDownloadQueueItem('Barcodes', $barcodeId, $user);
+        unset($object['Barcodes']);            
+
+        return [$object, $barcodeId];
     }
 }

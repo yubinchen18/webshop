@@ -5,12 +5,18 @@ use App\Utility\Text;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
+use Cake\Core\Configure;
 
 /**
  * App\Controller\UsersController Test Case
  */
 class BaseIntegrationTestCase extends IntegrationTestCase
 {
+    public function setUp() {
+        parent::setUp();
+        Configure::write('debug', true);
+    }
+
     public function loginAdmin($user = null)
     {
         if (empty($user)) {

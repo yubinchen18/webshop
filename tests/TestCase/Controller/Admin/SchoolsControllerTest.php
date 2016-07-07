@@ -18,10 +18,14 @@ class SchoolsControllerTest extends BaseIntegrationTestCase
      */
     public $fixtures = [
         'app.schools',
-        'app.schools',
+        'app.barcodes',
         'app.addresses',
-        'app.contacts'
-
+        'app.contacts',
+        'app.projects',
+        'app.groups',
+        'app.users',
+        'app.persons',
+        'app.downloadqueues'
     ];
 
     public function setUp()
@@ -238,5 +242,89 @@ class SchoolsControllerTest extends BaseIntegrationTestCase
         $this->assertRedirect('/admin/schools');
         $school = $this->Schools->find()->where(['id' => $id])->first();
         $this->assertEmpty($school);
+    }
+
+    public function testUploadCsv()
+    {
+        $this->Addresses = TableRegistry::get('Addresses');
+        $this->Barcodes = TableRegistry::get('Barcodes');
+        $this->Users = TableRegistry::get('Users');
+        $this->Groups = TableRegistry::get('Groups');
+        $this->Persons = TableRegistry::get('Persons');
+
+        $filename = TESTS . 'Fixture' .  DS . 'group-import.xlsx';
+        $data = [
+            'name' => '',
+            'contact' => [
+                'first_name' => 'Walter',
+                'prefix' => 'de',
+                'last_name' => 'vries',
+                'phone' => '+342-67-8288755',
+                'fax' => '+732-97-5948863',
+                'email' => 'test@test.com',
+                'gender' => 'f'
+            ],
+            'visitaddress' => [
+                'street' => 'test',
+                'number' => 20,
+                'extension' => '',
+                'zipcode' => '13933',
+                'city' => 'Bernisse',
+                'firstname' => 'Erin',
+                'prefix' => 'de',
+                'lastname' => 'Black',
+                'gender' => 'f'
+            ],
+            'mailaddress' => [
+                'street' => 'straatje',
+                'number' => 46,
+                'extension' => '',
+                'zipcode' => 74773,
+                'city' => 'Breda',
+                'firstname' => 'Delilah',
+                'prefix' => '',
+                'lastname' => 'Trevino',
+                'gender' => 'm'
+            ],
+            'differentmail' => 1,
+            'projects' => [
+                [
+                    'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+                    'id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                    'name' => 'test',
+                    'slug' => 'test',                    
+                    'grouptext' => 'tes groepstekst',
+                    'file' => [
+                        'name' => 'hoogstraten-group.xlsx',
+                        'type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'tmp_name' => $filename,
+                        'error' => '0',
+                        'size' => '4842'
+                    ]
+                ]
+            ]
+        ];
+
+        $id = '82199cab-fc52-4853-8f64-575a7721b8e7';
+
+        $addressesPrecount = $this->Addresses->find()->count();
+        $barcodesPrecount = $this->Barcodes->find()->count();
+        $usersPrecount = $this->Users->find()->count();
+        $groupsPrecount = $this->Groups->find()->count();
+        $personsPrecount = $this->Persons->find()->count();
+
+        $this->put('/admin/schools/edit/'.$id, $data);
+
+        $addressesCount = $this->Addresses->find()->count();
+        $barcodesCount = $this->Barcodes->find()->count();
+        $usersCount = $this->Users->find()->count();
+        $groupsCount = $this->Groups->find()->count();
+        $personsCount = $this->Persons->find()->count();
+//debug( $this->Barcodes->find()->toArray());
+        $this->assertEquals(1 ,($addressesCount - $addressesPrecount)); //2
+        $this->assertEquals(3 ,($barcodesCount - $barcodesPrecount)); //3
+        $this->assertEquals(2 ,($usersCount - $usersPrecount)); //2
+        $this->assertEquals(1 ,($groupsCount - $groupsPrecount)); //1
+        $this->assertEquals(2 ,($personsCount - $personsPrecount)); //2
     }
 }

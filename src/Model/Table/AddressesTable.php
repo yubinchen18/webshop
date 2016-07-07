@@ -93,4 +93,19 @@ class AddressesTable extends Table
 
         return $validator;
     }
+
+    public function setEntityData($data) //setAddress
+    {
+        return [
+            'street' => $data['address'],
+            'number' => 0,
+            'extension' => null,
+            'city' => $data['city'],
+            'zipcode' => $data['zipcode'],
+            'gender' => null,
+            'firstname' => $data['firstname'],
+            'prefix' => $data['prefix'],
+            'lastname' => $data['lastname']
+        ];
+    }
 }
