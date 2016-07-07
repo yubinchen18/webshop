@@ -48,7 +48,9 @@ class SchoolsController extends AppController
                 $school->mailaddress->street,
                 $school->mailaddress->city,
                 $school->mailaddress->zipcode,
-                $school->contact->first_name.' '.$school->contact->last_name               
+                $school->contact->first_name.' '.
+                    ($school->contact->prefix == '' ? '' : $school->contact->prefix.' ').
+                    $school->contact->last_name
                 ];
             });
         $this->set('_headerCsv', [

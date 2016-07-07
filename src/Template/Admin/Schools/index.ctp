@@ -57,7 +57,7 @@
             </tbody>
         </table>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="paginator">
                     <ul class="pagination">
                         <?= $this->Paginator->prev('< ' . __('Vorige')) ?>
@@ -81,10 +81,9 @@
                             '_ext' => 'csv'
                         ],
                         [
-                            'class' => 'btn btn-sm btn-purple',
+                            'class' => 'btn btn-sm btn-success pull-right',
                         ]
                     ) ?>
-
                 </div>
             </div>
         </div>
