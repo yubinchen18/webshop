@@ -62,6 +62,16 @@
                         </tr>
                     </table>
                     
+                    <?= $this->Html->link(__('Leerlingenkaart maken'),
+                        [
+                            'action' => 'createProjectCards',
+                            $project->id
+                        ],
+                        [
+                            'class' => 'btn btn-sm btn-pink pull-right'
+                        ]
+                    ) ?>
+                    
 
                 </div>
             </div>

@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
+use App\Lib\PDFCardCreator;
 
 /**
  * Projects Controller
@@ -112,5 +113,10 @@ class ProjectsController extends AppController
             $this->Flash->error(__('Het project kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function createProjectCards($id = null)
+    {
+        
     }
 }
