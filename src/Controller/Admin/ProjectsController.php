@@ -115,8 +115,27 @@ class ProjectsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
+    /**
+     * Create cards for all inside project
+     * 
+     * @param type $id
+     * @return PDF
+     */
     public function createProjectCards($id = null)
     {
+        $this->viewBuilder()->layout(false);
         
+        //Load the project data
+        $data = $this->Projects->get($id, [
+            'contain' => ['Groups'=> [
+                'Barcodes',
+                'Projects.Schools',
+                'Persons' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
+                ]
+            ]
+        ]);
+        
+        //Call helper create PDF
+        new PDFCardCreator($data);
     }
 }

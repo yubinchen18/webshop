@@ -108,6 +108,11 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Groups', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
+        $routes->connect(
+            '/groups/createGroupCards/:id',
+            ['controller' => 'Groups', 'action' => 'createGroupCards'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
 
 
         $routes->connect('/persons', ['controller' => 'Persons', 'action' => 'index']);

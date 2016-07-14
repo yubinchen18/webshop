@@ -1,11 +1,9 @@
 <?php
 namespace App\Controller\Admin;
 
-use Cake\Core\Configure;
-use Cake\Utility\Security;
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
-use FPDF;
+use App\Lib\PDFCardCreator;
 
 /**
  * Persons Controller
@@ -120,52 +118,21 @@ class PersonsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
+    /**
+     * Create card for person
+     * 
+     * @param type $id
+     * @return PDF
+     */
     public function createPersonCard($id = null)
     {
-        $person = $this->Persons->get($id, [
+        $this->viewBuilder()->layout(false);
+        
+        //Load the person data
+        $data = $this->Persons->get($id, [
             'contain' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
         ]);
-        $this->viewBuilder()->layout(false);
 	
-	$pdf = new FPDF( "L", "mm", "A5" );
-
-	$pdf->AddFont( "Code39", "", "code39.php");
-	
-	$pdf->AddPage();
-	$pdf->SetAutoPageBreak( true, 1 );
-	
-	$pdf->SetFont("Code39", "", 8);
-	$pdf->setXY( 	65, 	27 );
-	$pdf->Cell(		100, 	0, "*" . $person->barcode->barcode . "*" );
-
-	$pdf->SetFont( "Arial", "", 12);
-	$pdf->setXY( 	20, 	50 );
-	$pdf->MultiCell(	
-		90,
-		5, 
-		iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->firstname ) . ( $person->prefix != "" ? " " . iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->prefix ) : "" ) . " " . iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->lastname ) . PHP_EOL .
-		( $person->address->street != "" ? iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->address->street ) . PHP_EOL : "" ) . 
-		( $person->address->zipcode != "" ? iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->address->zipcode ) . " ": "" ) . ( $person->address->city != "" ? iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->address->city ) : "" ) . PHP_EOL . 
-		"KLAS " . iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->group->name ) . " " . iconv( "UTF-8", "ISO-8859-1//TRANSLIT", $person->group->project->school->name ) . PHP_EOL
-	);
-
-//	$pdf->SetFont( "Times", "", 12);
-	$pdf->setXY( 	66.5, 	124.8 );
-        $key = Configure::read('EncryptionSalt');
-	$pdf->MultiCell(	
-		90,
-		5, 
-		$person->user->username . PHP_EOL . 
-		Security::decrypt($person->user->genuine, $key) . PHP_EOL
-	);
-	
-	$pdf->Output();
-	die();
-        
-        
-        
-        
-        
-        $this->set(compact('person'));
+        new PDFCardCreator($data);
     }
 }

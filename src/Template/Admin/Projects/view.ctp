@@ -68,7 +68,9 @@
                             $project->id
                         ],
                         [
-                            'class' => 'btn btn-sm btn-pink pull-right'
+                            'escape' => false,
+                            'class' => 'btn btn-sm btn-pink pull-right',
+                            'target' => '_blank'
                         ]
                     ) ?>
                     

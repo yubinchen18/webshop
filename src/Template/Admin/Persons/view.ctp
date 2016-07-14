@@ -165,13 +165,13 @@
                     
                     <?= $this->Html->link(__('Leerlingenkaart maken'),
                         [
-                            'controller' => 'persons',
                             'action' => 'createPersonCard',
                             $person->id
                         ],
                         [
                             'escape' => false,
-                            'class' => 'btn btn-sm btn-pink pull-right'
+                            'class' => 'btn btn-sm btn-pink pull-right',
+                            'target' => '_blank'
                         ]
                     ) ?>
                     
