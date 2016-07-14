@@ -15,13 +15,16 @@ class PDFCardCreator
     private $key;
     
     public function __construct($data)
-    {
+    {        
+        $fontPath = APP . 'Lib/font';
+        define('FPDF_FONTPATH', $fontPath);
+        
         //Set salt key
         $this->key = Configure::read('EncryptionSalt');
 
         //Open new PDF file        
         $this->pdf = new FPDF( "L", "mm", "A5" );
-	$this->pdf->AddFont( "Code39", "", "code39.php");
+	$this->pdf->AddFont("Code39", "",  'code39.php');
     
         
         //Add page for each person in object
@@ -48,8 +51,7 @@ class PDFCardCreator
                 };
                 //Add anonymous cards
                 $this->addAlgemeenDocentCard($data);
-                $this->addAnoniemStudentCard($data);
-                
+                $this->addAnoniemStudentCard($data);               
                 break;
             case 'App\Model\Entity\Person':
                 $this->addCard($data);
