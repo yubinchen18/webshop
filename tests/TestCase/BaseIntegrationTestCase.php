@@ -12,7 +12,8 @@ use Cake\Core\Configure;
  */
 class BaseIntegrationTestCase extends IntegrationTestCase
 {
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         Configure::write('debug', true);
     }

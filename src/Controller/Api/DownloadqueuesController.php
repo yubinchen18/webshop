@@ -46,7 +46,7 @@ class DownloadqueuesController extends AppController
         }
         
         $this->set(compact('removingItems'));
-    }   
+    }
 
     public function add()
     {
@@ -63,10 +63,10 @@ class DownloadqueuesController extends AppController
         $this->barcodeId =0;
         $this->objectId =0;
 
-        if(isset($object['Groups']['name']) && $object['Groups']['name'] == 'Onbekend') {
+        if (isset($object['Groups']['name']) && $object['Groups']['name'] == 'Onbekend') {
             $object = $this->Downloadqueues->formatInput($this->request->data());
             $groupCheck = $this->Groups->checkGroups($object);
-            if($groupCheck !== false) {
+            if ($groupCheck !== false) {
                 $this->set('BarcodeId', $groupCheck['BarcodeId']);
                 $this->set('GroupId', $groupCheck['GroupId']);
                 return;
@@ -81,7 +81,7 @@ class DownloadqueuesController extends AppController
 
         if (!empty($object['Barcodes'])) {
             list($object, $barcodeId) = $this->Barcodes->processBarcodes($object, $this->getUser());
-            if(isset($barcodeId)) {
+            if (isset($barcodeId)) {
                 $this->result[] = $barcodeId;
             }
         }
@@ -121,7 +121,7 @@ class DownloadqueuesController extends AppController
 
             $savedEntity = $this->{$model}->save($entity);
             
-            if($savedEntity === false) {
+            if ($savedEntity === false) {
                 pr($entity->errors);
             }
             $objectId = $savedEntity->id;

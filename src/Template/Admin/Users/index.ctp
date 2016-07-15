@@ -14,7 +14,7 @@
             </thead>
             <tbody>
             <?php foreach ($users as $user): ?>
-                <tr>
+                <tr ondblclick="openView('users', '<?= $user->id ?>')">
                     <td><?= h($user->username) ?></td>
                     <td><?= h($user->email) ?></td>
                     <td><?= h($user->created) ?></td>

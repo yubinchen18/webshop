@@ -135,7 +135,6 @@ class UsersTable extends Table
             $entity = $this->newEntity($object['Users']);
             $savedEntity = $this->save($entity);
             $userId = $savedEntity->id;
-
         }
 
         $this->Downloadqueues->addDownloadQueueItem('Users', $userId, $username);
@@ -154,14 +153,14 @@ class UsersTable extends Table
             ->where(['username LIKE' => $username.'%'])
             ->toArray();
 
-        if(empty($users)) {
+        if (empty($users)) {
             return $username;
         }
 
         $found = false;
-        while($found == false) {
+        while ($found == false) {
             $newUsername = $username . $this->generateRandom(3);
-            if(!isset($users[$newUsername])) {
+            if (!isset($users[$newUsername])) {
                 $found = true;
                 $username = $newUsername;
             }

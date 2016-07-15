@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use Cake\TestSuite\IntegrationTestCase;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
+
 /**
  * App\Controller\AppController Test Case
  */
@@ -96,5 +97,4 @@ class LogsControllerTest extends BaseIntegrationTestCase
                 ->toArray();
         $this->assertCount(2, $logs);
     }
-
 }

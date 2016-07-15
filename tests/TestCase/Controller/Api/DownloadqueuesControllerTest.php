@@ -6,6 +6,7 @@ use Cake\TestSuite\IntegrationTestCase;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
+
 /**
  * App\Controller\QueuesController Test Case
  */
@@ -526,13 +527,13 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $this->Barcodes = TableRegistry::get('Barcodes');
 
         $data = [
-            'Groups' => [ //offline aangemaakt                
+            'Groups' => [ //offline aangemaakt
                 "id"=> 2271,
                 "online_id"=> 0,
                 "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
                 "barcode_id"=> 0,
-                "url"=> "onbekend",                
-                "name"=> "Onbekend",                
+                "url"=> "onbekend",
+                "name"=> "Onbekend",
                 "created"=> "\/Date(1393486879563)\/",
                 "modified"=> "\/Date(1393486879563)\/",
                 "deleted"=> false,

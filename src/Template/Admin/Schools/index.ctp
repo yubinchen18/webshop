@@ -16,7 +16,7 @@
             </thead>
             <tbody>
             <?php foreach ($schools as $school): ?>
-                <tr>
+                <tr ondblclick="openView('schools', '<?= $school->id ?>')">
                     <td><?= h($school->name) ?></td>
                     <td><?= h($school->contact->full_name) ?></td>
                     <td><?= h($school->contact->phone) ?></td>

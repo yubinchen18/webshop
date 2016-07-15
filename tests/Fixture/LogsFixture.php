@@ -32,7 +32,7 @@ class LogsFixture extends TestFixture
             'collation' => 'utf8_general_ci'
         ],
     ];
-    // @codingStandardsIgnoreEnd
+    
 
     /**
      * Records
@@ -50,4 +50,5 @@ class LogsFixture extends TestFixture
             'created' => '2016-06-29 14:12:11'
         ],
     ];
+    // @codingStandardsIgnoreEnd
 }

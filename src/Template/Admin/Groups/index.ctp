@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             <?php foreach ($groups as $group): ?>
-                <tr>
+                <tr ondblclick=""ick="openView('groups', '<?= $group->id ?>')">
                     <td><?= h($group->name) ?></td>
                     <td><?= h($group->project->name) ?></td>
                     <td><?= h($group->slug) ?></td>

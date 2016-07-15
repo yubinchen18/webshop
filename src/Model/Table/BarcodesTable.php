@@ -79,14 +79,14 @@ class BarcodesTable extends Table
      */
     public function generateBarcode($type = '*ano_')
     {
-        $unique = base_convert(rand(10e16, 10e20), 10, 36);
+        $unique = base_convert(rand(0, 9999999999999999999999999), 10, 36);
         $barcode = $type . $unique;
 
         $barcodeExisting = $this->find()
             ->where(['barcode' => $barcode])
             ->first();
 
-        if(!empty($barcodeExisting)) {
+        if (!empty($barcodeExisting)) {
             $barcode = $this->generateBarcode($type);
         }
 
@@ -110,7 +110,7 @@ class BarcodesTable extends Table
         }
 
         $this->Downloadqueues->addDownloadQueueItem('Barcodes', $barcodeId, $user);
-        unset($object['Barcodes']);            
+        unset($object['Barcodes']);
 
         return [$object, $barcodeId];
     }

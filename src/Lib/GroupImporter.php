@@ -38,13 +38,13 @@ class GroupImporter
         $this->Users = TableRegistry::get('Users');
         $this->Barcodes = TableRegistry::get('Barcodes');
 
-        if(!isset($this->data['projects'])) {
+        if (!isset($this->data['projects'])) {
             return;
         }
 
         //loop throug projects
-        foreach($this->data['projects'] as $project) {
-            if(empty($project['id'])) {
+        foreach ($this->data['projects'] as $project) {
+            if (empty($project['id'])) {
                 continue;
             }
             $this->groupsData = $this->Groups->find('list', [
@@ -56,7 +56,7 @@ class GroupImporter
 
             $excel = $this->checkFile($project['file']);
             
-            if($excel !== false) {
+            if ($excel !== false) {
                 $this->processFile($excel, $project['id']);
             }
         }
@@ -74,7 +74,7 @@ class GroupImporter
                 for ($col = 0; $col < $highestColumnIndex; ++ $col) {
                     $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
                     $column = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
-                    if(in_array($column, $this->columns)) {
+                    if (in_array($column, $this->columns)) {
                         $data[$column] = $value;
                     }
                 }
@@ -84,7 +84,7 @@ class GroupImporter
                 ];
 
                 $type = 'student';
-                if(!empty($data['docent'])) {
+                if (!empty($data['docent'])) {
                     $type = 'docent';
                 }
                 $data['type'] = $type;
@@ -106,13 +106,13 @@ class GroupImporter
 
                 list($address, $data) = $this->processAddress($data);
                 unset($data['address']);
-                if($address !== false) {
+                if ($address !== false) {
                     $data['address'] = $address;
                 }
                 $data = $this->getGroupId($data, $project_id);
                 $data['slug'] = Text::slug($data['firstname'] . $data['prefix'] . $data['lastname']);
                 
-                $entity = $this->Persons->newEntity($data,[
+                $entity = $this->Persons->newEntity($data, [
                     'associated' => ['Users', 'Groups.Barcodes', 'Barcodes', 'Addresses']
                 ]);
                 
@@ -127,18 +127,19 @@ class GroupImporter
         $streets = explode(' ', $address);
         $streetsLength =max(array_keys($streets));
 
-        if(empty($address) || empty($data['zipcode']) || empty($data['city'])) {
+        if (empty($address) || empty($data['zipcode']) || empty($data['city'])) {
             unset($data['address']);
             unset($data['zipcode']);
             unset($data['city']);
-            return [false, $data];;
+            return [false, $data];
+            ;
         }
 
-        if(is_numeric($streets[$streetsLength])) {
+        if (is_numeric($streets[$streetsLength])) {
             $number = $streets[$streetsLength];
             unset($streets[$streetsLength]);
-            $street = implode(' ', $streets);            
-        }   
+            $street = implode(' ', $streets);
+        }
 
         $address = [
             'street' => (isset($street)) ? $street : '',
@@ -156,7 +157,7 @@ class GroupImporter
     private function getGroupId($data, $project_id)
     {
         //existing group
-        if(isset($this->groupsData[$data['group_name']])) {
+        if (isset($this->groupsData[$data['group_name']])) {
             $data['group_id'] = $this->groupsData[$data['group_name']];
             unset($data['group_name']);
             return $data;
@@ -173,8 +174,9 @@ class GroupImporter
         return $data;
     }
 
-    private function checkFile($file) {
-        if(!empty($file['name']) && !empty($file['type']) && !empty($file['tmp_name'])) {
+    private function checkFile($file)
+    {
+        if (!empty($file['name']) && !empty($file['type']) && !empty($file['tmp_name'])) {
             $excel = PHPExcel_IOFactory::load($file['tmp_name']);
             return $excel;
         }

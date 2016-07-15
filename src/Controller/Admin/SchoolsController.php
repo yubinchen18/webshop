@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use App\Lib\GroupImporter;
+
 /**
  * Schools Controller
  *
@@ -35,11 +36,33 @@ class SchoolsController extends AppController
      */
     public function view($id = null)
     {
+       
         $school = $this->Schools->get($id, [
-            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']
+            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
         ]);
 
         $this->set('school', $school);
+    }
+
+    public function saveproject($schoolid)
+    {
+        $school = $this->Schools->get($schoolid, [
+            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $school = $this->Schools->patchEntity($school, $this->request->data, [
+                'associated' => ['Projects']
+            ]);
+            new GroupImporter($this->request->data, $schoolid);
+            
+            if ($this->Schools->save($school)) {
+                $this->Flash->success(__('Het project is opgeslagen.'));
+            } else {
+                $this->Flash->error(__('Het project kon niet opgeslagen worden. Probeer het nogmaals.'));
+            }
+        }
+        
+        return $this->redirect(['action' => 'view', 'id' => $schoolid]);
     }
 
     /**
@@ -79,11 +102,7 @@ class SchoolsController extends AppController
                 $this->Schools->Mailaddresses->delete($school->mailaddress);
                 $school->mailladdress = null;
             }
-
-            new GroupImporter($this->request->data, $id);            
-            $school = $this->Schools->patchEntity($school, $this->request->data, [
-                'associated' => ['Projects']
-            ]);
+            $school = $this->Schools->patchEntity($school, $this->request->data);
             if ($this->Schools->save($school)) {
                 $this->Flash->success(__('De school is opgeslagen.'));
                 return $this->redirect(['action' => 'index']);
@@ -119,12 +138,12 @@ class SchoolsController extends AppController
     public function deleteproject($id)
     {
         $success = false;
-        if($this->request->is('DELETE')) {
+        if ($this->request->is('DELETE')) {
             $project = $this->Schools->Projects->get($id);
 
-            if(!empty($project)) {
-                if($this->Schools->Projects->delete($project)) {
-                   $success = true;
+            if (!empty($project)) {
+                if ($this->Schools->Projects->delete($project)) {
+                    $success = true;
                 }
             }
             $this->set('project', $project);

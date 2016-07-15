@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+
 /**
  * Persons Model
  *
@@ -141,7 +142,7 @@ class PersonsTable extends Table
                         $oldPath
                     );
 
-                    if( !file_exists( dirname($newPath) ) ) {
+                    if (!file_exists(dirname($newPath))) {
                         mkdir(dirname($newPath), 0777, true);
                         return true;
                     }

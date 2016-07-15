@@ -21,10 +21,11 @@
         ]) ?>
 
          <?= $this->Html->script([
-             '/admin/js/jquery.min.js',
+            '/admin/js/jquery.min.js',
             '/admin/js/bootstrap.min.js',
             '/admin/js/ace-elements.js',
             '/admin/js/ace.js',
+            '/admin/js/main.js'
         ]) ?>
         
         <?= $this->fetch('css') ?>
