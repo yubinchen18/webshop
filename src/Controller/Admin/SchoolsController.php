@@ -33,7 +33,17 @@ class SchoolsController extends AppController
      */
     public function export()
     {
-        $schools = $this->Schools->find('all', ['contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']])->orderAsc('name');      
+        $schools = $this->Schools->find('all', ['contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']])->orderAsc('name');
+        //format phone and fax number output
+        foreach ($schools as $school) {
+            if (isset($school->contact->phone)) {
+                $school->contact->phone = preg_replace('|^\s?\(?0(.*?)$|si', '+31 (0)\1', $school->contact->phone);
+            };
+            if (isset($school->contact->fax)) {
+                $school->contact->fax = preg_replace('|^\s?0(.*?)$|si', '+31 (0)\1', $school->contact->fax);
+            };
+        };
+        
         $this->set(compact('schools'));        
         $this->set('_serialize', 'schools');
         $this->set('_csvMap', function ($school) {
