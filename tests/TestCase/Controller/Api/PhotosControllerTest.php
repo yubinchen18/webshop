@@ -5,6 +5,7 @@ use App\Controller\PhotosController;
 use Cake\TestSuite\IntegrationTestCase;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
+
 /**
  * App\Controller\PhotosController Test Case
  */

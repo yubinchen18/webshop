@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             <?php foreach ($projects as $project): ?>
-                <tr>
+                <tr ondblclick="openView('projects', '<?= $project->id ?>')">
                     <td><?= h($project->name) ?></td>
                     <td><?= h($project->school->name) ?></td>
                     <td><?= h($project->slug) ?></td>

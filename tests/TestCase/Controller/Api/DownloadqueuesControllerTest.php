@@ -5,11 +5,12 @@ use App\Controller\QueuesController;
 use Cake\TestSuite\IntegrationTestCase;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
 
 /**
  * App\Controller\QueuesController Test Case
  */
-class QueuesControllerTest extends BaseIntegrationTestCase
+class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 {
     /**
      * Fixtures
@@ -32,10 +33,9 @@ class QueuesControllerTest extends BaseIntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        TableRegistry::clear();
         $this->setBasicAuth();
     }
-
+       
     /**
      * Test initial setup
      *
@@ -223,7 +223,7 @@ class QueuesControllerTest extends BaseIntegrationTestCase
         $this->assertCount(4, $queue);
     }
 
-    public function testAddNeww()
+    public function testAddNew()
     {
         $this->Downloadqueue = TableRegistry::get('Downloadqueues');
         $this->Barcodes = TableRegistry::get('Barcodes');
@@ -432,29 +432,29 @@ class QueuesControllerTest extends BaseIntegrationTestCase
             'Barcodes' => [
                 "id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
                 "online_id"=> "0e46688d-02a9-4da4-9f91-ed61a3e7246e",
-        "barcode"=> "stuezdar9s5bko",
-        "type"=> "person",
-        "created"=> "\/Date(1392384692000)\/",
-        "modified" => "\/Date(1392384692000)\/",
+                "barcode"=> "stuezdar9s5bko",
+                "type"=> "person",
+                "created"=> "\/Date(1392384692000)\/",
+                "modified" => "\/Date(1392384692000)\/",
             ],
             'Photos' => [
                 "id"=> '44a4e893-3f80-474f-8a8f-2870513c9d1d',
                 "online_id"=> "59d395fa-e723-43f0-becb-0078425f9a27",
                 "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
-            "type"=> "sibling",
-            "path"=> "HA088268.jpg",
+                "type"=> "sibling",
+                "path"=> "HA088268.jpg",
                 "modified"=> "\/Date(1393595241733)\/",
                 "created"=> "\/Date(1393595241733)\/",
             ],
             'Groups' => [
-            "id"=> 2271,
+                "id"=> 2271,
                 "online_id"=> "e5b778cd-68cd-469f-88b3-37846b984868",
-            "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-            "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
-            "slug"=> "test",
-            "name"=> "test",
+                "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
+                "slug"=> "test",
+                "name"=> "test",
                 "modified"=> "\/Date(1393486879563)\/",
-            "created"=> "\/Date(1393486879563)\/",
+                "created"=> "\/Date(1393486879563)\/",
                 "deleted"=> false,
             ],
             "Users" => [
@@ -469,15 +469,15 @@ class QueuesControllerTest extends BaseIntegrationTestCase
             ],
             "Persons" => [
                 "id"=> 35628,
-            "online_id"=> "0fdcdf18-e0a9-43c0-b254-d373eefb79a0",
-            "barcode_id"=> "a34c9d93-b89f-4b6d-a10c-8a7e939df834",
+                "online_id"=> "0fdcdf18-e0a9-43c0-b254-d373eefb79a0",
+                "barcode_id"=> "a34c9d93-b89f-4b6d-a10c-8a7e939df834",
                 "group_id"=> "af83fdb0-c76c-4643-913c-e74f318026d7",
-            "studentnumber"=> "7",
-            "lastname"=> ".",
-            "user_id"=> 182075,
-            "slug"=> "anis_danoun_",
-            "firstname"=> "Anis Danoun",
-            "prefix"=> "",
+                "studentnumber"=> "7",
+                "lastname"=> ".",
+                "user_id"=> 182075,
+                "slug"=> "anis_danoun_",
+                "firstname"=> "Anis Danoun",
+                "prefix"=> "",
                 "zipcode"=> "3027 JM ROTTERDAM",
                 "city"=> "spijkenisse",
                 "address"=> "Multatulistraat 7 d",
@@ -527,13 +527,13 @@ class QueuesControllerTest extends BaseIntegrationTestCase
         $this->Barcodes = TableRegistry::get('Barcodes');
 
         $data = [
-            'Groups' => [ //offline aangemaakt                
+            'Groups' => [ //offline aangemaakt
                 "id"=> 2271,
                 "online_id"=> 0,
                 "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
                 "barcode_id"=> 0,
-                "url"=> "onbekend",                
-                "name"=> "Onbekend",                
+                "url"=> "onbekend",
+                "name"=> "Onbekend",
                 "created"=> "\/Date(1393486879563)\/",
                 "modified"=> "\/Date(1393486879563)\/",
                 "deleted"=> false,
@@ -542,6 +542,12 @@ class QueuesControllerTest extends BaseIntegrationTestCase
 
         $this->post('/api/v1/upload_item.json', $data);
 
+        $barcodeId = $this->viewVariable('BarcodeId');
+        $groupId = $this->viewVariable('GroupId');
+
+        $this->assertEquals('b0dacd2c-ffd5-4af7-b69f-fc12e009b256', $barcodeId);
+        $this->assertEquals('0b8c8b9d-3889-4cb5-bdb2-0b31e9979be1', $groupId);
+        
         $this->assertResponseSuccess();
         $data = $this->getDecodedResponse();
        

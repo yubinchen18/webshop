@@ -79,7 +79,7 @@ class AppController extends Controller
         $entity->method = $this->request->method();
         
         $request = json_encode($this->request->data());
-        if($this->request->method() == 'GET' &&
+        if ($this->request->method() == 'GET' &&
                 isset($this->request->params['model']) &&
                 isset($this->request->params['id'])) {
             $request = json_encode([
@@ -94,7 +94,7 @@ class AppController extends Controller
 
     private function saveResponse()
     {
-        if(!isset($this->Logs)) {
+        if (!isset($this->Logs)) {
             $this->Logs = TableRegistry::get('Logs');
         }
 

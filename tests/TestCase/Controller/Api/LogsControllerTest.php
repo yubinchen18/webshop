@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 use Cake\TestSuite\IntegrationTestCase;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
+
 /**
  * App\Controller\AppController Test Case
  */
@@ -21,7 +22,9 @@ class LogsControllerTest extends BaseIntegrationTestCase
         'app.persons',
         'app.photos',
         'app.barcodes',
-        'app.groups'
+        'app.groups',
+        'app.projects',
+        'app.downloadqueues'
     ];
 
     public function setUp()
@@ -94,5 +97,4 @@ class LogsControllerTest extends BaseIntegrationTestCase
                 ->toArray();
         $this->assertCount(2, $logs);
     }
-
 }

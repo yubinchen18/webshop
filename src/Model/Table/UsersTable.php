@@ -117,19 +117,7 @@ class UsersTable extends Table
             'type' => 'admin']);
         return $query;
     }
-
-    /**
-     *
-     * @param Query $query
-     * @param array $options
-     * @return Query
-     */
-    public function findBasicAuthUser(Query $query, array $options)
-    {
-        $query->where(['type' => 'photographer']);
-        return $query;
-    }
-
+    
     public function processUsers($object, $username)
     {
         $this->Downloadqueues = TableRegistry::get('Downloadqueues');
@@ -147,7 +135,6 @@ class UsersTable extends Table
             $entity = $this->newEntity($object['Users']);
             $savedEntity = $this->save($entity);
             $userId = $savedEntity->id;
-
         }
 
         $this->Downloadqueues->addDownloadQueueItem('Users', $userId, $username);
@@ -155,5 +142,42 @@ class UsersTable extends Table
         unset($object['Users']);
 
         return [$object, $userId,];
+    }
+
+    public function checkUsername($username)
+    {
+        $users = $this->find('list', [
+                'keyField' => 'username',
+                'valueField' => 'id'
+            ])
+            ->where(['username LIKE' => $username.'%'])
+            ->toArray();
+
+        if (empty($users)) {
+            return $username;
+        }
+
+        $found = false;
+        while ($found == false) {
+            $newUsername = $username . $this->generateRandom(3);
+            if (!isset($users[$newUsername])) {
+                $found = true;
+                $username = $newUsername;
+            }
+        }
+
+        return $username;
+    }
+
+    public function generateRandom($length = 8)
+    {
+        $password = "";
+        $chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+        $charlength = strlen($chars) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $password .= substr($chars, mt_rand(0, $charlength), 1);
+        }
+
+        return $password;
     }
 }

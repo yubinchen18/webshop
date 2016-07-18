@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Barcodes Model
@@ -69,5 +70,48 @@ class BarcodesTable extends Table
             ->allowEmpty('deleted');
 
         return $validator;
+    }
+
+    /**
+     * Type standard is anonymous
+     * @param type $type
+     * @return type
+     */
+    public function generateBarcode($type = '*ano_')
+    {
+        $unique = base_convert(rand(0, 9999999999999999999999999), 10, 36);
+        $barcode = $type . $unique;
+
+        $barcodeExisting = $this->find()
+            ->where(['barcode' => $barcode])
+            ->first();
+
+        if (!empty($barcodeExisting)) {
+            $barcode = $this->generateBarcode($type);
+        }
+
+        return $barcode;
+    }
+
+    public function processBarcodes($object, $user)
+    {
+        $barcodeId = null;
+        $this->Downloadqueues = TableRegistry::get('Downloadqueues');
+        unset($object['Barcodes']['modified']);
+        unset($object['Barcodes']['created']);
+
+        $barcodeId = $object['Barcodes']['online_id'];
+        if ($object['Barcodes']['online_id'] === 0) {
+            unset($object['Barcodes']['id']);
+
+            $entity = $this->newEntity($object['Barcodes']);
+            $savedEntity = $this->save($entity);
+            $barcodeId = $savedEntity->id;
+        }
+
+        $this->Downloadqueues->addDownloadQueueItem('Barcodes', $barcodeId, $user);
+        unset($object['Barcodes']);
+
+        return [$object, $barcodeId];
     }
 }

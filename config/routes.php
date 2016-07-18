@@ -15,8 +15,16 @@ Router::scope('/', function (RouteBuilder $routes) {
     Router::prefix('Api', function ($routes) {
         $routes->extensions(['json']);
 
-        $routes->connect('/v1/get_download_queue', ['controller' => 'Downloadqueues', 'action' => 'index', '_ext' => 'json']);
-        $routes->connect('/v1/remove_queue_items', ['controller' => 'Downloadqueues', 'action' => 'remove', '_ext' => 'json']);
+        $routes->connect('/v1/get_download_queue', [
+            'controller' => 'Downloadqueues',
+            'action' => 'index',
+            '_ext' => 'json'
+        ]);
+        $routes->connect('/v1/remove_queue_items', [
+            'controller' => 'Downloadqueues',
+            'action' => 'remove',
+            '_ext' => 'json'
+        ]);
         $routes->connect('/v1/upload_item', ['controller' => 'Downloadqueues', 'action' => 'add', '_ext' => 'json']);
 
         $routes->connect('/v1/get_ftp_login', ['controller' => 'Ftp', 'action' => 'index', '_ext' => 'json']);
@@ -65,6 +73,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect(
             '/schools/delete/:id',
             ['controller' => 'Schools', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/schools/saveproject/:schoolid',
+            ['controller' => 'Schools', 'action' => 'saveproject'],
+            ['schoolid' => RouteBuilder::UUID, 'pass' => ['schoolid']]
+        );
+
+        $routes->connect(
+            '/schools/deleteproject/:id',
+            ['controller' => 'Schools', 'action' => 'deleteproject'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 

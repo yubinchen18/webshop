@@ -62,9 +62,7 @@ class AddressesTable extends Table
             ->notEmpty('street');
 
         $validator
-            ->integer('number')
-            ->requirePresence('number', 'create')
-            ->notEmpty('number');
+            ->allowEmpty('number');
 
         $validator
             ->allowEmpty('extension');
@@ -94,5 +92,20 @@ class AddressesTable extends Table
             ->allowEmpty('deleted');
 
         return $validator;
+    }
+
+    public function setEntityData($data) //setAddress
+    {
+        return [
+            'street' => $data['address'],
+            'number' => 0,
+            'extension' => null,
+            'city' => $data['city'],
+            'zipcode' => $data['zipcode'],
+            'gender' => null,
+            'firstname' => $data['firstname'],
+            'prefix' => $data['prefix'],
+            'lastname' => $data['lastname']
+        ];
     }
 }
