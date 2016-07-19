@@ -117,7 +117,7 @@ class ProjectsController extends AppController
     
     /**
      * Create cards for all inside project
-     * 
+     *
      * @param type $id
      * @return PDF
      */

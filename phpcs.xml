@@ -4,6 +4,7 @@
     <exclude-pattern>vendor/*</exclude-pattern>
     <exclude-pattern>tmp/*</exclude-pattern>
     <exclude-pattern>config/Migrations/*</exclude-pattern>
+    <exclude-pattern>src/Lib/font/*</exclude-pattern>
     <arg name="extensions" value="php"/>
 
     <rule ref="PSR2" />

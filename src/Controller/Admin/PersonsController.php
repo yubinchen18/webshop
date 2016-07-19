@@ -120,7 +120,7 @@ class PersonsController extends AppController
     
     /**
      * Create card for person
-     * 
+     *
      * @param type $id
      * @return PDF
      */
@@ -132,7 +132,7 @@ class PersonsController extends AppController
         $data = $this->Persons->get($id, [
             'contain' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
         ]);
-	
+    
         new PDFCardCreator($data);
     }
 }
