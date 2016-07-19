@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
+use App\Lib\PDFCardCreator;
 
 /**
  * Groups Controller
@@ -110,5 +111,29 @@ class GroupsController extends AppController
             $this->Flash->error(__('De groep kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     * Create cards for all inside group
+     * 
+     * @param type $id
+     * @return PDF
+     */
+    public function createGroupCards($id = null)
+    {
+        $this->viewBuilder()->layout(false);
+        
+        //Load the person data
+        $data = $this->Groups->get($id, [
+            'contain' => [
+                'Barcodes',
+                'Projects.Schools',
+                'Persons' => [
+                    'Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users'
+                ]
+            ]
+        ]);
+
+        new PDFCardCreator($data);
     }
 }

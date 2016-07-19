@@ -5,6 +5,8 @@ use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use App\Lib\GroupImporter;
 
+use App\Lib\PDFCardCreator;
+
 /**
  * Schools Controller
  *

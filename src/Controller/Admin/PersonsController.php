@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
+use App\Lib\PDFCardCreator;
 
 /**
  * Persons Controller
@@ -115,5 +116,23 @@ class PersonsController extends AppController
             $this->Flash->error(__('De persoon kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     * Create card for person
+     * 
+     * @param type $id
+     * @return PDF
+     */
+    public function createPersonCard($id = null)
+    {
+        $this->viewBuilder()->layout(false);
+        
+        //Load the person data
+        $data = $this->Persons->get($id, [
+            'contain' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
+        ]);
+	
+        new PDFCardCreator($data);
     }
 }

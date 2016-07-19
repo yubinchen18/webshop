@@ -100,6 +100,11 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Projects', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
+        $routes->connect(
+            '/projects/createProjectCards/:id',
+            ['controller' => 'Projects', 'action' => 'createProjectCards'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
 
         $routes->connect('/groups', ['controller' => 'Groups', 'action' => 'index']);
         $routes->connect('/groups/add', ['controller' => 'Groups', 'action' => 'add']);
@@ -116,6 +121,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect(
             '/groups/delete/:id',
             ['controller' => 'Groups', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/groups/createGroupCards/:id',
+            ['controller' => 'Groups', 'action' => 'createGroupCards'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
@@ -135,6 +145,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect(
             '/persons/delete/:id',
             ['controller' => 'Persons', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/persons/createPersonCard/:id',
+            ['controller' => 'Persons', 'action' => 'createPersonCard'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 

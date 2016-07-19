@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
+use App\Lib\PDFCardCreator;
 
 /**
  * Projects Controller
@@ -20,7 +21,7 @@ class ProjectsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Schools']
+            'contain' => ['Schools', 'Groups']
         ];
         $projects = $this->paginate($this->Projects);
         $this->set(compact('projects'));
@@ -36,7 +37,7 @@ class ProjectsController extends AppController
     public function view($id = null)
     {
         $project = $this->Projects->get($id, [
-            'contain' => ['Schools']
+            'contain' => ['Schools', 'Groups']
         ]);
 
         $this->set('project', $project);
@@ -112,5 +113,29 @@ class ProjectsController extends AppController
             $this->Flash->error(__('Het project kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     * Create cards for all inside project
+     * 
+     * @param type $id
+     * @return PDF
+     */
+    public function createProjectCards($id = null)
+    {
+        $this->viewBuilder()->layout(false);
+        
+        //Load the project data
+        $data = $this->Projects->get($id, [
+            'contain' => ['Groups'=> [
+                'Barcodes',
+                'Projects.Schools',
+                'Persons' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
+                ]
+            ]
+        ]);
+        
+        //Call helper create PDF
+        new PDFCardCreator($data);
     }
 }

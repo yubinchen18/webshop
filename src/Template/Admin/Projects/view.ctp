@@ -59,10 +59,25 @@
                         <tr>
                             <th><?= __('Gewijzigd') ?></th>
                             <td><?= h($project->school->modified) ?></td>
-                        </tr>
+                        </tr>                        
                     </table>
                     
-
+                    <?php if (!empty($project->groups)): ?>
+                        <div>
+                            <?= $this->Html->link(__('Leerlingenkaart maken'),
+                                [
+                                    'action' => 'createProjectCards',
+                                    $project->id
+                                ],
+                                [
+                                    'escape' => false,
+                                    'class' => 'btn btn-sm btn-pink pull-right',
+                                    'target' => '_blank',
+                                ]) ?>
+                        </div>
+                        <div class="clearfix"></div>
+                    <?php endif; ?>
+                        
                 </div>
             </div>
         </div>
