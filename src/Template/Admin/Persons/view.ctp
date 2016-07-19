@@ -163,17 +163,20 @@
                         </tr>
                     </table>
                     
-                    <?= $this->Html->link(__('Leerlingenkaart maken'),
-                        [
-                            'action' => 'createPersonCard',
-                            $person->id
-                        ],
-                        [
-                            'escape' => false,
-                            'class' => 'btn btn-sm btn-pink pull-right',
-                            'target' => '_blank'
-                        ]
-                    ) ?>
+                    <div>
+                        <?= $this->Html->link(__('Leerlingenkaart maken'),
+                            [
+                                'action' => 'createPersonCard',
+                                $person->id
+                            ],
+                            [
+                                'escape' => false,
+                                'class' => 'btn btn-sm btn-pink pull-right',
+                                'target' => '_blank'
+                            ]
+                        ) ?>
+                    </div>
+                    <div class="clearfix"></div>
                     
                 </div>
             </div>

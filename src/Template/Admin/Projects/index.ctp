@@ -49,6 +49,21 @@
                                     'confirm' => __('Weet je zeker dat je {0} wilt verwijderen?', $project->name),
                                     'escape' => false
                                 ]) ?>
+                        
+                        <?php if (!empty($project->groups)): ?>
+                            <?= $this->Html->link('<button class="btn btn-app btn-pink btn-xs">
+                             <i class="ace-icon fa fa-file-pdf-o  bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'createProjectCards',
+                                    $project->id
+                                ],
+                                [
+                                    'escape' => false,
+                                    'target' => '_blank'
+                                ]) ?>
+                        <?php endif; ?>
+                        
                     </td>
                 </tr>
             <?php endforeach; ?>

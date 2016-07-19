@@ -21,7 +21,7 @@ class ProjectsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Schools']
+            'contain' => ['Schools', 'Groups']
         ];
         $projects = $this->paginate($this->Projects);
         $this->set(compact('projects'));
@@ -37,7 +37,7 @@ class ProjectsController extends AppController
     public function view($id = null)
     {
         $project = $this->Projects->get($id, [
-            'contain' => ['Schools']
+            'contain' => ['Schools', 'Groups']
         ]);
 
         $this->set('project', $project);

@@ -49,6 +49,18 @@
                                     'confirm' => __('Weet je zeker dat je {0} wilt verwijderen?', $person->name),
                                     'escape' => false
                                 ]) ?>
+                        
+                        <?= $this->Html->link('<button class="btn btn-app btn-pink btn-xs">
+                             <i class="ace-icon fa fa-file-pdf-o  bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'createPersonCard',
+                                    $person->id
+                                ],
+                                [
+                                    'escape' => false,
+                                    'target' => '_blank'
+                                ]) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
