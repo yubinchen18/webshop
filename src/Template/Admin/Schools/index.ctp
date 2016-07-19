@@ -57,7 +57,7 @@
             </tbody>
         </table>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="paginator">
                     <ul class="pagination">
                         <?= $this->Paginator->prev('< ' . __('Vorige')) ?>
@@ -74,8 +74,16 @@
                             'class' => 'btn btn-sm btn-purple'
                         ]
                     ) ?>
-
-
+                    
+                    <?= $this->Html->link(__('Scholen exporteren'),
+                        [
+                            'action' => 'export',
+                            '_ext' => 'csv'
+                        ],
+                        [
+                            'class' => 'btn btn-sm btn-pink pull-right',
+                        ]
+                    ) ?>
                 </div>
             </div>
         </div>

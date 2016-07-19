@@ -37,6 +37,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     });
 
     Router::prefix('Admin', function ($routes) {
+        
+        $routes->extensions(['csv']);
 
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
@@ -76,17 +78,11 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
         $routes->connect(
-            '/schools/saveproject/:schoolid',
-            ['controller' => 'Schools', 'action' => 'saveproject'],
-            ['schoolid' => RouteBuilder::UUID, 'pass' => ['schoolid']]
-        );
-
-        $routes->connect(
-            '/schools/deleteproject/:id',
-            ['controller' => 'Schools', 'action' => 'deleteproject'],
+            '/schools/export',
+            ['controller' => 'Schools', 'action' => 'export'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-
+        
         $routes->connect('/projects', ['controller' => 'Projects', 'action' => 'index']);
         $routes->connect('/projects/add', ['controller' => 'Projects', 'action' => 'add']);
         $routes->connect(
