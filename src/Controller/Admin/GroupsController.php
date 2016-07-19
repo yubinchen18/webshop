@@ -115,7 +115,7 @@ class GroupsController extends AppController
     
     /**
      * Create cards for all inside group
-     * 
+     *
      * @param type $id
      * @return PDF
      */
