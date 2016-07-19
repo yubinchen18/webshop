@@ -51,7 +51,7 @@ class GroupsController extends AppController
     {
         $group = $this->Groups->newEntity();
         $projects = $this->Groups->Projects->find('list');
-        $barcodes = $this->Groups->Barcodes->find('list');
+        
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {
@@ -61,7 +61,7 @@ class GroupsController extends AppController
                 $this->Flash->error(__('De groep kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
-        $this->set(compact('group', 'projects', 'barcodes'));
+        $this->set(compact('group', 'projects'));
     }
 
     /**

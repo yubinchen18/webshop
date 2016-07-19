@@ -41,18 +41,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <?= $this->Form->label('barcode_id', __('Barcode'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'barcode_id',
-                                    $barcodes,
-                                    ['empty' => __('(Kies een barcode)')]
-                                );
-                            ?>
-                        </div>
-                    </div>
-
                     <hr>
                     <?=$this->Html->link(__('Annuleer'),['action' => 'index'], ['class' => 'btn btn-sm']); ?>
                     <?=$this->Form->button(__('Voeg toe'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>

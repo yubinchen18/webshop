@@ -83,18 +83,6 @@
                     </div>
 
                     <div class="form-group">
-                        <?= $this->Form->label('barcode_id', __('Barcode'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'barcode_id',
-                                    $barcodes,
-                                    ['empty' => __('(Kies een barcode)')]
-                                );
-                            ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <?= $this->Form->label(_('Gebruikersnaam'), null, ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
                             <?= $this->Form->input('user.username', ['label' => false, 'class' => 'form-control']); ?>

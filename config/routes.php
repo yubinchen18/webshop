@@ -119,7 +119,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
-
         $routes->connect('/persons', ['controller' => 'Persons', 'action' => 'index']);
         $routes->connect('/persons/add', ['controller' => 'Persons', 'action' => 'add']);
         $routes->connect(
@@ -135,6 +134,24 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect(
             '/persons/delete/:id',
             ['controller' => 'Persons', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
+        $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
+        $routes->connect('/photos/add', ['controller' => 'Photos', 'action' => 'add']);
+        $routes->connect(
+            '/photos/view/:id',
+            ['controller' => 'Photos', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/photos/edit/:id',
+            ['controller' => 'Photos', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/photos/delete/:id',
+            ['controller' => 'Photos', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
