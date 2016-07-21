@@ -20,12 +20,41 @@ class PhotosController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Barcodes'],
-            'limit' => 24
+            'contain' => ['Barcodes.Persons.Groups.Projects'],
+            'limit' => 24,
+            'order' => [
+                'Photos.created'
+            ]
         ];
-        $photos = $this->paginate($this->Photos);
-
-        $this->set(compact('photos'));
+        
+        $schools = $this->Photos->Barcodes->Persons->Groups->Projects->Schools
+                ->find('list');
+        
+        $projects = [__('Selecteer een school')];
+        $groups = [__('Selecteer een project')];
+        
+        $query = $this->Photos->find();
+        if($this->request->is('post')) {
+            if(!empty($this->request->data['school_id'])) {
+                $query->where(['Projects.school_id' => $this->request->data['school_id']]);
+                $projects = $this->Photos->Barcodes->Persons->Groups->Projects
+                        ->find('list')
+                        ->where(['Projects.school_id' => $this->request->data['school_id']]);
+            }
+            if(!empty($this->request->data['project_id'])) {
+                $query->andWhere(['Projects.id' => $this->request->data['project_id']]);
+                $groups = $this->Photos->Barcodes->Persons->Groups
+                        ->find('list')
+                        ->where(['Groups.project_id' => $this->request->data['project_id']]);
+            }
+            if(!empty($this->request->data['group_id'])) {
+                $query->andWhere(['Groups.id' => $this->request->data['group_id']]);
+            }
+        }
+        
+        $photos = $this->paginate($query);
+        
+        $this->set(compact('photos', 'schools','projects', 'groups'));
         $this->set('_serialize', ['photos']);
     }
 
@@ -114,5 +143,23 @@ class PhotosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function display($size, $path)
+    {
+        $photo = $this->Photos->find()
+              ->where(['path' => $path])
+              ->first();
+        
+        $file =     APP . 'userphotos' . DS .
+                    $this->Photos->getPath($photo->barcode_id) . DS . 
+                    $photo->path;
+
+        $photo = new \Imagick($file);
+        $thumb = $this->Photos->autoRotateImage($photo, $size);
+        
+        $this->response->type(['jpg' => 'image/jpeg']);
+        $this->response->file($thumb,['name' => 'path']);
+        return $this->response;
     }
 }

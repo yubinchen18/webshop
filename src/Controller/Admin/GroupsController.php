@@ -27,6 +27,18 @@ class GroupsController extends AppController
     }
 
     /**
+     * Fetch all groups for a project
+     * @param type $project_id
+     */
+    public function projectgroups($project_id)
+    {
+        $groups = $this->Groups->find('list')
+                ->where(['Groups.project_id' => $project_id]);
+        
+        $this->set(compact('groups'));
+    }
+    
+    /**
      * View method
      *
      * @param string|null $id Group id.

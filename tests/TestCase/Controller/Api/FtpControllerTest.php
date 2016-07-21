@@ -44,7 +44,7 @@ class FtpControllerTest extends BaseIntegrationTestCase
                     'Host' => 'hoogstratenfotografie.nl',
                     'User' => 'hoogstraten',
                     'Pass' => 'sy74NdLHGw',
-                    'Path' => '/httpdocs/app/userphotos/',
+                    'Path' => ROOT.'/userphotos/',
                 
         ];
         $data = $this->getDecodedResponse();

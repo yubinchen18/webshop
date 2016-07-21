@@ -96,14 +96,16 @@ class BarcodesTable extends Table
 
     /**
      * Method to create a new barcode on the fly
-     * @param type $prefix | Defines if a prefix is to be used
+     * @param string $prefix : Defines if a prefix is to be used
      *      Useful if an anonymous barcode must be created
+     * @param string $type : Type of barcode to filter more easily
      * @return Entity $barcode
      */
-    public function createNewBarcode($prefix = '')
+    public function createNewBarcode($prefix = '', $type = 'person')
     {
         $barcode = $this->newEntity();
         $barcode->barcode = $this->generateBarcode($prefix);
+        $barcode->type = $type;
         return $this->save($barcode);
         
     }

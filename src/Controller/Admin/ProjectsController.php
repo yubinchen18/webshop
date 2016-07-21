@@ -17,7 +17,7 @@ class ProjectsController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
+    public function index($school_id = null)
     {
         $this->paginate = [
             'contain' => ['Schools']
@@ -26,6 +26,18 @@ class ProjectsController extends AppController
         $this->set(compact('projects'));
     }
 
+    /**
+     * Fetches all projects for a school
+     * @param type $school_id
+     */
+    public function schoolprojects($school_id)
+    {
+        $projects = $this->Projects->find('list')
+                ->where(['Projects.school_id' => $school_id]);
+        
+        $this->set(compact('projects'));
+    }
+    
     /**
      * View method
      *

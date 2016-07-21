@@ -26,5 +26,6 @@ $cakeDescription = 'Schoolfotografie by Hoogstraten ... de beste kwaliteit schoo
     </div>
     <footer>
     </footer>
+    <?= $this->fetch('scriptBottom'); ?>
 </body>
 </html>

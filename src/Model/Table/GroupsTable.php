@@ -89,7 +89,7 @@ class GroupsTable extends Table
     public function beforeSave($event, $entity, $options) 
     {
         if(empty($entity->barcode)) {
-            $entity->barcode = $this->Barcodes->createNewBarcode();
+            $entity->barcode = $this->Barcodes->createNewBarcode('','group');
         }
         
         return $entity;

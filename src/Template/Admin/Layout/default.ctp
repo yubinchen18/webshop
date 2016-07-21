@@ -67,5 +67,6 @@
                 </div>
             </div>
         <?php endif; ?>
+        <?= $this->fetch('scriptBottom'); ?>
     </body>
 </html>
