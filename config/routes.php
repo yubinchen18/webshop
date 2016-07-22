@@ -99,6 +99,10 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
         $routes->connect(
+            '/projects/edit',
+            ['controller' => 'Projects', 'action' => 'edit']
+        );
+        $routes->connect(
             '/projects/edit/:id',
             ['controller' => 'Projects', 'action' => 'edit'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]

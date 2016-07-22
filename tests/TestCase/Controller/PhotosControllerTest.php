@@ -21,15 +21,7 @@ class PhotosControllerTest extends IntegrationTestCase
         'app.groups',
         'app.projects',
         'app.schools',
-        'app.contacts',
-        'app.visitaddresses',
-        'app.invoices',
-        'app.persons',
-        'app.addresses',
-        'app.users',
-        'app.orders',
-        'app.orders_orderstatuses',
-        'app.mailaddresses'
+        'app.contacts'
     ];
 
     /**

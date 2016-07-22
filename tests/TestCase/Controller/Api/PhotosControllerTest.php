@@ -1,5 +1,5 @@
 <?php
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Api;
 
 use App\Controller\PhotosController;
 use Cake\TestSuite\IntegrationTestCase;

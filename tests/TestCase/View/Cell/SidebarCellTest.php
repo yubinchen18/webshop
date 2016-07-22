@@ -66,7 +66,7 @@ class SidebarCellTest extends TestCase
     {
         $user['type'] = 'admin';
         $this->SidebarCell->display($user);
-        $this->assertCount(6, $this->SidebarCell->viewVars['menu']);
+        $this->assertCount(7, $this->SidebarCell->viewVars['menu']);
     }
 
     public function testUser()

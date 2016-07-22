@@ -30,6 +30,9 @@ class GroupImporter
     
     public function __construct($data, $id)
     {
+        if(empty($data['project'])) {
+            return;
+        }
         $this->data = $data;
         $this->school_id = $id;
 
@@ -38,27 +41,22 @@ class GroupImporter
         $this->Users = TableRegistry::get('Users');
         $this->Barcodes = TableRegistry::get('Barcodes');
 
-        if (!isset($this->data['projects'])) {
-            return;
-        }
-
+        $project = $data['project'];
         //loop throug projects
-        foreach ($this->data['projects'] as $project) {
-            if (empty($project['id'])) {
-                continue;
-            }
-            $this->groupsData = $this->Groups->find('list', [
-                'keyField' => 'name',
-                'valueField' => 'id',
-            ])
-            ->where(['project_id' => $project['id']])
-            ->toArray();
+        if (empty($project['id'])) {
+            return false;
+        }
+        $this->groupsData = $this->Groups->find('list', [
+            'keyField' => 'name',
+            'valueField' => 'id',
+        ])
+        ->where(['project_id' => $project['id']])
+        ->toArray();
 
-            $excel = $this->checkFile($project['file']);
-            
-            if ($excel !== false) {
-                $this->processFile($excel, $project['id']);
-            }
+        $excel = $this->checkFile($project['file']);
+        
+        if ($excel !== false) {
+            $this->processFile($excel, $project['id']);
         }
     }
 
@@ -79,7 +77,7 @@ class GroupImporter
                     }
                 }
                 $data['barcode'] = [
-                    'barcode' => $this->Barcodes->generateBarcode(),
+                    'barcode' => $this->Barcodes->generateBarcode(''),
                     'type' => 'person'
                 ];
 
@@ -111,7 +109,6 @@ class GroupImporter
                 }
                 $data = $this->getGroupId($data, $project_id);
                 $data['slug'] = Text::slug($data['firstname'] . $data['prefix'] . $data['lastname']);
-                
                 $entity = $this->Persons->newEntity($data, [
                     'associated' => ['Users', 'Groups.Barcodes', 'Barcodes', 'Addresses']
                 ]);
@@ -132,7 +129,6 @@ class GroupImporter
             unset($data['zipcode']);
             unset($data['city']);
             return [false, $data];
-            ;
         }
 
         if (is_numeric($streets[$streetsLength])) {

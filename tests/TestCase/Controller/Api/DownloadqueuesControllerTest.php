@@ -291,41 +291,33 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
-
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
-
-        $this->assertCount(6, $queue);
-        $this->assertCount(7, $barcodes);
-        $this->assertCount(6, $users);
-        $this->assertCount(4, $groups);
-        $this->assertCount(2, $persons);
-        $this->assertCount(4, $photos);
+        $queueFixt = $this->Downloadqueue->find()->count();
+        $barcodesFixt = $this->Barcodes->find()->count();
+        $usersFixt = $this->Users->find()->count();
+        $groupsFixt = $this->Groups->find()->count();
+        $personsFixt = $this->Persons->find()->count();
+        $photosFixt = $this->Photos->find()->count();
 
         $this->post('/api/v1/upload_item.json', $data);
 
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
+        $queue = $this->Downloadqueue->find()->count();
+        $barcodes = $this->Barcodes->find()->count();
+        $users = $this->Users->find()->count();
+        $groups = $this->Groups->find()->count();
+        $persons = $this->Persons->find()->count();
+        $photos = $this->Photos->find()->count();
 
-        $this->assertCount(14, $queue);
-        $this->assertCount(8, $barcodes);
-        $this->assertCount(7, $users);
-        $this->assertCount(5, $groups);
-        $this->assertCount(3, $persons);
-        $this->assertCount(5, $photos);
+        $this->assertEquals($queueFixt+8, $queue);
+        $this->assertEquals($barcodesFixt + 3, $barcodes);
+        $this->assertEquals($usersFixt +1, $users);
+        $this->assertEquals($groupsFixt +1, $groups);
+        $this->assertEquals($personsFixt +1, $persons);
+        $this->assertEquals($photosFixt +1, $photos);
 
         $this->assertResponseSuccess();
     }
 
-    public function testAddNew2()
+    public function testAddNewWithPhoto()
     {
         $this->Downloadqueue = TableRegistry::get('Downloadqueues');
         $this->Barcodes = TableRegistry::get('Barcodes');
@@ -339,20 +331,20 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "id"=> '44a4e893-3f80-474f-8a8f-2870513c9d1d',
                 "online_id"=> 0,
                 "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
-        "type"=> "sibling",
-        "path"=> "HA088268.jpg",
+                "type"=> "sibling",
+                "path"=> "HA088268.jpg",
                 "modified"=> "\/Date(1393595241733)\/",
                 "created"=> "\/Date(1393595241733)\/",
             ],
             'Groups' => [
-            "id"=> 2271,
+                "id"=> 2271,
                 "online_id"=> 0,
-            "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-            "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
-            "slug"=> "test",
-            "name"=> "test",
+                "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                "barcode_id"=> "ba0f3313-757a-430a-bda3-908082dea691",
+                "slug"=> "test",
+                "name"=> "test",
                 "modified"=> "\/Date(1393486879563)\/",
-            "created"=> "\/Date(1393486879563)\/",
+                "created"=> "\/Date(1393486879563)\/",
                 "deleted"=> false,
             ],
             "Users" => [
@@ -367,15 +359,15 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ],
             "Persons" => [
                 "id"=> 35628,
-            "online_id"=> 0,
-            "barcode_id"=> "a34c9d93-b89f-4b6d-a10c-8a7e939df834",
+                "online_id"=> 0,
+                "barcode_id"=> "a34c9d93-b89f-4b6d-a10c-8a7e939df834",
                 "group_id"=> "af83fdb0-c76c-4643-913c-e74f318026d7",
-            "studentnumber"=> "7",
-            "lastname"=> ".",
-            "user_id"=> 182075,
-            "slug"=> "anis_danoun_",
-            "firstname"=> "Anis Danoun",
-            "prefix"=> "",
+                "studentnumber"=> "7",
+                "lastname"=> ".",
+                "user_id"=> 182075,
+                "slug"=> "anis_danoun_",
+                "firstname"=> "Anis Danoun",
+                "prefix"=> "",
                 "zipcode"=> "3027 JM ROTTERDAM",
                 "city"=> "spijkenisse",
                 "address"=> "Multatulistraat 7 d",
@@ -386,35 +378,28 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         ];
 
 
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
-
-        $this->assertCount(6, $queue);
-        $this->assertCount(7, $barcodes);
-        $this->assertCount(6, $users);
-        $this->assertCount(4, $groups);
-        $this->assertCount(2, $persons);
-        $this->assertCount(4, $photos);
+        $queueFixt = $this->Downloadqueue->find()->count();
+        $barcodesFixt = $this->Barcodes->find()->count();
+        $usersFixt = $this->Users->find()->count();
+        $groupsFixt = $this->Groups->find()->count();
+        $personsFixt = $this->Persons->find()->count();
+        $photosFixt = $this->Photos->find()->count();
 
         $this->post('/api/v1/upload_item.json', $data);
 
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
+        $queue = $this->Downloadqueue->find()->count();
+        $barcodes = $this->Barcodes->find()->count();
+        $users = $this->Users->find()->count();
+        $groups = $this->Groups->find()->count();
+        $persons = $this->Persons->find()->count();
+        $photos = $this->Photos->find()->count();
 
-        $this->assertCount(12, $queue);
-        $this->assertCount(7, $barcodes);
-        $this->assertCount(7, $users);
-        $this->assertCount(5, $groups);
-        $this->assertCount(3, $persons);
-        $this->assertCount(5, $photos);
+        $this->assertEquals($queueFixt+6, $queue);
+        $this->assertEquals($barcodesFixt+2, $barcodes);
+        $this->assertEquals($usersFixt+1, $users);
+        $this->assertEquals($groupsFixt+1, $groups);
+        $this->assertEquals($personsFixt+1, $persons);
+        $this->assertEquals($photosFixt+1, $photos);
 
         $this->assertResponseSuccess();
     }
@@ -487,36 +472,21 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
-
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
-
-        $this->assertCount(6, $queue);
-        $this->assertCount(7, $barcodes);
-        $this->assertCount(6, $users);
-        $this->assertCount(4, $groups);
-        $this->assertCount(2, $persons);
-        $this->assertCount(4, $photos);
-
         $this->post('/api/v1/upload_item.json', $data);
 
-        $queue = $this->Downloadqueue->find()->toArray();
-        $barcodes = $this->Barcodes->find()->toArray();
-        $users = $this->Users->find()->toArray();
-        $groups = $this->Groups->find()->toArray();
-        $persons = $this->Persons->find()->toArray();
-        $photos = $this->Photos->find()->toArray();
+        $queue = $this->Downloadqueue->find()->count();
+        $barcodes = $this->Barcodes->find()->count();
+        $users = $this->Users->find()->count();
+        $groups = $this->Groups->find()->count();
+        $persons = $this->Persons->find()->count();
+        $photos = $this->Photos->find()->count();
 
-        $this->assertCount(14, $queue);
-        $this->assertCount(7, $barcodes);
-        $this->assertCount(6, $users);
-        $this->assertCount(4, $groups);
-        $this->assertCount(2, $persons);
-        $this->assertCount(4, $photos);
+        $this->assertEquals($this->Downloadqueue->find()->count(), $queue);
+        $this->assertEquals($this->Barcodes->find()->count(), $barcodes);
+        $this->assertEquals($this->Users->find()->count(), $users);
+        $this->assertEquals($this->Groups->find()->count(), $groups);
+        $this->assertEquals($this->Persons->find()->count(), $persons);
+        $this->assertEquals($this->Photos->find()->count(), $photos);
 
         $this->assertResponseSuccess();
     }
