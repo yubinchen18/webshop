@@ -174,7 +174,15 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
         $this->assertEquals(1, ($addressesCount - $addressesPrecount)); //2
         $this->assertEquals(3, ($barcodesCount - $barcodesPrecount)); //3
         $this->assertEquals(2, ($usersCount - $usersPrecount)); //2
-//        $this->assertEquals(1, ($groupsCount - $groupsPrecount)); //1
+        $this->assertEquals(1, ($groupsCount - $groupsPrecount)); //1
         $this->assertEquals(2, ($personsCount - $personsPrecount)); //2
+    }
+    
+    public function testSchoolProjects()
+    {
+        $school_id = '82199cab-fc52-4853-8f64-575a7721b8e7';
+        $this->get('/admin/projects/'. $school_id . '.json');
+         
+        $this->assertResponseContains('Eindejaars 2016');
     }
 }

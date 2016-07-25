@@ -130,4 +130,14 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $group = $this->Groups->find()->where(['id' => $id])->first();
         $this->assertEmpty($group);
     }
+    
+    public function testProductgroups()
+    {
+        $project_id = '4a7d8a96-08f6-441c-a8d5-eb40440e7603';
+        $this->get('/admin/groups/'. $project_id . '.json');
+         
+        $this->assertResponseContains('Klas blauw');
+        $response = json_decode($this->_response->body(), true);
+        $this->assertEquals(4, count($response['groups']));
+    }
 }
