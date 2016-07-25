@@ -23,10 +23,7 @@ class BarcodesTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.users',
-        'app.barcodes',
-    ];
+    public $fixtures = [];
 
     /*
      * setUp method

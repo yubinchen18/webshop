@@ -23,9 +23,7 @@ class DownloadqueuesTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.downloadqueues'
-    ];
+    public $fixtures = [];
 
      /**
      * setUp method

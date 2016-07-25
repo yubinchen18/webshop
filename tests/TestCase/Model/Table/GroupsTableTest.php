@@ -23,15 +23,7 @@ class GroupsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.groups',
-        'app.projects',
-        'app.schools',
-        'app.contacts',
-        'app.addresses',
-        'app.barcodes',
-        'app.persons'
-    ];
+    public $fixtures = [];
 
     /*
      * setUp method

@@ -23,10 +23,7 @@ class AddressesTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.addresses',
-        'app.users',
-    ];
+    public $fixtures = [];
 
     /*
      * setUp method
