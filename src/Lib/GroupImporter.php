@@ -30,7 +30,7 @@ class GroupImporter
     
     public function __construct($data, $id)
     {
-        if(empty($data['project'])) {
+        if (empty($data['project'])) {
             return;
         }
         $this->data = $data;

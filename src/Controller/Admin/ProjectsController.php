@@ -86,7 +86,7 @@ class ProjectsController extends AppController
     public function edit($id = null)
     {
         $project = $this->Projects->newEntity();
-        if(!empty($id)) {
+        if (!empty($id)) {
             $project = $this->Projects->get($id, [
                 'contain' => ['Schools']
             ]);

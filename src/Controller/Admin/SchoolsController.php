@@ -28,12 +28,19 @@ class SchoolsController extends AppController
 
     /**
      * Export method
-     * 
+     *
      * @return CSV
      */
     public function export()
     {
-        $schools = $this->Schools->find('all', ['contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']])->orderAsc('name');
+        $schools = $this->Schools->find('all', [
+            'contain' => [
+                'Contacts',
+                'Visitaddresses',
+                'Mailaddresses'
+            ]
+        ])
+        ->orderAsc('name');
         //format phone and fax number output
         foreach ($schools as $school) {
             if (isset($school->contact->phone)) {
@@ -44,7 +51,7 @@ class SchoolsController extends AppController
             };
         };
         
-        $this->set(compact('schools'));        
+        $this->set(compact('schools'));
         $this->set('_serialize', 'schools');
         $this->set('_csvMap', function ($school) {
             return [
@@ -62,7 +69,7 @@ class SchoolsController extends AppController
                     ($school->contact->prefix == '' ? '' : $school->contact->prefix.' ').
                     $school->contact->last_name
                 ];
-            });
+        });
         $this->set('_headerCsv', [
             __('Organisatie'),
             __('Telefoonnummer'),

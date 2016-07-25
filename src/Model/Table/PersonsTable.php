@@ -117,14 +117,14 @@ class PersonsTable extends Table
         return $rules;
     }
     
-    public function beforeSave($event, $entity, $options) 
+    public function beforeSave($event, $entity, $options)
     {
-        if(empty($entity->barcode)) {
+        if (empty($entity->barcode)) {
             $entity->barcode = $this->Barcodes->createNewBarcode();
         }
         
         return $entity;
-    }    
+    }
 
     public function processPersons($data)
     {

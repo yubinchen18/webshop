@@ -118,8 +118,8 @@ class PhotosTable extends Table
         "_" .
         $barcode->person->group->slug .
         DS .
-        $barcode->person->id . 
-        "_" . 
+        $barcode->person->id .
+        "_" .
         $barcode->person->slug;
         return $path;
     }
@@ -127,47 +127,48 @@ class PhotosTable extends Table
     /**
      * Method to rotate the image automatically
      * Also resizes the image to thumb and medium format
-     * 
+     *
      * @param Imagick Object $image
-     * @param string $return 
+     * @param string $return
      * @return string image path
      */
-    public function autoRotateImage($image, $return = 'original') {
+    public function autoRotateImage($image, $return = 'original')
+    {
         $orientation = $image->getImageOrientation();
 
-        switch($orientation) {
+        switch ($orientation) {
             case 3:
                 $image->rotateimage("#000", 180);
-            break;
+                break;
 
             case 6:
                 $image->rotateimage("#000", 90);
-            break;
+                break;
 
             case 8:
                 $image->rotateimage("#000", -90);
-            break;
+                break;
         }
 
-        // Now that it's auto-rotated, make sure 
+        // Now that it's auto-rotated, make sure
         // the EXIF data is correct in case the EXIF gets saved with the image
         $image->setImageOrientation(1);
         $imgPath = $image->getImageFilename();
-        $path = substr(strrchr($imgPath, DS),1);
-        $rawPath = str_replace($path, "",$imgPath);
+        $path = substr(strrchr($imgPath, DS), 1);
+        $rawPath = str_replace($path, "", $imgPath);
         
         $thumbPath = $rawPath.DS."thumbs".DS.$path;
         $medPath = $rawPath.DS."med".DS.$path;
         
         $image->writeImage($imgPath);
         
-        $image->scaleImage(0,250);
+        $image->scaleImage(0, 250);
         $image->writeImage($medPath);
         
-        $image->scaleImage(0,100);
+        $image->scaleImage(0, 100);
         $image->writeImage($thumbPath);
         
-        switch($return) {
+        switch ($return) {
             case "med":
                 return $medPath;
                 break;
@@ -180,5 +181,5 @@ class PhotosTable extends Table
                 return $imgPath;
                 break;
         }
-    } 
+    }
 }

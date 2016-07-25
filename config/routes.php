@@ -84,14 +84,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
         
         $routes->connect('/projects', ['controller' => 'Projects', 'action' => 'index']);
-        $routes->connect('/projects/:school_id', [
-            'controller' => 'Projects', 
+        $routes->connect(
+            '/projects/:school_id',
+            [
+            'controller' => 'Projects',
             'action' => 'schoolprojects'
             ],
             [
                 'school_id' => RouteBuilder::UUID,
                 'pass' => ['school_id']
-        ]);
+            ]
+        );
         $routes->connect('/projects/add', ['controller' => 'Projects', 'action' => 'add']);
         $routes->connect(
             '/projects/view/:id',
@@ -114,14 +117,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
 
         $routes->connect('/groups', ['controller' => 'Groups', 'action' => 'index']);
-        $routes->connect('/groups/:project_id', [
-            'controller' => 'Groups', 
+        $routes->connect(
+            '/groups/:project_id',
+            [
+            'controller' => 'Groups',
             'action' => 'projectgroups'
             ],
             [
                 'school_id' => RouteBuilder::UUID,
                 'pass' => ['project_id']
-        ]);
+            ]
+        );
         $routes->connect('/groups/add', ['controller' => 'Groups', 'action' => 'add']);
         $routes->connect(
             '/groups/view/:id',
@@ -157,12 +163,14 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
-        $routes->connect('/photos/:size/:path',
-                [
+        $routes->connect(
+            '/photos/:size/:path',
+            [
                     'controller' => 'Photos',
                     'action' => 'display',
                 ],
-                ['size','path', 'pass' => ['size','path']]);
+            ['size','path', 'pass' => ['size','path']]
+        );
         $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
         $routes->connect('/photos/add', ['controller' => 'Photos', 'action' => 'add']);
         $routes->connect(

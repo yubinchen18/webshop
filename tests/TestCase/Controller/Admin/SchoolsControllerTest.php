@@ -244,5 +244,4 @@ class SchoolsControllerTest extends BaseIntegrationTestCase
         $school = $this->Schools->find()->where(['id' => $id])->first();
         $this->assertEmpty($school);
     }
-
 }
