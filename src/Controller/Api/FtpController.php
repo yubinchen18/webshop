@@ -23,7 +23,7 @@ class FtpController extends AppController
         $host = "hoogstratenfotografie.nl";
         $user = "hoogstraten";
         $pass = "sy74NdLHGw";
-        $path = "/httpdocs/app/userphotos/";
+        $path = ROOT ."/userphotos/";
 
         $this->set('Host', $host);
         $this->set('User', $user);

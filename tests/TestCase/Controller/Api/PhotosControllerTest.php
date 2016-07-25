@@ -1,5 +1,5 @@
 <?php
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Api;
 
 use App\Controller\PhotosController;
 use Cake\TestSuite\IntegrationTestCase;
@@ -70,6 +70,6 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->get('/api/v1/get_photos/groups/e5b778cd-68cd-469f-88b3-37846b984868.json');
         $this->assertResponseSuccess();
         $data = $this->getDecodedResponse();
-        $this->assertCount(3, $data['Photos']);
+        $this->assertCount(2, $data['Photos']);
     }
 }

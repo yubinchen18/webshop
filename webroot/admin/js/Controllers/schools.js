@@ -7,14 +7,14 @@ jQuery(function($) {
         }
     });
 
-    $('.slugx').slug({
+    $('.slug').slug({
         slug:'slugx',
         hide: false,
     });
 
     $('.widget-box.project').each(function(index, element) {
-        $('.slug'+index).slug({
-            slug:'slug0',
+        $('.slugname'+index).slug({
+            slug:'slug'+index,
             hide: false,
         });
     });   

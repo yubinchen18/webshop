@@ -53,4 +53,15 @@ class Person extends Entity
                 $this->_properties['lastname'];
         }
     }
+
+    protected function _getFullNameSorted()
+    {
+        if (isset($this->_properties['firstname']) &&
+                isset($this->_properties['prefix']) &&
+                isset($this->_properties['lastname'])) {
+            return $this->_properties['lastname'] . ',  ' .
+                $this->_properties['firstname'] . '  ' .
+                $this->_properties['prefix'];
+        }
+    }
 }

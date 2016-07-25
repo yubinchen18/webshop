@@ -73,13 +73,14 @@ class BarcodesTable extends Table
     }
 
     /**
+     * Method to generate a custom unique barcode
      * Type standard is anonymous
      * @param type $type
      * @return type
      */
     public function generateBarcode($type = '*ano_')
     {
-        $unique = base_convert(rand(0, 9999999999999999999999999), 10, 36);
+        $unique = base_convert(rand(0, 999999999999999), 10, 36);
         $barcode = $type . $unique;
 
         $barcodeExisting = $this->find()
@@ -93,6 +94,22 @@ class BarcodesTable extends Table
         return $barcode;
     }
 
+    /**
+     * Method to create a new barcode on the fly
+     * @param string $prefix : Defines if a prefix is to be used
+     *      Useful if an anonymous barcode must be created
+     * @param string $type : Type of barcode to filter more easily
+     * @return Entity $barcode
+     */
+    public function createNewBarcode($prefix = '', $type = 'person')
+    {
+        $barcode = $this->newEntity();
+        $barcode->barcode = $this->generateBarcode($prefix);
+        $barcode->type = $type;
+        return $this->save($barcode);
+        
+    }
+    
     public function processBarcodes($object, $user)
     {
         $barcodeId = null;

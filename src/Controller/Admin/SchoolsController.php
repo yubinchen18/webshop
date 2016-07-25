@@ -3,7 +3,6 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
-use App\Lib\GroupImporter;
 
 use App\Lib\PDFCardCreator;
 
@@ -36,8 +35,15 @@ class SchoolsController extends AppController
      */
     public function export()
     {
-        $schools = $this->Schools->find('all', ['contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']])
-                ->orderAsc('name');
+        $schools = $this->Schools->find('all', [
+            'contain' => [
+                'Contacts',
+                'Visitaddresses',
+                'Mailaddresses'
+            ]
+        ])
+        ->orderAsc('name');
+
         //format phone and fax number output
         foreach ($schools as $school) {
             if (isset($school->contact->phone)) {
@@ -95,29 +101,9 @@ class SchoolsController extends AppController
         $school = $this->Schools->get($id, [
             'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
         ]);
+        $project = $this->Schools->Projects->newEntity();
 
-        $this->set('school', $school);
-    }
-
-    public function saveproject($schoolid)
-    {
-        $school = $this->Schools->get($schoolid, [
-            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $school = $this->Schools->patchEntity($school, $this->request->data, [
-                'associated' => ['Projects']
-            ]);
-            new GroupImporter($this->request->data, $schoolid);
-            
-            if ($this->Schools->save($school)) {
-                $this->Flash->success(__('Het project is opgeslagen.'));
-            } else {
-                $this->Flash->error(__('Het project kon niet opgeslagen worden. Probeer het nogmaals.'));
-            }
-        }
-        
-        return $this->redirect(['action' => 'view', 'id' => $schoolid]);
+        $this->set(compact('school', 'project'));
     }
 
     /**

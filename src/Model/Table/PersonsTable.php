@@ -116,6 +116,15 @@ class PersonsTable extends Table
         $rules->add($rules->existsIn(['barcode_id'], 'Barcodes'));
         return $rules;
     }
+    
+    public function beforeSave($event, $entity, $options)
+    {
+        if (empty($entity->barcode)) {
+            $entity->barcode = $this->Barcodes->createNewBarcode();
+        }
+        
+        return $entity;
+    }
 
     public function processPersons($data)
     {

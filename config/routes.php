@@ -38,7 +38,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     Router::prefix('Admin', function ($routes) {
         
-        $routes->extensions(['csv']);
+        $routes->extensions(['csv','json']);
 
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
@@ -84,11 +84,26 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
         
         $routes->connect('/projects', ['controller' => 'Projects', 'action' => 'index']);
+        $routes->connect(
+            '/projects/:school_id',
+            [
+            'controller' => 'Projects',
+            'action' => 'schoolprojects'
+            ],
+            [
+                'school_id' => RouteBuilder::UUID,
+                'pass' => ['school_id']
+            ]
+        );
         $routes->connect('/projects/add', ['controller' => 'Projects', 'action' => 'add']);
         $routes->connect(
             '/projects/view/:id',
             ['controller' => 'Projects', 'action' => 'view'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/projects/edit',
+            ['controller' => 'Projects', 'action' => 'edit']
         );
         $routes->connect(
             '/projects/edit/:id',
@@ -107,6 +122,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
 
         $routes->connect('/groups', ['controller' => 'Groups', 'action' => 'index']);
+        $routes->connect(
+            '/groups/:project_id',
+            [
+            'controller' => 'Groups',
+            'action' => 'projectgroups'
+            ],
+            [
+                'school_id' => RouteBuilder::UUID,
+                'pass' => ['project_id']
+            ]
+        );
         $routes->connect('/groups/add', ['controller' => 'Groups', 'action' => 'add']);
         $routes->connect(
             '/groups/view/:id',
@@ -129,7 +155,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
-
         $routes->connect('/persons', ['controller' => 'Persons', 'action' => 'index']);
         $routes->connect('/persons/add', ['controller' => 'Persons', 'action' => 'add']);
         $routes->connect(
@@ -150,6 +175,32 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect(
             '/persons/createPersonCard/:id',
             ['controller' => 'Persons', 'action' => 'createPersonCard'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+
+        $routes->connect(
+            '/photos/:size/:path',
+            [
+                    'controller' => 'Photos',
+                    'action' => 'display',
+                ],
+            ['size','path', 'pass' => ['size','path']]
+        );
+        $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
+        $routes->connect('/photos/add', ['controller' => 'Photos', 'action' => 'add']);
+        $routes->connect(
+            '/photos/view/:id',
+            ['controller' => 'Photos', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/photos/edit/:id',
+            ['controller' => 'Photos', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/photos/delete/:id',
+            ['controller' => 'Photos', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
 
