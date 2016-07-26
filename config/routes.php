@@ -152,8 +152,13 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Persons', 'action' => 'createPersonCard'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-
-
+        
+        
+        $routes->connect(
+            '/searches/showResults',
+            ['controller' => 'Searches', 'action' => 'showResults']
+        );
+        
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
         $routes->connect('/', ['controller' => 'Pages', 'action' => 'display']);
     });

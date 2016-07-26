@@ -143,14 +143,20 @@ if (!Configure::read('App.fullBaseUrl')) {
     unset($httpHost, $s);
 }
 
-$env = 'production';
-if (strpos(env('HTTP_HOST'), '.xseeding') !== false) {
-    $env = 'staging';
+$httpHost = env('HTTP_HOST');
+
+if (!empty($httpHost)) {
+    $env = 'production';
+    if (strpos(env('HTTP_HOST'), '.xseeding') !== false) {
+        $env = 'staging';
+    }
+    if (strpos(env('HTTP_HOST'), '.local') !== false || strpos(env('HTTP_HOST'), '.dev.xseeding') !== false) {
+        $env = 'development';
+    }
+    Configure::load('environments/' . $env);
+    
 }
-if (strpos(env('HTTP_HOST'), '.local') !== false || strpos(env('HTTP_HOST'), '.dev.xseeding') !== false) {
-    $env = 'development';
-}
-Configure::load('environments/' . $env);
+
 
 Cache::config(Configure::consume('Cache'));
 ConnectionManager::config(Configure::consume('Datasources'));

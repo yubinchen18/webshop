@@ -43,6 +43,14 @@ class AddressesTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'address_id'
         ]);
+        $this->hasMany('Deliveryorders', [
+            'foreignKey' => 'deliveryaddress_id',
+            'className' => 'Orders'
+        ]);
+        $this->hasMany('Invoiceorders', [
+            'foreignKey' => 'invoiceaddress_id',
+            'className' => 'Orders'
+        ]);
     }
 
     /**
