@@ -42,7 +42,7 @@ class PhotosFixture extends TestFixture
     public $records = [
         [
             'id' => 'a18bfc55-1095-4764-9154-810849a1a664',
-            'path' => 'test.jpg',
+            'path' => 'tests/Fixture/photo.jpg',
             'type' => 'image',
             'barcode_id' => 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
             'created' => '2016-06-27 12:53:08',

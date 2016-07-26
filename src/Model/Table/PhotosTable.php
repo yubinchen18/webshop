@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
 
 /**
  * Photos Model
@@ -16,7 +17,7 @@ use Cake\Core\Configure;
  */
 class PhotosTable extends Table
 {
-
+    public $baseDir = APP . 'userphotos';
     /**
      * Initialize method
      *
@@ -26,7 +27,7 @@ class PhotosTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
+        
         $this->table('photos');
         $this->displayField('id');
         $this->primaryKey('id');
@@ -89,39 +90,38 @@ class PhotosTable extends Table
                 ->where(["Barcodes.id" => $barcode_id])
                 ->contain(['Groups.Projects.Schools', 'Persons.Groups.Projects.Schools'])
                 ->first();
+
+
+        $path = $this->getPathObject();
         
-        if ($barcode->type == "group") {
-            $path = $barcode->group->project->school->id .
-            "_" .
-            $barcode->group->project->school->slug .
-            DS .
-            $barcode->group->project->id .
-            "_" .
-            $barcode->group->project->slug .
-            DS .
-            $barcode->group->id .
-            "_" .
-            $barcode->group->slug;
-            return $path;
+        if (empty($barcode->person->group->project->school->slug)) {
+            $path->create('unknown');
+            $path->cd('unknown');
+
+            return $path->path;
         }
-            
+        if ($barcode->type == "group") {
+            $pathToCreate = $barcode->person->group->project->school->slug . DS .
+                $barcode->person->group->project->slug . DS .
+                $barcode->person->group->slug;
+                $path->create($pathToCreate);
+                $path->cd($pathToCreate);
+
+            return $path->path;
+        }
         
-        $path = $barcode->person->group->project->school->id .
-        "_" .
-        $barcode->person->group->project->school->slug .
-        DS .
-        $barcode->person->group->project->id .
-        "_" .
-        $barcode->person->group->project->slug .
-        DS .
-        $barcode->person->group->id .
-        "_" .
-        $barcode->person->group->slug .
-        DS .
-        $barcode->person->id .
-        "_" .
-        $barcode->person->slug;
-        return $path;
+        $pathToCreate = $barcode->person->group->project->school->slug . DS .
+                $barcode->person->group->project->slug . DS .
+                $barcode->person->group->slug . DS . $barcode->person->slug;
+        $path->create($pathToCreate);
+        $path->cd($pathToCreate);
+
+        return $path->path;
+    }
+
+    private function getPathObject()
+    {
+        return new Folder($this->baseDir);
     }
     
     /**

@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Routing\RouteBuilder;
 
 /**
  * Downloadqueues Controller
@@ -20,7 +21,7 @@ class DownloadqueuesController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
+    public function listQueue()
     {
         $downloadqueueitems = $this->Downloadqueues->find()
                 ->contain(['Schools', 'Barcodes', 'Users', 'Projects', 'Groups', 'Persons'])
@@ -30,7 +31,7 @@ class DownloadqueuesController extends AppController
         $this->set(compact('downloadqueueitems'));
     }
 
-    public function remove()
+    public function removeFromQueue()
     {
         $queueItemIds = $this->request->data();
 
@@ -48,7 +49,7 @@ class DownloadqueuesController extends AppController
         $this->set(compact('removingItems'));
     }
 
-    public function add()
+    public function uploadItem()
     {
         $this->Groups = TableRegistry::get('Groups');
         $this->Photos = TableRegistry::get('Photos');
@@ -64,7 +65,6 @@ class DownloadqueuesController extends AppController
         $this->objectId =0;
 
         if (isset($object['Groups']['name']) && $object['Groups']['name'] == 'Onbekend') {
-            $object = $this->Downloadqueues->formatInput($this->request->data());
             $groupCheck = $this->Groups->checkGroups($object);
             if ($groupCheck !== false) {
                 $this->set('BarcodeId', $groupCheck['BarcodeId']);
@@ -83,6 +83,7 @@ class DownloadqueuesController extends AppController
             list($object, $barcodeId) = $this->Barcodes->processBarcodes($object, $this->getUser());
             if (isset($barcodeId)) {
                 $this->result[] = $barcodeId;
+                $this->barcodeId = $barcodeId;
             }
         }
         $object = $this->process($object);
@@ -97,8 +98,22 @@ class DownloadqueuesController extends AppController
             unset($data['deleted']);
             unset($data['created']);
 
-            if ($this->barcodeId != 0) {
+            if ($this->barcodeId != RouteBuilder::UUID) {
                 $data['barcode_id'] = $this->barcodeId;
+            }
+
+            if ($model == "Photos") {
+                $path = $this->Photos->getPath($data['barcode_id']);
+                foreach ($data['data'] as $key => $imagedata) {
+                    $filename = basename($data['path']);
+
+                    if ($key != 'original') {
+                        $filename .= '_' . $key;
+                    }
+
+                    $decoded = base64_decode($imagedata);
+                    file_put_contents($path . DS . $filename, $decoded);
+                }
             }
             
             if ($model == "Persons") {
@@ -118,7 +133,7 @@ class DownloadqueuesController extends AppController
                 $entity = $this->{$model}->get($data['id']);
                 $entity = $this->{$model}->patchEntity($entity, $data);
             }
-
+            
             $savedEntity = $this->{$model}->save($entity);
             
             if ($savedEntity === false) {

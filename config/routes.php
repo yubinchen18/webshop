@@ -17,22 +17,31 @@ Router::scope('/', function (RouteBuilder $routes) {
 
         $routes->connect('/v1/get_download_queue', [
             'controller' => 'Downloadqueues',
-            'action' => 'index',
+            'action' => 'listQueue',
             '_ext' => 'json'
         ]);
         $routes->connect('/v1/remove_queue_items', [
             'controller' => 'Downloadqueues',
-            'action' => 'remove',
+            'action' => 'removeFromQueue',
             '_ext' => 'json'
         ]);
-        $routes->connect('/v1/upload_item', ['controller' => 'Downloadqueues', 'action' => 'add', '_ext' => 'json']);
+        $routes->connect('/v1/upload_item', [
+            'controller' => 'Downloadqueues',
+            'action' => 'uploadItem',
+            '_ext' => 'json'
+        ]);
 
-        $routes->connect('/v1/get_ftp_login', ['controller' => 'Ftp', 'action' => 'index', '_ext' => 'json']);
         $routes->connect('/v1/check_update', ['controller' => 'Update', 'action' => 'index', '_ext' => 'json']);
         $routes->connect(
             '/v1/get_photos/:model/:id',
-            ['controller' => 'Photos', 'action' => 'index', '_ext' => 'json'],
+            ['controller' => 'Photos', 'action' => 'getPhotos', '_ext' => 'json'],
             ['pass' => ['model','id']]
+        );
+
+        $routes->connect(
+            '/v1/get_photo/:id',
+            ['controller' => 'Photos', 'action' => 'getPhoto', '_ext' => 'json'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
     });
 
