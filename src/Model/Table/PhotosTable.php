@@ -85,44 +85,101 @@ class PhotosTable extends Table
 
     public function getPath($barcode_id)
     {
-
-        $aBarcode = $this->Barcodes->find()
+        $barcode = $this->Barcodes->find()
                 ->where(["Barcodes.id" => $barcode_id])
                 ->contain(['Groups.Projects.Schools', 'Persons.Groups.Projects.Schools'])
                 ->first();
         
-        if ($aBarcode->type == "group") {
-            $path = $aBarcode->group->project->school->id .
+        if ($barcode->type == "group") {
+            $path = $barcode->group->project->school->id .
             "_" .
-            $aBarcode->group->project->school->slug .
-            "/" .
-            $aBarcode->group->project->id .
+            $barcode->group->project->school->slug .
+            DS .
+            $barcode->group->project->id .
             "_" .
-            $aBarcode->group->project->slug .
-            "/" .
-            $aBarcode->group->id .
+            $barcode->group->project->slug .
+            DS .
+            $barcode->group->id .
             "_" .
-            $aBarcode->group->slug;
+            $barcode->group->slug;
             return $path;
         }
             
-            $sModel = $aBarcode->type;
-            $path = $aBarcode->{$sModel}->group->project->school->id .
-            "_" .
-            $aBarcode->{$sModel}->group->project->school->slug .
-            "/" .
-            $aBarcode->{$sModel}->group->project->id .
-            "_" .
-            $aBarcode->{$sModel}->group->project->url .
-            "/" .
-            $aBarcode->{$sModel}->group->id .
-            "_" .
-            $aBarcode->{$sModel}->group->url .
-            "/" .
-            $aBarcode->{$sModel}->id .
-            "_" .
-            $aBarcode->{$sModel}->url;
+        
+        $path = $barcode->person->group->project->school->id .
+        "_" .
+        $barcode->person->group->project->school->slug .
+        DS .
+        $barcode->person->group->project->id .
+        "_" .
+        $barcode->person->group->project->slug .
+        DS .
+        $barcode->person->group->id .
+        "_" .
+        $barcode->person->group->slug .
+        DS .
+        $barcode->person->id .
+        "_" .
+        $barcode->person->slug;
+        return $path;
+    }
+    
+    /**
+     * Method to rotate the image automatically
+     * Also resizes the image to thumb and medium format
+     *
+     * @param Imagick Object $image
+     * @param string $return
+     * @return string image path
+     */
+    public function autoRotateImage($image, $return = 'original')
+    {
+        $orientation = $image->getImageOrientation();
 
-            return $path;
+        switch ($orientation) {
+            case 3:
+                $image->rotateimage("#000", 180);
+                break;
+
+            case 6:
+                $image->rotateimage("#000", 90);
+                break;
+
+            case 8:
+                $image->rotateimage("#000", -90);
+                break;
+        }
+
+        // Now that it's auto-rotated, make sure
+        // the EXIF data is correct in case the EXIF gets saved with the image
+        $image->setImageOrientation(1);
+        $imgPath = $image->getImageFilename();
+        $path = substr(strrchr($imgPath, DS), 1);
+        $rawPath = str_replace($path, "", $imgPath);
+        
+        $thumbPath = $rawPath.DS."thumbs".DS.$path;
+        $medPath = $rawPath.DS."med".DS.$path;
+        
+        $image->writeImage($imgPath);
+        
+        $image->scaleImage(0, 250);
+        $image->writeImage($medPath);
+        
+        $image->scaleImage(0, 100);
+        $image->writeImage($thumbPath);
+        
+        switch ($return) {
+            case "med":
+                return $medPath;
+                break;
+            
+            case "thumb":
+                return $thumbPath;
+                break;
+            
+            default:
+                return $imgPath;
+                break;
+        }
     }
 }

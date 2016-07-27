@@ -167,24 +167,25 @@
                         </a>
                     </div>
                 </div>
-                <?= $this->Form->create($school, [
+                <?= $this->Form->create($project, [
                         'class' => 'form-horizontal school',
                         'autocomplete' => 'false',
                         'novalidate' => true,
                         'type' =>'file',
                         'url' => [
-                            'action' => 'saveproject'
+                            'controller' => 'Projects',
+                            'action' => 'add'
                         ]
                     ]) ?>
-
+                <?= $this->Form->input('school_id',['type' => 'hidden','value' => $school->id]); ?>
                 <div class="widget-body newprojectcontainer">
                     <div class="widget-main">
                         <div class="form-group">
                             <?= $this->Form->label('name', __('Projectnaam'), ['class' => 'col-sm-2 control-label no-padding-right ']);?>
                             <div class="col-sm-10">
-                                <?= $this->Form->input('projects.x.name', [
+                                <?= $this->Form->input('name', [
                                     'label' => false,
-                                    'class' => 'form-control slugx newproject',
+                                    'class' => 'form-control slug newproject',
                                 ]); ?>
                             </div>
                         </div>
@@ -192,7 +193,7 @@
                         <div class="form-group">
                             <?= $this->Form->label('slug', __('Slug'), ['class' => 'col-sm-2 control-label no-padding-right']);?>
                             <div class="col-sm-10">
-                                <?= $this->Form->input('projects.x.slug', [
+                                <?= $this->Form->input('slug', [
                                     'label' => false,
                                     'class' => 'form-control slugx newproject',
                                     'readonly'=>true,
@@ -203,23 +204,32 @@
                         <div class="form-group">
                             <?= $this->Form->label('grouptext', __('Groeptekst'), ['class' => 'col-sm-2 control-label no-padding-right']);?>
                             <div class="col-sm-10">
-                                <?= $this->Form->input('projects.x.grouptext', [
+                                <?= $this->Form->input('grouptext', [
                                     'label' => false,
                                     'class' => 'form-control newproject',
                                 ]); ?>
                             </div>
                         </div>
                         <hr>
-
-                        <?=$this->Form->button(__('Verwijderen'), ['type' => 'submit', 'class' => 'btn btn-sm btn-danger deleteproject']); ?>
                         <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right']); ?>
-
+                        
                     </div>
                 </div>
+                <?= $this->Form->end(); ?>
             </div>
             <?php $count = 0; ?>
             <?php foreach($school->projects as $project): ?>
                 <div class="widget-box <?php echo ($count != 0) ? 'collapsed' :''; ?> project">
+                    <?= $this->Form->create($project, [
+                        'class' => 'form-horizontal school',
+                        'autocomplete' => 'false',
+                        'novalidate' => true,
+                        'type' =>'file',
+                        'url' => [
+                            'controller' => 'Projects',
+                            'action' => 'edit'
+                        ]
+                    ]) ?>
                     <div class="widget-header">
                         <h4 class="widget-title"><?= $project->name ?></h4>
 
@@ -232,13 +242,13 @@
 
                     <div class="widget-body">
                         <div class="widget-main">
-
+                            <?= $this->Form->input('project.id',['type' => 'hidden','value' => $project->id]); ?>
                             <div class="form-group">
                                 <?= $this->Form->label('name', __('Projectnaam'), ['class' => 'col-sm-2 control-label no-padding-right ']);?>
                                 <div class="col-sm-10">
-                                    <?= $this->Form->input('projects.'. $count .'.name', [
+                                    <?= $this->Form->input('project.name', [
                                         'label' => false,
-                                        'class' => 'form-control slug'. $count,
+                                        'class' => 'form-control slugname'. $count,
                                         'value' =>  $project->name
                                     ]); ?>
                                 </div>
@@ -247,7 +257,7 @@
                             <div class="form-group">
                                 <?= $this->Form->label('slug', __('Slug'), ['class' => 'col-sm-2 control-label no-padding-right']);?>
                                 <div class="col-sm-10">
-                                    <?= $this->Form->input('projects.'. $count .'.slug', [
+                                    <?= $this->Form->input('project.slug', [
                                         'label' => false,
                                         'class' => 'form-control slug'. $count,
                                         'readonly'=>true,
@@ -256,19 +266,10 @@
                                 </div>
                             </div>
 
-                            <?= $this->Form->hidden('projects.'. $count .'.school_id', [
-                                'value' => $project->school_id,
-                            ]) ?>
-
-                            <?= $this->Form->hidden('projects.'. $count .'.id', [
-                                'value' => $project->id,
-                                'class' => 'project_id'
-                            ]) ?>
-
                             <div class="form-group">
                                 <?= $this->Form->label('grouptext', __('Groeptekst'), ['class' => 'col-sm-2 control-label no-padding-right']);?>
                                 <div class="col-sm-10">
-                                    <?= $this->Form->input('projects.'. $count .'.grouptext', [
+                                    <?= $this->Form->input('project.grouptext', [
                                         'label' => false,
                                         'class' => 'form-control',
                                         'value' =>  $project->grouptext
@@ -279,7 +280,7 @@
                              <div class="form-group">
                                 <?= $this->Form->label('upload', __('Upload Excel'), ['class' => 'col-sm-2 control-label no-padding-right']);?>
                                 <div class="col-sm-10">
-                                    <?= $this->Form->input('projects.'. $count .'.file', [
+                                    <?= $this->Form->input('project.file', [
                                         'label' => false,
                                         'class' => '',
                                         'type' => 'file'
@@ -287,18 +288,17 @@
                                 </div>
                             </div>
                             <br><br>
-                            <?=$this->Form->button(__('Verwijderen'), ['type' => 'submit', 'class' => 'btn btn-sm btn-danger deleteproject']); ?>
+                            <?=$this->Form->button(__('Verwijderen'), ['type' => 'button', 'class' => 'btn btn-sm btn-danger deleteproject']); ?>
                             <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right']); ?>
-
                         </div>
                     </div>
+                    <?= $this->Form->end(); ?>
                 </div>
             <?php $count++; ?>
             <?php endforeach; ?>
         </div>
     </div>
 </div>
-
 <?= $this->Html->script('/admin/js/jquery.slug'); ?>
 <?= $this->Html->script('/admin/js/Controllers/schools'); ?>
 

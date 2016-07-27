@@ -116,4 +116,38 @@ class AddressesTable extends Table
             'lastname' => $data['lastname']
         ];
     }
+    
+    /**
+     * 
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                /*->join([
+                        'Deliveryorders' => [
+                            'table' => 'orders',
+                            'type' => 'LEFT',
+                            'conditions' => 'Deliveryorders.deliveryaddress_id = Addresses.id'
+                        ],
+                        'Invoiceorders' => [
+                            'table' => 'orders',
+                            'type' => 'LEFT',
+                            'conditions' => 'Invoiceorders.invoiceaddress_id = Addresses.id'
+                        ]                    
+                ])*/
+                //->where(['Deliveryorders.ident LIKE' => "%$searchTerm%"])
+                //->orWhere(['Invoiceorders.ident LIKE' => "%$searchTerm%"])
+                ->where(['Addresses.lastname LIKE' => "%".$options['searchTerm']."%"])
+                ->orWhere(['Addresses.zipcode LIKE' => "%".$options['searchTerm']."%"])
+                //->contain(['Deliveryorders', 'Invoiceorders'])
+                ->limit(6)
+                ->order(['Addresses.lastname' => 'asc']);
+    }
 }

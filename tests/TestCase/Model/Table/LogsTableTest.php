@@ -23,9 +23,7 @@ class LogsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.logs',
-    ];
+    public $fixtures = [];
 
     /*
      * setUp method

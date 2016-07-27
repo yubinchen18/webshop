@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use App\Lib\PDFCardCreator;
+use App\Lib\GroupImporter;
 
 /**
  * Projects Controller
@@ -18,7 +19,7 @@ class ProjectsController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
+    public function index($school_id = null)
     {
         $this->paginate = [
             'contain' => ['Schools', 'Groups']
@@ -27,6 +28,18 @@ class ProjectsController extends AppController
         $this->set(compact('projects'));
     }
 
+    /**
+     * Fetches all projects for a school
+     * @param type $school_id
+     */
+    public function schoolprojects($school_id)
+    {
+        $projects = $this->Projects->find('list')
+                ->where(['Projects.school_id' => $school_id]);
+        
+        $this->set(compact('projects'));
+    }
+    
     /**
      * View method
      *
@@ -56,7 +69,7 @@ class ProjectsController extends AppController
             $project = $this->Projects->patchEntity($project, $this->request->data);
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('Het project is opgeslagen.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($this->referer());
             } else {
                 $this->Flash->error(__('Het project kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
@@ -73,20 +86,25 @@ class ProjectsController extends AppController
      */
     public function edit($id = null)
     {
-        $project = $this->Projects->get($id, [
-            'contain' => ['Schools']
-        ]);
+        $project = $this->Projects->newEntity();
+        if (!empty($id)) {
+            $project = $this->Projects->get($id, [
+                'contain' => ['Schools']
+            ]);
+        }
+        
         $schools = $this->Projects->Schools->find('list');
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (isset($this->request->data['differentmail']) && $this->request->data['differentmail'] == 0) {
                 $this->Projects->Mailaddresses->delete($project->mailaddress);
                 $project->mailladdress = null;
             }
-            
+            new GroupImporter($this->request->data, $project->school_id);
             $project = $this->Projects->patchEntity($project, $this->request->data);
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('Het project is opgeslagen.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect($this->referer());
             } else {
                 $this->Flash->error(__('Het project kon niet opgeslagen worden. Probeer het nogmaals.'));
             }

@@ -134,18 +134,26 @@ class OrdersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['deliveryaddress_id'], 'Deliveryaddresses'));
         $rules->add($rules->existsIn(['invoiceaddress_id'], 'Invoiceaddresses'));
-        $rules->add($rules->existsIn(['trx_id'], 'Trxes'));
 
         return $rules;
     }
-
+    
     /**
-     * Returns the database connection name to use by default.
-     *
-     * @return string
+     * 
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
      */
-    public static function defaultConnectionName()
+    public function findSearch(Query $query, array $options)
     {
-        return 'development';
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['ident LIKE' => "%".$options['searchTerm']."%"])
+                ->contain(['Deliveryaddresses', 'Invoiceaddresses'])
+                ->limit(6)
+                ->order(['ident' => 'asc']);
     }
 }

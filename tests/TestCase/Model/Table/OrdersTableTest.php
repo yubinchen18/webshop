@@ -24,26 +24,7 @@ class OrdersTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.orders',
-        'app.users',
-        'app.addresses',
-        'app.invoices',
-        'app.persons',
-        'app.groups',
-        'app.projects',
-        'app.schools',
-        'app.contacts',
-        'app.visitaddresses',
-        'app.mailaddresses',
-        'app.barcodes',
-        'app.photos',
-        'app.orders_orderstatuses',
-        'app.deliveryaddresses',
-        'app.invoiceaddresses',
-        'app.trxes',
-        'app.orderlines',
-        'app.photex_downloads',
-        'app.orderstatuses'
+        'app.orders'
     ];
 
     /**
@@ -71,23 +52,15 @@ class OrdersTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test validationDefault method
      *
      * @return void
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\Validation\Validator();
+        $validator = $this->Orders->validationDefault($mock);
+        $this->assertEquals($mock, $validator);
     }
 
     /**
@@ -97,16 +70,20 @@ class OrdersTableTest extends TestCase
      */
     public function testBuildRules()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\ORM\RulesChecker();
+        $rules = $this->Orders->buildRules($mock);
+        $this->assertEquals($mock, $rules);
     }
-
-    /**
-     * Test defaultConnectionName method
-     *
-     * @return void
-     */
-    public function testDefaultConnectionName()
+    
+    public function testFindSearchException()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->setExpectedException("\InvalidArgumentException");
+        $query = $this->Orders->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Orders->find('search', ['searchTerm' => 'asdf']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
     }
 }

@@ -23,11 +23,7 @@ class SchoolsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.schools',
-        'app.contacts',
-        'app.addresses',
-    ];
+    public $fixtures = [];
 
     /*
      * setUp method

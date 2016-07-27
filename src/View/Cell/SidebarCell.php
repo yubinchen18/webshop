@@ -62,7 +62,7 @@ class SidebarCell extends Cell
                     [
                         'name' => __('Scholen'),
                         'url' => ['controller' => 'Schools', 'action' => 'index', 'prefix' => 'admin'],
-                        'icon' => 'fa fa-users',
+                        'icon' => 'fa fa-building-o',
                         'children' => [
                             [
                                 'name' => __('Overzicht'),
@@ -77,7 +77,7 @@ class SidebarCell extends Cell
                     [
                         'name' => __('Projects'),
                         'url' => ['controller' => 'Projects', 'action' => 'index', 'prefix' => 'admin'],
-                        'icon' => 'fa fa-users',
+                        'icon' => 'fa fa-briefcase',
                         'children' => [
                             [
                                 'name' => __('Overzicht'),
@@ -107,7 +107,7 @@ class SidebarCell extends Cell
                     [
                         'name' => __('Personen'),
                         'url' => ['controller' => 'Persons', 'action' => 'index', 'prefix' => 'admin'],
-                        'icon' => 'fa fa-users',
+                        'icon' => 'fa fa-user',
                         'children' => [
                             [
                                 'name' => __('Overzicht'),
@@ -118,9 +118,16 @@ class SidebarCell extends Cell
                                 'url' => ['controller' => 'Persons', 'action' => 'add', 'prefix' => 'admin']
                             ],
                         ]
-                    ]
+                    ],
+                    [
+                        'name' => __('Foto\'s'),
+                        'url' => ['controller' => 'photos', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-camera',
+                        'children' => [
+                        ]
+                    ],
                 ];
-case 'user':
+            case 'user':
                 return [
                     [
                         'name' => __('Dashboard'),

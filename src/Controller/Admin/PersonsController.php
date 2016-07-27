@@ -51,7 +51,6 @@ class PersonsController extends AppController
     {
         $person = $this->Persons->newEntity();
         $groups = $this->Persons->Groups->find('list');
-        $barcodes = $this->Persons->Barcodes->find('list');
         if ($this->request->is('post')) {
             if (!empty($this->request->data['user']['password'])) {
                 $this->request->data['user']['genuine'] = $this->request->data['user']['password'];
@@ -81,7 +80,6 @@ class PersonsController extends AppController
             'contain' => ['Groups', 'Addresses', 'Barcodes', 'Users']
         ]);
         $groups = $this->Persons->Groups->find('list');
-        $barcodes = $this->Persons->Barcodes->find('list');
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (isset($this->request->data['differentmail']) && $this->request->data['differentmail'] == 0) {
                 $this->Persons->Mailaddresses->delete($person->mailaddress);

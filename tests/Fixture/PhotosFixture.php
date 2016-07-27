@@ -44,7 +44,7 @@ class PhotosFixture extends TestFixture
             'id' => 'a18bfc55-1095-4764-9154-810849a1a664',
             'path' => 'test.jpg',
             'type' => 'image',
-            'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
+            'barcode_id' => 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
             'deleted' => null
@@ -53,7 +53,7 @@ class PhotosFixture extends TestFixture
             'id' => '123327ea-7e67-48bc-b7f6-49d9d880a356',
             'path' => 'tes2t.jpg',
             'type' => 'image',
-            'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
+            'barcode_id' => 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
             'deleted' => null
@@ -62,7 +62,7 @@ class PhotosFixture extends TestFixture
             'id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
             'path' => 'tes2t.jpg',
             'type' => 'image',
-            'barcode_id' => '0e46688d-02a9-4da4-9f91-ed61a3e7246e',
+            'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
             'deleted' => null
@@ -71,7 +71,7 @@ class PhotosFixture extends TestFixture
             'id' => '59d395fa-e723-43f0-becb-0078425f9a27',
             'path' => 'tes2t.jpg',
             'type' => 'image',
-            'barcode_id' => '88c35f25-886b-48cc-a51c-7959b80c2061',
+            'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
             'deleted' => null

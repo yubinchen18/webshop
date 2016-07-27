@@ -84,4 +84,23 @@ class ProjectsTable extends Table
         $rules->add($rules->existsIn(['school_id'], 'Schools'));
         return $rules;
     }
+    
+    /**
+     * 
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['Projects.name LIKE' => "%".$options['searchTerm']."%"])
+                ->contain('Schools')
+                ->limit(6)
+                ->order(['Projects.name' => 'asc']);
+    }
 }

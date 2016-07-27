@@ -116,6 +116,15 @@ class PersonsTable extends Table
         $rules->add($rules->existsIn(['barcode_id'], 'Barcodes'));
         return $rules;
     }
+    
+    public function beforeSave($event, $entity, $options)
+    {
+        if (empty($entity->barcode)) {
+            $entity->barcode = $this->Barcodes->createNewBarcode();
+        }
+        
+        return $entity;
+    }
 
     public function processPersons($data)
     {
@@ -150,5 +159,24 @@ class PersonsTable extends Table
             }
         }
         return true;
+    }
+    
+    /**
+     * 
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['Persons.lastname LIKE' => "%".$options['searchTerm']."%"])
+                ->contain('Groups.Projects.Schools')
+                ->limit(6)
+                ->order(['Persons.lastname' => 'asc']);
     }
 }

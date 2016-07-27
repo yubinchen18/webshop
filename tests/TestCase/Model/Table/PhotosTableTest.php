@@ -23,10 +23,7 @@ class PhotosTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'app.photos',
-        'app.barcodes',
-    ];
+    public $fixtures = [];
 
      /**
      * setUp method

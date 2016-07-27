@@ -17,10 +17,14 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.projects',
         'app.addresses',
+        'app.barcodes',
         'app.contacts',
+        'app.groups',
+        'app.persons',
+        'app.projects',
         'app.schools',
+        'app.users',
     ];
 
     public function setUp()
@@ -64,7 +68,7 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
             'grouptext' => 'groepstekst'
         ];
         $this->post('/admin/projects/add', $data);
-        $this->assertRedirect('/admin/projects');
+        $this->assertRedirect();
 
         $project = $this->Projects->find()->where(['name' => 'New project'])->first();
         $this->assertNotEmpty($project);
@@ -107,10 +111,9 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
         $id = '4a7d8a96-08f6-441c-a8d5-eb40440e7603';
         $data = [
             'name' => 'changedproject',
-
         ];
         $this->put('/admin/projects/edit/'.$id, $data);
-        $this->assertRedirect('/admin/projects');
+        $this->assertRedirect();
 
         $project = $this->Projects->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($project);
@@ -126,5 +129,60 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
         $this->assertRedirect('/admin/projects');
         $project = $this->Projects->find()->where(['id' => $id])->first();
         $this->assertEmpty($project);
+    }
+    
+    public function testUploadCsv()
+    {
+        $this->Addresses = TableRegistry::get('Addresses');
+        $this->Barcodes = TableRegistry::get('Barcodes');
+        $this->Users = TableRegistry::get('Users');
+        $this->Groups = TableRegistry::get('Groups');
+        $this->Persons = TableRegistry::get('Persons');
+
+        $filename = TESTS . 'Fixture' .  DS . 'group-import.xlsx';
+        $data = [
+            'project' => [
+                'id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+                'name' => 'test',
+                'slug' => 'test',
+                'grouptext' => 'tes groepstekst',
+                'file' => [
+                    'name' => 'hoogstraten-group.xlsx',
+                    'type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'tmp_name' => $filename,
+                    'error' => '0',
+                    'size' => '4842'
+                ]
+            ]
+        ];
+
+        $addressesPrecount = $this->Addresses->find()->count();
+        $barcodesPrecount = $this->Barcodes->find()->count();
+        $usersPrecount = $this->Users->find()->count();
+        $groupsPrecount = $this->Groups->find()->count();
+        $personsPrecount = $this->Persons->find()->count();
+
+        $this->put('/admin/projects/edit/', $data);
+
+        $addressesCount = $this->Addresses->find()->count();
+        $barcodesCount = $this->Barcodes->find()->count();
+        $usersCount = $this->Users->find()->count();
+        $groupsCount = $this->Groups->find()->count();
+        $personsCount = $this->Persons->find()->count();
+
+        $this->assertEquals(1, ($addressesCount - $addressesPrecount)); //2
+        $this->assertEquals(3, ($barcodesCount - $barcodesPrecount)); //3
+        $this->assertEquals(2, ($usersCount - $usersPrecount)); //2
+        $this->assertEquals(1, ($groupsCount - $groupsPrecount)); //1
+        $this->assertEquals(2, ($personsCount - $personsPrecount)); //2
+    }
+    
+    public function testSchoolProjects()
+    {
+        $school_id = '82199cab-fc52-4853-8f64-575a7721b8e7';
+        $this->get('/admin/projects/'. $school_id . '.json');
+         
+        $this->assertResponseContains('Eindejaars 2016');
     }
 }
