@@ -1,5 +1,6 @@
-<div class="table-header"><?=__('Zoekopdracht'). ': '. "'$searchTerm'"?></div>
+<div class="table-header"><?=__("Zoekopdracht: {0}", h($searchTerm)); ?></div>
 <br>
+
 <div class="table-header" <?php echo (empty($schools)) ? "style='opacity:0.5'" : "" ?>><?=__('Schools')?></div>
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
@@ -41,7 +42,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen scholen gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen scholen gevonden voor de zoekopdracht: '".h($searchTerm)."'") ?>
                 </tr>
             <?php endif; ?>    
             </tbody>
