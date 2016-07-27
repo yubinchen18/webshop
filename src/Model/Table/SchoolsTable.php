@@ -79,4 +79,16 @@ class SchoolsTable extends Table
 
         return $validator;
     }
+    
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['name LIKE' => "%".$options['searchTerm']."%"])
+                ->contain(['Contacts', 'Visitaddresses'])
+                ->limit(6)
+                ->order(['name' => 'asc']);
+    }
 }

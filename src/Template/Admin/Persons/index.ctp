@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             <?php foreach ($persons as $person): ?>
-                <tr ondblclick=""ick="openView('persons', '<?= $person->id ?>')">
+                <tr ondblclick="openView('persons', '<?= $person->id ?>')">
                     <td><?= h($person->full_name) ?></td>
                     <td><?= h($person->email) ?></td>
                     <td><?= h($person->group->name) ?></td>
