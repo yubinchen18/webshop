@@ -5,3 +5,4 @@
 /webroot/css/
 /webroot/js/
 /config/Migrations/schema-dump-development.lock
+/config/bootstrap.php
