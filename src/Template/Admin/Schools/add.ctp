@@ -36,3 +36,5 @@
         </div>
     </div>
 </div>
+<?= $this->Html->script('/admin/js/jquery.slug'); ?>
+<?= $this->Html->script('/admin/js/Controllers/schools'); ?>
