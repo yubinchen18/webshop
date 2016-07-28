@@ -162,7 +162,7 @@ class PersonsTable extends Table
     }
     
     /**
-     * 
+     *
      * @param Query $query
      * @param array $options
      * @return type

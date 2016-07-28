@@ -23,7 +23,9 @@ class AddressesTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.addresses'
+    ];
 
     /*
      * setUp method
@@ -59,5 +61,20 @@ class AddressesTableTest extends TestCase
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Addresses->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+    
+    public function testFindSearchException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $query = $this->Addresses->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Addresses->find('search', ['searchTerm' => 'horst']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
+        $result = $query->count();
+        $expected = 2;
+        $this->assertEquals($expected, $result);
     }
 }

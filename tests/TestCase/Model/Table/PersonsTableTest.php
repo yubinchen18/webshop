@@ -23,7 +23,12 @@ class PersonsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.persons',
+        'app.groups',
+        'app.projects',
+        'app.schools'
+    ];
 
     /*
      * setUp method
@@ -59,5 +64,21 @@ class PersonsTableTest extends TestCase
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Persons->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+    
+    public function testFindSearchException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $query = $this->Persons->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Persons->find('search', ['searchTerm' => 'Tank']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
+        $result = $query->toArray();
+        $email = $result[0]->email;
+        $expected = 'henkdetank@test.nl';
+        $this->assertEquals($expected, $email);
     }
 }

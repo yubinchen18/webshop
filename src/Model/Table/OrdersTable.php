@@ -139,7 +139,7 @@ class OrdersTable extends Table
     }
     
     /**
-     * 
+     *
      * @param Query $query
      * @param array $options
      * @return type

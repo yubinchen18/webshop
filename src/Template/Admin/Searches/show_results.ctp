@@ -1,7 +1,6 @@
-<div class="table-header"><?=__("Zoekopdracht: {0}", h($searchTerm)); ?></div>
+<div class="table-header"><?=__("Zoekopdracht: ' {0} '", h($searchTerm)); ?></div>
 <br>
-
-<div class="table-header" <?php echo (empty($schools)) ? "style='opacity:0.5'" : "" ?>><?=__('Schools')?></div>
+<div class="table-header<?php echo (!empty($schools)) ? " search-active" : "";?>" <?php echo (empty($schools)) ? "style='opacity:0.4'" : "";?>><?=__('Schools')?></div>
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
         <table class="table table-striped table-bordered table-hover dataTable no-footer table-condensed" role="grid"
@@ -42,7 +41,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen scholen gevonden voor de zoekopdracht: '".h($searchTerm)."'") ?>
+                    <td><?=__("Geen scholen gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>    
             </tbody>
@@ -51,7 +50,7 @@
 </div>
 
 <br>
-<div class="table-header" <?php echo (empty($projects)) ? "style='opacity:0.5'" : "" ?>><?=__('Projecten')?></div>
+<div class="table-header<?php echo (!empty($projects)) ? " search-active" : "";?>" <?php echo (empty($projects)) ? "style='opacity:0.4'" : "";?>><?=__('Projecten')?></div>
 
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
@@ -96,7 +95,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen projecten gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen projecten gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>
             </tbody>
@@ -104,7 +103,7 @@
     </div>
 </div>
 <br>
-<div class="table-header" <?php echo (empty($groups)) ? "style='opacity:0.5'" : "" ?> ><?=__('Klassen')?></div>
+<div class="table-header<?php echo (!empty($groups)) ? " search-active" : "";?>" <?php echo (empty($groups)) ? "style='opacity:0.4'" : "";?>><?=__('Klassen')?></div>
 
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
@@ -158,7 +157,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen klassen gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen klassen gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>
             </tbody>
@@ -166,7 +165,7 @@
     </div>
 </div>
 <br>
-<div class="table-header" <?php echo (empty($persons)) ? "style='opacity:0.5'" : "" ?> ><?=__('Personen')?></div>
+<div class="table-header<?php echo (!empty($persons)) ? " search-active" : "";?>" <?php echo (empty($persons)) ? "style='opacity:0.4'" : "";?>><?=__('Personen')?></div>
 
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
@@ -231,7 +230,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen personen gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen personen gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>
             </tbody>
@@ -239,16 +238,17 @@
     </div>
 </div>
 <br>
-<div class="table-header" <?php echo (empty($addresses)) ? "style='opacity:0.5'" : "" ?> ><?=__('Adressen')?></div>
+<div class="table-header<?php echo (!empty($addresses)) ? " search-active" : "";?>" <?php echo (empty($addresses)) ? "style='opacity:0.4'" : "";?>><?=__('Adressen')?></div>
 
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
         <table class="table table-striped table-bordered table-hover dataTable no-footer table-condensed" role="grid"
                aria-describedby="dynamic-table_info">
             <?php if (!empty($addresses)): ?>
+            <?php pr($addresses); ?>
             <thead>
             <tr role="row">
-                <th><?= __('Naam') ?></th>
+                <th><?= __('Achternaam') ?></th>
                 <th><?= __('Adres') ?></th>
                 <th><?= __('Postcode') ?></th>
                 <th><?= __('Plaats') ?></th>
@@ -260,7 +260,7 @@
             <tbody>
             <?php foreach ($addresses as $address): ?>
                 <tr ondblclick="openView('addresses', '<?= $address->id ?>')">
-                    <td><?= h($address->full_name) ?></td>
+                    <td><?= h($address->lastname) ?></td>
                     <td><?= h($address->full_address) ?></td>
                     <td><?= h($address->zipcode) ?></td>
                     <td><?= h($address->city) ?></td>
@@ -272,7 +272,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen adressen gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen adressen gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>
             </tbody>
@@ -281,7 +281,7 @@
 </div>
 
 <br>
-<div class="table-header" <?php echo (empty($orders)) ? "style='opacity:0.5'" : "" ?> ><?=__('Orders')?></div>
+<div class="table-header<?php echo (!empty($orders)) ? " search-active" : "";?>" <?php echo (empty($orders)) ? "style='opacity:0.4'" : "";?>><?=__('Orders')?></div>
 
 <div>
     <div class="dataTables_wrapper form-inline no-footer">
@@ -314,10 +314,12 @@
             <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td><?=__("Geen orders gevonden voor de zoekopdracht: '$searchTerm'") ?>
+                    <td><?=__("Geen orders gevonden voor de zoekopdracht: ' {0} '", h($searchTerm)) ?>
                 </tr>
             <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
+
+<?= $this->Html->script('/admin/js/Controllers/searches'); ?>

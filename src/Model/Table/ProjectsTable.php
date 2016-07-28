@@ -86,7 +86,7 @@ class ProjectsTable extends Table
     }
     
     /**
-     * 
+     *
      * @param Query $query
      * @param array $options
      * @return type

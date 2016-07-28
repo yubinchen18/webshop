@@ -23,7 +23,11 @@ class SchoolsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.schools',
+        'app.contacts',
+        'app.addresses'
+    ];
 
     /*
      * setUp method
@@ -59,5 +63,20 @@ class SchoolsTableTest extends TestCase
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Schools->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+    
+    public function testFindSearchException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $query = $this->Schools->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Schools->find('search', ['searchTerm' => 'van putten']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
+        $result = $query->count();
+        $expected = 1;
+        $this->assertEquals($expected, $result);
     }
 }
