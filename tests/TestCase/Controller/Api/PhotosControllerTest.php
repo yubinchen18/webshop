@@ -72,4 +72,15 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $data = $this->getDecodedResponse();
         $this->assertCount(2, $data['Photos']);
     }
+
+    /**
+     * Test initial setup
+     *
+     * @return void
+     */
+    public function testPhotoDownload()
+    {
+        $image = file_get_contents("https://www.google.com/images/srpr/logo3w.png");
+        $this->assertEquals("\x89PNG\x0d\x0a\x1a\x0a", substr($image, 0, 8));
+    }
 }

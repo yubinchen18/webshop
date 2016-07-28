@@ -119,7 +119,7 @@ class PersonsTable extends Table
     
     public function beforeSave($event, $entity, $options)
     {
-        if (empty($entity->barcode)) {
+        if (empty($entity->barcode) && empty($entity->barcode_id)) {
             $entity->barcode = $this->Barcodes->createNewBarcode();
         }
         
@@ -144,7 +144,7 @@ class PersonsTable extends Table
                     ->first();
 
                 if (!empty($oldGroup) && !empty($newGroup)) {
-                    $oldPath = APP . "userphotos" . DS . $this->Photos->getPath($data['barcode_id']);
+                    $oldPath = $this->Photos->getPath($data['barcode_id']);
                     $newPath = str_replace(
                         $oldGroup->id . '_' . $oldGroup->slug,
                         $newGroup->id . '_' . $newGroup->slug,

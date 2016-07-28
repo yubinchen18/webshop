@@ -46,7 +46,6 @@ class AppController extends Controller
             'realm'=>'Hoogstraten synchronisatie',
             'loginAction' => false
         ]);
-
     }
 
     public function beforeFilter(Event $event)

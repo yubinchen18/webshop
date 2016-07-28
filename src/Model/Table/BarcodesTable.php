@@ -35,13 +35,16 @@ class BarcodesTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasOne('Groups', [
-            'foreignKey' => 'barcode_id'
+            'foreignKey' => 'barcode_id',
+            'joinType' => 'LEFT'
         ]);
         $this->hasOne('Persons', [
-            'foreignKey' => 'barcode_id'
+            'foreignKey' => 'barcode_id',
+            'joinType' => 'LEFT'
         ]);
         $this->hasMany('Photos', [
-            'foreignKey' => 'barcode_id'
+            'foreignKey' => 'barcode_id',
+            'joinType' => 'LEFT'
         ]);
     }
 

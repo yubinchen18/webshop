@@ -40,7 +40,7 @@ class LogsControllerTest extends BaseIntegrationTestCase
      */
     public function testGet()
     {
-        $this->get('/api/v1/get_ftp_login.json');
+        $this->get('/api/v1/get_photos/persons/1447e1dd-f3a5-4183-9508-725519b3107d.json');
         $this->assertResponseSuccess();
 
         $this->Logs = TableRegistry::get('Logs');

@@ -24,7 +24,7 @@ class PhotosController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function index($modelName, $id)
+    public function getPhotos($modelName, $id)
     {
         $this->Model = TableRegistry::get($modelName);
         $this->Photos = TableRegistry::get('Photos');
@@ -66,5 +66,24 @@ class PhotosController extends AppController
                 ->toArray();
 
         $this->set('Photos', $photos);
+    }
+
+    public function getPhoto($id)
+    {
+        $photo = $this->Photos->get($id);
+        $file = ROOT . DS . $photo->path;
+        $mimetype = mime_content_type($file);
+        $size   = filesize($file);
+
+        header('Content-Type: ' . $mimetype);
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . $mimetype);
+        header('Content-Disposition: attachment; filename= ' . basename($photo->path));
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: public');
+        header('Pragma: public');
+        header('Content-Length: ' . $size);
+        readfile($file);
     }
 }
