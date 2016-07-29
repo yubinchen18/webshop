@@ -123,7 +123,7 @@
                         </tr>
                         <tr>
                             <th><?= __('Geslacht') ?></th>
-                            <td><?= ($person->address->gender == 'm') ? _('Man') : _('Vrouw'); ?></td>
+                            <td><?= ($person->address->gender == 'm') ? __('Man') : __('Vrouw'); ?></td>
                         </tr>
                         <tr>
                             <th><?= __('Aangemaakt') ?></th>
