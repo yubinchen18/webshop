@@ -43,6 +43,14 @@ class AddressesTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'address_id'
         ]);
+        $this->hasMany('Deliveryorders', [
+            'foreignKey' => 'deliveryaddress_id',
+            'className' => 'Orders'
+        ]);
+        $this->hasMany('Invoiceorders', [
+            'foreignKey' => 'invoiceaddress_id',
+            'className' => 'Orders'
+        ]);
     }
 
     /**
@@ -107,5 +115,24 @@ class AddressesTable extends Table
             'prefix' => $data['prefix'],
             'lastname' => $data['lastname']
         ];
+    }
+    
+    /**
+     *
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['Addresses.lastname LIKE' => "%".$options['searchTerm']."%"])
+                ->orWhere(['Addresses.zipcode LIKE' => "%".$options['searchTerm']."%"])
+                ->limit(6)
+                ->order(['Addresses.lastname' => 'asc']);
     }
 }

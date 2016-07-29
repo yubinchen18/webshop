@@ -160,4 +160,23 @@ class PersonsTable extends Table
         }
         return true;
     }
+    
+    /**
+     *
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['Persons.lastname LIKE' => "%".$options['searchTerm']."%"])
+                ->contain('Groups.Projects.Schools')
+                ->limit(6)
+                ->order(['Persons.lastname' => 'asc']);
+    }
 }

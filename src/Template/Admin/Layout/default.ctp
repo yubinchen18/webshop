@@ -53,6 +53,39 @@
                                     <a href="#"><?= __($this->request->params['action']) ?></a>
                                 </li>
                             </ul>
+                            
+                            <!-- #section:basics/content.searchbox -->
+                            <div class="nav-search" id="nav-search">                                
+                                <?= $this->Form->create(null, [
+                                    'url' => [
+                                        'controller' => 'searches',
+                                        'action' => 'showResults'
+                                    ],
+                                    'class'=> [
+                                        'form-search'
+                                    ],
+                                    'type'=> 'get'
+                                ]); ?>
+                                <span class="input-icon">
+                                    <?= $this->Form->input('query', [
+                                        'label' => false,
+                                        'type' => 'text',
+                                        'class'=> 'nav-search-input',
+                                        'id' => "nav-search-input",
+                                        'placeholder' => __('Search...'),
+                                        'autocomplete' => 'off',
+                                        'templates' => [
+                                            'inputContainer' => '{{content}}'
+                                        ]
+                                    ]); ?>
+                                    <!--<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />-->
+                                <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                </span>
+                                <?= $this->Form->end(); ?>                                
+                            </div><!-- /.nav-search -->
+                            
+
+
                         </div>
 
                         <div class="page-content">

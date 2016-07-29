@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\PersonsTable;
+use App\Model\Table\OrdersTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\PersonsTable Test Case
+ * App\Model\Table\OrdersTable Test Case
  */
-class PersonsTableTest extends TestCase
+class OrdersTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\PersonsTable
+     * @var \App\Model\Table\OrdersTable
      */
-    public $Persons;
+    public $Orders;
 
     /**
      * Fixtures
@@ -24,13 +24,10 @@ class PersonsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.persons',
-        'app.groups',
-        'app.projects',
-        'app.schools'
+        'app.orders'
     ];
 
-    /*
+    /**
      * setUp method
      *
      * @return void
@@ -38,8 +35,8 @@ class PersonsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Persons') ? [] : ['className' => 'App\Model\Table\PersonsTable'];
-        $this->Persons = TableRegistry::get('Persons', $config);
+        $config = TableRegistry::exists('Orders') ? [] : ['className' => 'App\Model\Table\OrdersTable'];
+        $this->Orders = TableRegistry::get('Orders', $config);
     }
 
     /**
@@ -49,7 +46,7 @@ class PersonsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Persons);
+        unset($this->Orders);
 
         parent::tearDown();
     }
@@ -62,23 +59,31 @@ class PersonsTableTest extends TestCase
     public function testValidationDefault()
     {
         $mock = new \Cake\Validation\Validator();
-        $validator = $this->Persons->validationDefault($mock);
+        $validator = $this->Orders->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
+    {
+        $mock = new \Cake\ORM\RulesChecker();
+        $rules = $this->Orders->buildRules($mock);
+        $this->assertEquals($mock, $rules);
     }
     
     public function testFindSearchException()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-        $query = $this->Persons->find('search');
+        $this->setExpectedException("\InvalidArgumentException");
+        $query = $this->Orders->find('search');
     }
     
     public function testFindSearch()
     {
-        $query = $this->Persons->find('search', ['searchTerm' => 'Tank']);
+        $query = $this->Orders->find('search', ['searchTerm' => 'asdf']);
         $this->assertInstanceOf('Cake\ORM\Query', $query);
-        $result = $query->toArray();
-        $email = $result[0]->email;
-        $expected = 'henkdetank@test.nl';
-        $this->assertEquals($expected, $email);
     }
 }

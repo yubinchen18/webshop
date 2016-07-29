@@ -46,4 +46,11 @@ class Address extends Entity
                 $this->_properties['prefix'] . '  ' .
             $this->_properties['lastname'];
     }
+    
+    protected function _getFullAddress()
+    {
+        return $this->_properties['street'] . '  ' .
+                $this->_properties['number'] . ' ' .
+                $this->_properties['extension'];
+    }
 }

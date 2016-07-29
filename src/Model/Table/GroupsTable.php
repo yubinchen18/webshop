@@ -114,4 +114,23 @@ class GroupsTable extends Table
         
         return false;
     }
+    
+    /**
+     *
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    public function findSearch(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+        return $query
+                ->where(['Groups.name LIKE' => "%".$options['searchTerm']."%"])
+                ->contain('Projects.Schools')
+                ->limit(6)
+                ->order(['Groups.name' => 'asc']);
+    }
 }

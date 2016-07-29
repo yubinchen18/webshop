@@ -23,7 +23,10 @@ class ProjectsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.projects',
+        'app.schools'
+    ];
 
      /*
      * setUp method
@@ -55,9 +58,31 @@ class ProjectsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
-    {
+    {        
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Projects->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+    
+    public function testBuildRules()
+    {
+        $mock = new \Cake\ORM\RulesChecker();
+        $rules = $this->Projects->buildRules($mock);
+        $this->assertEquals($mock, $rules);
+    }
+    
+    public function testFindSearchException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $query = $this->Projects->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Projects->find('search', ['searchTerm' => 'Eindej']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
+        $result = $query->count();
+        $expected = 1;
+        $this->assertEquals($expected, $result);
     }
 }

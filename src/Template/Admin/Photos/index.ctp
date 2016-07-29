@@ -2,7 +2,7 @@
         <div class="col-sm-12 filters">
             <div class="form-group">
                 <?= $this->Form->create('Photos'); ?>
-                <?= $this->Form->label(_('Filter'),null, ['class' => 'col-sm-1']);?>
+                <?= $this->Form->label(__('Filter'),null, ['class' => 'col-sm-1']);?>
                 <div class="col-sm-3">
                     
                     <?= $this->Form->input('school_id', [

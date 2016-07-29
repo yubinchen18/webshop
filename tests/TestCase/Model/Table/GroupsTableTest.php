@@ -23,7 +23,11 @@ class GroupsTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.groups',
+        'app.projects',
+        'app.schools'
+    ];
 
     /*
      * setUp method
@@ -59,5 +63,21 @@ class GroupsTableTest extends TestCase
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Groups->validationDefault($mock);
         $this->assertEquals($mock, $validator);
+    }
+    
+    public function testFindSearchException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $query = $this->Groups->find('search');
+    }
+    
+    public function testFindSearch()
+    {
+        $query = $this->Groups->find('search', ['searchTerm' => 'Klas 2A']);
+        $this->assertInstanceOf('Cake\ORM\Query', $query);
+        $result = $query->toArray();
+        $email = $result[0]->project->name;
+        $expected = 'Eindejaars 2016';
+        $this->assertEquals($expected, $email);
     }
 }
