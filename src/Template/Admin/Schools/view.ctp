@@ -59,7 +59,7 @@
                         </tr>
                         <tr>
                             <th><?= __('Geslacht') ?></th>
-                            <td><?= ($school->contact->gender == 'm') ? _('Man') : _('Vrouw'); ?></td>
+                            <td><?= ($school->contact->gender == 'm') ? __('Man') : __('Vrouw'); ?></td>
                         </tr>
                         <tr>
                             <th><?= __('Aangemaakt') ?></th>
@@ -99,7 +99,7 @@
                         </tr>
                         <tr>
                             <th><?= __('Geslacht') ?></th>
-                            <td><?= ($school->visitaddress->gender == 'm') ? _('Man') : _('Vrouw'); ?></td>
+                            <td><?= ($school->visitaddress->gender == 'm') ? __('Man') : __('Vrouw'); ?></td>
                         </tr>
                         <tr>
                             <th><?= __('Aangemaakt') ?></th>
@@ -139,7 +139,7 @@
                         </tr>
                         <tr>
                             <th><?= __('Geslacht') ?></th>
-                            <td><?= ($school->mailaddress->gender == 'm') ? _('Man') : _('Vrouw'); ?></td>
+                            <td><?= ($school->mailaddress->gender == 'm') ? __('Man') : __('Vrouw'); ?></td>
                         </tr>
                         <tr>
                             <th><?= __('Aangemaakt') ?></th>
