@@ -245,7 +245,6 @@
         <table class="table table-striped table-bordered table-hover dataTable no-footer table-condensed" role="grid"
                aria-describedby="dynamic-table_info">
             <?php if (!empty($addresses)): ?>
-            <?php pr($addresses); ?>
             <thead>
             <tr role="row">
                 <th><?= __('Achternaam') ?></th>
