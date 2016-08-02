@@ -72,16 +72,6 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        
-        if (Configure::read('environment') == 'staging') {
-            $this->loadComponent('Auth', [
-                'authenticate' => [
-                    'Basic' => ['finder' => 'auth']
-                ],
-                'storage' => 'Memory',
-                'unauthorizedRedirect' => false
-            ]);
-        }
     }
 
     /**
