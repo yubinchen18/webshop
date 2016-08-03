@@ -5,12 +5,17 @@ use App\Controller\Admin\PersonsController;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
+use org\bovigo\vfs\vfsStream;
+use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 
 /**
  * App\Controller\PersonsController Test Case
  */
 class PersonsControllerTest extends BaseIntegrationTestCase
 {
+    private $vfsStream;
+    private $vfsRoot;
     /**
      * Fixtures
      *
@@ -24,6 +29,8 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         'app.groups',
         'app.barcodes',
         'app.projects',
+        'app.photos',
+        'app.schools',
     ];
 
     public function setUp()
@@ -31,6 +38,17 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         parent::setUp();
         $this->loginAdmin();
         $this->Persons = TableRegistry::get('Persons');
+        $this->Photos = TableRegistry::get('Photos');
+        $this->vfsStream = vfsStream::setup('data', null, ['tmp' => []]);
+        $this->vfsRoot = 'vfs://data';
+        $this->Photos->baseDir = $this->vfsRoot;
+    }
+    
+    public function tearDown()
+    {
+        unset($this->vfsStream);
+        unset($this->Photos);
+        parent::tearDown();
     }
 
     public function testIndex()
@@ -163,6 +181,38 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         $person = $this->Persons->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($person);
         $this->assertEquals($data['studentnumber'], $person->studentnumber);
+    }
+    
+        
+    public function testEditGroup()
+    {
+        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $data = [
+            'group_id' => '8262ca6b-f23a-4154-afed-fc893c1516d3',
+        ];
+        $this->put('/admin/persons/edit/'.$id, $data);
+        $this->assertRedirect('/admin/persons');
+        $person2 = $this->Persons->find()->where(['id' => $id])->first();
+        $this->assertNotEmpty($person2);
+        $this->assertEquals($data['group_id'], $person2->group_id);
+    }
+    
+    public function testEditFolder()
+    {
+        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $data = [
+            'group_id' => '8262ca6b-f23a-4154-afed-fc893c1516d3',
+        ];
+        $this->put('/admin/persons/edit/'.$id, $data);
+        $this->assertRedirect('/admin/persons');
+        $person = $this->Persons->find()->where(['id' => $id])->first();
+        $oldPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos';
+        $newPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-blauw/pieter-vos';
+        $oldFolder = new Folder($oldPath);
+        $newFolder = new Folder($newPath);
+        
+        $this->assertTrue(file_exists($newFolder->pwd()));
+        $this->assertFalse(file_exists($oldFolder->pwd()));
     }
 
     public function testDelete()

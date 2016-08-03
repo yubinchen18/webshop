@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use App\Lib\PDFCardCreator;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
 
 /**
  * Persons Controller
@@ -81,14 +83,26 @@ class PersonsController extends AppController
         ]);
         $groups = $this->Persons->Groups->find('list');
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if (isset($this->request->data['differentmail']) && $this->request->data['differentmail'] == 0) {
-                $this->Persons->Mailaddresses->delete($person->mailaddress);
-                $person->mailladdress = null;
+            //when group is changed get the old picture folder path
+            if (isset($this->request->data['group_id']) && $person->group->id !== $this->request->data['group_id']) {
+                $photos = TableRegistry::get('Photos');
+                $oldPath = $photos->getPath($person->barcode->id);
             }
             
             $person = $this->Persons->patchEntity($person, $this->request->data);
             if ($this->Persons->save($person)) {
                 $this->Flash->success(__('De persoon is opgeslagen.'));
+                
+                // move folder to new path
+                if (isset($oldPath)){
+                    $newPath = $photos->getPath($person->barcode->id);
+                    $picFolder = new Folder($oldPath);
+                    $picFolder->move([
+                        'to' => $newPath,
+                        'mode' => 0777
+                    ]);
+                }
+                
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('De persoon kon niet opgeslagen worden. Probeer het nogmaals.'));
