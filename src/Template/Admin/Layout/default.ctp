@@ -33,7 +33,6 @@
     </head>
 
     <body class="no-skin">
-        <?= $this->Flash->render() ?>
         <?php if($this->request->params['controller'] == 'Users' && $this->request->params['action'] == 'login'): ?>        
             <?= $this->element('login'); ?>
         <?php else: ?>
@@ -91,6 +90,7 @@
                         <div class="page-content">
                             <div class="row">
                                 <div class="col-xs-12">
+                                    <?= $this->Flash->render() ?>
                                     <?= $this->fetch('content') ?>
                                 </div>
                             </div>

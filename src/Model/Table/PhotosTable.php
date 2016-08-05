@@ -115,7 +115,9 @@ class PhotosTable extends Table
                 $barcode->person->group->slug . DS . $barcode->person->slug;
         $path->create($pathToCreate);
         $path->cd($pathToCreate);
-
+        $path->create('thumbs');
+        $path->create('med');
+        
         return $path->path;
     }
 

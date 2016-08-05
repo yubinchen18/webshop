@@ -3,6 +3,9 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 /**
  * Photos Controller
@@ -151,15 +154,68 @@ class PhotosController extends AppController
               ->where(['path' => $path])
               ->first();
         
-        $file =     APP . 'userphotos' . DS .
-                    $this->Photos->getPath($photo->barcode_id) . DS .
+        $file =     $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs' . DS .
                     $photo->path;
-
-        $photo = new \Imagick($file);
-        $thumb = $this->Photos->autoRotateImage($photo, $size);
         
         $this->response->type(['jpg' => 'image/jpeg']);
-        $this->response->file($thumb, ['name' => 'path']);
+        $this->response->file($file, ['name' => 'path']);
         return $this->response;
+    }
+    
+    public function move()
+    {
+        if(!$this->request->is('post')) {
+            return $this->redirect(['action' => 'index']);
+        }
+        
+        if(!empty($this->request->data['destination_id'])) {
+            $person = $this->Photos->Barcodes->Persons->get($this->request->data['destination_id']);
+            
+            foreach($this->request->data['photos'] as $photo_id) {
+                $photo = $this->Photos->get($photo_id);
+                $oldPath = $this->Photos->getPath($photo->barcode_id);
+                $photo->barcode_id = $person->barcode_id;
+                if($this->Photos->save($photo)) {
+                    // move folder to new path
+                    if (isset($oldPath)){
+                        $newPath = $this->Photos->getPath($photo->barcode_id);
+                        
+                        $file = new File($oldPath . DS . 'thumbs' . DS . $photo->path);
+                        $file->copy($newPath . DS . 'thumbs' . DS . $photo->path);
+                        $file->delete($oldPath . DS . 'thumbs' . DS . $photo->path);
+                        
+                        $file = new File($oldPath . DS . 'med' . DS . $photo->path);
+                        $file->copy($newPath . DS . 'med' . DS . $photo->path);
+                        $file->delete($oldPath . DS . 'med' . DS . $photo->path);
+                        
+                        $file = new File($oldPath . DS . $photo->path);
+                        $file->copy($newPath . DS . $photo->path);
+                        $file->delete($oldPath . DS . $photo->path);
+                    }
+                }
+            }
+            $this->Flash->success(__('De foto is verplaatst'));
+            return $this->redirect(['controller' => 'photos','action' => 'index']);
+        }
+
+        $moves = [];
+        $barcodes = [];
+        $persons = [];
+        
+        foreach($this->request->data['photos'] as $id => $checked) {
+            if($checked == 1) {
+                $photo = $this->Photos->get($id,['contain' => ['Barcodes.Persons.Groups.Projects']]);
+                $moves[] = $photo;
+                $barcodes[] = $photo->barcode->id;
+                $persons[] = $photo->barcode->person->id;
+            }
+        }
+        
+        $schools = TableRegistry::get('Schools');
+        $tree = $schools->find('tree',[
+            'school_id' => $photo->barcode->person->group->project->school_id,
+        ])->first();
+        
+        $this->set(compact('moves', 'tree'));
     }
 }
