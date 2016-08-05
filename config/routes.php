@@ -12,6 +12,21 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     $routes->fallbacks('DashedRoute');
     
+    $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
+    $routes->connect(
+        '/photos/view/:id',
+        ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/:size/:path',
+        [
+                'controller' => 'Photos',
+                'action' => 'display',
+            ],
+        ['size','path', 'pass' => ['size','path']]
+    );
+    
     Router::prefix('Api', function ($routes) {
         $routes->extensions(['json']);
 

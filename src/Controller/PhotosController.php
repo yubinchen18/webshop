@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
 
 /**
  * Photos Controller
@@ -18,15 +20,32 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Barcodes']
-        ];
-        $photos = $this->paginate($this->Photos);
-
-        $this->set(compact('photos'));
+        //temporary fix for test
+        $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
+        
+        $usersTable = TableRegistry::get('users');
+        $personsTable = TableRegistry::get('Persons');
+        $person = $personsTable->find()
+                ->where(['Persons.id' => $personId])
+                ->contain(['Barcodes.Photos'])
+                ->first();
+        
+        //add the orientation data to the photos array
+        foreach ($person->barcode->photos as $key => $photo) {
+            $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
+            $dimensions = getimagesize($filePath);
+            if ($dimensions[0] > $dimensions[1]) {
+                $orientationClass = 'photos-horizontal';
+            } else {
+                $orientationClass = 'photos-vertical';
+            }
+            $photo->orientationClass = $orientationClass;
+        }
+        
+        $this->set(compact('person'));
         $this->set('_serialize', ['photos']);
     }
-
+    
     /**
      * View method
      *
@@ -112,5 +131,37 @@ class PhotosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     * 
+     * @param type $size
+     * @param type $id
+     * @return type
+     */
+    public function display($size = 'original', $path)
+    {
+        $photo = $this->Photos->find()
+              ->where(['path' => $path])
+              ->first();
+        
+        switch ($size) {
+            case "med":
+                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'med';
+                break;
+            
+            case "thumb":
+                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs';
+                break;
+            
+            default:
+                $rawPath = $this->Photos->getPath($photo->barcode_id);
+                break;
+        }
+        $file = $rawPath . DS . $photo->path;
+   
+        $this->response->type(['jpg' => 'image/jpeg']);
+        $this->response->file($file, ['name' => 'path']);
+        return $this->response;
     }
 }
