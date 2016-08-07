@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
+    use Cake\Network\Exception\NotFoundException;
 
 /**
  * Photos Controller
@@ -20,26 +21,30 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        //temporary fix for test
-        $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
-        
-        $usersTable = TableRegistry::get('users');
+        $personId = $this->request->session()->read('Auth.User.id');
+        //temporary fix for test, should be $personId = $this->Auth->user('id')
+        if (!$personId) {
+            $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
+        }
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
                 ->where(['Persons.id' => $personId])
                 ->contain(['Barcodes.Photos'])
                 ->first();
-        
         //add the orientation data to the photos array
-        foreach ($person->barcode->photos as $key => $photo) {
-            $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
-            $dimensions = getimagesize($filePath);
-            if ($dimensions[0] > $dimensions[1]) {
-                $orientationClass = 'photos-horizontal';
-            } else {
-                $orientationClass = 'photos-vertical';
+        if (isset($person)) {
+            foreach ($person->barcode->photos as $key => $photo) {
+                $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
             }
-            $photo->orientationClass = $orientationClass;
+        } else {
+            $this->Flash->error(__('This person is not found or doesn\'t have any photos.'));
         }
         
         $this->set(compact('person'));
@@ -134,34 +139,41 @@ class PhotosController extends AppController
     }
     
     /**
-     * 
+     *
      * @param type $size
      * @param type $id
      * @return type
      */
-    public function display($size = 'original', $path)
+    public function display($size, $path)
     {
         $photo = $this->Photos->find()
               ->where(['path' => $path])
               ->first();
         
-        switch ($size) {
-            case "med":
-                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'med';
-                break;
-            
-            case "thumb":
-                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs';
-                break;
-            
-            default:
-                $rawPath = $this->Photos->getPath($photo->barcode_id);
-                break;
+        if (!empty($photo)) {
+            switch ($size) {
+                case "med":
+                    $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'med';
+                    break;
+
+                case "thumb":
+                    $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs';
+                    break;
+
+                case "original":
+                    $rawPath = $this->Photos->getPath($photo->barcode_id);
+                    break;
+
+                default:
+                    $rawPath = $this->Photos->getPath($photo->barcode_id);
+                    break;
+            }
+            $file = $rawPath . DS . $photo->path;
+            $this->response->type(['jpg' => 'image/jpeg']);
+            $this->response->file($file, ['name' => 'path']);
+            return $this->response;
+        } else {
+            throw new NotFoundException($path. ' was not found.');
         }
-        $file = $rawPath . DS . $photo->path;
-   
-        $this->response->type(['jpg' => 'image/jpeg']);
-        $this->response->file($file, ['name' => 'path']);
-        return $this->response;
     }
 }

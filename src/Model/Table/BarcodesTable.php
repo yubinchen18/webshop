@@ -110,7 +110,6 @@ class BarcodesTable extends Table
         $barcode->barcode = $this->generateBarcode($prefix);
         $barcode->type = $type;
         return $this->save($barcode);
-        
     }
     
     public function processBarcodes($object, $user)

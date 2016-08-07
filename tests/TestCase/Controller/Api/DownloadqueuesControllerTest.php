@@ -44,7 +44,6 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $this->vfsStream = vfsStream::setup('data', null, ['tmp' => []]);
         $this->vfsRoot = 'vfs://data';
         $this->Photos->baseDir = $this->vfsRoot;
-
     }
 
     /**
@@ -499,7 +498,6 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $this->assertEquals($personsFixt, $persons);
 
         $this->assertResponseSuccess();
-        
     }
 
     public function testUploadBarcodeNew()
@@ -640,7 +638,6 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 
         $this->assertResponseSuccess();
         $data = $this->getDecodedResponse();
-
     }
     
     // @codingStandardsIgnoreStart

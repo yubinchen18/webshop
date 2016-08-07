@@ -1,7 +1,7 @@
 <div class="photos-index-label row">
     <h2><?= __('Selecteer een foto') ?></h2>
-
     <div class="photos-index col-md-9">
+    <?php if (isset($person)): ?>
         <?php $p = 0; $count = count($person->barcode->photos); ?>
         <?php foreach ($person->barcode->photos as $key => $photo): ?>
             <?php $p++; ?>
@@ -26,12 +26,10 @@
             </div>
             <?php endif; ?>
         <?php endforeach; ?>
+    <?php endif ?>
     </div>
     <div class="photos-index col-md-3">
         <div class="photos-index-banner container col-md-11 col-md-offset-1">
-    <!--        <div class="">
-                <?= $this->Html->image('../img/layout/Hoogstraten_webshop-onderdelen-05.png') ?>
-            </div>-->
             <ul class="photos-index-banner-ul  list-group">
                 <li><h5><?= __('Betrouwbaar en veilig bestellen') ?></h5></li>
                 <li><h5><?= __('Unieke inlog-barcode') ?></h5></li>

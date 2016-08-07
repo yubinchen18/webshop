@@ -58,7 +58,7 @@ class ProjectsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
-    {        
+    {
         $mock = new \Cake\Validation\Validator();
         $validator = $this->Projects->validationDefault($mock);
         $this->assertEquals($mock, $validator);

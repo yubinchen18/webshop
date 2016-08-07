@@ -24,7 +24,7 @@ Router::scope('/', function (RouteBuilder $routes) {
                 'controller' => 'Photos',
                 'action' => 'display',
             ],
-        ['size','path', 'pass' => ['size','path']]
+        ['path', 'size', 'pass' => ['size','path']]
     );
     
     Router::prefix('Api', function ($routes) {

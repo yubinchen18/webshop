@@ -42,6 +42,5 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $photos = $this->viewVariable('photos');
         
         $this->assertEquals(4, $photos->count());
-        
     }
 }
