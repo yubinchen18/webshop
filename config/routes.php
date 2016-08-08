@@ -14,17 +14,12 @@ Router::scope('/', function (RouteBuilder $routes) {
     
     $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
     $routes->connect(
-        '/photos/view/:id',
-        ['controller' => 'Photos', 'action' => 'view'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-    );
-    $routes->connect(
-        '/photos/:size/:path',
+        '/photos/:size/:id',
         [
                 'controller' => 'Photos',
                 'action' => 'display',
             ],
-        ['path', 'size', 'pass' => ['size','path']]
+        ['path', 'id', 'pass' => ['size','id']]
     );
     
     Router::prefix('Api', function ($routes) {

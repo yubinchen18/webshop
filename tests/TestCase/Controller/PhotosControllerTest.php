@@ -92,40 +92,40 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertResponseContains('This person is not found');
     }
     
-    public function testDisplayPhotoNotFound()
+    public function testDisplayPhotoIdNotFound()
     {
-        $this->get('/photos/display/thumb/bestaatnietadfa.jpg');
+        $this->get('/photos/display/thumbs/idbestaatniet');
         $this->assertResponseContains('Cake\Network\Exception\NotFoundException');
         $this->assertResponseCode(404);
     }
     
     // @codingStandardsIgnoreStart
+    public function testDisplayRandomSize()
+    {
+        $this->get('/photos/display/asdfeager/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $this->assertContentType('jpeg');
+        $this->assertFileResponse('/var/www/webshop2016/tests/Fixture/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/horizontal.jpeg');
+    }
+    
     public function testDisplayOriginalPhoto()
     {
-        $this->get('/photos/display/original/horizontal.jpeg');
+        $this->get('/photos/display/original/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse('/var/www/webshop2016/tests/Fixture/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/horizontal.jpeg');
     }
     
     public function testDisplayThumbPhoto()
     {
-        $this->get('/photos/display/thumb/horizontal.jpeg');
+        $this->get('/photos/display/thumbs/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse('/var/www/webshop2016/tests/Fixture/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/thumbs/horizontal.jpeg');
     }
     
     public function testDisplayMedPhoto()
     {
-        $this->get('/photos/display/med/horizontal.jpeg');
+        $this->get('/photos/display/med/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse('/var/www/webshop2016/tests/Fixture/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/med/horizontal.jpeg');
-    }
-    
-    public function testDisplayDefaultPhoto()
-    {
-        $this->get('/photos/display/horizontal.jpeg');
-        $this->assertContentType('jpeg');
-        $this->assertFileResponse('/var/www/webshop2016/tests/Fixture/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/horizontal.jpeg');
     }
     // @codingStandardsIgnoreEnd
 }

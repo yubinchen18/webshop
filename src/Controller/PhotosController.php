@@ -144,36 +144,24 @@ class PhotosController extends AppController
      * @param type $id
      * @return type
      */
-    public function display($size, $path)
+    public function display($size, $id)
     {
         $photo = $this->Photos->find()
-              ->where(['path' => $path])
+              ->where(['id' => $id])
               ->first();
         
         if (!empty($photo)) {
-            switch ($size) {
-                case "med":
-                    $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'med';
-                    break;
-
-                case "thumb":
-                    $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs';
-                    break;
-
-                case "original":
-                    $rawPath = $this->Photos->getPath($photo->barcode_id);
-                    break;
-
-                default:
-                    $rawPath = $this->Photos->getPath($photo->barcode_id);
-                    break;
+            $rawPath = $this->Photos->getPath($photo->barcode_id);
+            if(in_array($size, ['thumbs','med'])) {
+                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . $size;
             }
+            
             $file = $rawPath . DS . $photo->path;
             $this->response->type(['jpg' => 'image/jpeg']);
-            $this->response->file($file, ['name' => 'path']);
+            $this->response->file($file, ['name' => $photo->path]);
             return $this->response;
         } else {
-            throw new NotFoundException($path. ' was not found.');
+            throw new NotFoundException('Photo Id: '.$id. ' was not found.');
         }
     }
 }

@@ -14,8 +14,8 @@
                     <?= $this->Html->image($this->Url->build([
                         'controller' => 'Photos',
                         'action' => 'display',
-                        'path' => $photo->path,
-                        'size' => 'med'
+                        'id' => $photo->id,
+                        'size' => 'thumbs'
                     ]), [
                         'alt' => $photo->path,
                         'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
