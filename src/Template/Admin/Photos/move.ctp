@@ -11,7 +11,7 @@
                     <div class="col-lg-4"><?= $this->Html->image($this->Url->build([
                             'controller' => 'Photos',
                             'action' => 'display', 
-                            'path' => $photo->path,
+                            'path' => $photo->id,
                             'size' => 'med']),
                             ['width' => 125]
                         ); ?>

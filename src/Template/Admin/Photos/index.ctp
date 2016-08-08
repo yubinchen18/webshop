@@ -46,7 +46,7 @@
             <tr>
                 <th></th>
                 <th></th>
-                <th><?= $this->Paginator->sort('type') ?></th>
+                <th><?= __('type'); ?></th>
                 <th><?= __('Leerling'); ?></th>
                 <th><?= __('Project'); ?></th>
                 <th><?= __('Klas / Groep'); ?></th>
@@ -60,8 +60,8 @@
                 <td class="col-lg-1"><?= $this->Html->image($this->Url->build([
                     'controller' => 'Photos',
                     'action' => 'display',
-                    'path' => $photo->path,
-                    'size' => 'thumb'
+                    'path' => $photo->id,
+                    'size' => 'thumbs'
                 ])); ?></td>
                 <td class="col-lg-1"><?= h($photo->type) ?></td>
                 <td class="col-lg-3"><?= h($photo->barcode->person->full_name_sorted) ?></td>
@@ -69,7 +69,6 @@
                 <td class="col-lg-2"><?= h($photo->barcode->person->group->name) ?></td>
                 <td class="col-lg-2 actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $photo->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $photo->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $photo->id], ['confirm' => __('Are you sure you want to delete # {0}?', $photo->id)]) ?>
                 </td>
             </tr>

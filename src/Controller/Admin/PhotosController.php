@@ -4,8 +4,6 @@ namespace App\Controller\Admin;
 use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
 
 /**
  * Photos Controller
@@ -14,7 +12,6 @@ use Cake\Filesystem\File;
  */
 class PhotosController extends AppController
 {
-
     /**
      * Index method
      *
@@ -79,56 +76,6 @@ class PhotosController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $photo = $this->Photos->newEntity();
-        if ($this->request->is('post')) {
-            $photo = $this->Photos->patchEntity($photo, $this->request->data);
-            if ($this->Photos->save($photo)) {
-                $this->Flash->success(__('The photo has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The photo could not be saved. Please, try again.'));
-            }
-        }
-        $barcodes = $this->Photos->Barcodes->find('list', ['limit' => 200]);
-        $this->set(compact('photo', 'barcodes'));
-        $this->set('_serialize', ['photo']);
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Photo id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $photo = $this->Photos->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $photo = $this->Photos->patchEntity($photo, $this->request->data);
-            if ($this->Photos->save($photo)) {
-                $this->Flash->success(__('The photo has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The photo could not be saved. Please, try again.'));
-            }
-        }
-        $barcodes = $this->Photos->Barcodes->find('list', ['limit' => 200]);
-        $this->set(compact('photo', 'barcodes'));
-        $this->set('_serialize', ['photo']);
-    }
-
-    /**
      * Delete method
      *
      * @param string|null $id Photo id.
@@ -148,13 +95,13 @@ class PhotosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
-    public function display($size, $path)
+    public function display($size, $id)
     {
         $photo = $this->Photos->find()
-              ->where(['path' => $path])
+              ->where(['id' => $id])
               ->first();
         
-        $file =     $this->Photos->getPath($photo->barcode_id) . DS . 'thumbs' . DS .
+        $file =     $this->Photos->getPath($photo->barcode_id) . DS . $size . DS .
                     $photo->path;
         
         $this->response->type(['jpg' => 'image/jpeg']);
@@ -178,19 +125,7 @@ class PhotosController extends AppController
                 if($this->Photos->save($photo)) {
                     // move folder to new path
                     if (isset($oldPath)){
-                        $newPath = $this->Photos->getPath($photo->barcode_id);
-                        
-                        $file = new File($oldPath . DS . 'thumbs' . DS . $photo->path);
-                        $file->copy($newPath . DS . 'thumbs' . DS . $photo->path);
-                        $file->delete($oldPath . DS . 'thumbs' . DS . $photo->path);
-                        
-                        $file = new File($oldPath . DS . 'med' . DS . $photo->path);
-                        $file->copy($newPath . DS . 'med' . DS . $photo->path);
-                        $file->delete($oldPath . DS . 'med' . DS . $photo->path);
-                        
-                        $file = new File($oldPath . DS . $photo->path);
-                        $file->copy($newPath . DS . $photo->path);
-                        $file->delete($oldPath . DS . $photo->path);
+                        $this->Photos->move($oldPath, $photo);
                     }
                 }
             }
