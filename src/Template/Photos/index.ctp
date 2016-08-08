@@ -6,7 +6,7 @@
         <?php foreach ($person->barcode->photos as $key => $photo): ?>
             <?php $p++; ?>
             <?php if ($p % 4 == 1): ?>
-            <div class="row">
+            <div class="row photos-index-row">
             <?php endif; ?>
                 <div class="col-xs-3 container photo-container">
                     <div class="<?= $photo->orientationClass.'-background' ?>">
