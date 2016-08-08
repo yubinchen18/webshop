@@ -6,7 +6,7 @@
             <?= $this->Html->image($this->Url->build([
                     'controller' => 'Photos',
                     'action' => 'display',
-                    'path' => $photo->path,
+                    'path' => $photo->id,
                     'size' => 'original'
                 ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
         </div>
