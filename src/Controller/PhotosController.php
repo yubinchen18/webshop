@@ -63,6 +63,16 @@ class PhotosController extends AppController
         $photo = $this->Photos->get($id, [
             'contain' => ['Barcodes']
         ]);
+        
+        //add the orientation data to the photos array
+        $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+        $dimensions = getimagesize($filePath);
+        if ($dimensions[0] > $dimensions[1]) {
+            $orientationClass = 'photos-horizontal';
+        } else {
+            $orientationClass = 'photos-vertical';
+        }
+        $photo->orientationClass = $orientationClass;
 
         $this->set('photo', $photo);
         $this->set('_serialize', ['photo']);
