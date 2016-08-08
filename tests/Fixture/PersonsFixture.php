@@ -71,7 +71,7 @@ class PersonsFixture extends TestFixture
             'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
         ],
         [
-            'id' => '0fdcdf18-e0a9-43c0-b254-d373eefb79a0', 
+            'id' => '0fdcdf18-e0a9-43c0-b254-d373eefb79a0',
             'group_id' => '8262ca6b-f23a-4154-afed-fc893c1516d3',
             'address_id' => '8888b43c-68aa-4845-b7d6-6f50f6f7cece',
             'studentnumber' => '98532671',

@@ -94,13 +94,14 @@ class SchoolsTable extends Table
     }
     
     /**
-     * Method finds all Projects, Classes and students for 
+     * Method finds all Projects, Classes and students for
      * a school
-     * 
+     *
      * @param Query $query
      * @param array $options
      */
-    public function findTree(Query $query, array $options = []) {
+    public function findTree(Query $query, array $options = [])
+    {
         return $query
                 ->contain(['Projects.Groups.Persons.Barcodes'])
                 ->where([

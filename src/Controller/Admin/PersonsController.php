@@ -94,7 +94,7 @@ class PersonsController extends AppController
                 $this->Flash->success(__('De persoon is opgeslagen.'));
                 
                 // move folder to new path
-                if (isset($oldPath)){
+                if (isset($oldPath)) {
                     $newPath = $photos->getPath($person->barcode->id);
                     $picFolder = new Folder($oldPath);
                     $picFolder->move([

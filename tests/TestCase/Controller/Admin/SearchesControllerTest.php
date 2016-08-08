@@ -27,7 +27,7 @@ class SearchesControllerTest extends BaseIntegrationTestCase
         'app.orders'
     ];
     
-     public function setUp()
+    public function setUp()
     {
         parent::setUp();
         $this->loginAdmin();
@@ -55,6 +55,4 @@ class SearchesControllerTest extends BaseIntegrationTestCase
         $this->assertResponseContains('Hoofdweg');
         $this->assertResponseOK();
     }
-    
-    
 }

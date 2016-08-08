@@ -49,7 +49,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $data = [
             'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
             'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-            'group_id' => 'e5b778cd-68cd-469f-88b3-37846b984868'            
+            'group_id' => 'e5b778cd-68cd-469f-88b3-37846b984868'
         ];
         $this->post('/admin/photos', $data);
         $photos = $this->viewVariable('photos');
@@ -57,7 +57,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertEquals(2, $photos->count());
     }
     
-    public function testView() 
+    public function testView()
     {
         $photo_id = '277d32ec-b56c-44fa-a10a-ddfcb86c19f8';
         $this->get('/admin/photos/view/'.$photo_id);
@@ -66,16 +66,16 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $photo = $this->viewVariable('photo');
         
         $this->assertEquals('test3.jpg', $photo->path);
-        $this->assertEquals('3333', $photo->barcode->barcode); 
+        $this->assertEquals('3333', $photo->barcode->barcode);
     }
     
-    public function testMoveWithoutPost() 
+    public function testMoveWithoutPost()
     {
         $this->get('/admin/photos/move');
         $this->assertRedirect('/admin/photos');
     }
     
-    public function testMoveOne() 
+    public function testMoveOne()
     {
         $model = $this->getMockForModel('\App\Model\Table\PhotosTable', ['move']);
         $model->method('move')->will($this->returnValue(true));
@@ -97,17 +97,18 @@ class PhotosControllerTest extends BaseIntegrationTestCase
                 'destination_id' => '0fdcdf18-e0a9-43c0-b254-d373eefb79a0',
             ];
         
-        $this->post('/admin/photos/move',$data);
+        $this->post('/admin/photos/move', $data);
         $this->assertRedirect('/admin/photos');
         
         $photos = TableRegistry::get('Photos');
-        $moved  = $photos->get('277d32ec-b56c-44fa-a10a-ddfcb86c19f8',[
+        $moved  = $photos->get('277d32ec-b56c-44fa-a10a-ddfcb86c19f8', [
             'contain' => 'Barcodes'
         ]);
-        $this->assertEquals('5555',$moved->barcode->barcode);
+        $this->assertEquals('5555', $moved->barcode->barcode);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         parent::tearDown();
         TableRegistry::clear();
     }

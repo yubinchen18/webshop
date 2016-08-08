@@ -111,20 +111,20 @@ class PhotosController extends AppController
     
     public function move()
     {
-        if(!$this->request->is('post')) {
+        if (!$this->request->is('post')) {
             return $this->redirect(['action' => 'index']);
         }
         
-        if(!empty($this->request->data['destination_id'])) {
+        if (!empty($this->request->data['destination_id'])) {
             $person = $this->Photos->Barcodes->Persons->get($this->request->data['destination_id']);
             
-            foreach($this->request->data['photos'] as $photo_id) {
+            foreach ($this->request->data['photos'] as $photo_id) {
                 $photo = $this->Photos->get($photo_id);
                 $oldPath = $this->Photos->getPath($photo->barcode_id);
                 $photo->barcode_id = $person->barcode_id;
-                if($this->Photos->save($photo)) {
+                if ($this->Photos->save($photo)) {
                     // move folder to new path
-                    if (isset($oldPath)){
+                    if (isset($oldPath)) {
                         $this->Photos->move($oldPath, $photo);
                     }
                 }
@@ -137,9 +137,9 @@ class PhotosController extends AppController
         $barcodes = [];
         $persons = [];
         
-        foreach($this->request->data['photos'] as $id => $checked) {
-            if($checked == 1) {
-                $photo = $this->Photos->get($id,['contain' => ['Barcodes.Persons.Groups.Projects']]);
+        foreach ($this->request->data['photos'] as $id => $checked) {
+            if ($checked == 1) {
+                $photo = $this->Photos->get($id, ['contain' => ['Barcodes.Persons.Groups.Projects']]);
                 $moves[] = $photo;
                 $barcodes[] = $photo->barcode->id;
                 $persons[] = $photo->barcode->person->id;
@@ -147,7 +147,7 @@ class PhotosController extends AppController
         }
         
         $schools = TableRegistry::get('Schools');
-        $tree = $schools->find('tree',[
+        $tree = $schools->find('tree', [
             'school_id' => $photo->barcode->person->group->project->school_id,
         ])->first();
         
