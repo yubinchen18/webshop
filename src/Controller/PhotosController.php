@@ -2,6 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
+    use Cake\Network\Exception\NotFoundException;
 
 /**
  * Photos Controller
@@ -18,15 +21,36 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Barcodes']
-        ];
-        $photos = $this->paginate($this->Photos);
-
-        $this->set(compact('photos'));
+        $personId = $this->request->session()->read('Auth.User.id');
+        //temporary fix for test, should be $personId = $this->Auth->user('id')
+        if (!$personId) {
+            $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
+        }
+        $personsTable = TableRegistry::get('Persons');
+        $person = $personsTable->find()
+                ->where(['Persons.id' => $personId])
+                ->contain(['Barcodes.Photos'])
+                ->first();
+        //add the orientation data to the photos array
+        if (isset($person)) {
+            foreach ($person->barcode->photos as $key => $photo) {
+                $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
+            }
+        } else {
+            $this->Flash->error(__('This person is not found or doesn\'t have any photos.'));
+        }
+        
+        $this->set(compact('person'));
         $this->set('_serialize', ['photos']);
     }
-
+    
     /**
      * View method
      *
@@ -112,5 +136,32 @@ class PhotosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    /**
+     *
+     * @param type $size
+     * @param type $id
+     * @return type
+     */
+    public function display($size, $id)
+    {
+        $photo = $this->Photos->find()
+              ->where(['id' => $id])
+              ->first();
+        
+        if (!empty($photo)) {
+            $rawPath = $this->Photos->getPath($photo->barcode_id);
+            if(in_array($size, ['thumbs','med'])) {
+                $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . $size;
+            }
+            
+            $file = $rawPath . DS . $photo->path;
+            $this->response->type(['jpg' => 'image/jpeg']);
+            $this->response->file($file, ['name' => $photo->path]);
+            return $this->response;
+        } else {
+            throw new NotFoundException('Photo Id: '.$id. ' was not found.');
+        }
     }
 }

@@ -23,7 +23,6 @@ class UpdateControllerTest extends BaseIntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        
     }
 
     /**

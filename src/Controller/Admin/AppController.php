@@ -29,6 +29,41 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'],
+            'loginAction' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'loginRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'index',
+            ],
+            'logoutRedirect' => [
+                'prefix' => 'admin',
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'unauthorizedRedirect' => '/admin/login',
+            'authError' => __('U heeft geen toegang tot deze locatie.'),
+            'flash' => [
+                'element' => 'default',
+                'params' => [
+                    'class' => 'error',
+                ],
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password',
+                    ],
+                    'userModel' => 'Users'
+                ],
+            ]
+        ]);
 
         $authuser = $this->Auth->user();
         $this->set(compact('authuser'));

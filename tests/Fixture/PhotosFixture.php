@@ -60,7 +60,7 @@ class PhotosFixture extends TestFixture
         ],
         [
             'id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
-            'path' => 'tes2t.jpg',
+            'path' => 'horizontal.jpeg',
             'type' => 'image',
             'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
             'created' => '2016-06-27 12:53:08',
