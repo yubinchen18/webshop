@@ -130,19 +130,24 @@ class PhotosTable extends Table
     public function move($oldPath, $photo)
     {
         $newPath = $this->getPath($photo->barcode_id);
-                        
-        $file = new File($oldPath . DS . 'thumbs' . DS . $photo->path);
-        $file->copy($newPath . DS . 'thumbs' . DS . $photo->path);
-        $file->delete($oldPath . DS . 'thumbs' . DS . $photo->path);
-
-        $file = new File($oldPath . DS . 'med' . DS . $photo->path);
-        $file->copy($newPath . DS . 'med' . DS . $photo->path);
-        $file->delete($oldPath . DS . 'med' . DS . $photo->path);
-
-        $file = new File($oldPath . DS . $photo->path);
-        $file->copy($newPath . DS . $photo->path);
-        $file->delete($oldPath . DS . $photo->path);
+                      
+        if(is_file($oldPath . DS . 'thumbs' . DS . $photo->path)) {
+            $file = new File($oldPath . DS . 'thumbs' . DS . $photo->path);
+            $file->copy($newPath . DS . 'thumbs' . DS . $photo->path);
+            $file->delete($oldPath . DS . 'thumbs' . DS . $photo->path);
+        }
         
+        if(is_file($oldPath . DS . 'med' . DS . $photo->path)) {
+            $file = new File($oldPath . DS . 'med' . DS . $photo->path);
+            $file->copy($newPath . DS . 'med' . DS . $photo->path);
+            $file->delete($oldPath . DS . 'med' . DS . $photo->path);
+        }
+        
+        if(is_file($oldPath . DS . $photo->path)) {
+            $file = new File($oldPath . DS . $photo->path);
+            $file->copy($newPath . DS . $photo->path);
+            $file->delete($oldPath . DS . $photo->path);
+        }
         return true;
     }
     

@@ -134,15 +134,10 @@ class PhotosController extends AppController
         }
 
         $moves = [];
-        $barcodes = [];
-        $persons = [];
-        
         foreach ($this->request->data['photos'] as $id => $checked) {
             if ($checked == 1) {
                 $photo = $this->Photos->get($id, ['contain' => ['Barcodes.Persons.Groups.Projects']]);
                 $moves[] = $photo;
-                $barcodes[] = $photo->barcode->id;
-                $persons[] = $photo->barcode->person->id;
             }
         }
         

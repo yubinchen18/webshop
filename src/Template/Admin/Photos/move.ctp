@@ -47,22 +47,30 @@
         <div class="widget-header"><h3 class="widget-title bigger lighter"><?= __('Verplaats naar'); ?></h3></div>
         <?= $this->Form->input('destination_id', ['type' => 'hidden','default' => null]); ?>
         <div class="widget-body widget-main">
+            
             <?php foreach($tree->projects as $project) : ?>
-                <div class="row">
-                    <div class="col-md-12"><?= __('Project'); ?>: <?= $project->name; ?></div>
-                </div>
-                <?php foreach($project->groups as $group) : ?>
-                    <div class="row">
-                        <div class="col-md-11 col-md-offset-1"><?= __('Groep'); ?>: <?= $group->name; ?></div>
-                    </div>
-                    <?php foreach($group->persons as $person) : ?>
-                        <div class="row">
-                            <div class="col-md-10 col-md-offset-2">
-                                <a href="#" class="person" data-person="<?= $person->id; ?>"><?= $person->full_name_sorted; ?></a>
+                    <h4><?= __('Project'); ?>: <?= $project->name; ?></h4>
+                    <div id="project-<?= $project->id; ?>" class="panel-group accordion-style1 accordion-style2">
+                    <?php foreach($project->groups as $group) : ?>
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a href="#grp-<?= $group->id; ?>" class="accordion-toggle collapsed" data-toggle="collapse" aria-expanded="false" data-parent="group-<?= $group->project_id; ?>">
+                                    <i class="ace-icon fa fa-chevron-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-right"></i>
+                                <?= __('Groep'); ?>: <?= $group->name; ?>
+                                </a>
                             </div>
-                        </div>
+                            <div id="grp-<?= $group->id; ?>" class="panel-collapse collapse" aria-expanded="false">
+                                <div class="panel-body">
+                                <?php foreach($group->persons as $person) : ?>
+                                    <div class="col-md-11 col-md-offset-1">
+                                        <a href="#" class="person" data-person="<?= $person->id; ?>"><?= $person->full_name_sorted; ?></a>
+                                    </div>
+                                <?php endforeach; ?>
+                                </div>
+                            </div>
+                            </div>
                     <?php endforeach; ?>
-                <?php endforeach; ?>
+                    </div>
             <?php endforeach; ?>
         </div>
     </div>
