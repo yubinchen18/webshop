@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Hash;
 
 /**
  * Schools Model
@@ -90,5 +91,22 @@ class SchoolsTable extends Table
                 ->contain(['Contacts', 'Visitaddresses'])
                 ->limit(6)
                 ->order(['name' => 'asc']);
+    }
+    
+    /**
+     * Method finds all Projects, Classes and students for
+     * a school
+     *
+     * @param Query $query
+     * @param array $options
+     */
+    public function findTree(Query $query, array $options = [])
+    {
+        return $query
+                ->contain(['Projects.Groups.Persons.Barcodes'])
+                ->where([
+                    'Schools.id' => $options['school_id'],
+                  ]);
+                
     }
 }

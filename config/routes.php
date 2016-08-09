@@ -205,6 +205,7 @@ Router::scope('/', function (RouteBuilder $routes) {
                 ],
             ['size','path', 'pass' => ['size','path']]
         );
+        $routes->connect('/photos/move', ['controller' => 'Photos', 'action' => 'move']);
         $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
         $routes->connect('/photos/add', ['controller' => 'Photos', 'action' => 'add']);
         $routes->connect(

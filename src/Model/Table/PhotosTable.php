@@ -8,6 +8,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 /**
  * Photos Model
@@ -115,13 +116,39 @@ class PhotosTable extends Table
                 $barcode->person->group->slug . DS . $barcode->person->slug;
         $path->create($pathToCreate);
         $path->cd($pathToCreate);
-
+        $path->create('thumbs');
+        $path->create('med');
+        
         return $path->path;
     }
 
     private function getPathObject()
     {
         return new Folder($this->baseDir);
+    }
+    
+    public function move($oldPath, $photo)
+    {
+        $newPath = $this->getPath($photo->barcode_id);
+                      
+        if (is_file($oldPath . DS . 'thumbs' . DS . $photo->path)) {
+            $file = new File($oldPath . DS . 'thumbs' . DS . $photo->path);
+            $file->copy($newPath . DS . 'thumbs' . DS . $photo->path);
+            $file->delete($oldPath . DS . 'thumbs' . DS . $photo->path);
+        }
+        
+        if (is_file($oldPath . DS . 'med' . DS . $photo->path)) {
+            $file = new File($oldPath . DS . 'med' . DS . $photo->path);
+            $file->copy($newPath . DS . 'med' . DS . $photo->path);
+            $file->delete($oldPath . DS . 'med' . DS . $photo->path);
+        }
+        
+        if (is_file($oldPath . DS . $photo->path)) {
+            $file = new File($oldPath . DS . $photo->path);
+            $file->copy($newPath . DS . $photo->path);
+            $file->delete($oldPath . DS . $photo->path);
+        }
+        return true;
     }
     
     /**

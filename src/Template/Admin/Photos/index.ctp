@@ -39,40 +39,44 @@
 </div>
 <div class="photos index large-9 medium-8 columns content">
     <h3><?= __('Foto\'s') ?></h3>
+    <?= $this->Form->create(null, ['id' => 'moveform','url' => $this->Url->build(['controller' => 'Photos','action' => 'move'])]); ?>
     <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid"
                aria-describedby="dynamic-table_info">
         <thead>
             <tr>
                 <th></th>
-                <th><?= $this->Paginator->sort('type') ?></th>
+                <th></th>
+                <th><?= __('type'); ?></th>
+                <th><?= __('Leerling'); ?></th>
                 <th><?= __('Project'); ?></th>
                 <th><?= __('Klas / Groep'); ?></th>
-                <th><?= __('Leerling'); ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($photos as $photo): ?>
             <tr>
-                <td><?= $this->Html->image($this->Url->build([
+                <td class="col-lg-1"><?= $this->Form->checkbox('photos.'.$photo->id, ['value' => 1, 'class' => 'check']); ?></td>
+                <td class="col-lg-1"><?= $this->Html->image($this->Url->build([
                     'controller' => 'Photos',
                     'action' => 'display',
-                    'path' => $photo->path,
-                    'size' => 'thumb'
+                    'path' => $photo->id,
+                    'size' => 'thumbs'
                 ])); ?></td>
-                <td><?= h($photo->type) ?></td>
-                <td><?= h($photo->barcode->person->group->project->name) ?></td>
-                <td><?= h($photo->barcode->person->group->name) ?></td>
-                <td><?= h($photo->barcode->person->full_name_sorted) ?></td>
-                <td class="actions">
+                <td class="col-lg-1"><?= h($photo->type) ?></td>
+                <td class="col-lg-3"><?= h($photo->barcode->person->full_name_sorted) ?></td>
+                <td class="col-lg-2"><?= h($photo->barcode->person->group->project->name) ?></td>
+                <td class="col-lg-2"><?= h($photo->barcode->person->group->name) ?></td>
+                <td class="col-lg-2 actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $photo->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $photo->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $photo->id], ['confirm' => __('Are you sure you want to delete # {0}?', $photo->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+    <button type="button" disabled="disabled" class="btn btn-warning" id="move"><?= __('Verplaats foto\'s'); ?></button>
+    <?= $this->Form->end(); ?>
     <div class="paginator">
         <ul class="pagination">
             <?= $this->Paginator->prev('< ' . __('previous')) ?>
@@ -113,5 +117,24 @@ $(document).ready(function() {
             }
         });
     });
+    
+    $('.check').on('click', function() {
+        var selected = false;
+        $('#move').attr('disabled','disabled');
+        $('.check').each(function() {
+            if(this.checked) {
+                selected = true;
+            }
+        });
+        
+        if(selected === true) {
+            $('#move').removeAttr('disabled');
+        }
+    });
+    
+    $('#move').on('click', function() {
+        $('#moveform').submit();
+    });
+
 });
 ", ['block' => 'scriptBottom']); ?>

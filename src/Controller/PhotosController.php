@@ -152,7 +152,7 @@ class PhotosController extends AppController
         
         if (!empty($photo)) {
             $rawPath = $this->Photos->getPath($photo->barcode_id);
-            if(in_array($size, ['thumbs','med'])) {
+            if (in_array($size, ['thumbs','med'])) {
                 $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . $size;
             }
             
