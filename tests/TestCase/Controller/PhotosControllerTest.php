@@ -92,6 +92,17 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertResponseContains('This person is not found');
     }
     
+    public function testViewLoadPerson()
+    {
+        $this->get('/photos/view/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $testperson = $this->viewVariable('person');
+        $this->assertTrue(isset($testperson));
+        $this->assertInstanceOf('App\Model\Entity\Person', $testperson);
+        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $testperson->barcode_id);
+    }
+    
+//    public function 
+    
     public function testDisplayPhotoIdNotFound()
     {
         $this->get('/photos/display/thumbs/idbestaatniet');

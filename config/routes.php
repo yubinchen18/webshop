@@ -21,6 +21,11 @@ Router::scope('/', function (RouteBuilder $routes) {
             ],
         ['path', 'id', 'pass' => ['size','id']]
     );
+    $routes->connect(
+        '/photos/view/:id',
+        ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
     
     Router::prefix('Api', function ($routes) {
         $routes->extensions(['json']);
