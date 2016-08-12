@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
-    use Cake\Network\Exception\NotFoundException;
+use Cake\Network\Exception\NotFoundException;
 
 /**
  * Photos Controller
@@ -67,32 +67,37 @@ class PhotosController extends AppController
             $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
         }
         
+        //load the person and photo
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
                 ->where(['Persons.id' => $personId])
                 ->contain(['Barcodes'])
                 ->first();
         
-        $photo = $this->Photos->find()
+        if (!empty($person)) {
+            $photo = $this->Photos->find()
                 ->where(['Photos.id' => $id, 'Photos.barcode_id' => $person->barcode->id])
                 ->contain(['Barcodes'])
                 ->first();
 
-        if (!empty($photo)) {
-            //add the orientation data to the photos array
-            $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-            $dimensions = getimagesize($filePath);
-            if ($dimensions[0] > $dimensions[1]) {
-                $orientationClass = 'photos-horizontal';
-            } else {
-                $orientationClass = 'photos-vertical';
-            }
-            $photo->orientationClass = $orientationClass;
+            if (!empty($photo)) {
+                //add the orientation data to the photos array
+                $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
 
-            $this->set(compact('person', 'photo'));
-            $this->set('_serialize', ['photo']);
+                $this->set(compact('person', 'photo'));
+                $this->set('_serialize', ['photo']);
+            } else {
+                throw new NotFoundException('Photo not found');
+            }
         } else {
-            throw new NotFoundException('Photo not found or you are not authorized to view this photo.');
+            throw new NotFoundException('Person not found');
         }
     }
 
@@ -180,7 +185,7 @@ class PhotosController extends AppController
         
         if (!empty($photo)) {
             $rawPath = $this->Photos->getPath($photo->barcode_id);
-            if(in_array($size, ['thumbs','med'])) {
+            if (in_array($size, ['thumbs','med'])) {
                 $rawPath = $this->Photos->getPath($photo->barcode_id) . DS . $size;
             }
             
