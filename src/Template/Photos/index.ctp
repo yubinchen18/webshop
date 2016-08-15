@@ -41,7 +41,8 @@
                     <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
                         'class' => [
                             'photos-index-banner-img',
-                            'img-responsive'
+                            'img-responsive',
+                            'center-block'
                         ]
                     ]) ?>
                 </li>
