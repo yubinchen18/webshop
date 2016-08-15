@@ -9,7 +9,7 @@
             <div class="row photos-index-row">
             <?php endif; ?>
                 <div class="col-xs-3 container photo-container">
-                    <div class="<?= $photo->orientationClass.'-background' ?>">
+                    <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
                     </div>
                     <?= $this->Html->image($this->Url->build([
                         'controller' => 'Photos',

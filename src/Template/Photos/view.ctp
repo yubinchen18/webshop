@@ -2,7 +2,7 @@
     <div class="photos-view-detail col-sm-6">
         <div class="row">
             <div class="container photos-view-detail-container col-xs-6">
-                <div class="<?= $photo->orientationClass.'-background' ?>">
+                <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
                 </div>
                 <?= $this->Html->image($this->Url->build([
                         'controller' => 'Photos',
@@ -51,11 +51,11 @@
                             ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                             <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-01-horizontal.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php else: ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-01-vertical.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php endif; ?>
                         </div>
@@ -73,11 +73,11 @@
                             ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                             <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-02-horizontal.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php else: ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-02-vertical.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php endif; ?>
                         </div>
@@ -124,11 +124,11 @@
                             ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                             <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-04-horizontal.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php else: ?>
                                 <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-04-vertical.png', [
-                                    'class' => [$photo->orientationClass.'-overlay']
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                                 ]); ?>
                             <?php endif; ?>
                         </div>
