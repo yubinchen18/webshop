@@ -24,3 +24,7 @@ th{
 .index table tbody td {
     vertical-align: top;
 }
+
+.right-fix {
+    margin-right:15px;
+}

@@ -211,7 +211,9 @@
                             </div>
                         </div>
                         <hr>
-                        <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right']); ?>
+                        <div class="form-group">
+                            <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right right-fix']); ?>
+                        </div>                        
                         
                     </div>
                 </div>
@@ -220,16 +222,7 @@
             <?php $count = 0; ?>
             <?php foreach($school->projects as $project): ?>
                 <div class="widget-box <?php echo ($count != 0) ? 'collapsed' :''; ?> project">
-                    <?= $this->Form->create($project, [
-                        'class' => 'form-horizontal school',
-                        'autocomplete' => 'false',
-                        'novalidate' => true,
-                        'type' =>'file',
-                        'url' => [
-                            'controller' => 'Projects',
-                            'action' => 'edit'
-                        ]
-                    ]) ?>
+                    
                     <div class="widget-header">
                         <h4 class="widget-title"><?= $project->name ?></h4>
 
@@ -242,6 +235,16 @@
 
                     <div class="widget-body">
                         <div class="widget-main">
+                            <?= $this->Form->create($project, [
+                                'class' => 'form-horizontal school',
+                                'autocomplete' => 'false',
+                                'novalidate' => true,
+                                'type' =>'file',
+                                'url' => [
+                                    'controller' => 'Projects',
+                                    'action' => 'edit'
+                                ]
+                            ]) ?>
                             <?= $this->Form->input('project.id',['type' => 'hidden','value' => $project->id]); ?>
                             <div class="form-group">
                                 <?= $this->Form->label('name', __('Projectnaam'), ['class' => 'col-sm-2 control-label no-padding-right ']);?>
