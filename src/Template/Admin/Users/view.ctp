@@ -14,10 +14,6 @@
                 <div class="widget-main">
                      <table class="vertical-table">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($user->id) ?></td>
-                        </tr>
-                        <tr>
                             <th><?= __('Rol') ?></th>
                             <td><?= h($user->type) ?></td>
                         </tr>                     

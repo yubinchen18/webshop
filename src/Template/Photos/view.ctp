@@ -1,42 +1,140 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Photo'), ['action' => 'edit', $photo->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Photo'), ['action' => 'delete', $photo->id], ['confirm' => __('Are you sure you want to delete # {0}?', $photo->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Photos'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Photo'), ['action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="photos view large-9 medium-8 columns content">
-    <h3><?= h($photo->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= h($photo->id) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Path') ?></th>
-            <td><?= h($photo->path) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Type') ?></th>
-            <td><?= h($photo->type) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Barcode Id') ?></th>
-            <td><?= h($photo->barcode_id) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Created') ?></th>
-            <td><?= h($photo->created) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Modified') ?></th>
-            <td><?= h($photo->modified) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Deleted') ?></th>
-            <td><?= h($photo->deleted) ?></td>
-        </tr>
-    </table>
+<div class="photos-view-row row">
+    <div class="photos-view-detail col-sm-6">
+        <div class="row">
+            <div class="container photos-view-detail-container col-xs-6">
+                <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                </div>
+                <?= $this->Html->image($this->Url->build([
+                        'controller' => 'Photos',
+                        'action' => 'display',
+                        'id' => $photo->id,
+                        'size' => 'med'
+                    ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+            </div>
+            <div class='photos-view-detail-text'>
+                <h3><?= __('1e opname per kind op 13x19 €5,95<br>iedere volgende 13x19 van uw kind €3,29') ?></h3>
+            </div>
+        </div>
+    </div>
+    <div class="photos-view-products col-sm-6">
+        <div class='row photos-view-products-row'>
+            <!-- Large screen -->
+            <div class="photos-view-products-buttons-md col-md-4 hidden-sm hidden-xs">
+                <div class="photos-view-products-select">
+                    <h3><?= __('Selecteer<br>een product >') ?></h3>
+                </div>
+            </div>
+            <!-- Medium screen -->
+            <div class="photos-view-products-buttons-sm col-sm-4 hidden-lg hidden-md hidden-xs">
+                <div class="photos-view-products-select">
+                    <h3><?= __('Selecteer<br>een product >') ?></h3>
+                </div>
+            </div>
+            <!-- Small screen -->
+            <div class="photos-view-products-buttons-xs col-xs-4 hidden-sm hidden-md hidden-lg">
+                <div class="photos-view-products-select">
+                    <h3><?= __('Selecteer<br>een product >') ?></h3>
+                </div>
+            </div>
+            <div class='photos-view-products-panel col-sm-8'>
+                <div class="row">
+                    <div class="photos-view-products-container col-xs-6">
+                        <div class="photos-view-products-labels label1 text-center vertical-center">
+                            <span><?= __('Losse afdrukken') ?></span>
+                        </div>
+                        <div class="photos-view-products-icon">
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'thumbs'
+                            ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                            <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-01-horizontal.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php else: ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-01-vertical.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="photos-view-products-container  col-xs-6">
+                        <div class="photos-view-products-labels label2 text-center">
+                            <span><?= __('Fotocadeaus') ?></span>
+                        </div>
+                        <div class="photos-view-products-icon">
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'thumbs'
+                            ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                            <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-02-horizontal.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php else: ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-02-vertical.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="photos-view-products-container col-xs-6">
+                        <div class="photos-view-products-labels label3 text-center vertical-center">
+                            <span><?= __('Combinatievellen') ?></span>
+                        </div>
+                        <div class="photos-view-products-icon">
+                            <?php for ($i = 1; $i < 8; $i++): ?>
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'thumbs'
+                            ]), ['class' => [$photo->orientationClass.'-combi-'.$i, 'img-responsive']]); ?>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+                    <div class="photos-view-products-container  col-xs-6">
+                        <div class="photos-view-products-labels label4 text-center">
+                            <span><?= __('Digitale downloads') ?></span>
+                        </div>
+                        <div class="photos-view-products-icon">
+                            <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03.png', [
+                                'class' => [$photo->orientationClass, 'img-responsive']
+                            ]); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="photos-view-products-container col-xs-6">
+                        <div class="photos-view-products-labels label5 text-center">
+                            <span><?= __('Canvas') ?></span>
+                        </div>
+                        <div class="photos-view-products-icon">
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'thumbs'
+                            ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                            <?php if ($photo->orientationClass == 'photos-horizontal') : ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-04-horizontal.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php else: ?>
+                                <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-04-vertical.png', [
+                                    'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
+                                ]); ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

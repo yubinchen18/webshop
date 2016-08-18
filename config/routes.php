@@ -21,8 +21,13 @@ Router::scope('/', function (RouteBuilder $routes) {
             ],
         ['path', 'id', 'pass' => ['size','id']]
     );
+    $routes->connect(
+        '/photos/view/:id',
+        ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
     
-    Router::prefix('Api', function ($routes) {
+    Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);
 
         $routes->connect('/v1/get_download_queue', [
@@ -55,10 +60,10 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
     });
 
-    Router::prefix('Admin', function ($routes) {
+    Router::prefix('admin', function ($routes) {
         
         $routes->extensions(['csv','json']);
-
+        
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
         $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);

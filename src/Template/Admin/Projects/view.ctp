@@ -16,10 +16,6 @@
                 <div class="widget-main">
                      <table class="vertical-table">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($project->id) ?></td>
-                        </tr>
-                        <tr>
                             <th><?= __('Naam') ?></th>
                             <td><?= h($project->name) ?></td>
                         </tr>                    
@@ -27,23 +23,11 @@
                             <th><?= __('Slug') ?></th>
                             <td><?= h($project->slug) ?></td>
                         </tr>
-                        <tr>
-                            <th><?= __('Aangemaakt') ?></th>
-                            <td><?= h($project->created) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Gewijzigd') ?></th>
-                            <td><?= h($project->modified) ?></td>
-                        </tr>
                     </table>
 
                     <hr></hr>
                     <h3><?=__('School'); ?></h3>
                     <table class="vertical-table">
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($project->school->id) ?></td>
-                        </tr>
                         <tr>
                             <th><?= __('Naam') ?></th>
                             <td><?= h($project->school->name) ?></td>
@@ -53,18 +37,11 @@
                             <td><?= h($project->school->slug) ?></td>
                         </tr>                        
                         <tr>
-                            <th><?= __('Aangemaakt') ?></th>
-                            <td><?= h($project->school->created) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Gewijzigd') ?></th>
-                            <td><?= h($project->school->modified) ?></td>
-                        </tr>                        
                     </table>
                     
                     <?php if (!empty($project->groups)): ?>
                         <div>
-                            <?= $this->Html->link(__('Leerlingenkaart maken'),
+                            <?= $this->Html->link(__('Leerlingkaarten maken'),
                                 [
                                     'action' => 'createProjectCards',
                                     $project->id

@@ -9,7 +9,7 @@
             <div class="row photos-index-row">
             <?php endif; ?>
                 <div class="col-xs-3 container photo-container">
-                    <div class="<?= $photo->orientationClass.'-background' ?>">
+                    <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
                     </div>
                     <?= $this->Html->image($this->Url->build([
                         'controller' => 'Photos',
@@ -41,7 +41,8 @@
                     <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
                         'class' => [
                             'photos-index-banner-img',
-                            'img-responsive'
+                            'img-responsive',
+                            'center-block'
                         ]
                     ]) ?>
                 </li>

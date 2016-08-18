@@ -16,10 +16,6 @@
                 <div class="widget-main">
                      <table class="vertical-table">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($group->id) ?></td>
-                        </tr>
-                        <tr>
                             <th><?= __('Naam') ?></th>
                             <td><?= h($group->name) ?></td>
                         </tr>
@@ -27,24 +23,11 @@
                             <th><?= __('Slug') ?></th>
                             <td><?= h($group->slug) ?></td>
                         </tr>
-                        
-                        <tr>
-                            <th><?= __('Aangemaakt') ?></th>
-                            <td><?= h($group->created) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Gewijzigd') ?></th>
-                            <td><?= h($group->modified) ?></td>
-                        </tr>
                     </table>
 
                     <hr></hr>
                     <h3><?=__('Project'); ?></h3>
                     <table class="vertical-table">
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($group->project->id) ?></td>
-                        </tr>
                         <tr>
                             <th><?= __('Projectnaam') ?></th>
                             <td><?= h($group->project->name) ?></td>
@@ -75,24 +58,8 @@
                     <h3><?=__('Barcode'); ?></h3>
                     <table class="vertical-table">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <td><?= h($group->barcode->id) ?></td>
-                        </tr>
-                        <tr>
                             <th><?= __('Barcode') ?></th>
                             <td><?= h($group->barcode->barcode)?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Type') ?></th>
-                            <td><?= h($group->barcode->type) ?></td>
-                        </tr>                      
-                        <tr>
-                            <th><?= __('Aangemaakt') ?></th>
-                            <td><?= h($group->barcode->created) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Gewijzigd') ?></th>
-                            <td><?= h($group->barcode->modified) ?></td>
                         </tr>
                     </table>
                     

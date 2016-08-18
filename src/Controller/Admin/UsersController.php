@@ -34,7 +34,9 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [];
+        $this->paginate = ['conditions' => [
+            'Users.type' => 'admin'
+        ]];
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
