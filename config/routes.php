@@ -16,14 +16,19 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect(
         '/photos/:size/:id',
         [
-                'controller' => 'Photos',
-                'action' => 'display',
-            ],
+            'controller' => 'Photos',
+            'action' => 'display',
+        ],
         ['path', 'id', 'pass' => ['size','id']]
     );
     $routes->connect(
         '/photos/view/:id',
         ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/combine/:id',
+        ['controller' => 'Photos', 'action' => 'combine'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]
     );
     

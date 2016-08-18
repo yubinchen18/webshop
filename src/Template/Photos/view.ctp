@@ -89,14 +89,24 @@
                             <span><?= __('Combinatievellen') ?></span>
                         </div>
                         <div class="photos-view-products-icon">
-                            <?php for ($i = 1; $i < 8; $i++): ?>
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'thumbs'
+                            ]), [
+                                'alt' => $photo->path,
+                                'url' => ['controller' => 'Photos', 'action' => 'combine', $photo->id],
+                                'class' => [$photo->orientationClass, 'img-responsive']
+                            ]); ?>
+                        <!--    <?php for ($i = 1; $i < 8; $i++): ?>
                             <?= $this->Html->image($this->Url->build([
                                 'controller' => 'Photos',
                                 'action' => 'display',
                                 'id' => $photo->id,
                                 'size' => 'thumbs'
                             ]), ['class' => [$photo->orientationClass.'-combi-'.$i, 'img-responsive']]); ?>
-                            <?php endfor; ?>
+                            <?php endfor; ?>-->
                         </div>
                     </div>
                     <div class="photos-view-products-container  col-xs-6">
