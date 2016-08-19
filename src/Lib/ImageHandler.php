@@ -11,6 +11,7 @@ namespace App\Lib;
 
 use Cake\ORM\TableRegistry;
 use App\Lib\Products\CombinationSheet;
+use App\Model\Entity\Photo;
 
 class ImageHandler
 {
@@ -153,26 +154,11 @@ class ImageHandler
     }
 
 
-    public function createProductPreview($photoId, $product, $layouts = 'all', array $options = [])
+    public function createProductPreview(Photo $photo, $productGroup, array $options = null)
     {
         // Get the product and photo details.
-        $photoDetails = $this->getPhotoDetails($photoId);
-        $photoFolder = $this->photos->getPath($photoDetails->barcode_id) . DS;
-//        $productDetails = $this->getProductDetails($productId);
+        $photoFolder = $this->photos->getPath($photo->barcode_id) . DS;
         
-        extract($options);
-        
-        
-        switch ($product) {
-            case 'CombinationSheet':
-                $combinationSheet = new CombinationSheet($layouts);
-                $productLayouts = $combinationSheet->getLayouts();
-                break;
-            case 'mug':
-                break;
-            default:
-                throw new \Exception('You have to specify a product');
-        }
 //        // Check if there is a static product image.
 //        $staticProductImage = current($productDetails['Image']);
 //        if (!empty($staticProductImage['path']) && is_file(IMAGES . 'products' . DS .$staticProductImage['path'])) {
@@ -180,30 +166,76 @@ class ImageHandler
 //        }
 
         //Initialize variables and create the folders we need.
+        $layout = 'all';
+        $watermark = false;
         $tmpDir = $this->cacheFolder . 'tmp-images' . DS ;
-        $fileName = $photoId . '.jpg';
-        $targetImage = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS . $fileName;
+        $tmpProductDir = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS;
+        $fileName = '';
+        $suffix = null;
         $finalProductImages = [];
         $this->_createDir($tmpDir);
-        $this->_createDir(dirname($targetImage));
+        $this->_createDir($tmpProductDir);
 
-        // Return the path if the image is already generated.
-        //if( file_exists($targetImage)) return $targetImage;
+        //read the options
+        if (isset($options) && is_array($options)) {
+            foreach ($options as $option => $value) {
+                if (!in_array((string)$option, ['resize', 'watermark', 'layout'])) {
+                    throw new \Exception('Invalid Option'); die();
+                }
+                switch($option) {
+                    case 'resize':
+                        extract($value);
+                        $width = isset($width) ? $width : null;
+                        $height = isset($height) ? $height : null;
+                        $suffix = $suffix . (string)$width.(string)$height;
+                        break;
+                    case 'watermark':
+                        $watermark = isset($value) ? $value : false;
+                        $suffix = $suffix . (($watermark == true) ? 'watermarked' : '');
+                        break;
+                    case 'layout' :
+                        $layout = isset($value) ? $value : 'all';
+                        break;
+                }
+            }
+        }
+        //load the productgroup layout files
+        switch ($productGroup) {
+            case 'combination-sheets':
+                $combinationSheet = new CombinationSheet($layout);
+                $productLayouts = $combinationSheet->getLayouts();
+                break;
+            case 'mug':
+                break;
+            default:
+                throw new \Exception('You have to specify a valid product');
+        }
         
-        
-        foreach ($productLayouts as $product => $productLayout) {
+        foreach ($productLayouts as $layoutName => $layout) {
+            
+            //give cached image path if already exists.
+            if (!isset($suffix)) {
+                $suffix = 'none';
+            }
+            $fileName = $layoutName . '-' . $photo->id . '-' . $suffix;
+            $targetImage = $tmpProductDir . md5($fileName) . '.jpg';
+            if( file_exists( $targetImage ) ) {
+                $finalProductImages[] = ['layout' => $layoutName, 'path' => $targetImage, 'suffix' => $suffix];
+                continue;
+            }
+
             //create new blank canvas
             $ratio = 67;
             $this->create(850, 1250);
             $done = [];
             
             //loop through layout to add subimages to canvas
-            foreach ($productLayout as $subImage) {
+            foreach ($layout as $subImage) {
                 $tmpTargetFile = microtime(true) . '.jpg';
                 $imageName = $subImage['position'] . '-' . $subImage['filter'];
                 if (!key_exists($imageName, $done)) {
                     $tmpImageHandler = new ImageHandler();
-                    $tmpImageHandler->load($photoFolder . 'med' . DS . $photoDetails->path);
+                    $tmpImageHandler->load($photoFolder . 'med' . DS . $photo->path);
 
                     $tmpWidth = imagesx($tmpImageHandler->image);
                     $tmpHeight = imagesy($tmpImageHandler->image);
@@ -253,16 +285,9 @@ class ImageHandler
                 //delete tmp files
                 @unlink($tmpDir . $tmpTargetFile);
             }
-            
-            //read the options
-            if (isset($options)) {
-                extract($options);
-                $height = isset($height) ? $height : null;
-                $width = isset($width) ? $width : null;
-            }
 
             //rotate class photos
-            if (count($productLayouts) == 1 && $photoDetails->type == 'class') {
+            if (count($productLayouts) == 1 && $photo->type == 'class') {
                 $this->rotate(-90);
             }
 
@@ -276,11 +301,14 @@ class ImageHandler
                 );
             }
             
-            //save to new location
-            $fileName = $photoId . '-' . $product. '.jpg';
-            $targetImage = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS . $fileName;
+            // apply watermark
+            if ($watermark) {
+                $this->merge(APP . 'userphotos' . DS . 'watermark.png');
+            }
+            
+            //save file to new location
             $this->save($targetImage);
-            $finalProductImages[$product] = $targetImage;
+            $finalProductImages[] = ['layout' => $layoutName, 'path' => $targetImage, 'suffix' => $suffix];
         }
         return $finalProductImages;
     }

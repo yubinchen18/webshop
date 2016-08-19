@@ -1,42 +1,33 @@
 <div class="photos-view-row row">
-    <div class="photos-view-detail col-sm-6">
-        <div class="row">
-            <div class="container photos-view-detail-container col-xs-6">
-                <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+    <div class="photos-view-detail col-sm-8">
+        <h2><?= __('Combinatievellen') ?></h2>
+        <?php if (isset($person)): ?>
+            <?php $p = 0; $count = count($images); ?>
+            <?php foreach ($images as $image): ?>
+                <?php $p++; ?>
+                <?php if ($p % 3 == 1): ?>
+                <div class="row">
+                <?php endif; ?>
+                    <div class="col-xs-4 container photo-container">
+                        <div class="<?= 'photos-vertical'.' '.'photos-vertical-background' ?>">
+                        </div>
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'displayProduct',
+                                'layout' => $image['layout'],
+                                'id' => $photo->id,
+                                'suffix' => $image['suffix']
+                            ]), ['class' => ['photos-vertical', 'img-responsive']]); ?>
+                    </div>
+                <?php if ($p % 3 == 0 || $p == ($count)) : ?>
                 </div>
-                <?= $this->Html->image($this->Url->build([
-                        'controller' => 'Photos',
-                        'action' => 'display',
-                        'id' => $photo->id,
-                        'size' => 'med'
-                    ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
-            </div>
-            <div class='photos-view-detail-text'>
-                <h3><?= __('1e opname per kind op 13x19 €5,95<br>iedere volgende 13x19 van uw kind €3,29') ?></h3>
-            </div>
-        </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif ?>
     </div>
-    <div class="photos-view-products col-sm-6">
+    <div class="photos-view-products col-sm-4">
         <div class='row photos-view-products-row'>
-            <!-- Large screen -->
-            <div class="photos-view-products-buttons-md col-md-4 hidden-sm hidden-xs">
-                <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer<br>een product >') ?></h3>
-                </div>
-            </div>
-            <!-- Medium screen -->
-            <div class="photos-view-products-buttons-sm col-sm-4 hidden-lg hidden-md hidden-xs">
-                <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer<br>een product >') ?></h3>
-                </div>
-            </div>
-            <!-- Small screen -->
-            <div class="photos-view-products-buttons-xs col-xs-4 hidden-sm hidden-md hidden-lg">
-                <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer<br>een product >') ?></h3>
-                </div>
-            </div>
-            <div class='photos-view-products-panel col-sm-8'>
+            <div class='photos-view-products-panel col-sm-12'>
                 <div class="row">
                     <div class="photos-view-products-container col-xs-6">
                         <div class="photos-view-products-labels label1 text-center vertical-center">
@@ -91,10 +82,9 @@
                         <div class="photos-view-products-icon">
                             <?= $this->Html->image($this->Url->build([
                                 'controller' => 'Photos',
-                                'action' => 'displayProduct',
-                                'layout' => $combinationSheetThumb[0]['layout'],
+                                'action' => 'display',
                                 'id' => $photo->id,
-                                'suffix' => $combinationSheetThumb[0]['suffix']
+                                'size' => 'thumbs'
                             ]), [
                                 'alt' => $photo->path,
                                 'url' => $this->Url->build([

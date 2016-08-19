@@ -20,7 +20,6 @@ class CombinationSheet
 {
     private $layouts = [];
     private $layoutsPath;
-    private $combinationSheets;
     
     public function __construct($layouts)
     {
@@ -28,6 +27,7 @@ class CombinationSheet
         $this->layoutsPath = dirname(__FILE__) . DS . 'CombinationLayouts' . DS;
         $folder = new Folder($this->layoutsPath);
         $files = $folder->find('(^CombinationLayout\d+).php', true);
+        natsort($files);
         
         //load all associated layouts
         if ($layouts == 'all') {
@@ -47,29 +47,6 @@ class CombinationSheet
                 $this->layouts[$layouts] = $combinationLayout->getLayout();
             } else {
                 throw new \Exception('You have to specify a valid CombinationLayout name.');
-            }
-        }
-        
-//        return $this->createCombinationSheet($sourcePath, $this->layouts);
-        // if all, alle types aanmaken
-        // als naam van layout: alleen die layout
-        // new Image(hoogte, breedte);
-        // Image = buitenste image
-        // foreach subimage (dus in layout)
-        // new Image(hoogte, breedte);
-        // Image->setBlackWhite();
-        
-        // return is array van strings met path naar aangemaakte image
-        // key = layoutname
-    }
-    
-    public function createCombinationSheet($sourcePath, $layouts)
-    {
-        //create array with images paths
-        if (file_exists($sourcePath)) {
-            pr($layouts);
-            foreach ($layouts as $key => $layout) {
-                
             }
         }
     }

@@ -91,8 +91,16 @@ class PhotosController extends AppController
                     $orientationClass = 'photos-vertical';
                 }
                 $photo->orientationClass = $orientationClass;
-
-                $this->set(compact('person', 'photo'));
+                
+                //create a thumbnail for combination sheets for the view
+                $imageHandler = new ImageHandler();
+                $combinationSheetThumb = $imageHandler->createProductPreview($photo, 'combination-sheets', [
+                    'resize' => ['width' => 400, 'height' => 360],
+                    'watermark' => true,
+                    'layout' => 'CombinationLayout1'
+                ]);
+//                pr($combinationSheetThumb);die();
+                $this->set(compact('person', 'photo', 'combinationSheetThumb'));
                 $this->set('_serialize', ['photo']);
             } else {
                 throw new NotFoundException('Photo not found');
@@ -199,10 +207,39 @@ class PhotosController extends AppController
         }
     }
     
-    public function combine($id = null)
+    /**
+     *
+     * @param type $layout
+     * @param type $id
+     * @return type
+     */
+    public function displayProduct($layout, $id, $suffix = null)
+    {
+//        pr($layout);pr($id);pr($suffix);die();
+        if (!isset($suffix)) {
+            $suffix = 'none';
+        }
+        $fileName = $layout . '-' . $id . '-' . $suffix;
+        $tmpProductDir = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS;
+        $targetImage = $tmpProductDir . md5($fileName) . '.jpg';
+        if (file_exists($targetImage)) {
+            $this->response->type(['jpg' => 'image/jpeg']);
+            $this->response->file($targetImage, ['name' => $fileName]);
+            return $this->response;
+        } else {
+            throw new NotFoundException('Product photo was not found.');
+        }
+    }
+    
+    /**
+     * 
+     * @param type $productGroup
+     * @param type $id
+     * @throws NotFoundException
+     */
+    public function productGroupIndex($productGroup, $id)
     {
         $this->autoRender = false;
-        
         //check if user is auth to view this photo id
         $personId = $this->request->session()->read('Auth.User.id');
         //temporary fix for test, should be $personId = $this->Auth->user('id')
@@ -224,110 +261,29 @@ class PhotosController extends AppController
                 ->first();
 
             if (!empty($photo)) {
-                //show combine photos
-                $sourcePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+                //add the orientation data to the photos array
+                $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
+                
+                //create tmp product preview images
                 $imageHandler = new ImageHandler();
-                $images = $imageHandler->createProductPreview($id, 'CombinationSheet');pr($images);die();
-                $combinationSheet = new CombinationSheet();
-//                $imageHandler->createProduct($sourcePath, 'combination', 'CombinationLayout5');
-//                pr($photos = $imageHandler->createProduct('combination', 'CombinationLayout5'));
-
-                $this->set(compact('person', 'images'));
+                $images = $imageHandler->createProductPreview($photo, $productGroup, ['resize' => ['width' => 400, 'height' => 360]]);
+                //pass results to views
+                $templateName = $productGroup.'-index';
+                $this->set(compact('person', 'photo', 'images'));
                 $this->set('_serialize', ['images']);
+                $this->render($templateName);
             } else {
                 throw new NotFoundException('Photo not found');
             }
         } else {
             throw new NotFoundException('Person not found');
         }
-        
-//        $path = APP . 'userphotos'.DS.'FPDF-School'.DS.'leeg-project'.DS.'photo-klas'.DS.'gebruikeruser-gebruikeruser'.DS.'med'.DS.'Etui.jpg';
-//        
-//        $layout1 = [
-//        [
-//            'start_x_cm'    => 0.00,
-//            'start_y_cm'    => 9.50,
-//            'width_cm'      => 6.12,
-//            'position'      => 'portrait',
-//            'filter'        => 'none'
-//        ], [
-//            'start_x_cm'    => 6.35,
-//            'start_y_cm'    => 9.50,
-//            'width_cm'      => 6.12,
-//            'position'      => 'portrait',
-//            'filter'        => 'none'
-//        ], [
-//            'start_x_cm'    => 6.35,
-//            'start_y_cm'    => 0.00,
-//            'width_cm'      => 6.12,
-//            'position'      => 'portrait',
-//            'filter'        => 'none'
-//        ], [
-//            'start_x_cm'    => 0.00,
-//            'start_y_cm'    => 0.00,
-//            'width_cm'      => 6.12,
-//            'position'      => 'portrait',
-//            'filter'        => 'none'
-//        ]
-//    ];
-//
-//        //set tmp folders
-//        $cacheFolder = TMP . 'image-cache';
-////        $fileName = md5($path);
-////        $finalPath = IMAGES . 'cache' . DS . 'tmp' . DS . $fileName;
-//        $imageHandlerMaster = new ImageHandler();
-//        $imageHandlerMaster->create(850, 1250);
-//        $iRatio = 67;
-//        $aDone = array();
-//        $sTmpDir = $cacheFolder . DS . 'tmp-images' . DS ;
-//        
-//        
-//        //compile the compinationsheet
-//        foreach($layout1 as $i => $aProductLayout) {
-//            $sTmpTargetFile = microtime(true) . '.jpg';
-//            $sImageName = $aProductLayout['position'] . '-' . $aProductLayout['filter'];
-//            if( !key_exists($sImageName, $aDone ) ) {
-//                $oTmpImageHandler = new ImageHandler();
-//                $oTmpImageHandler->load($path);
-//
-//                $tmpWidth = imagesx($oTmpImageHandler->image);
-//                $tmpHeight = imagesy($oTmpImageHandler->image);
-//
-//                if($aProductLayout['position'] == 'landscape') {
-//                        if($tmpWidth < $tmpHeight) $oTmpImageHandler->rotate();
-//                } else if($aProductLayout['position'] == 'portrait') {
-//                        if($tmpWidth > $tmpHeight) $oTmpImageHandler->rotate();
-//                } 
-//
-//                if($aProductLayout['filter'] == 'black-white' ) $oTmpImageHandler->convertToBlackWhite();
-//                if($aProductLayout['filter'] == 'sepia' ) $oTmpImageHandler->convertToSepia();
-//                $aDone[$sImageName] = $oTmpImageHandler;
-//            } else {
-//                $oTmpImageHandler = $aDone[$sImageName];
-//            }
-//
-//            if($aProductLayout['position'] == 'landscape' ) {
-//                $oTmpImageHandler->resize(array('height' => ($aProductLayout['width_cm']*$iRatio)));
-//            } else {
-//                $oTmpImageHandler->resize(array('width' => ($aProductLayout['width_cm']*$iRatio)));
-//            }
-//
-//            $oTmpImageHandler->save($sTmpDir . $sTmpTargetFile);
-//            $tmpWidth = imagesx($oTmpImageHandler->image);
-//            $tmpHeight = imagesy($oTmpImageHandler->image);
-//            $imageHandlerMaster->merge(
-//                $sTmpDir . $sTmpTargetFile, 
-//                array(
-//                        'x' => ($aProductLayout['start_x_cm']*$iRatio), 
-//                        'y' => ($aProductLayout['start_y_cm']*$iRatio),
-//                        'width' => $oTmpImageHandler->imageDetails['width'],
-//                        'height' => $oTmpImageHandler->imageDetails['height']
-//                )
-//            );
-////            @unlink($sTmpDir . $sTmpTargetFile);
-//        }
-//        
-////        $imageHandlerMaster->show();die();
-        
     }
 }

@@ -27,9 +27,17 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]
     );
     $routes->connect(
-        '/photos/combine/:id',
-        ['controller' => 'Photos', 'action' => 'combine'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        '/photos/product-group/:productGroup/:id',
+        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
+        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id']]
+    );
+    $routes->connect(
+        '/photos/product/:layout/:id/:suffix',
+        [
+            'controller' => 'Photos',
+            'action' => 'displayProduct',
+        ],
+        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
     
     Router::prefix('Api', function ($routes) {
