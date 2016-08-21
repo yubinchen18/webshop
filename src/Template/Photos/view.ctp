@@ -36,6 +36,7 @@
                     <h3><?= __('Selecteer<br>een product >') ?></h3>
                 </div>
             </div>
+            <!-- right product group panel -->
             <div class='photos-view-products-panel col-sm-8'>
                 <div class="row">
                     <div class="photos-view-products-container col-xs-6">
@@ -105,14 +106,6 @@
                                 ]),
                                 'class' => [$photo->orientationClass, 'img-responsive']
                             ]); ?>
-                        <!--    <?php for ($i = 1; $i < 8; $i++): ?>
-                            <?= $this->Html->image($this->Url->build([
-                                'controller' => 'Photos',
-                                'action' => 'display',
-                                'id' => $photo->id,
-                                'size' => 'thumbs'
-                            ]), ['class' => [$photo->orientationClass.'-combi-'.$i, 'img-responsive']]); ?>
-                            <?php endfor; ?>-->
                         </div>
                     </div>
                     <div class="photos-view-products-container  col-xs-6">

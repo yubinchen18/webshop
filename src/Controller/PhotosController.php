@@ -95,11 +95,10 @@ class PhotosController extends AppController
                 //create a thumbnail for combination sheets for the view
                 $imageHandler = new ImageHandler();
                 $combinationSheetThumb = $imageHandler->createProductPreview($photo, 'combination-sheets', [
-                    'resize' => ['width' => 400, 'height' => 360],
-                    'watermark' => true,
+                    'resize' => ['width' => 200, 'height' => 180],
+                    'watermark' => false,
                     'layout' => 'CombinationLayout1'
                 ]);
-//                pr($combinationSheetThumb);die();
                 $this->set(compact('person', 'photo', 'combinationSheetThumb'));
                 $this->set('_serialize', ['photo']);
             } else {
@@ -215,12 +214,11 @@ class PhotosController extends AppController
      */
     public function displayProduct($layout, $id, $suffix = null)
     {
-//        pr($layout);pr($id);pr($suffix);die();
         if (!isset($suffix)) {
             $suffix = 'none';
         }
         $fileName = $layout . '-' . $id . '-' . $suffix;
-        $tmpProductDir = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS;
+        $tmpProductDir = TMP . 'image-cache' . DS . 'product-images' . DS;
         $targetImage = $tmpProductDir . md5($fileName) . '.jpg';
         if (file_exists($targetImage)) {
             $this->response->type(['jpg' => 'image/jpeg']);
@@ -247,13 +245,21 @@ class PhotosController extends AppController
             $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
         }
         
-        //load the person and photo
+        //load the person and photo and product
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
                 ->where(['Persons.id' => $personId])
                 ->contain(['Barcodes'])
                 ->first();
         
+        $productTable = TableRegistry::get('Products');
+        $products = $productTable->find()
+                ->where(['product_group' => $productGroup])
+                ->orderAsc('article')
+                ->all();
+        $combinationSheetThumb = $products->first();
+        
+//        debug($products->first());die();
         if (!empty($person)) {
             $photo = $this->Photos->find()
                 ->where(['Photos.id' => $id, 'Photos.barcode_id' => $person->barcode->id])
@@ -271,12 +277,23 @@ class PhotosController extends AppController
                 }
                 $photo->orientationClass = $orientationClass;
                 
-                //create tmp product preview images
-                $imageHandler = new ImageHandler();
-                $images = $imageHandler->createProductPreview($photo, $productGroup, ['resize' => ['width' => 400, 'height' => 360]]);
+                if (!empty($products)) {
+                    foreach ($products as $product) {
+                        //create tmp product preview images
+                        $imageHandler = new ImageHandler();
+                        $image = $imageHandler->createProductPreview($photo, $product->product_group, [
+                            'resize' => ['width' => 200, 'height' => 180],
+                            'layout' => $product->layout
+                        ]);
+                        //add the image data to product object
+                        $product->image = $image[0];
+                    }
+                } else {
+                    throw new NotFoundException('No products found.');
+                }
                 //pass results to views
                 $templateName = $productGroup.'-index';
-                $this->set(compact('person', 'photo', 'images'));
+                $this->set(compact('person', 'photo', 'products', 'combinationSheetThumb'));
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);
             } else {

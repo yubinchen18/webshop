@@ -1,36 +1,54 @@
-<div class="photos-view-row row">
-    <div class="photos-view-detail col-sm-8">
+<div class="row">
+    <!-- left panel -->
+    <div class="photos-product-index col-sm-8">
+        <!-- left pics panel -->
         <h2><?= __('Combinatievellen') ?></h2>
         <?php if (isset($person)): ?>
-            <?php $p = 0; $count = count($images); ?>
-            <?php foreach ($images as $image): ?>
+            <?php $p = 0; $count = count($products); ?>
+            <?php foreach ($products as $product): ?>
                 <?php $p++; ?>
                 <?php if ($p % 3 == 1): ?>
                 <div class="row">
                 <?php endif; ?>
-                    <div class="col-xs-4 container photo-container">
-                        <div class="<?= 'photos-vertical'.' '.'photos-vertical-background' ?>">
+                    <div class="col-xs-4 photos-product-container">
+                        <div class="photos-product-label">
+                            <div class="row">
+                                <div class="flex-box price col-xs-5">
+                                    <?= $this->Number->currency($product->price_ex, 'EUR'); ?>
+                                    <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
+                                </div>
+                                <div class="flex-box dimensions col-xs-7">
+                                    <?= __('13 x 19cm'); ?>
+                                </div>
+                            </div>
                         </div>
-                            <?= $this->Html->image($this->Url->build([
-                                'controller' => 'Photos',
-                                'action' => 'displayProduct',
-                                'layout' => $image['layout'],
-                                'id' => $photo->id,
-                                'suffix' => $image['suffix']
-                            ]), ['class' => ['photos-vertical', 'img-responsive']]); ?>
+                        <div class="photos-product-icon">
+                            <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                            </div>
+                                <?= $this->Html->image($this->Url->build([
+                                    'controller' => 'Photos',
+                                    'action' => 'displayProduct',
+                                    'layout' => $product->layout,
+                                    'id' => $photo->id,
+                                    'suffix' => $product->image['suffix'],
+                                ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                        </div>
                     </div>
                 <?php if ($p % 3 == 0 || $p == ($count)) : ?>
                 </div>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endif ?>
+        <!-- right buttons panel -->
+        
     </div>
+    <!-- Right panel -->
     <div class="photos-view-products col-sm-4">
         <div class='row photos-view-products-row'>
             <div class='photos-view-products-panel col-sm-12'>
                 <div class="row">
                     <div class="photos-view-products-container col-xs-6">
-                        <div class="photos-view-products-labels label1 text-center vertical-center">
+                        <div class="photos-view-products-labels label1 text-center">
                             <span><?= __('Losse afdrukken') ?></span>
                         </div>
                         <div class="photos-view-products-icon">
@@ -82,9 +100,10 @@
                         <div class="photos-view-products-icon">
                             <?= $this->Html->image($this->Url->build([
                                 'controller' => 'Photos',
-                                'action' => 'display',
+                                'action' => 'displayProduct',
+                                'layout' => $combinationSheetThumb->layout,
                                 'id' => $photo->id,
-                                'size' => 'thumbs'
+                                'suffix' => $combinationSheetThumb->image['suffix']
                             ]), [
                                 'alt' => $photo->path,
                                 'url' => $this->Url->build([
@@ -95,14 +114,6 @@
                                 ]),
                                 'class' => [$photo->orientationClass, 'img-responsive']
                             ]); ?>
-                        <!--    <?php for ($i = 1; $i < 8; $i++): ?>
-                            <?= $this->Html->image($this->Url->build([
-                                'controller' => 'Photos',
-                                'action' => 'display',
-                                'id' => $photo->id,
-                                'size' => 'thumbs'
-                            ]), ['class' => [$photo->orientationClass.'-combi-'.$i, 'img-responsive']]); ?>
-                            <?php endfor; ?>-->
                         </div>
                     </div>
                     <div class="photos-view-products-container  col-xs-6">

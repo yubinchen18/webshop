@@ -250,110 +250,56 @@
             .photos-vertical-overlay {
                 height: 101%;
             }
-
-            .photos-vertical-combi-1 {
-                position: absolute;
-                top: 0%; left: 16%;
-                height: 48%;
-                width: auto;
-            }
-            
-            .photos-vertical-combi-2 {
-                position: absolute;
-                top: 0%; right: 17%;
-                height: 48%;
-                width: auto;
-            }
-            
-            .photos-vertical-combi-3 {
-                position: absolute;
-                top: 45%; left: 22%;
-                height: 32%;
-                width: auto;
-                transform: rotateZ(90deg);
-            }
-            
-            .photos-vertical-combi-4 {
-                position: absolute;
-                bottom: 0%; left: 22%;
-                height: 32%;
-                width: auto;
-                transform: rotateZ(90deg);
-            }
-            
-            .photos-vertical-combi-5 {
-                position: absolute;
-                top: 49%; right: 17%;
-                height: 23%;
-                width: auto;
-            }
-            
-            .photos-vertical-combi-6 {
-                position: absolute;
-                top: 49%; right: 34%;
-                height: 23%;
-                width: auto;
-            }
-            
-            .photos-vertical-combi-7 {
-                position: absolute;
-                bottom: 0%; right: 22%;
-                height: 32%;
-                width: auto;
-                transform: rotateZ(90deg);
-            }
-            
-            .photos-horizontal-combi-1 {
-                position: absolute;
-                top: 17%; left: 0%;
-                height: auto;
-                width: 50%;
-            }
-            
-            .photos-horizontal-combi-2 {
-                position: absolute;
-                top: 55%; left: 0%;
-                height: auto;
-                width: 50%;
-            }
-            
-            .photos-horizontal-combi-3 {
-                position: absolute;
-                top: 23%; left: 48%;
-                height: auto;
-                width: 33%;
-                transform: rotateZ(90deg);
-            }
-            
-            .photos-horizontal-combi-4 {
-                position: absolute;
-                top: 23%; left: 73%;
-                height: auto;
-                width: 33%;
-                transform: rotateZ(90deg);
-            }
-            
-            .photos-horizontal-combi-5 {
-                position: absolute;
-                top: 55%; left: 53%;
-                height: auto;
-                width: 23%;
-            }
-            
-            .photos-horizontal-combi-6 {
-                position: absolute;
-                top: 72%; left: 53%;
-                height: auto;
-                width: 23%;
-            }
-            
-            .photos-horizontal-combi-7 {
-                position: absolute;
-                top: 61%; left: 73%;
-                height: auto;
-                width: 33%;
-                transform: rotateZ(90deg);
-            }
         }
     }
 }
+
+.photos-product-index {
+    h2 {
+        color: #d15400;
+        font-weight: bold;
+        margin-bottom: 3%;
+    }
+    .photos-product-container {
+        margin-bottom: 3%;
+        .photos-product-label {
+            .row {
+                height: 30px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .flex-box {
+                display: -webkit-flex;
+                display: flex;
+                height: 100%;
+                align-items: center;
+            }
+            .price {
+                color: white;
+                background: #eda111;
+                justify-content: flex-start;
+            }
+            .dimensions {
+                justify-content: flex-end;
+            }
+            .plus-sign {
+                position : absolute;
+                height: 100%;
+                width: auto;
+                top: 0;
+                right: 0;
+                transform: translate(50%,0%);
+            }
+            
+        }
+        .photos-product-icon {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            margin-bottom: 1.5%;
+            position: relative;
+            overflow: hidden;
+        }
+    }
+}
+

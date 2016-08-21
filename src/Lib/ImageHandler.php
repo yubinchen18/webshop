@@ -168,8 +168,9 @@ class ImageHandler
         //Initialize variables and create the folders we need.
         $layout = 'all';
         $watermark = false;
+        $rotate = false;
         $tmpDir = $this->cacheFolder . 'tmp-images' . DS ;
-        $tmpProductDir = WWW_ROOT . 'img' . DS . 'cache' . DS . 'tmp' . DS;
+        $tmpProductDir = $this->cacheFolder . 'product-images' . DS;
         $fileName = '';
         $suffix = null;
         $finalProductImages = [];
@@ -192,6 +193,10 @@ class ImageHandler
                     case 'watermark':
                         $watermark = isset($value) ? $value : false;
                         $suffix = $suffix . (($watermark == true) ? 'watermarked' : '');
+                        break;
+                    case 'rotate' :
+                        $rotate = isset($value) ? $value : false;
+                        $suffix = $suffix . (($rotate == true) ? 'rotated' : '');
                         break;
                     case 'layout' :
                         $layout = isset($value) ? $value : 'all';
@@ -286,8 +291,8 @@ class ImageHandler
                 @unlink($tmpDir . $tmpTargetFile);
             }
 
-            //rotate class photos
-            if (count($productLayouts) == 1 && $photo->type == 'class') {
+            //auto rotate class photos
+            if ((count($productLayouts) == 1 && $photo->type == 'class') || $photo->orientationClass == 'photos-horizontal') {
                 $this->rotate(-90);
             }
 
@@ -304,6 +309,11 @@ class ImageHandler
             // apply watermark
             if ($watermark) {
                 $this->merge(APP . 'userphotos' . DS . 'watermark.png');
+            }
+            
+            //rotate
+            if ($rotate) {
+                $this->rotate(-90);
             }
             
             //save file to new location
@@ -710,20 +720,6 @@ class ImageHandler
         }
         if ($this->imageDetails['width'] == $this->imageDetails['height']) {
             $this->imageDetails['shape'] = 'square';
-        }
-    }
-
-    public function createProduct($sourcePath, $product, $layouts = 'all')
-    {
-        switch ($product) {
-            case 'combination':
-                $CombinationSheet = new CombinationSheet($sourcePath, $layouts);
-                return $CombinationSheet->getLayouts();
-                break;
-            case 'mug':
-                break;
-            default:
-                throw new \Exception('You have to specify a product');
         }
     }
 }
