@@ -80,6 +80,18 @@ class ImageHandler
     public $cacheFolder;
     
     /**
+     * The path to tmp images for processing
+     * @var type 
+     */
+    public $tmpImagesFolder;
+    
+    /**
+     * The path to finished cached product images
+     * @var type 
+     */
+    public $tmpProductImagesFolder;
+    
+    /**
      *  
      * @var type PhotoTable object
      */
@@ -88,6 +100,8 @@ class ImageHandler
     public function __construct()
     {
         $this->cacheFolder = TMP . 'image-cache' . DS;
+        $this->tmpImagesFolder = $this->cacheFolder . 'tmp-images' . DS ;
+        $this->tmpProductImagesFolder = $this->cacheFolder . 'product-images' . DS;
         $this->photos = TableRegistry::get('Photos');
     }
     
@@ -169,8 +183,8 @@ class ImageHandler
         $layout = 'all';
         $watermark = false;
         $rotate = false;
-        $tmpDir = $this->cacheFolder . 'tmp-images' . DS ;
-        $tmpProductDir = $this->cacheFolder . 'product-images' . DS;
+        $tmpDir = $this->tmpImagesFolder;
+        $tmpProductDir = $this->tmpProductImagesFolder;
         $fileName = '';
         $suffix = null;
         $finalProductImages = [];

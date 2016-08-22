@@ -30,6 +30,7 @@ class ProductsFixture extends TestFixture
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'deleted' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'layout' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => '', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'product_group' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => '', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -47,19 +48,20 @@ class ProductsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => 'e1a58b9b-e5af-472e-b4ad-3a0467bddba2',
-            'name' => 'Lorem ipsum dolor sit amet',
-            'article' => 'Lorem ipsum dolor sit amet',
-            'slug' => 'Lorem ipsum dolor sit amet',
+            'id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'name' => 'product1',
+            'article' => 'C0001',
+            'slug' => 'product-1',
             'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-            'price_ex' => 1,
+            'price_ex' => 9.99,
             'vat' => 1,
             'high_shipping' => 1,
             'active' => 1,
-            'created' => '2016-08-18 12:10:10',
-            'modified' => '2016-08-18 12:10:10',
-            'deleted' => '2016-08-18 12:10:10',
-            'layout' => 'Lorem ipsum dolor sit amet'
+            'created' => '2016-08-22 08:54:02',
+            'modified' => '2016-08-22 08:54:02',
+            'deleted' => '2016-08-22 08:54:02',
+            'layout' => 'CombinationLayout1',
+            'product_group' => 'combination-sheets'
         ],
     ];
 }

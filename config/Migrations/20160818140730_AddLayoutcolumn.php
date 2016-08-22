@@ -16,6 +16,7 @@ class AddLayoutcolumn extends AbstractMigration
         $table->addColumn('layout', 'string', [
             'null' => false,
             'default' => '',
+            'after' => 'active'
             
         ])->update();
     }

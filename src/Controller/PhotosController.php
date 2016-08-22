@@ -214,11 +214,12 @@ class PhotosController extends AppController
      */
     public function displayProduct($layout, $id, $suffix = null)
     {
-        if (!isset($suffix)) {
-            $suffix = 'none';
-        }
+        // look for temp product cache pics in hardcoded folders\
+        $tmpProductDir = $this->request->query('path');
         $fileName = $layout . '-' . $id . '-' . $suffix;
-        $tmpProductDir = TMP . 'image-cache' . DS . 'product-images' . DS;
+        if (!$tmpProductDir) {
+            $tmpProductDir = (new ImageHandler())->tmpProductImagesFolder;
+        }
         $targetImage = $tmpProductDir . md5($fileName) . '.jpg';
         if (file_exists($targetImage)) {
             $this->response->type(['jpg' => 'image/jpeg']);
@@ -245,21 +246,13 @@ class PhotosController extends AppController
             $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
         }
         
-        //load the person and photo and product
+        //load the person and photo
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
                 ->where(['Persons.id' => $personId])
                 ->contain(['Barcodes'])
                 ->first();
         
-        $productTable = TableRegistry::get('Products');
-        $products = $productTable->find()
-                ->where(['product_group' => $productGroup])
-                ->orderAsc('article')
-                ->all();
-        $combinationSheetThumb = $products->first();
-        
-//        debug($products->first());die();
         if (!empty($person)) {
             $photo = $this->Photos->find()
                 ->where(['Photos.id' => $id, 'Photos.barcode_id' => $person->barcode->id])
@@ -267,6 +260,14 @@ class PhotosController extends AppController
                 ->first();
 
             if (!empty($photo)) {
+                //load products
+                $productTable = TableRegistry::get('Products');
+                $products = $productTable->find()
+                        ->where(['product_group' => $productGroup])
+                        ->orderAsc('article')
+                        ->toArray();
+                
+                
                 //add the orientation data to the photos array
                 $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
                 $dimensions = getimagesize($filePath);
@@ -276,8 +277,9 @@ class PhotosController extends AppController
                     $orientationClass = 'photos-vertical';
                 }
                 $photo->orientationClass = $orientationClass;
-                
                 if (!empty($products)) {
+                    //set thumbnail
+                    $combinationSheetThumb = $products[0];
                     foreach ($products as $product) {
                         //create tmp product preview images
                         $imageHandler = new ImageHandler();

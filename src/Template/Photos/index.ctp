@@ -46,13 +46,13 @@
             </ul>
         </div>
         <!-- Small screen -->
-        <div class="photos-index-banner col-sm-12 hidden-lg hidden-md">
-            <div class="banner-flex-item"><?= __('Betrouwbaar en veilig bestellen') ?></div>
-            <div class="banner-flex-item long"><?= __('Rechtstreeks betalen via eigen bank') ?></div>
-            <div class="banner-flex-item last"><?= __('Veilig betalen via iDeal') ?></div>
-            <div class="banner-flex-item"><?= __('Unieke inlog-barcode') ?></div>
-            <div class="banner-flex-item long"><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></div>
-            <div class="banner-flex-item last"><?= __('Razendsnelle levering foto\'s') ?></div>
+        <div class="photos-index-banner-sm col-sm-12 hidden-lg hidden-md">
+            <div class="banner-flex-item small-font"><?= __('Betrouwbaar en veilig bestellen') ?></div>
+            <div class="banner-flex-item small-font long"><?= __('Rechtstreeks betalen via eigen bank') ?></div>
+            <div class="banner-flex-item small-font last"><?= __('Veilig betalen via iDeal') ?></div>
+            <div class="banner-flex-item small-font"><?= __('Unieke inlog-barcode') ?></div>
+            <div class="banner-flex-item small-font long"><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></div>
+            <div class="banner-flex-item small-font last"><?= __('Razendsnelle levering foto\'s') ?></div>
                 <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
                     'class' => [
                         'photos-index-banner-img'

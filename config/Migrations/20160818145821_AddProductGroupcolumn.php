@@ -16,7 +16,7 @@ class AddProductGroupcolumn extends AbstractMigration
         $table->addColumn('product_group', 'string', [
             'null' => false,
             'default' => '',
-            
+            'after' => 'active'
         ])->update();
     }
 }
