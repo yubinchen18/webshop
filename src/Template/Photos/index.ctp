@@ -1,35 +1,32 @@
 <div class="photos-index-label row">
     <h2><?= __('Selecteer een foto') ?></h2>
-    <div class="photos-index col-md-9">
+    <div class="col-md-9 photos-index">
     <?php if (isset($person)): ?>
-        <?php $p = 0; $count = count($person->barcode->photos); ?>
+        <div class="row photos-index-row">
         <?php foreach ($person->barcode->photos as $key => $photo): ?>
-            <?php $p++; ?>
-            <?php if ($p % 4 == 1): ?>
-            <div class="row photos-index-row">
-            <?php endif; ?>
-                <div class="col-xs-3 container photo-container">
+            <div class="col-md-3 col-xs-4 photos-index-container">
+                <div class="photos-index-icon">
                     <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
-                    </div>
-                    <?= $this->Html->image($this->Url->build([
-                        'controller' => 'Photos',
-                        'action' => 'display',
-                        'id' => $photo->id,
-                        'size' => 'thumbs'
-                    ]), [
-                        'alt' => $photo->path,
-                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
-                        'class' => [$photo->orientationClass, 'img-responsive']
-                    ]); ?>
                 </div>
-            <?php if ($p % 4 == 0 || $key == ($count - 1)) : ?>
+                <?= $this->Html->image($this->Url->build([
+                    'controller' => 'Photos',
+                    'action' => 'display',
+                    'id' => $photo->id,
+                    'size' => 'thumbs'
+                ]), [
+                    'alt' => $photo->path,
+                    'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
+                    'class' => [$photo->orientationClass, 'img-responsive']
+                ]); ?>
+                </div>
             </div>
-            <?php endif; ?>
         <?php endforeach; ?>
+        </div>
     <?php endif ?>
     </div>
-    <div class="photos-index col-md-3">
-        <div class="photos-index-banner container col-md-11 col-md-offset-1">
+    <div class="photos-index col-md-3 col-sm-12">
+        <!-- Medium screen -->
+        <div class="photos-index-banner container col-md-11 col-md-offset-1 hidden-sm hidden-xs">
             <ul class="photos-index-banner-ul  list-group">
                 <li><h5><?= __('Betrouwbaar en veilig bestellen') ?></h5></li>
                 <li><h5><?= __('Unieke inlog-barcode') ?></h5></li>
@@ -47,6 +44,20 @@
                     ]) ?>
                 </li>
             </ul>
+        </div>
+        <!-- Small screen -->
+        <div class="photos-index-banner col-sm-12 hidden-lg hidden-md">
+            <div class="banner-flex-item"><?= __('Betrouwbaar en veilig bestellen') ?></div>
+            <div class="banner-flex-item long"><?= __('Rechtstreeks betalen via eigen bank') ?></div>
+            <div class="banner-flex-item last"><?= __('Veilig betalen via iDeal') ?></div>
+            <div class="banner-flex-item"><?= __('Unieke inlog-barcode') ?></div>
+            <div class="banner-flex-item long"><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></div>
+            <div class="banner-flex-item last"><?= __('Razendsnelle levering foto\'s') ?></div>
+                <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
+                    'class' => [
+                        'photos-index-banner-img'
+                    ]
+                ]) ?>
         </div>
     </div>
 </div>

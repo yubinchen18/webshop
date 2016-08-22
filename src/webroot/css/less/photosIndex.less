@@ -33,16 +33,17 @@
 
 .photos-index {
     .photos-index-row {
-        padding-left: 1.5%;
     }
-    
-    .photo-container {
+    .photos-index-container {
+        padding-left: 1%;
+        padding-right: 1%;
+        margin-bottom: 2%;
+    }
+    .photos-index-icon {
         border: 1px solid #b5b5b5;
-        width: 23.5%;
+        width: 100%;
         height: 0;
-        padding-bottom: 23.5%;
-        margin-right: 1.5%;
-        margin-bottom: 1.5%;
+        padding-bottom: 100%;
         position: relative;
         overflow: hidden;
     }
@@ -99,6 +100,61 @@
     }
 }
 
+@media only screen and (max-width: 992px) {
+    .photos-index-banner {
+        border: 1px solid #b5b5b5;
+        background-image: url('../img/layout/Hoogstraten_webshop-onderdelen-41.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        padding-left: 3%;
+        padding-right: 0px;
+        width: 100%;
+        height: 100px;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-justify-content: flex-start;
+        justify-content: flex-start;
+        
+        .banner-flex-item {
+            /*border: 1px solid white;*/
+            display: -webkit-flex;
+            display: flex;
+            height: 30px;
+            width: 25%;
+            margin-left: 1%;
+            -webkit-align-items: flex-start;
+            align-items: flex-start;
+            background: url('../img/layout/Hoogstraten_webshop-onderdelen-07.png') no-repeat;
+            background-position: 0% 2%;
+            background-size: auto 50%;
+            padding-left: 20px;
+            color: #00b4ff;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .long {
+            width: 35%;
+        }
+        .last {
+            /*margin-right: auto;*/
+        }
+        .photos-index-banner-img {
+            position: absolute;
+            height: auto;
+            width: 20%;
+            right: -5%;
+            bottom: 100%;
+            -ms-transform: rotate(9deg); /* IE 9 */
+            -webkit-transform: rotate(9deg); /* Chrome, Safari, Opera */
+            transform: rotate(12deg) translate(0%, 30%);
+        }
+    }
+}
+
 .photos-view-detail {
     margin-top: 4%;
     height: auto;
@@ -137,14 +193,7 @@
             font-size: 14px;
         }
     }
-}
-
-.photos-view-products {
     
-    margin-top: 3%;
-    .photos-view-products-row {
-        height: 100%;
-    }
     .photos-view-products-buttons-md {
         height: 100%;
         padding-top: 40%;
@@ -156,10 +205,14 @@
             color: #008eff;
             font-weight: bold;
         }
+        @media only screen and (max-width: 1199px) {
+            h3 {
+                font-size: 20px;
+            }
+        }
     }
     .photos-view-products-buttons-sm {
         height: 100%;
-        padding-top: 40%;
         .photos-view-products-select {
             width: 100%;
             height: auto;
@@ -167,19 +220,20 @@
         h3 {
             color: #008eff;
             font-weight: bold;
-            font-size: 14px;
+        }
+        @media only screen and (max-width: 425px) {
+            h3 {
+                font-size: 16px;
+            }
         }
     }
-    .photos-view-products-buttons-xs {
-        width: 100%;
-        .photos-view-products-select {
-            width: 100%;
-            height: auto;
-        }
-        h3 {
-            color: #008eff;
-            font-weight: bold;
-        }
+}
+
+.photos-view-products {
+    
+    margin-top: 3%;
+    .photos-view-products-row {
+        height: 100%;
     }
     
     .photos-view-products-panel{
@@ -196,24 +250,6 @@
             margin-right: -3%;
             color: white;
             font-weight: bold;
-        }
-        
-        @media only screen and (max-width: 990px) and (min-width: 768px){
-            /*For mobile phones:*/ 
-            .photos-view-products-labels {
-                width: 100%;
-                height: 40px;
-                display: table;
-                font-size: 12px;
-            }
-            .photos-view-products-labels span {
-                vertical-align: middle;
-                display: table-cell;
-                text-align: center;
-            }
-            .label3{
-                font-size: 11px;
-            }
         }
         
         .label1{
