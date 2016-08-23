@@ -6,7 +6,6 @@ use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\TestSuite\IntegrationTestCase;
 use Cake\ORM\TableRegistry;
 use Cake\Filesystem\File;
-use org\bovigo\vfs\vfsStream;
 use App\Lib\ImageHandler;
 
 /**
@@ -39,7 +38,6 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         
         $this->Photos = TableRegistry::get('Photos');
         $this->Persons = TableRegistry::get('Persons');
-        $this->Products = TableRegistry::get('Products');
         $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
         $this->session([
             'Auth' => [
@@ -49,10 +47,6 @@ class PhotosControllerTest extends BaseIntegrationTestCase
                 ]
             ]
         ]);
-        $this->vfsStream = vfsStream::setup('data', null, ['tmp' => []]);
-        $this->vfsRoot = 'vfs://data';
-        $imageHandler = new ImageHandler();
-        $imageHandler->tmpProductImagesFolder = $this->vfsRoot;
     }
     
     /**
