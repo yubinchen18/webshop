@@ -225,7 +225,8 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertResponseCode(404);
     }
     
-    public function testProductGroupIndexLoadHorizontalPhoto() {
+    public function testProductGroupIndexLoadHorizontalPhoto()
+    {
         $this->get('/photos/product-group/combination-sheets/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $photo = $this->viewVariable('photo');
         $this->assertTrue(isset($photo));
@@ -233,7 +234,8 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertEquals('photos-horizontal', $photo->orientationClass);
     }
     
-    public function testProductGroupIndexLoadVerticalPhoto() {
+    public function testProductGroupIndexLoadVerticalPhoto()
+    {
         $this->get('/photos/product-group/combination-sheets/59d395fa-e723-43f0-becb-0078425f9a27');
         $photo = $this->viewVariable('photo');
         $this->assertTrue(isset($photo));

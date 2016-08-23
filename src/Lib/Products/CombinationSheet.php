@@ -16,7 +16,7 @@ use App\Lib\ImageHandler;
  *
  * @author yubin
  */
-class CombinationSheet 
+class CombinationSheet
 {
     private $layouts = [];
     private $layoutsPath;
@@ -38,7 +38,7 @@ class CombinationSheet
                 $combinationLayout = new $fullClassName();
                 $this->layouts['CombinationLayout'.$number] = $combinationLayout->getLayout();
             }
-        //load specific layout 
+        //load specific layout
         } else {
             $file = $layouts.'.php';
             if (in_array($file, $files)) {

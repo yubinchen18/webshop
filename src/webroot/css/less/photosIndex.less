@@ -233,14 +233,13 @@
 }
 
 .photos-view-products {
-    
-    margin-top: 3%;
+    border-left: 2px solid #b5b5b5;
     .photos-view-products-row {
         height: 100%;
     }
-    
+
     .photos-view-products-panel{
-        border-left: 2px solid #b5b5b5;
+        margin-top: 9%;
         padding-left: 5%;
     }
     
@@ -272,9 +271,9 @@
         }
         
         .photos-view-products-icon {
-            width: 110%;
+            width: 100%;
             height: 0;
-            padding-bottom: 110%;
+            padding-bottom: 100%;
             margin-top: 5%;
             margin-left: -5%;
             margin-right: -5%;
@@ -341,14 +340,71 @@
         }
     }
     
-    @media only screen and (max-width: 530px) {
+    @media only screen and (max-width: 600px) {
         .photos-product-container {
             width: 100%;
         }
     }
     @media only screen and (max-width: 375px) {
         h2 {
-            font-size: 25px;
+            font-size: 20px;
+        }
+    }
+    
+    .photos-view-buttons-panel {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        border-left: 2px solid #b5b5b5;
+        border-bottom: 2px solid #b5b5b5;
+    }
+    
+    .photos-view-buttons-box1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 150px;
+        border-bottom: 2px solid #b5b5b5;
+        padding: 10%;
+    }
+    
+    .photos-view-buttons-box2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 300px;
+        padding: 10%;
+    }
+    
+    @media only screen and (max-width: 767px) {
+        .photos-view-buttons-panel-top {
+            display: flex;
+            flex-direction: row;
+            border-bottom: 2px solid #b5b5b5;
+            border-top: 2px solid #b5b5b5; 
+            margin-bottom: 2%;
+            height: 4%;
+            justify-content: space-around;
+            padding: 0;
+            flex-wrap: nowrap;
+        }
+        .photos-view-buttons-box1-top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            height: 80%;
+            border-right: 2px solid #b5b5b5;
+        }
+        .photos-view-buttons-box2-top {
+            display:flex;
+            flex-direction: row;
+            justify-content: space-around;
+            height: 80%;
+        }
+        .photos-view-buttons-button {
+            padding: 8px;
         }
     }
 }

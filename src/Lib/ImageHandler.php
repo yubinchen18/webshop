@@ -81,18 +81,18 @@ class ImageHandler
     
     /**
      * The path to tmp images for processing
-     * @var type 
+     * @var type
      */
     public $tmpImagesFolder;
     
     /**
      * The path to finished cached product images
-     * @var type 
+     * @var type
      */
     public $tmpProductImagesFolder;
     
     /**
-     *  
+     *
      * @var type PhotoTable object
      */
     public $photos;
@@ -194,10 +194,11 @@ class ImageHandler
         //read the options
         if (isset($options) && is_array($options)) {
             foreach ($options as $option => $value) {
-                if (!in_array((string)$option, ['resize', 'watermark', 'layout'])) {
-                    throw new \Exception('Invalid Option'); die();
+                if (!in_array((string)$option, ['resize', 'watermark', 'layout', 'filter'])) {
+                    throw new \Exception('Invalid Option');
+                    die();
                 }
-                switch($option) {
+                switch ($option) {
                     case 'resize':
                         extract($value);
                         $width = isset($width) ? $width : null;
@@ -208,11 +209,14 @@ class ImageHandler
                         $watermark = isset($value) ? $value : false;
                         $suffix = $suffix . (($watermark == true) ? 'watermarked' : '');
                         break;
-                    case 'rotate' :
+                    case 'rotate':
                         $rotate = isset($value) ? $value : false;
                         $suffix = $suffix . (($rotate == true) ? 'rotated' : '');
                         break;
-                    case 'layout' :
+                    case 'filter':
+                        $filter = isset($value) ? $value : null;
+                        $suffix = $suffix . (string)$filter;
+                    case 'layout':
                         $layout = isset($value) ? $value : 'all';
                         break;
                 }
@@ -231,14 +235,13 @@ class ImageHandler
         }
         
         foreach ($productLayouts as $layoutName => $layout) {
-            
             //give cached image path if already exists.
             if (!isset($suffix)) {
                 $suffix = 'none';
             }
             $fileName = $layoutName . '-' . $photo->id . '-' . $suffix;
             $targetImage = $tmpProductDir . md5($fileName) . '.jpg';
-            if( file_exists( $targetImage ) ) {
+            if (file_exists($targetImage)) {
                 $finalProductImages[] = ['layout' => $layoutName, 'path' => $targetImage, 'suffix' => $suffix];
                 continue;
             }
@@ -328,6 +331,18 @@ class ImageHandler
             //rotate
             if ($rotate) {
                 $this->rotate(-90);
+            }
+            
+            // apply filter {
+            if ($filter) {
+                switch($filter) {
+                    case 'sepia':
+                            $this->convertToSepia();
+                            break;
+                    case 'zwart/wit':
+                            $this->convertToBlackWhite();
+                            break;
+                }
             }
             
             //save file to new location

@@ -231,7 +231,7 @@ class PhotosController extends AppController
     }
     
     /**
-     * 
+     *
      * @param type $productGroup
      * @param type $id
      * @throws NotFoundException

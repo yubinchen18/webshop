@@ -15,7 +15,8 @@ use App\Lib\Products\CombinationLayouts\Layout;
  *
  * @author yubin
  */
-class CombinationLayout5 extends Layout {
+class CombinationLayout5 extends Layout
+{
     //put your code here
     public $name = 'CombinationLayout5';
     protected $data = [

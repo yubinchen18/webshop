@@ -13,7 +13,8 @@ namespace App\Lib\Products\CombinationLayouts;
  *
  * @author yubin
  */
-class Layout {
+class Layout
+{
     
     public function getLayout()
     {
