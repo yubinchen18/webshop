@@ -121,14 +121,36 @@ class ImageHandler
     private function __clone()
     {
         if (!empty($this->originalImage)) {
-            $originalImage = imagecreatetruecolor($this->originalImageDetails['width'], $this->originalImageDetails['height']);
-            imagecopyresampled($originalImage, $this->originalImage, 0, 0, 0, 0,
-                $this->originalImageDetails['width'], $this->originalImageDetails['height'],
-                $this->originalImageDetails['width'], $this->originalImageDetails['height']);
+            $originalImage = imagecreatetruecolor(
+                $this->originalImageDetails['width'],
+                $this->originalImageDetails['height']
+            );
+            imagecopyresampled(
+                $originalImage,
+                $this->originalImage,
+                0,
+                0,
+                0,
+                0,
+                $this->originalImageDetails['width'],
+                $this->originalImageDetails['height'],
+                $this->originalImageDetails['width'],
+                $this->originalImageDetails['height']
+            );
 
             $image = imagecreatetruecolor($this->imageDetails['width'], $this->imageDetails['height']);
-            imagecopyresampled($image, $this->image, 0, 0, 0, 0, $this->imageDetails['width'],
-                $this->imageDetails['height'], $this->imageDetails['width'], $this->imageDetails['height']);
+            imagecopyresampled(
+                $image,
+                $this->image,
+                0,
+                0,
+                0,
+                0,
+                $this->imageDetails['width'],
+                $this->imageDetails['height'],
+                $this->imageDetails['width'],
+                $this->imageDetails['height']
+            );
 
             $this->originalImage = $originalImage;
             $this->image = $image;
@@ -187,15 +209,16 @@ class ImageHandler
                         break;
                     case 'watermark':
                         $watermark = isset($value) ? $value : false;
-                        $suffix = $suffix . (($watermark == true) ? 'watermarked' : '');
+                        $suffix = $suffix . (($watermark === true) ? 'watermarked' : '');
                         break;
                     case 'rotate':
                         $rotate = isset($value) ? $value : false;
-                        $suffix = $suffix . (($rotate == true) ? 'rotated' : '');
+                        $suffix = $suffix . (($rotate === true) ? 'rotated' : '');
                         break;
                     case 'filter':
                         $filter = isset($value) ? $value : null;
                         $suffix = $suffix . (string)$filter;
+                        break;
                     case 'layout':
                         $layout = isset($value) ? $value : 'all';
                         break;
@@ -289,7 +312,9 @@ class ImageHandler
             }
 
             //auto rotate class photos
-            if ((count($productLayouts) == 1 && $photo->type == 'class') || $photo->orientationClass == 'photos-horizontal') {
+            if ((count($productLayouts) == 1 &&
+                    $photo->type == 'class') ||
+                    $photo->orientationClass == 'photos-horizontal') {
                 $this->rotate(-90);
             }
 
@@ -315,13 +340,13 @@ class ImageHandler
             
             // apply filter {
             if ($filter) {
-                switch($filter) {
+                switch ($filter) {
                     case 'sepia':
                             $this->convertToSepia();
-                            break;
+                        break;
                     case 'zwart/wit':
                             $this->convertToBlackWhite();
-                            break;
+                        break;
                 }
             }
             
@@ -336,7 +361,18 @@ class ImageHandler
     {
         $combinedImage = imagecreatetruecolor(imagesx($images[0]['image']) * 2, imagesy($images[0]['image']) * 2);
         foreach ($images as $image) {
-            imagecopyresampled($combinedImage, $image['image'], $image['offsetLeft'], $image['offsetTop'], 0, 0, $this->imageDetails['width'], $this->imageDetails['height'], imagesx($images[0]['image']), imagesy($images[0]['image']));
+            imagecopyresampled(
+                $combinedImage,
+                $image['image'],
+                $image['offsetLeft'],
+                $image['offsetTop'],
+                0,
+                0,
+                $this->imageDetails['width'],
+                $this->imageDetails['height'],
+                imagesx($images[0]['image']),
+                imagesy($images[0]['image'])
+            );
         }
 
         $this->image = $combinedImage;
@@ -587,7 +623,18 @@ class ImageHandler
             //imageantialias($resizedImage, true);
         }
 
-        imagecopyresampled($resizedImage, $this->image, 0, 0, 0, 0, $newImageSize['width'], $newImageSize['height'], $this->imageDetails['width'], $this->imageDetails['height']);
+        imagecopyresampled(
+            $resizedImage,
+            $this->image,
+            0,
+            0,
+            0,
+            0,
+            $newImageSize['width'],
+            $newImageSize['height'],
+            $this->imageDetails['width'],
+            $this->imageDetails['height']
+        );
         return $resizedImage;
     }
 
@@ -605,12 +652,19 @@ class ImageHandler
         $originalSize = array('width' => $this->imageDetails['width'], 'height' => $this->imageDetails['height']);
         $originalShape = $this->imageDetails['shape'];
 
-        // If just one of the dimensions has a value, the calculation is the same no mather what the value of $keepAspectRatio is
+        // If just one of the dimensions has a value,
+        // the calculation is the same no mather what the value of $keepAspectRatio is
         if (!empty($width) && empty($height)) {
-            return array('width' => $width, 'height' => round($originalSize['height']/($originalSize['width']/$width)) );
+            return array(
+                'width' => $width,
+                'height' => round($originalSize['height']/($originalSize['width']/$width))
+            );
         }
         if (empty($width) && !empty($height)) {
-            return array('width' => round($originalSize['width']/($originalSize['height']/$height)), 'height' => $height );
+            return array(
+                'width' => round($originalSize['width']/($originalSize['height']/$height)),
+                'height' => $height
+            );
         }
 
         // If both dimensions are have a value the calculation differs based on the value of $keepAspectRatio

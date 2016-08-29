@@ -52,7 +52,11 @@ class ProductsFixture extends TestFixture
             'name' => 'product1',
             'article' => 'C0001',
             'slug' => 'product-1',
-            'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+            'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. '
+            . 'Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, '
+            . 'pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. '
+            . 'Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, '
+            . 'tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
             'price_ex' => 9.99,
             'vat' => 1,
             'high_shipping' => 1,

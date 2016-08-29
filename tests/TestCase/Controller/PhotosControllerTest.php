@@ -287,7 +287,9 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     public function testDisplayProductNoPhotoFound()
     {
         $testTmpDir = ROOT.'/tests/Fixture/';
-        $this->get('/photos/product/CombinationLayout2/277d32ec-b56c-44fa-a10a-ddfcb86notexist/200180?path='.$testTmpDir);
+        $this->get(
+            '/photos/product/CombinationLayout2/277d32ec-b56c-44fa-a10a-ddfcb86notexist/200180?path='.$testTmpDir
+        );
         $this->assertResponseContains('Cake\Network\Exception\NotFoundException');
         $this->assertResponseCode(404);
     }

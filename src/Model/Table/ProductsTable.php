@@ -6,6 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+//@codingStandardsIgnoreStart
 /**
  * Products Model
  *
@@ -22,6 +23,8 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
+//@codingStandardsIgnoreEnd
+
 class ProductsTable extends Table
 {
 
