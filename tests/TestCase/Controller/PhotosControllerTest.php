@@ -42,7 +42,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->session([
             'Auth' => [
                 'User' => [
-                    'id' => '1447e1dd-f3a5-4183-9508-725519b3107d',
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
                     'firstname' => 'Pieter'
                 ]
             ]
