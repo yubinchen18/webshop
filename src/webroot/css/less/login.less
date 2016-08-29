@@ -1,0 +1,148 @@
+.login-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    /*top: 0;*/
+    background: -webkit-radial-gradient(50% -5%, #455267, #1a181c); /* Safari */
+    background: -o-radial-gradient(50% -5%, #455267, #1a181c); /* Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(50% -5%, #455267, #1a181c); /* Firefox 3.6 to 15 */
+    
+    .login-main-container {
+        position: relative;
+        width: 1100px;
+        height: 100%;
+        margin: 0 auto;
+        
+        .login-main-container-panel {
+            position: absolute;
+            width: 350px;
+            height: 500px;
+            background-image: url('../img/layout/Hoogstraten_webshop-onderdelen-12.png');
+            background-size: 100% 100%;
+            left: 2%;
+            top: 50%;
+            transform: translate(0%, -60%);
+            overflow: hidden;
+            
+            .inlog-form {
+                height: 100%;
+                width: 100%;
+                margin: auto;
+                
+                .login-portraits-container {
+                    width: 100%;
+                    padding: 2%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    overflow: hidden;
+
+                    .portrait-container {
+                        width: 50px;
+                        height: 50px;
+                        border: 2px solid #00a8d6;
+                        border-radius: 25px;
+                        position: relative;
+                        overflow: hidden;
+                        margin: 5px;
+
+                        .photos-vertical {
+                            height: 130%;
+                            max-width: 100%;
+                        }
+                        .photos-horizontal {
+                            max-height: 100%;
+                        }
+                    }
+                }
+                .login-inputs-panel-before {
+                    position: absolute;
+                    top: 25%;
+                }
+                .login-inputs-panel-after {
+                    .login-inputs-panel-after-hidden {
+                        margin: auto;
+                        width: 70%;
+                        display: none;
+                    }
+                }
+                .login-divide-stripe {
+                    height: 5px;
+                    background: -webkit-linear-gradient(rgb(179, 179, 179, 1) 30%, white); /* Safari */
+                    background: -o-linear-gradient(rgb(179, 179, 179, 1) 30%, white); /* Opera 11.6 to 12.0 */
+                    background: -moz-linear-gradient(rgb(179, 179, 179, 1) 30%, white); /* Firefox 3.6 to 15 */
+                }
+                .login-container-input {
+                    height: 50px;
+                    font-size: 16px;
+                    border-radius: 2px;
+                    color: black;
+                    background: rgba(199,199,199,0.5);
+                    box-shadow: 2px 2px 1px 1px rgba(199,199,199, 1) inset;
+                }
+                .login-container-input:focus {
+                    background: rgba(242,242,242,0.8);
+                    box-shadow: 2px 2px 1px 1px rgba(115, 115, 115, 1) inset;
+                    border-color: rgba(115, 115, 115, 1);
+                }
+                .input {
+                    padding-left: 5%;
+                    padding-right: 5%;
+                    padding-top: 2%;
+                    padding-bottom: 2%;
+                    /*border-top: rgba(199,199,199, 1) solid 2px;*/
+                }
+                .input:focus {
+                }
+                .text {
+                }
+                .password {
+                }
+                .login-submit-button {
+                    padding-top: 5%;
+                    padding-left: 5%;
+                    padding-right: 5%;
+                    position: relative;
+                    h2 {
+                        position: absolute;
+                        top: 50%; left: 50%;
+                        transform: translate(-50%,-50%);
+                        height: auto;
+                        width: 100%;
+                    }
+                }
+                .login-container-submit {
+                    /*background: white;*/
+                    -webkit-transition: all 0.30s ease-in-out;
+                    -moz-transition: all 0.30s ease-in-out;
+                    -ms-transition: all 0.30s ease-in-out;
+                    -o-transition: all 0.30s ease-in-out;
+                    -webkit-filter: brightness(90%);
+                    filter: brightness(0.9);
+                    width: 100%;
+                    height: auto;
+                    cursor: pointer;
+                }
+                .login-container-submit:hover {
+                    -webkit-filter: brightness(115%);
+                    filter: brightness(1.15);
+                    box-shadow: 0 0 20px rgba(255, 204, 0, 1);
+                }
+                .login-add-child:hover {
+                    box-shadow: 0 0 20px rgba(117, 214, 214, 1);
+                }
+            }
+        }
+
+        .login-main-logo {
+            position: absolute;
+            width: 50%;
+            height: auto;
+            left: 50%;
+            top: 50%;
+            transform: translate(0%, -60%);
+        }
+    }
+}

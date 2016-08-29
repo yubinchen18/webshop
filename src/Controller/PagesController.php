@@ -38,5 +38,6 @@ class PagesController extends AppController
      */
     public function display()
     {
+        pr($this->Auth);die();
     }
 }

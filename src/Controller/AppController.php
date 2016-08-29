@@ -31,6 +31,34 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'],
+            'loginAction' => [
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'loginRedirect' => '/',
+            'logoutRedirect' => '/',
+            'unauthorizedRedirect' => '/',
+            'authError' => __('U heeft geen toegang tot deze locatie.'),
+            'flash' => [
+                'element' => 'default',
+                'params' => [
+                    'class' => 'error',
+                ],
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password',
+                    ],
+                    'userModel' => 'Users'
+                ],
+            ]
+        ]);
+        $authuser = $this->Auth->user();
+        $this->set(compact('authuser'));
     }
 
     public function beforeFilter(Event $event)
@@ -83,6 +111,15 @@ class AppController extends Controller
                 return true;
             }
             return false;
+        }
+        
+        //persons not allowed to admin
+        if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'admin') {
+            return (bool)($user['type'] === 'admin');
+        }
+        
+        if ($user) {
+            return true;
         }
 
         //by default nothing is allowed
