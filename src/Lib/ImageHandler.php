@@ -122,10 +122,13 @@ class ImageHandler
     {
         if (!empty($this->originalImage)) {
             $originalImage = imagecreatetruecolor($this->originalImageDetails['width'], $this->originalImageDetails['height']);
-            imagecopyresampled($originalImage, $this->originalImage, 0, 0, 0, 0, $this->originalImageDetails['width'], $this->originalImageDetails['height'], $this->originalImageDetails['width'], $this->originalImageDetails['height']);
+            imagecopyresampled($originalImage, $this->originalImage, 0, 0, 0, 0,
+                $this->originalImageDetails['width'], $this->originalImageDetails['height'],
+                $this->originalImageDetails['width'], $this->originalImageDetails['height']);
 
             $image = imagecreatetruecolor($this->imageDetails['width'], $this->imageDetails['height']);
-            imagecopyresampled($image, $this->image, 0, 0, 0, 0, $this->imageDetails['width'], $this->imageDetails['height'], $this->imageDetails['width'], $this->imageDetails['height']);
+            imagecopyresampled($image, $this->image, 0, 0, 0, 0, $this->imageDetails['width'],
+                $this->imageDetails['height'], $this->imageDetails['width'], $this->imageDetails['height']);
 
             $this->originalImage = $originalImage;
             $this->image = $image;
@@ -151,33 +154,10 @@ class ImageHandler
         return $this->image;
     }
 
-    private function ___createPhoto($photoId, $options = array())
-    {
-        $photoDetails = $this->getPhotoDetails($photoId);
-        $photoFolder = $this->getPhotoFolder($photoDetails['Photo']['barcode_id']);
-
-        extract($options);
-        $use = isset($use) ? $use : 'big';
-
-        if ($use != 'big') {
-            $imagePath = $photoFolder . DS . 'med' . DS .  $photoDetails['Photo']['path'];
-        } else {
-            $imagePath = $photoFolder . DS .  $photoDetails['Photo']['path'];
-        }
-        return $imagePath;
-    }
-
-
     public function createProductPreview(Photo $photo, $productGroup, array $options = null)
     {
         // Get the product and photo details.
         $photoFolder = $this->photos->getPath($photo->barcode_id) . DS;
-        
-//        // Check if there is a static product image.
-//        $staticProductImage = current($productDetails['Image']);
-//        if (!empty($staticProductImage['path']) && is_file(IMAGES . 'products' . DS .$staticProductImage['path'])) {
-//            return IMAGES . 'products' . DS . $staticProductImage['path'];
-//        }
 
         //Initialize variables and create the folders we need.
         $layout = 'all';

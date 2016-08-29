@@ -22,14 +22,10 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $personId = $this->request->session()->read('Auth.User.id');
-        //temporary fix for test, should be $personId = $this->Auth->user('id')
-        if (!$personId) {
-            $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
-        }
+        $userId = $this->request->session()->read('Auth.User.id');
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
-                ->where(['Persons.id' => $personId])
+                ->where(['Persons.user_id' => $userId])
                 ->contain(['Barcodes.Photos'])
                 ->first();
         //add the orientation data to the photos array
@@ -62,16 +58,11 @@ class PhotosController extends AppController
     public function view($id = null)
     {
         //check if user is auth to view this photo id
-        $personId = $this->request->session()->read('Auth.User.id');
-        //temporary fix for test, should be $personId = $this->Auth->user('id')
-        if (!$personId) {
-            $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
-        }
-        
+        $userId = $this->request->session()->read('Auth.User.id');
         //load the person and photo
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
-                ->where(['Persons.id' => $personId])
+                ->where(['Persons.user_id' => $userId])
                 ->contain(['Barcodes'])
                 ->first();
         
@@ -233,29 +224,25 @@ class PhotosController extends AppController
     /**
      *
      * @param type $productGroup
-     * @param type $id
+     * @param type $photoId
      * @throws NotFoundException
      */
-    public function productGroupIndex($productGroup, $id)
+    public function productGroupIndex($productGroup, $photoId)
     {
         $this->autoRender = false;
         //check if user is auth to view this photo id
-        $personId = $this->request->session()->read('Auth.User.id');
-        //temporary fix for test, should be $personId = $this->Auth->user('id')
-        if (!$personId) {
-            $personId = '8273af3e-1fc8-44e6-ae0e-021a4a955965';
-        }
+        $userId = $this->request->session()->read('Auth.User.id');
         
         //load the person and photo
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
-                ->where(['Persons.id' => $personId])
+                ->where(['Persons.user_id' => $userId])
                 ->contain(['Barcodes'])
                 ->first();
         
         if (!empty($person)) {
             $photo = $this->Photos->find()
-                ->where(['Photos.id' => $id, 'Photos.barcode_id' => $person->barcode->id])
+                ->where(['Photos.id' => $photoId, 'Photos.barcode_id' => $person->barcode->id])
                 ->contain(['Barcodes'])
                 ->first();
 
