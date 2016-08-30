@@ -22,7 +22,7 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $userId = $this->request->session()->read('Auth.User.id');
+        $userId = $this->Auth->user('id');
 
         $personsTable = TableRegistry::get('Persons');
         $person = $personsTable->find()
@@ -59,7 +59,7 @@ class PhotosController extends AppController
     public function view($id = null)
     {
         //check if user is auth to view this photo id
-        $userId = $this->request->session()->read('Auth.User.id');
+        $userId = $this->Auth->user('id');
         
         //load the person and photo
         $personsTable = TableRegistry::get('Persons');
@@ -233,7 +233,7 @@ class PhotosController extends AppController
     {
         $this->autoRender = false;
         //check if user is auth to view this photo id
-        $userId = $this->request->session()->read('Auth.User.id');
+        $userId = $this->Auth->user('id');
 
         //load the person and photo
         $personsTable = TableRegistry::get('Persons');
