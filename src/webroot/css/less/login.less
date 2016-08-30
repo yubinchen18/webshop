@@ -14,6 +14,7 @@
         height: 100%;
         margin: 0 auto;
         
+        
         .login-main-container-panel {
             position: absolute;
             width: 350px;
@@ -32,9 +33,12 @@
                 
                 .login-portraits-container {
                     width: 100%;
+                    margin-top: 4%;
+                    margin-left: 5%;
+                    margin-right: 5%;
                     padding: 2%;
                     display: flex;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: center;
                     flex-wrap: wrap;
                     overflow: hidden;
@@ -42,7 +46,7 @@
                     .portrait-container {
                         width: 50px;
                         height: 50px;
-                        border: 2px solid #00a8d6;
+                        border: 3px solid #00a8d6;
                         border-radius: 25px;
                         position: relative;
                         overflow: hidden;
@@ -62,6 +66,8 @@
                     top: 25%;
                 }
                 .login-inputs-panel-after {
+                    position: absolute;
+                    top: 30%;
                     .login-inputs-panel-after-hidden {
                         margin: auto;
                         width: 70%;
@@ -87,6 +93,10 @@
                     box-shadow: 2px 2px 1px 1px rgba(115, 115, 115, 1) inset;
                     border-color: rgba(115, 115, 115, 1);
                 }
+                .input-small {
+                    height: 35px;
+                    font-size: 14px;
+                }
                 .input {
                     padding-left: 5%;
                     padding-right: 5%;
@@ -95,10 +105,6 @@
                     /*border-top: rgba(199,199,199, 1) solid 2px;*/
                 }
                 .input:focus {
-                }
-                .text {
-                }
-                .password {
                 }
                 .login-submit-button {
                     padding-top: 5%;
@@ -132,6 +138,20 @@
                 }
                 .login-add-child:hover {
                     box-shadow: 0 0 20px rgba(117, 214, 214, 1);
+                }
+                .login-add-child:active {
+                    filter: brightness(0.4);
+                }
+                .flash-message {
+                    position: absolute;
+                    padding-left: 5%;
+                    padding-right: 5%;
+                    bottom: 5px;
+                    width: 350px;
+                    height: 20px;
+                    border: red;
+                    color: red;
+                    text-align: center;
                 }
             }
         }

@@ -11,17 +11,9 @@ $cakeDescription = 'Schoolfotografie by Hoogstraten ... de beste kwaliteit schoo
         <?= $this->fetch('title') ?>
     </title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->Html->css([
-            'layout.css',
-            '/admin/css/bootstrap.min.css',
-            '/admin/css/font-awesome.min.css',
-            '/admin/css/ace-fonts.css',
-        ]) ?>
-    
-    <?= $this->Html->script([
-        'main.js',
-        '/admin/js/bootstrap.min.js',
-        ]) ?>
+
+    <?= $this->Html->css('layout.css') ?>
+    <?= $this->Html->script('main.js') ?>
 
     <?= $this->fetch('meta') ?>
 </head>

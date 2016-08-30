@@ -1,7 +1,6 @@
 <div class='login-background'>
     <div class='login-main-container'>
         <div class='login-main-container-panel'>
-            <?= $this->Flash->render(); ?>
             <?= $this->Form->create(null, [
                 'url' => [
                     'controller' => 'Users',
@@ -34,7 +33,7 @@
                     <?= $this->Form->input( 'username',
                         [
                             'type' => 'text',
-                            'class' => ['form-control', 'login-container-input', 'input-username'],
+                            'class' => ['form-control', 'login-container-input'],
                             'placeholder' => __('GEBRUIKERSNAAM'),
                             'required' => 'required',
                             'label' => false,
@@ -44,7 +43,7 @@
                         <?= $this->Form->input( 'password',
                         [
                             'type' => 'password',
-                            'class' => ['form-control', 'login-container-input', 'input-password'],
+                            'class' => ['form-control', 'login-container-input'],
                             'placeholder' => __('INLOGCODE'),
                             'required' => 'required',
                             'label' => false
@@ -75,7 +74,7 @@
                         <?= $this->Form->input( 'username',
                             [
                                 'type' => 'text',
-                                'class' => ['form-control', 'login-container-input', 'input-username'],
+                                'class' => ['form-control', 'login-container-input', 'input-small'],
                                 'placeholder' => __('GEBRUIKERSNAAM'),
                                 'required' => 'required',
                                 'label' => false,
@@ -84,7 +83,7 @@
                         <?= $this->Form->input( 'password',
                         [
                             'type' => 'password',
-                            'class' => ['form-control', 'login-container-input', 'input-password'],
+                            'class' => ['form-control', 'login-container-input', 'input-small'],
                             'placeholder' => __('INLOGCODE'),
                             'required' => 'required',
                             'label' => false
@@ -99,6 +98,7 @@
                     </div>
                 </div>
             <?php endif; ?>
+            <div class="flash-message"><?= $this->Flash->render(); ?></div>
             <?= $this->Form->end() ?>
         </div>
         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-36.png', [
