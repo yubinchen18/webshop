@@ -1,43 +1,128 @@
-<div class="photos-view-row row">
-    <div class="photos-view-detail col-md-8 col-xs-9">
-        <div class="row">
-            <!-- Medium screen -->
-            <div class="photos-view-products-buttons-sm col-sm-12 hidden-lg hidden-md">
-                <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer een product >') ?></h3>
-                </div>
-            </div>
-            <div class="col-md-9 col-xs-12">
-                <div class="container photos-view-detail-container">
-                    <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+<div class="row">
+    <!-- left panel -->
+    <div class="photos-product-index col-md-8 col-xs-9">
+        <!-- left pics panel -->
+        <div class='row'>
+            <?php if (isset($person)): ?>
+            <div class='col-sm-11 col-xs-12'>
+                <div class="row">
+                    <h2 class='col-xs-12'><?= __('Combinatievellen') ?></h2>
+                    <!-- top buttons panel xs only -->
+                    <div class='col-xs-12 hidden-lg hidden-md hidden-sm photos-view-buttons-panel-top'>
+                        <div class='photos-view-buttons-box1-top'>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-25.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-26.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                        </div>
+                        <div class='photos-view-buttons-box2-top'>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-31.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-32.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-33.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                            <div class='photos-view-buttons-button'>
+                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-34.png', [
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            </div>
+                        </div>
                     </div>
-                    <?= $this->Html->image($this->Url->build([
-                            'controller' => 'Photos',
-                            'action' => 'display',
-                            'id' => $photo->id,
-                            'size' => 'med'
-                        ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                    
+                    
+                    
+                    
+                    <?php foreach ($products as $product): ?>
+                        <div class="col-md-4 col-xs-6 photos-product-container">
+                            <div class="photos-product-label">
+                                <div class="row">
+                                    <div class="flex-box price col-xs-5">
+                                        <?= $this->Number->currency($product->price_ex, 'EUR'); ?>
+                                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
+                                    </div>
+                                    <div class="flex-box dimensions col-xs-7">
+                                        <?= __('13 x 19cm'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="photos-product-icon">
+                                <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                                </div>
+                                    <?= $this->Html->image($this->Url->build([
+                                        'controller' => 'Photos',
+                                        'action' => 'displayProduct',
+                                        'layout' => $product->layout,
+                                        'id' => $photo->id,
+                                        'suffix' => $product->image['suffix'],
+                                    ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-            <!-- Large screen -->
-            <div class="photos-view-products-buttons-md col-md-3 hidden-sm hidden-xs">
-                <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer een product >') ?></h3>
+            <?php endif ?>
+            <!-- right buttons panel -->
+            <div class='col-sm-1 hidden-xs photos-view-buttons-panel'>
+                <div class='photos-view-buttons-box1'>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-25.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-26.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
+                </div>
+                <div class='photos-view-buttons-box2'>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-31.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-32.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-33.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
+                    <div class='photos-view-buttons-button'>
+                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-34.png', [
+                            'class' => ['img-responsive']
+                        ]); ?>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class='photos-view-detail-text'>
-            <h3><?= __('1e opname per kind op 13x19 €5,95<br>iedere volgende 13x19 van uw kind €3,29') ?></h3>
-        </div>
-        
     </div>
-    <!-- Right panel -->
+    <!-- Right products panel -->
     <div class="photos-view-products col-md-4 col-xs-3">
         <div class='row photos-view-products-row'>
             <div class='photos-view-products-panel col-sm-12'>
                 <div class="row">
                     <div class="photos-view-products-container col-md-6">
-                        <div class="photos-view-products-labels label1 text-center vertical-center">
+                        <div class="photos-view-products-labels label1 text-center">
                             <span><?= __('Losse afdrukken') ?></span>
                         </div>
                         <div class="photos-view-products-icon">
@@ -90,9 +175,9 @@
                             <?= $this->Html->image($this->Url->build([
                                 'controller' => 'Photos',
                                 'action' => 'displayProduct',
-                                'layout' => $combinationSheetThumb[0]['layout'],
+                                'layout' => $combinationSheetThumb->layout,
                                 'id' => $photo->id,
-                                'suffix' => $combinationSheetThumb[0]['suffix']
+                                'suffix' => $combinationSheetThumb->image['suffix']
                             ]), [
                                 'alt' => $photo->path,
                                 'url' => $this->Url->build([

@@ -35,8 +35,20 @@
         </div>
     </div>
     <!-- back to index button -->
-    <?php if ($this->request->params['controller'] == 'Photos' && $this->request->params['action'] == 'view'): ?>
-        <a href="<?= $this->request->referer(); ?>">
+    <?php if ($this->request->params['controller'] === 'Photos' && in_array($this->request->params['action'], ['view','productGroupIndex'])): ?>
+        <?php $viewUrl = $this->Url->build(['controller' => 'Photos', 'action' => 'view', $this->request->params['id']]); ?>    
+        <?php $indexUrl = $this->Url->build(['controller' => 'Photos', 'action' => 'index']); ?>
+        <?php switch ($this->request->params['action']) {
+            case 'view':
+                $backUrl = $indexUrl;
+                break;
+            case 'productGroupIndex':
+                $backUrl = $viewUrl;
+            break;
+            default:
+                $backUrl = $indexUrl;
+        }?>
+        <a href="<?= $backUrl; ?>">
             <div class="navbar-back-to-index">
                 <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-11.png', [
                     'class' => ['img-responsive', 'navbar-back-to-index-img']

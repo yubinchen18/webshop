@@ -16,15 +16,28 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect(
         '/photos/:size/:id',
         [
-                'controller' => 'Photos',
-                'action' => 'display',
-            ],
+            'controller' => 'Photos',
+            'action' => 'display',
+        ],
         ['path', 'id', 'pass' => ['size','id']]
     );
     $routes->connect(
         '/photos/view/:id',
         ['controller' => 'Photos', 'action' => 'view'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/product-group/:productGroup/:id',
+        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
+        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id']]
+    );
+    $routes->connect(
+        '/photos/product/:layout/:id/:suffix',
+        [
+            'controller' => 'Photos',
+            'action' => 'displayProduct',
+        ],
+        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
     
     Router::prefix('api', function ($routes) {
