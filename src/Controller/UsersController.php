@@ -15,15 +15,15 @@ class UsersController extends AppController
     public function login()
     {
         $session = $this->request->session();
-//        pr($session->read('Auth'));
         if (!$this->Auth->user()) {
             if ($this->request->is('post')) {
                 $user = $this->Auth->identify();
                 if ($user) {
                     $this->Auth->setUser($user);
-                    $data = $session->read('Auth.AllUsers');
-                    $data[] = $user;
-                    $session->write('Auth.AllUsers', $data);
+                    $data = $session->read('LoggedInUsers.AllUsers');
+                    $data[] = $user['id'];
+                    $session->write('LoggedInUsers.AllUsers', $data);
+                    $session->write('LoggedInUsers.ActiveUser', $user['id']);
                     return $this->redirect($this->Auth->redirectUrl());
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
@@ -37,11 +37,20 @@ class UsersController extends AppController
             // Already logged in with valid user
             // identify extra user
             if ($this->request->is('post')) {
+                $loggedInUsers = $session->read('LoggedInUsers.AllUsers');
                 $extraUser = $this->Auth->identify();
                 if ($extraUser) {
-                    $data = $session->read('Auth.AllUsers');
-                    $data[] = $extraUser;
-                    $session->write('Auth.AllUsers', $data);
+                    //check for duplicate users
+                    if (in_array($extraUser['id'], $loggedInUsers)) {
+                        $this->Flash->set(__('Kind al ingelogd.'), [
+                            'element' => 'default',
+                            'params' => ['class' => 'error']
+                        ], 'auth');
+                        return $this->redirect(['action' => 'login']);
+                    }
+                    //write all users to session key
+                    $loggedInUsers[] = $extraUser['id'];
+                    $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
                     return $this->redirect(['action' => 'login']);
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
@@ -53,26 +62,31 @@ class UsersController extends AppController
             }
             
             // fetch logged in user photo
-            $allUsers = $session->read('Auth.AllUsers');
+            $allUsers = $session->read('LoggedInUsers.AllUsers');
+            $photos = [];
             foreach ($allUsers as $loggedUser) {
+                $photo = null;
                 $person = $this->Users->Persons->find()
-                    ->where(['user_id' => $loggedUser['id']])
+                    ->where(['user_id' => $loggedUser])
                     ->contain(['Barcodes.Photos'])
                     ->first();
-                $photo = $person->barcode->photos[0];
-                // add orientation data to photo object
-                $filePath = $this->Users->Persons->Barcodes->Photos->getPath($person->barcode_id) . DS . $photo->path;
-                $dimensions = getimagesize($filePath);
-                if ($dimensions[0] > $dimensions[1]) {
-                    $orientationClass = 'photos-horizontal';
-                } else {
-                    $orientationClass = 'photos-vertical';
+                if ($person) {
+                    $dbPhotos = $person->barcode->photos;
+                    if(!empty($dbPhotos)) {
+                        $photo = $dbPhotos[0];
+                        // add orientation data to photo object
+                        $filePath = $this->Users->Persons->Barcodes->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                        $dimensions = getimagesize($filePath);
+                        if ($dimensions[0] > $dimensions[1]) {
+                            $orientationClass = 'photos-horizontal';
+                        } else {
+                            $orientationClass = 'photos-vertical';
+                        }
+                        $photo->orientationClass = $orientationClass;
+                    }
                 }
-                $photo->orientationClass = $orientationClass;
                 $photos[] = $photo;
             }
-            
-//            pr($photos);
             $this->set(compact('photos', 'allUsers'));
             $this->set('_serialize', ['photo']);
         }
@@ -89,9 +103,35 @@ class UsersController extends AppController
         ]);
         
         //clear extra users data from session
-        if ($this->request->session()->read('Auth.AllUsers')) {
-            $this->request->session()->destroy('Auth.AllUsers');
+        if ($this->request->session()->read('LoggedInUsers')) {
+            $this->request->session()->destroy('LoggedInUsers');
         }
         return $this->redirect($this->Auth->logout());
+    }
+    
+    public static function getUserPortrait($userId)
+    {
+        $photo = null;
+        $usersTable = TableRegistry::get('Users');
+        $person = $usersTable->Persons->find()
+            ->where(['user_id' => $userId])
+            ->contain(['Barcodes.Photos'])
+            ->first();
+        if ($person) {
+            $dbPhotos = $person->barcode->photos;
+            if(!empty($dbPhotos)) {
+                $photo = $dbPhotos[0];
+                // add orientation data to photo object
+                $filePath = $usersTable->Persons->Barcodes->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
+            }
+        }
+        return $photo;
     }
 }

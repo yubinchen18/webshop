@@ -1,25 +1,27 @@
 <div class="photos-index-label row">
     <h2><?= __('Selecteer een foto') ?></h2>
     <div class="col-md-9 photos-index">
-    <?php if (isset($person)): ?>
+    <?php if (!empty($persons)): ?>
         <div class="row photos-index-row">
-        <?php foreach ($person->barcode->photos as $key => $photo): ?>
-            <div class="col-md-3 col-xs-4 photos-index-container">
-                <div class="photos-index-icon">
-                    <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+        <?php foreach ($persons as $person): ?>
+            <?php foreach ($person->barcode->photos as $key => $photo): ?>
+                <div class="col-md-3 col-xs-4 photos-index-container">
+                    <div class="photos-index-icon">
+                        <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                    </div>
+                    <?= $this->Html->image($this->Url->build([
+                        'controller' => 'Photos',
+                        'action' => 'display',
+                        'id' => $photo->id,
+                        'size' => 'thumbs'
+                    ]), [
+                        'alt' => $photo->path,
+                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
+                        'class' => [$photo->orientationClass, 'img-responsive']
+                    ]); ?>
+                    </div>
                 </div>
-                <?= $this->Html->image($this->Url->build([
-                    'controller' => 'Photos',
-                    'action' => 'display',
-                    'id' => $photo->id,
-                    'size' => 'thumbs'
-                ]), [
-                    'alt' => $photo->path,
-                    'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
-                    'class' => [$photo->orientationClass, 'img-responsive']
-                ]); ?>
-                </div>
-            </div>
+            <?php endforeach; ?>
         <?php endforeach; ?>
         </div>
     <?php endif ?>

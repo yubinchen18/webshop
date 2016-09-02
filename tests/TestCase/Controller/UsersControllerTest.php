@@ -39,54 +39,38 @@ class UsersControllerTest extends IntegrationTestCase
         'app.photos',
         'app.orders'
     ];
-
+    
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $this->Photos = TableRegistry::get('Photos');
+        $this->Persons = TableRegistry::get('Persons');
+        $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'firstname' => 'Pieter'
+                ]
+            ]
+        ]);
+    }
+    
     /**
-     * Test index method
+     * tearDown method
      *
      * @return void
      */
-    public function testIndex()
+    public function tearDown()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        unset($this->Persons);
+        unset($this->Photos);
+
+        parent::tearDown();
     }
 
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test add method
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+    public function testLogin() {
+//       $this->post('/', $data)
     }
 }

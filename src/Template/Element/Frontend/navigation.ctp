@@ -2,11 +2,38 @@
     <div class="container">
         <div class="row">
             <a class="col-xs-3">Logo</a>
+            <!-- user icons -->
+            <?php $loggedUsers = $this->request->session()->read('LoggedInUsers.AllUsers'); ?>
+            <?php if (isset($loggedUsers)): ?>
+                <div class='col-xs-7 portraits-container'>
+                    <?php foreach($loggedUsers as $loggedUser): ?>
+                        <?php $photo = \App\Controller\UsersController::getUserPortrait($loggedUser); ?>
+                        <div class="portrait-container">
+                            <?php if ($photo): ?>
+                                <?= $this->Html->image($this->Url->build([
+                                    'controller' => 'Photos',
+                                    'action' => 'display',
+                                    'id' => $photo->id,
+                                    'size' => 'thumbs'
+                                ]), [
+                                    'alt' => $photo->path,
+                                    'class' => [$photo->orientationClass]
+                                ]); ?>
+                            <?php else: ?>
+                                <?= $this->Html->image('layout/user-default.png', [
+                                    'alt' => 'default_user',
+                                    'class' => ['img-responsive']
+                                ]); ?>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <!-- Desktop screen -->
-            <div class="col-md-6 col-md-offset-3 hidden-sm hidden-xs">
+            <div class="col-sm-2 hidden-sm hidden-xs">
                 <div class="cart-btn desktopmenu">
                     <div class="row">
-                        <div class="dropdown col-md-5 col-md-offset-7">
+                        <div class="dropdown col-md-12">
                             <a href="/cart"><img src="/img/layout/cart.png" /></a>
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown"><img src="/img/layout/menu.png" /></a>
                             <ul class="dropdown-menu pull-right">
@@ -19,7 +46,7 @@
                 </div>
             </div>
             <!-- Small screen -->
-            <div class="col-xs-12 hidden-md hidden-lg">
+            <div class="col-xs-2 hidden-md hidden-lg">
                 <div class="cart-btn">
                     <div class="dropdown">
                         <a href="/cart"><img src="/img/layout/cart.png" /></a>

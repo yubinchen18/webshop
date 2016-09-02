@@ -22,30 +22,35 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $userId = $this->Auth->user('id');
-
+        //load persons for allow auth check
+        $session = $this->request->session();
+        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
         $personsTable = TableRegistry::get('Persons');
-        $person = $personsTable->find()
-                ->where(['Persons.user_id' => $userId])
+        $persons = $personsTable->find()
+                ->where(['Persons.user_id IN' => $loggedInUsersIds])
+                ->order('FIELD(Persons.user_id, "'.implode('", "', $loggedInUsersIds).'")')
                 ->contain(['Barcodes.Photos'])
-                ->first();
+                ->all();
+
         //add the orientation data to the photos array
-        if (isset($person)) {
-            foreach ($person->barcode->photos as $key => $photo) {
-                $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
-                $dimensions = getimagesize($filePath);
-                if ($dimensions[0] > $dimensions[1]) {
-                    $orientationClass = 'photos-horizontal';
-                } else {
-                    $orientationClass = 'photos-vertical';
+        if (!empty($persons)) {
+            foreach ($persons as $person) {
+                foreach ($person->barcode->photos as $key => $photo) {
+                    $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                    $dimensions = getimagesize($filePath);
+                    if ($dimensions[0] > $dimensions[1]) {
+                        $orientationClass = 'photos-horizontal';
+                    } else {
+                        $orientationClass = 'photos-vertical';
+                    }
+                    $photo->orientationClass = $orientationClass;
                 }
-                $photo->orientationClass = $orientationClass;
             }
         } else {
-            $this->Flash->error(__('This person is not found or doesn\'t have any photos.'));
+            $this->Flash->error(__('Person not found or doesn\'t have any photos.'));
         }
         
-        $this->set(compact('person'));
+        $this->set(compact('persons'));
         $this->set('_serialize', ['photos']);
     }
     
@@ -59,22 +64,16 @@ class PhotosController extends AppController
     public function view($id = null)
     {
         //check if user is auth to view this photo id
-        $userId = $this->Auth->user('id');
+        $session = $this->request->session();
+        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
         
-        //load the person and photo
-        $personsTable = TableRegistry::get('Persons');
-        $person = $personsTable->find()
-                ->where(['Persons.user_id' => $userId])
-                ->contain(['Barcodes'])
+        $photo = $this->Photos->find()
+                ->where(['Photos.id' => $id])
+                ->contain(['Barcodes.Persons'])
                 ->first();
         
-        if (!empty($person)) {
-            $photo = $this->Photos->find()
-                ->where(['Photos.id' => $id, 'Photos.barcode_id' => $person->barcode->id])
-                ->contain(['Barcodes'])
-                ->first();
-
-            if (!empty($photo)) {
+        if (!empty($photo)) {
+            if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
                 //add the orientation data to the photos array
                 $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
                 $dimensions = getimagesize($filePath);
@@ -84,7 +83,7 @@ class PhotosController extends AppController
                     $orientationClass = 'photos-vertical';
                 }
                 $photo->orientationClass = $orientationClass;
-                
+
                 //create a thumbnail for combination sheets for the view
                 $imageHandler = new ImageHandler();
                 $combinationSheetThumb = $imageHandler->createProductPreview($photo, 'combination-sheets', [
@@ -92,13 +91,13 @@ class PhotosController extends AppController
                     'watermark' => false,
                     'layout' => 'CombinationLayout1'
                 ]);
-                $this->set(compact('person', 'photo', 'combinationSheetThumb'));
+                $this->set(compact('photo', 'combinationSheetThumb'));
                 $this->set('_serialize', ['photo']);
             } else {
-                throw new NotFoundException('Photo not found');
+                throw new NotFoundException('Not authorized to view this photo');
             }
         } else {
-            throw new NotFoundException('Person not found');
+            throw new NotFoundException('Photo not found');
         }
     }
 
@@ -233,22 +232,17 @@ class PhotosController extends AppController
     {
         $this->autoRender = false;
         //check if user is auth to view this photo id
-        $userId = $this->Auth->user('id');
-
-        //load the person and photo
-        $personsTable = TableRegistry::get('Persons');
-        $person = $personsTable->find()
-                ->where(['Persons.user_id' => $userId])
-                ->contain(['Barcodes'])
-                ->first();
+        $session = $this->request->session();
+        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
         
-        if (!empty($person)) {
-            $photo = $this->Photos->find()
-                ->where(['Photos.id' => $photoId, 'Photos.barcode_id' => $person->barcode->id])
-                ->contain(['Barcodes'])
-                ->first();
+        //load the photo
+        $photo = $this->Photos->find()
+            ->where(['Photos.id' => $photoId])
+            ->contain(['Barcodes.Persons'])
+            ->first();
 
-            if (!empty($photo)) {
+        if (!empty($photo)) {
+            if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
                 //load products
                 $productTable = TableRegistry::get('Products');
                 $products = $productTable->find()
@@ -288,10 +282,10 @@ class PhotosController extends AppController
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);
             } else {
-                throw new NotFoundException('Photo not found');
+                throw new NotFoundException('Not authorized to view this photo');
             }
         } else {
-            throw new NotFoundException('Person not found');
+            throw new NotFoundException('Photo not found');
         }
     }
 }

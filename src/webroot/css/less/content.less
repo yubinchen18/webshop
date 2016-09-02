@@ -18,7 +18,7 @@ a {
     .navbar-back-to-index {
         overflow: hidden;
         position: absolute;
-        right: 40%;
+        right: 50%;
         top: 42%;
         width: 180px;
         height: 65%;
@@ -39,7 +39,31 @@ a {
             right: 10px;
             top: 8px;
         }
-    }   
+    }
+    .portraits-container {
+        display: flex;
+        padding: 11px 0;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        .portrait-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            border-radius: 30px;
+            border: 3px solid #00a8d6;
+            margin: 4px;
+            .photos-vertical {
+                height: 150%;
+                max-width: 100%;
+            }
+            .photos-horizontal {
+                width: 150%;
+                max-height: 100%;
+            }
+        }
+    }
 }
 .dropdown-menu {
     background: #505e74;

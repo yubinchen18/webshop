@@ -3,7 +3,6 @@
     <div class="photos-product-index col-md-8 col-xs-9">
         <!-- left pics panel -->
         <div class='row'>
-            <?php if (isset($person)): ?>
             <div class='col-sm-11 col-xs-12'>
                 <div class="row">
                     <h2 class='col-xs-12'><?= __('Combinatievellen') ?></h2>
@@ -76,7 +75,6 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-            <?php endif ?>
             <!-- right buttons panel -->
             <div class='col-sm-1 hidden-xs photos-view-buttons-panel'>
                 <div class='photos-view-buttons-box1'>
