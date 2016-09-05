@@ -26,11 +26,17 @@ class PhotosController extends AppController
         $session = $this->request->session();
         $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
         $personsTable = TableRegistry::get('Persons');
-        $persons = $personsTable->find()
-                ->where(['Persons.user_id IN' => $loggedInUsersIds])
-                ->order('FIELD(Persons.user_id, "'.implode('", "', $loggedInUsersIds).'")')
+
+        $persons = [];
+        foreach ($loggedInUsersIds as $userId) {
+            $person = $personsTable->find()
+                ->where(['Persons.user_id' => $userId])
                 ->contain(['Barcodes.Photos'])
-                ->all();
+                ->first();
+            if ($person) {
+                $persons[] = $person;
+            }
+        }
 
         //add the orientation data to the photos array
         if (!empty($persons)) {
@@ -47,7 +53,7 @@ class PhotosController extends AppController
                 }
             }
         } else {
-            $this->Flash->error(__('Person not found or doesn\'t have any photos.'));
+            $this->Flash->error(__('Person not found.'));
         }
         
         $this->set(compact('persons'));
@@ -278,7 +284,7 @@ class PhotosController extends AppController
                 }
                 //pass results to views
                 $templateName = $productGroup.'-index';
-                $this->set(compact('person', 'photo', 'products', 'combinationSheetThumb'));
+                $this->set(compact('photo', 'products', 'combinationSheetThumb'));
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);
             } else {

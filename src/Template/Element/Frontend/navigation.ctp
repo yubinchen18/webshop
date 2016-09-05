@@ -7,7 +7,7 @@
             <?php if (isset($loggedUsers)): ?>
                 <div class='col-xs-7 portraits-container'>
                     <?php foreach($loggedUsers as $loggedUser): ?>
-                        <?php $photo = \App\Controller\UsersController::getUserPortrait($loggedUser); ?>
+                        <?php $photo = \Cake\ORM\TableRegistry::get('Users')->getUserPortrait($loggedUser); ?>
                         <div class="portrait-container">
                             <?php if ($photo): ?>
                                 <?= $this->Html->image($this->Url->build([

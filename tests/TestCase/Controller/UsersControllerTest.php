@@ -3,6 +3,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Controller\UsersController;
 use Cake\TestSuite\IntegrationTestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\UsersController Test Case
@@ -18,26 +19,12 @@ class UsersControllerTest extends IntegrationTestCase
     public $fixtures = [
         'app.users',
         'app.addresses',
-        'app.invoices',
         'app.persons',
         'app.groups',
-        'app.projects',
         'app.schools',
-        'app.contacts',
-        'app.visitaddresses',
-        'app.deliveryorders',
-        'app.deliveryaddresses',
-        'app.invoiceorders',
-        'app.invoiceaddresses',
-        'app.trxes',
-        'app.orderlines',
-        'app.photex_downloads',
-        'app.orderstatuses',
-        'app.orders_orderstatuses',
-        'app.mailaddresses',
         'app.barcodes',
         'app.photos',
-        'app.orders'
+        'app.projects'
     ];
     
     public function setUp()
@@ -46,15 +33,8 @@ class UsersControllerTest extends IntegrationTestCase
         
         $this->Photos = TableRegistry::get('Photos');
         $this->Persons = TableRegistry::get('Persons');
+        $this->Users = TableRegistry::get('Users');
         $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
-        $this->session([
-            'Auth' => [
-                'User' => [
-                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-                    'firstname' => 'Pieter'
-                ]
-            ]
-        ]);
     }
     
     /**
@@ -69,8 +49,207 @@ class UsersControllerTest extends IntegrationTestCase
 
         parent::tearDown();
     }
+    
+    public function testLoginGetPortraits()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+                ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            ]
+        ]);
+        
+        $this->get('/');
+        $photos = $this->viewVariable('photos');
+        $this->assertTrue(isset($photos));
+        $this->assertEquals('horizontal.jpeg', $photos[0]->path);
+        $this->assertEquals('photos-horizontal', $photos[0]->orientationClass);
+        $this->assertResponseOk();
+    }
 
-    public function testLogin() {
-//       $this->post('/', $data)
+    public function testFirstLoginSuccess()
+    {
+        $data = [
+            'username' => 'person',
+            'password' => 'photex',
+            'x' => 176,
+            'y' => 45
+        ];
+       
+        $this->post('/', $data);
+        $this->assertSession('91017bf5-5b19-438b-bd44-b0c4e1eaf903', 'Auth.User.id');
+        $this->assertSession('person', 'Auth.User.type');
+        $this->assertSession(['91017bf5-5b19-438b-bd44-b0c4e1eaf903'], 'LoggedInUsers.AllUsers');
+        $this->assertSession('91017bf5-5b19-438b-bd44-b0c4e1eaf903', 'LoggedInUsers.ActiveUser');
+    }
+    
+    public function testFirstLoginFail()
+    {
+        $data = [
+            'username' => 'bestaatniet',
+            'password' => 'bestaatniet',
+            'x' => 176,
+            'y' => 45
+        ];
+        
+        $this->post('/', $data);
+        $this->assertSession('Het inloggen is mislukt. Probeer het nogmaals.', 'Flash.flash.0.message');
+        $this->assertRedirect('/');
+    }
+    
+    public function testMulitpleLoginSuccess()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+                ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            ]
+        ]);
+        
+        $data = [
+            'username' => 'person2',
+            'password' => 'photex',
+            'x' => 176,
+            'y' => 45
+        ];
+        $this->post('/', $data);
+        $loggedInUsers = [
+            '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+            '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+        ];
+        $this->assertSession($loggedInUsers, 'LoggedInUsers.AllUsers');
+        $this->assertRedirect('/');
+    }
+    
+    public function testMultipleLoginUserAlreadyLoggedIn()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+                ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [
+                    0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    1 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+                ],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            ]
+        ]);
+        
+        $data = [
+            'username' => 'person2',
+            'password' => 'photex',
+            'x' => 176,
+            'y' => 45
+        ];
+        $this->post('/', $data);
+        $this->assertSession('Kind al ingelogd.', 'Flash.flash.0.message');
+        $this->assertRedirect('/');
+    }
+    
+    public function testMulitpleLoginFail()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+                ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            ]
+        ]);
+        
+        $data = [
+            'username' => 'bestaatniet',
+            'password' => 'bestaatniet',
+            'x' => 176,
+            'y' => 45
+        ];
+        
+        $this->post('/', $data);
+        $this->assertSession('Het inloggen is mislukt. Probeer het nogmaals.', 'Flash.flash.0.message');
+        $this->assertRedirect('/');
+    }
+    
+    public function testLogout()
+    {
+        $this->session([
+            'Auth' => [
+                'User' => [
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
+                ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [
+                    0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                    1 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+                ],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            ]
+        ]);
+        
+        $this->get('/users/logout');
+        $this->assertSession('Het uitloggen is succesvol', 'Flash.flash.0.message');
+        $this->assertSession(null, 'LoggedInUsers');
+        $this->assertRedirect('/');
     }
 }
