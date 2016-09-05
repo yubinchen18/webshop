@@ -2,30 +2,11 @@
     <div class="container">
         <div class="row">
             <a class="col-xs-3">Logo</a>
-            <!-- user icons -->
-            <?php $loggedUsers = $this->request->session()->read('LoggedInUsers.AllUsers'); ?>
-            <?php if (isset($loggedUsers)): ?>
+            <!-- user portraits -->
+            <?php if (isset($userPortraits)): ?>
                 <div class='col-xs-7 portraits-container'>
-                    <?php foreach($loggedUsers as $loggedUser): ?>
-                        <?php $photo = \Cake\ORM\TableRegistry::get('Users')->getUserPortrait($loggedUser); ?>
-                        <div class="portrait-container">
-                            <?php if ($photo): ?>
-                                <?= $this->Html->image($this->Url->build([
-                                    'controller' => 'Photos',
-                                    'action' => 'display',
-                                    'id' => $photo->id,
-                                    'size' => 'thumbs'
-                                ]), [
-                                    'alt' => $photo->path,
-                                    'class' => [$photo->orientationClass]
-                                ]); ?>
-                            <?php else: ?>
-                                <?= $this->Html->image('layout/user-default.png', [
-                                    'alt' => 'default_user',
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            <?php endif; ?>
-                        </div>
+                    <?php foreach($userPortraits as $userPortrait): ?>
+                        <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>

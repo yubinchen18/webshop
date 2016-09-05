@@ -11,27 +11,9 @@
                     'role'=>'form'
                 ]) ?>
                 <div class="login-portraits-container">
-                    <?php if($authuser): ?>
-                        <?php foreach ($photos as $photo): ?>
-                                
-                                <div class="portrait-container">
-                                    <?php if ($photo): ?>
-                                        <?= $this->Html->image($this->Url->build([
-                                            'controller' => 'Photos',
-                                            'action' => 'display',
-                                            'id' => $photo->id,
-                                            'size' => 'thumbs'
-                                        ]), [
-                                            'alt' => $photo->path,
-                                            'class' => [$photo->orientationClass]
-                                        ]); ?>
-                                    <?php else: ?>
-                                        <?= $this->Html->image('layout/user-default.png', [
-                                            'alt' => 'default_user',
-                                            'class' => ['img-responsive']
-                                        ]); ?>
-                                    <?php endif; ?>
-                                </div>
+                    <?php if ($authuser): ?>
+                        <?php foreach ($userPortraits as $userPortrait): ?>
+                            <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>

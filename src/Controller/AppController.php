@@ -4,6 +4,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -88,6 +89,17 @@ class AppController extends Controller
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
             $this->set('_serialize', true);
+        }
+        
+        //fetch user portraits and pass them to navbar
+        $loggedUsers = $this->request->session()->read('LoggedInUsers.AllUsers');
+        $userPortraits = [];
+        if (isset($loggedUsers)) {
+            foreach($loggedUsers as $loggedUser) {
+                $portrait = TableRegistry::get('Users')->getUserPortrait($loggedUser);
+                $userPortraits[] = $portrait;
+            }
+            $this->set(compact('userPortraits'));
         }
     }
 
