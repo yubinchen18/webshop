@@ -94,7 +94,15 @@ class BarcodesFixture extends TestFixture
             'created' => '2016-06-06 13:58:07',
             'modified' => '2016-06-06 13:58:07',
             'deleted' => null
-        ]
+        ],
+        [
+            'id' => '105ea78c-2e11-4b7f-b42c-05443169d43a',
+            'barcode' => '9999',
+            'type' => 'person',
+            'created' => '2016-06-06 13:58:07',
+            'modified' => '2016-06-06 13:58:07',
+            'deleted' => null
+        ],
 
     ];
 }

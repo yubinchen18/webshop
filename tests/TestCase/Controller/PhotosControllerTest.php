@@ -43,8 +43,20 @@ class PhotosControllerTest extends BaseIntegrationTestCase
             'Auth' => [
                 'User' => [
                     'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-                    'firstname' => 'Pieter'
+                    'username' => 'person',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
                 ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
             ]
         ]);
     }
@@ -70,10 +82,10 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     public function testIndexLoadPerson()
     {
         $this->get('/photos');
-        $testperson = $this->viewVariable('person');
-        $this->assertTrue(isset($testperson));
-        $this->assertInstanceOf('App\Model\Entity\Person', $testperson);
-        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $testperson->barcode_id);
+        $testpersons = $this->viewVariable('persons');
+        $this->assertTrue(isset($testpersons));
+        $this->assertInstanceOf('App\Model\Entity\Person', $testpersons[0]);
+        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $testpersons[0]->barcode_id);
     }
     
     public function testIndexPersonNotFound()
@@ -82,39 +94,27 @@ class PhotosControllerTest extends BaseIntegrationTestCase
             'Auth' => [
                 'User' => [
                     'id' => '1447e1dd-f3a5-4183-9508-111111111111',
-                    'firstname' => 'NotExistingPerson'
+                    'username' => 'dontexist',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'dontexist@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
                 ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '1447e1dd-f3a5-4183-9508-111111111111'],
+                'ActiveUser' => '1447e1dd-f3a5-4183-9508-111111111111'
             ]
         ]);
         $this->get('/photos');
-        $testperson = $this->viewVariable('person');
         $this->assertResponseOk();
-        $this->assertResponseContains('This person is not found');
+        $this->assertResponseContains('Person not found.');
     }
-    
-    public function testViewLoadPerson()
-    {
-        $this->get('/photos/view/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
-        $testperson = $this->viewVariable('person');
-        $this->assertTrue(isset($testperson));
-        $this->assertInstanceOf('App\Model\Entity\Person', $testperson);
-        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $testperson->barcode_id);
-    }
-    
-    public function testViewLoadNonExistingPerson()
-    {
-        $this->session([
-            'Auth' => [
-                'User' => [
-                    'id' => '1447e1dd-f3a5-4183-9508-111111111111',
-                    'firstname' => 'NotExistingPerson'
-                ]
-            ]
-        ]);
-        $this->get('/photos/view/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
-        $this->assertResponseError();
-    }
-    
+     
     public function testViewLoadHorizontalPhoto()
     {
         $this->get('/photos/view/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
@@ -122,6 +122,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertTrue(isset($photo));
         $this->assertEquals('horizontal.jpeg', $photo->path);
         $this->assertEquals('photos-horizontal', $photo->orientationClass);
+        $this->assertResponseOk();
     }
     
     public function testViewLoadVerticalPhoto()
@@ -145,13 +146,26 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->session([
             'Auth' => [
                 'User' => [
-                    'id' => '0fdcdf18-e0a9-43c0-b254-d373eefb79a0',
-                    'firstname' => 'Henk'
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904',
+                    'username' => 'person2',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person2@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
                 ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
             ]
         ]);
         $this->get('/photos/view/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertResponseCode(404);
+        $this->assertResponseContains('Not authorized to view this photo');
     }
     
     public function testDisplayPhotoIdNotFound()
@@ -192,31 +206,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertFileResponse(ROOT.'/tests/Fixture/'
                 . 'de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/med/horizontal.jpeg');
     }
-    
-    public function testProductGroupIndexLoadPerson()
-    {
-        $this->get('/photos/product-group/combination-sheets/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
-        $testperson = $this->viewVariable('person');
-        $this->assertTrue(isset($testperson));
-        $this->assertInstanceOf('App\Model\Entity\Person', $testperson);
-        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $testperson->barcode_id);
-    }
-    
-    public function testProductGroupIndexPersonNotFound()
-    {
-        $this->session([
-            'Auth' => [
-                'User' => [
-                    'id' => '1447e1dd-f3a5-4183-9508-111111111111',
-                    'firstname' => 'NotExistingPerson'
-                ]
-            ]
-        ]);
-        $this->get('/photos/product-group/combination-sheets/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
-        $this->assertResponseError();
-        $this->assertResponseCode(404);
-    }
-    
+
     public function testProductGroupIndexLoadHorizontalPhoto()
     {
         $this->get('/photos/product-group/combination-sheets/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
@@ -247,13 +237,26 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->session([
             'Auth' => [
                 'User' => [
-                    'id' => '0fdcdf18-e0a9-43c0-b254-d373eefb79a0',
-                    'firstname' => 'Henk'
+                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904',
+                    'username' => 'person2',
+                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
+                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
+                    'email' => 'person2@person.nl',
+                    'type' => 'person',
+                    'created' => '2016-05-25 09:02:25',
+                    'modified' => '2016-05-25 09:02:25',
+                    'deleted' => null,
+                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
                 ]
+            ],
+            'LoggedInUsers' => [
+                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'],
+                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
             ]
         ]);
         $this->get('/photos/product-group/combination-sheets/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertResponseCode(404);
+        $this->assertResponseContains('Not authorized to view this photo');
     }
     
     public function testProductGroupIndexLoadProducts()

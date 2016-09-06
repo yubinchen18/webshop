@@ -185,6 +185,7 @@ class ImageHandler
         $layout = 'all';
         $watermark = false;
         $rotate = false;
+        $filter = null;
         $tmpDir = $this->tmpImagesFolder;
         $tmpProductDir = $this->tmpProductImagesFolder;
         $fileName = '';

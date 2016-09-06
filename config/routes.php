@@ -7,7 +7,7 @@ Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function (RouteBuilder $routes) {
 
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     $routes->fallbacks('DashedRoute');
@@ -39,6 +39,7 @@ Router::scope('/', function (RouteBuilder $routes) {
         ],
         ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);

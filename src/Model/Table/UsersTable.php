@@ -180,4 +180,29 @@ class UsersTable extends Table
 
         return $password;
     }
+    
+    public function getUserPortrait($userId)
+    {
+        $photo = null;
+        $person = $this->Persons->find()
+            ->where(['user_id' => $userId])
+            ->contain(['Barcodes.Photos'])
+            ->first();
+        if ($person) {
+            $dbPhotos = $person->barcode->photos;
+            if (!empty($dbPhotos)) {
+                $photo = $dbPhotos[0];
+                // add orientation data to photo object
+                $filePath = $this->Persons->Barcodes->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $photo->orientationClass = $orientationClass;
+            }
+        }
+        return $photo;
+    }
 }

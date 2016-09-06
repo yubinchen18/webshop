@@ -24,10 +24,6 @@ class ProductsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.products',
-        'app.orderlines',
-        'app.productoptions',
-        'app.products_productoptions'
     ];
 
     /**
