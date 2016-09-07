@@ -74,7 +74,7 @@ class UsersTableTest extends TestCase
     
     public function testGetUserHorizontalPortrait()
     {
-        $userId = '91017bf5-5b19-438b-bd44-b0c4e1eaf904';
+        $userId = '61d2a03c-08f9-400b-9942-9d2f3a843aaa';
         $photo = $this->Users->getUserPortrait($userId);
         $this->assertEquals('vertical.jpg', $photo->path);
         $this->assertTrue(isset($photo));

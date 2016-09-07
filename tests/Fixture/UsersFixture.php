@@ -83,7 +83,7 @@ class UsersFixture extends TestFixture
             'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
         ],
         [
-            'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904',
+            'id' => '61d2a03c-08f9-400b-9942-9d2f3a843aaa',
             'username' => 'person2',
             'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
             'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex

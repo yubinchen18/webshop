@@ -41,7 +41,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/photos');
         $photos = $this->viewVariable('photos');
         
-        $this->assertEquals(4, $photos->count());
+        $this->assertEquals(5, $photos->count());
     }
     
     public function testIndexFiltered()
@@ -54,7 +54,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->post('/admin/photos', $data);
         $photos = $this->viewVariable('photos');
         
-        $this->assertEquals(2, $photos->count());
+        $this->assertEquals(3, $photos->count());
     }
     
     public function testView()

@@ -143,7 +143,7 @@ class UsersControllerTest extends IntegrationTestCase
         $this->post('/', $data);
         $loggedInUsers = [
             '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-            '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+            '61d2a03c-08f9-400b-9942-9d2f3a843aaa'
         ];
         $this->assertSession($loggedInUsers, 'LoggedInUsers.AllUsers');
         $this->assertRedirect('/');
@@ -169,7 +169,7 @@ class UsersControllerTest extends IntegrationTestCase
             'LoggedInUsers' => [
                 'AllUsers' => [
                     0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-                    1 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+                    1 => '61d2a03c-08f9-400b-9942-9d2f3a843aaa'
                 ],
                 'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
             ]
@@ -241,7 +241,7 @@ class UsersControllerTest extends IntegrationTestCase
             'LoggedInUsers' => [
                 'AllUsers' => [
                     0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-                    1 => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+                    1 => '61d2a03c-08f9-400b-9942-9d2f3a843aaa'
                 ],
                 'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
             ]

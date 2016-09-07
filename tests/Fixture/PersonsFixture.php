@@ -85,10 +85,10 @@ class PersonsFixture extends TestFixture
             'modified' => '2016-06-06 11:47:18',
             'deleted' => null,
             'barcode_id' => 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
-            'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+            'user_id' => 'e192691b-2e57-4eef-8f8f-fd5d0094716a'
         ],
         [
-            'id' => '1447e1dd-f3a5-4183-9508-725519basdfg',
+            'id' => '084acf3a-e474-40a3-9589-41b7a46623ba',
             'group_id' => 'e5b778cd-68cd-469f-88b3-37846b984868',
             'address_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
             'studentnumber' => '987654321',
@@ -102,7 +102,7 @@ class PersonsFixture extends TestFixture
             'modified' => '2016-06-06 11:47:18',
             'deleted' => null,
             'barcode_id' => '105ea78c-2e11-4b7f-b42c-05443169d43a',
-            'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf904'
+            'user_id' => '61d2a03c-08f9-400b-9942-9d2f3a843aaa'
         ]
     ];
 }

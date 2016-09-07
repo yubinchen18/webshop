@@ -56,7 +56,7 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/persons');
         $this->assertResponseOk();
         $persons = $this->viewVariable('persons');
-        $this->assertEquals(2, $persons->count());
+        $this->assertEquals(3, $persons->count());
     }
 
     public function testView()

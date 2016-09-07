@@ -65,7 +65,7 @@ class DeletableBehaviorTest extends TestCase
         $entity = $this->Users->find()->first();
         $this->Users->delete($entity);
         $entities = $this->Users->find()->toArray();
-        $this->assertCount(5, $entities);
+        $this->assertCount(6, $entities);
     }
 
     public function testFindWithDeleted()
@@ -73,7 +73,7 @@ class DeletableBehaviorTest extends TestCase
         $entity = $this->Users->find()->first();
         $this->Users->delete($entity);
         $entities = $this->Users->find('all', ['withDeleted' => true])->toArray();
-        $this->assertCount(6, $entities);
+        $this->assertCount(7, $entities);
     }
 
     public function testRestore()
