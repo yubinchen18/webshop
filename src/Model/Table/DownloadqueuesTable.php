@@ -99,20 +99,26 @@ class DownloadqueuesTable extends Table
 
         return $validator;
     }
-
-    public function addDownloadQueueItem($model, $foreignKey, $username)
+    
+    public function addDownloadQueueItem($model, $foreignKey, $username = '')
     {
         $this->Users =TableRegistry::get('Users');
 
+        $conditions = [
+            'Users.type' => 'photographer'
+        ];
+        
+        if(!empty($username)) {
+              $conditions['Users.username <>'] = $username;
+        }
+        
         $users = $this->Users->find('list', [
             'keyField' => 'id',
             'valueField' => 'username'
         ])
-        ->where([
-            'Users.username <>' => $username,
-            'Users.type' => 'photographer'
-        ])->toArray();
-
+        ->where($conditions)->toArray();
+        
+        $result = true;
         foreach ($users as $id => $username) {
             $data = array(
                 'profile_name' => $username,
@@ -126,9 +132,11 @@ class DownloadqueuesTable extends Table
             
             if (empty($existingItem)) {
                 $newDownloadQueue = $this->newEntity($data);
-                $this->save($newDownloadQueue);
+                $result = $this->save($newDownloadQueue);
             }
         }
+        
+        return $result;
     }
 
     public function formatInput($data)

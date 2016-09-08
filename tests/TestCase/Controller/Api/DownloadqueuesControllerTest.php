@@ -40,6 +40,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     {
         parent::setUp();
         $this->Photos = TableRegistry::get('Photos');
+        $this->Users = TableRegistry::get('Users');
         $this->setBasicAuth();
         $this->vfsStream = vfsStream::setup('data', null, ['tmp' => []]);
         $this->vfsRoot = 'vfs://data';
@@ -55,6 +56,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     {
         unset($this->vfsStream);
         unset($this->Photos);
+        unset($this->Users);
         parent::tearDown();
     }
        
@@ -254,7 +256,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 
         $data = [
             'Barcodes' => [
-                "id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "id"=> '87324',
                 "online_id"=> 0,
                 "barcode"=> "stuezdar9s5bko",
                 "type"=> "zebrapas",
@@ -273,6 +275,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "deleted"=> false,
             ]
         ];
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
 
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
@@ -284,9 +288,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $barcodes = $this->Barcodes->find()->count();
         $groups = $this->Groups->find()->count();
 
-        $this->assertEquals($queueFixt+4, $queue);
+        $this->assertEquals($queueFixt+(2*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
-        $this->assertEquals($groupsFixt +1, $groups);
+        $this->assertEquals($groupsFixt + 1, $groups);
 
         $this->assertResponseSuccess();
     }
@@ -294,23 +298,22 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     public function testUploadGroupExisting()
     {
         //Contains a barcode and a group
-        //Contains a barcode and a group
         $this->Downloadqueue = TableRegistry::get('Downloadqueues');
         $this->Barcodes = TableRegistry::get('Barcodes');
         $this->Groups = TableRegistry::get('Groups');
 
         $data = [
             'Barcodes' => [
-                "online_id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
-                "barcode"=> "stuezdar9s5bko",
+                "online_id"=> '88c35f25-886b-48cc-a51c-7959b80c2061',
+                "barcode"=> "2244",
                 "type"=> "person",
                 "created"=> "\/Date(1392384692000)\/",
                 "modified" => "\/Date(1392384692000)\/",
             ],
             'Groups' => [
-                "online_id"=> 'e5b778cd-68cd-469f-88b3-37846b984868',
+                "online_id"=> '8262ca6b-f23a-4154-afed-fc893c1516d3',
                 "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-                "barcode_id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "barcode_id"=> '88c35f25-886b-48cc-a51c-7959b80c2061',
                 "slug"=> "test",
                 "name"=> "test",
                 "modified"=> "\/Date(1393486879563)\/",
@@ -319,6 +322,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $groupsFixt = $this->Groups->find()->count();
@@ -329,7 +335,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $barcodes = $this->Barcodes->find()->count();
         $groups = $this->Groups->find()->count();
 
-        $this->assertEquals($queueFixt+4, $queue);
+        // Barcodes ARE NOT updateable through the API and must not be queued
+        $this->assertEquals($queueFixt+($countPhotographers-1), $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
         $this->assertEquals($groupsFixt, $groups);
 
@@ -347,7 +354,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 
         $data = [
             'Barcodes' => [
-                "id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "id"=> '72676',
                 "online_id"=> 0,
                 "barcode"=> "stuezdar9s5bko",
                 "type"=> "person",
@@ -395,6 +402,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $usersFixt = $this->Users->find()->count();
@@ -409,7 +418,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $groups = $this->Groups->find()->count();
         $persons = $this->Persons->find()->count();
 
-        $this->assertEquals($queueFixt+8, $queue);
+        // Add queue for Barcode, Group and Person. Users are not queued
+        $this->assertEquals($queueFixt+(3*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
         $this->assertEquals($usersFixt +1, $users);
         $this->assertEquals($groupsFixt +1, $groups);
@@ -477,6 +487,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $usersFixt = $this->Users->find()->count();
@@ -491,7 +504,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $groups = $this->Groups->find()->count();
         $persons = $this->Persons->find()->count();
 
-        $this->assertEquals($queueFixt+8, $queue);
+        // Barcodes and Users are not queued
+        $this->assertEquals($queueFixt+(2*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
         $this->assertEquals($usersFixt, $users);
         $this->assertEquals($groupsFixt, $groups);
@@ -516,6 +530,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
              ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
 
@@ -524,7 +541,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $queue = $this->Downloadqueue->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        $this->assertEquals($queueFixt + ($countPhotographers-1), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
 
         $this->assertResponseSuccess();
@@ -554,7 +571,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $queue = $this->Downloadqueue->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        //Barcodes must not be queued
+        $this->assertEquals($queueFixt, $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
 
         $this->assertResponseSuccess();
@@ -588,12 +606,13 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
              ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $photosFixt = $this->Photos->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
 
-   
-        
         $this->post('/api/v1/upload_item.json', $data);
         $file = new File($this->vfsRoot . '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/HA088268.jpg');
         $this->assertTrue($file->exists());
@@ -602,7 +621,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $photos = $this->Photos->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        // Existing Barcodes and Photos are not queued
+        $this->assertEquals($queueFixt, $queue);
         $this->assertEquals($photosFixt +1, $photos);
         $this->assertEquals($barcodesFixt, $barcodes);
 

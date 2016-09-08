@@ -13,7 +13,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Schools
  * @property \Cake\ORM\Association\HasMany $Groups
  */
-class ProjectsTable extends Table
+class ProjectsTable extends BaseTable
 {
 
     /**

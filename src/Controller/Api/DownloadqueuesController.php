@@ -8,6 +8,8 @@ use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Inflector;
+use App\Lib\ApiMapper;
 
 /**
  * Downloadqueues Controller
@@ -24,11 +26,24 @@ class DownloadqueuesController extends AppController
     public function listQueue()
     {
         $downloadqueueitems = $this->Downloadqueues->find()
-                ->contain(['Schools', 'Barcodes', 'Users', 'Projects', 'Groups', 'Persons'])
-                ->where(['profile_name' => $this->getUser()])
-                ->ToArray();
-
-        $this->set(compact('downloadqueueitems'));
+                ->contain([ 'Schools', 'Barcodes', 'Users', 'Projects', 'Groups', 'Persons'])
+                ->where(['Downloadqueues.profile_name' => $this->getUser()]);
+        
+        $DownloadQueueItems = [];
+        foreach($downloadqueueitems as $queueitem) {
+            $model = Inflector::singularize($queueitem->model);
+            $item = [
+                'Id' => $queueitem->id,
+                'Model' => $model,
+                'ForeignKey' => $queueitem->foreign_key,
+                'Modified' => $queueitem->modified->format('Y-m-d'),
+                'Created' => $queueitem->created->format('Y-m-d')
+            ];
+            $data = ApiMapper::map($model, $queueitem);
+            $DownloadQueueItems[] = $item+$data;
+        }
+        
+        $this->set(compact('DownloadQueueItems'));
     }
 
     public function removeFromQueue()
@@ -134,16 +149,14 @@ class DownloadqueuesController extends AppController
                 $entity = $this->{$model}->patchEntity($entity, $data);
             }
             
-            $savedEntity = $this->{$model}->save($entity);
+            $savedEntity = $this->{$model}->save($entity,['api_user' => $this->getUser()]);
             
             if ($savedEntity === false) {
                 pr($entity->errors);
             }
             $objectId = $savedEntity->id;
             $this->result[] = $objectId;
-            if ($model != 'Photos') {
-                $this->Downloadqueues->addDownloadQueueItem($model, $objectId, $this->getUser());
-            }
+            
         }
         return $object;
     }

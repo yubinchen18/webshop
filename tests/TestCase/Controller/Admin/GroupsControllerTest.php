@@ -23,6 +23,8 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         'app.schools',
         'app.projects',
         'app.barcodes',
+        'app.users',
+        'app.downloadqueues'
     ];
 
     public function setUp()
@@ -30,6 +32,8 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         parent::setUp();
         $this->loginAdmin();
         $this->Groups = TableRegistry::get('Groups');
+        $this->Downloadqueues = TableRegistry::get('Downloadqueues');
+        $this->Users = TableRegistry::get('Users');
     }
 
     public function testIndex()
@@ -66,12 +70,22 @@ class GroupsControllerTest extends BaseIntegrationTestCase
             'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
             'barcode_id' => 'ba0f3313-757a-430a-bda3-908082dea691'
         ];
+        // Check number of queued items before add
+        $countQueueItems = $this->Downloadqueues->find()->count();
+        
         $this->post('/admin/groups/add', $data);
         $this->assertRedirect('/admin/groups');
-
+        
         $group = $this->Groups->find()->where(['name' => 'Nieuwe Klas'])->first();
         $this->assertNotEmpty($group);
         $this->assertUuid($group->id);
+        
+        // Check if this school has been added to the downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        $countNewQueue = $this->Downloadqueues->find()->count();
+        
+        $this->assertEquals($countPhotographers+$countQueueItems, $countNewQueue);
+        
     }
 
     public function testAddFailure()
@@ -107,28 +121,47 @@ class GroupsControllerTest extends BaseIntegrationTestCase
 
     public function testEdit()
     {
-        $id = 'e5b778cd-68cd-469f-88b3-37846b984868';
+        $id = '8262ca6b-f23a-4154-afed-fc893c1516d3';
         $data = [
             'name' => 'changedgroup',
 
         ];
+        // Check number of queued items before edit
+        $countQueueItems = $this->Downloadqueues->find()->count();
+        
         $this->put('/admin/groups/edit/'.$id, $data);
         $this->assertRedirect('/admin/groups');
 
         $group = $this->Groups->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($group);
         $this->assertEquals($data['name'], $group->name);
+        
+        // Check if this group has been added to the downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        $countNewQueue = $this->Downloadqueues->find()->count();
+        
+        $this->assertEquals($countPhotographers+$countQueueItems, $countNewQueue);
     }
 
     public function testDelete()
     {
-        $id = 'e5b778cd-68cd-469f-88b3-37846b984868';
+        $id = '8262ca6b-f23a-4154-afed-fc893c1516d3';
         $group = $this->Groups->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($group);
+        
+        // Check number of queued items before deletion
+        $countQueueItems = $this->Downloadqueues->find()->count();        
+        
         $this->delete('/admin/groups/delete/'.$id);
         $this->assertRedirect('/admin/groups');
         $group = $this->Groups->find()->where(['id' => $id])->first();
         $this->assertEmpty($group);
+        
+        // Check if this group has been added to the downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        $countNewQueue = $this->Downloadqueues->find()->count();
+        
+        $this->assertEquals($countPhotographers+$countQueueItems, $countNewQueue);
     }
     
     public function testProductgroups()

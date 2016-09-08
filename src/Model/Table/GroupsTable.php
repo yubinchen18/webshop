@@ -14,7 +14,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Barcodes
  * @property \Cake\ORM\Association\HasMany $Persons
  */
-class GroupsTable extends Table
+class GroupsTable extends BaseTable
 {
 
     /**

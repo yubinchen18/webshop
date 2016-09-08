@@ -64,7 +64,6 @@ class GroupsController extends AppController
     {
         $group = $this->Groups->newEntity();
         $projects = $this->Groups->Projects->find('list');
-        
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {
