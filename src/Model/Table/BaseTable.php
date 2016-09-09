@@ -34,6 +34,7 @@ class BaseTable extends Table
             'Projects',
             'Groups',
             'Persons',
+            'Users',
             'Barcodes'
         ];
         

@@ -26,7 +26,7 @@ class DownloadqueuesController extends AppController
     public function listQueue()
     {
         $downloadqueueitems = $this->Downloadqueues->find()
-                ->contain([ 'Schools', 'Barcodes', 'Users', 'Projects', 'Groups', 'Persons'])
+                ->contain([ 'Schools', 'Barcodes', 'Users', 'Projects', 'Groups', 'Persons.Addresses'])
                 ->where(['Downloadqueues.profile_name' => $this->getUser()]);
         
         $DownloadQueueItems = [];
@@ -40,7 +40,7 @@ class DownloadqueuesController extends AppController
                 'Created' => $queueitem->created->format('Y-m-d')
             ];
             $data = ApiMapper::map($model, $queueitem);
-            $DownloadQueueItems[] = $item+$data;
+            $DownloadQueueItems[] = array_merge($item, $data);//$item+$data;
         }
         
         $this->set(compact('DownloadQueueItems'));
