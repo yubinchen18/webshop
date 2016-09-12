@@ -137,8 +137,6 @@ class UsersTable extends Table
             $userId = $savedEntity->id;
         }
 
-        $this->Downloadqueues->addDownloadQueueItem('Users', $userId, $username);
-
         unset($object['Users']);
 
         return [$object, $userId,];

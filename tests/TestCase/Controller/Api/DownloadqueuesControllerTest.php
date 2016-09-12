@@ -40,6 +40,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     {
         parent::setUp();
         $this->Photos = TableRegistry::get('Photos');
+        $this->Users = TableRegistry::get('Users');
         $this->setBasicAuth();
         $this->vfsStream = vfsStream::setup('data', null, ['tmp' => []]);
         $this->vfsRoot = 'vfs://data';
@@ -55,6 +56,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     {
         unset($this->vfsStream);
         unset($this->Photos);
+        unset($this->Users);
         parent::tearDown();
     }
        
@@ -69,161 +71,116 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $this->assertResponseSuccess();
 
         $data = $this->getDecodedResponse();
-
+        
         $expected = [
-            'downloadqueueitems' => [
+            'DownloadQueueItems' => [
                 [
-                    'id' => 'c7872eea-eb05-4bcf-8a16-0233a7f12e7a',
-                    'profile_name' => 'photographer',
-                    'model' => 'Schools',
-                    'foreign_key' => '82199cab-fc52-4853-8f64-575a7721b8e7',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => null,
-                    'group' => null,
-                    'project' => null,
-                    'user' => null,
-                    'barcode' => null,
-                    'school' => [
-                        'id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
-                        'name' => 'De ring van putten',
-                        'slug' => 'de-ring-van-putten',
-                        'contact_id' => 'b552c2c1-3d94-4734-b974-c15d5e35fe7c',
-                        'visitaddress_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
-                        'mailaddress_id' => '8888b43c-68aa-4845-b7d6-6f50f6f7cece',
-                        'created' => '2016-06-01T14:18:27+0000',
-                        'modified' => '2016-06-01T14:18:27+0000',
-                        'deleted' => null
+                    'Id' => 'c7872eea-eb05-4bcf-8a16-0233a7f12e7a',
+                    'Model' => 'School',
+                    'ForeignKey' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+                    'Created' => '2016-06-27',
+                    'Modified' => '2016-06-27',
+                    'School' => [
+                        'OnlineId' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+                        'Name' => 'De ring van putten',
+                        'Url' => 'de-ring-van-putten',
+                        'Deleted' => false,
+                        'Created' => '2016-06-01 14:18:27',
+                        'Modified' => '2016-06-01 14:18:27',
                     ]
                 ],
                 [
-                    'id' => '97acd799-7a3f-4bae-af70-ec70d7e8d4b7',
-                    'profile_name' => 'photographer',
-                    'model' => 'Users',
-                    'foreign_key' => 'ed2438e7-f8e4-472a-a6de-48d763c29ed8',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => null,
-                    'group' => null,
-                    'project' => null,
-                    'user' => [
-                        'id' => 'ed2438e7-f8e4-472a-a6de-48d763c29ed8',
-                        'username' => 'photographer03',
-                        'email' => 'photographer@photographer.nl',
-                        'type' => 'photographer',
-                        'created' => '2016-05-25T09:02:25+0000',
-                        'modified' => '2016-05-25T09:02:25+0000',
-                        'deleted' => null,
-                        'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
-                    ],
-                    'barcode' => null,
-                    'school' => null
+                    'Id' => '97acd799-7a3f-4bae-af70-ec70d7e8d4b7',
+                    'Model' => 'User',
+                    'ForeignKey' => 'ed2438e7-f8e4-472a-a6de-48d763c29ed8',
+                    'Modified' => '2016-06-27',
+                    'Created' => '2016-06-27',
+                    'User' => [
+                        'OnlineId' => 'ed2438e7-f8e4-472a-a6de-48d763c29ed8',
+                        'Username' => 'photographer03',
+                        'Password' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed',
+                        'Name' => null,
+                        'UserType' => 'photographer',
+                        'Modified' => '2016-05-25 09:02:25',
+                        'Created' => '2016-05-25 09:02:25'
+                    ]
                 ],
                 [
-                    'id' => '62beb0e3-ef13-458a-8973-67aabbf101d0',
-                    'profile_name' => 'photographer',
-                    'model' => 'Barcodes',
-                    'foreign_key' => 'cb7f7c7d-fafb-452e-9b2d-e156f90f6209',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => null,
-                    'group' => null,
-                    'project' => null,
-                    'user' => null,
-                    'barcode' => [
-                        'id' => 'cb7f7c7d-fafb-452e-9b2d-e156f90f6209',
-                        'barcode' => '4444',
-                        'type' => 'barcode',
-                        'created' => '2016-06-06T13:58:07+0000',
-                        'modified' => '2016-06-06T13:58:07+0000',
-                        'deleted' => null
-                    ],
-                    'school' => null
+                    'Id' => '62beb0e3-ef13-458a-8973-67aabbf101d0',
+                    'Model' => 'Barcode',
+                    'ForeignKey' => 'cb7f7c7d-fafb-452e-9b2d-e156f90f6209',
+                    'Modified' => '2016-06-27',
+                    'Created' => '2016-06-27',
+                    'Barcode' => [
+                        'OnlineId' => 'cb7f7c7d-fafb-452e-9b2d-e156f90f6209',
+                        'Barcode' => '4444',
+                        'BarcodeType' => 'person',
+                        'Deleted' => false,
+                        'Modified' => '2016-06-06 13:58:07',
+                        'Created' => '2016-06-06 13:58:07'
+                    ]
                 ],
                 [
-                    'id' => 'fb7d9668-c2a2-4be0-9d04-3dc236d9fd2d',
-                    'profile_name' => 'photographer',
-                    'model' => 'Projects',
-                    'foreign_key' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => null,
-                    'group' => null,
-                    'project' => [
-                        'id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-                        'school_id' => '82199cab-fc52-4853-8f64-575a7721b8e7',
-                        'name' => 'Eindejaars 2016',
-                        'slug' => 'eindejaars-2016',
-                        'grouptext' => 'Gefeliciteerd geslaagde!',
-                        'created' => '2016-06-06T10:18:42+0000',
-                        'modified' => '2016-06-06T10:18:42+0000',
-                        'deleted' => null
-                    ],
-                    'user' => null,
-                    'barcode' => null,
-                    'school' => null
+                    'Id' => 'fb7d9668-c2a2-4be0-9d04-3dc236d9fd2d',
+                    'Model' => 'Project',
+                    'ForeignKey' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                    'Modified' => '2016-06-27',
+                    'Created' => '2016-06-27',
+                    'Project' => [
+                        'OnlineId' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                        'SchoolId' => '82199cab-fc52-4853-8f64-575a7721b8e7',
+                        'Name' => 'Eindejaars 2016',
+                        'Url' => 'eindejaars-2016',
+                        'Deleted' => false,
+                        'Modified' => '2016-06-06 10:18:42',
+                        'Created' => '2016-06-06 10:18:42'
+                    ]
                 ],
                 [
-                    'id' => '97a9f95d-7212-42f9-bb2c-3d0c20b7808d',
-                    'profile_name' => 'photographer',
-                    'model' => 'Groups',
-                    'foreign_key' => 'e5b778cd-68cd-469f-88b3-37846b984868',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => null,
-                    'group' => [
-                        'id' => 'e5b778cd-68cd-469f-88b3-37846b984868',
-                        'name' => 'Klas 2A',
-                        'slug' => 'klas-2a',
-                        'created' => '2016-06-06T11:47:13+0000',
-                        'modified' => '2016-06-06T11:47:13+0000',
-                        'deleted' => null,
-                        'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-                        'barcode_id' => '0e46688d-02a9-4da4-9f91-ed61a3e7246e'
-                    ],
-                    'project' => null,
-                    'user' => null,
-                    'barcode' => null,
-                    'school' => null
+                    'Id' => '97a9f95d-7212-42f9-bb2c-3d0c20b7808d',
+                    'Model' => 'Group',
+                    'ForeignKey' => 'e5b778cd-68cd-469f-88b3-37846b984868',
+                    'Modified' => '2016-06-27',
+                    'Created' => '2016-06-27',
+                    'Group' => [
+                            'OnlineId' => 'e5b778cd-68cd-469f-88b3-37846b984868',
+                            'ProjectId' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+                            'BarcodeId' => '0e46688d-02a9-4da4-9f91-ed61a3e7246e',
+                            'Name' => 'Klas 2A',
+                            'Url' => 'klas-2a',
+                            'Deleted' => false,
+                            'Modified' => '2016-06-06 11:47:13',
+                            'Created' => '2016-06-06 11:47:13',
+                    ]
                 ],
                 [
-                    'id' => '442800b8-a449-4a1e-b539-ce8cf79f9099',
-                    'profile_name' => 'photographer',
-                    'model' => 'Persons',
-                    'foreign_key' => '1447e1dd-f3a5-4183-9508-725519b3107d',
-                    'created' => '2016-06-27T09:22:26+0000',
-                    'modified' => '2016-06-27T09:22:26+0000',
-                    'deleted' => null,
-                    'person' => [
-                        'id' => '1447e1dd-f3a5-4183-9508-725519b3107d',
-                        'group_id' => 'e5b778cd-68cd-469f-88b3-37846b984868',
-                        'address_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
-                        'studentnumber' => '123456789',
-                        'firstname' => 'Pieter',
-                        'prefix' => '',
-                        'lastname' => 'Vos',
-                        'slug' => 'pieter-vos',
-                        'email' => 'pietertje@pietervos.nl',
-                        'type' => 'leerling',
-                        'created' => '2016-06-06T11:47:18+0000',
-                        'modified' => '2016-06-06T11:47:18+0000',
-                        'deleted' => null,
-                        'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
-                        'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
-                    ],
-                    'group' => null,
-                    'project' => null,
-                    'user' => null,
-                    'barcode' => null,
-                    'school' => null
+                    'Id' => '442800b8-a449-4a1e-b539-ce8cf79f9099',
+                    'Model' => 'Person',
+                    'ForeignKey' => '1447e1dd-f3a5-4183-9508-725519b3107d',
+                    'Modified' => '2016-06-27',
+                    'Created' => '2016-06-27',
+                    'Student' => [
+                        'OnlineId' => '1447e1dd-f3a5-4183-9508-725519b3107d',
+                        'UserId' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
+                        'GroupId' => 'e5b778cd-68cd-469f-88b3-37846b984868',
+                        'BarcodeId' => 'df99d62f-258c-424d-a1fe-af3213e70867',
+                        'StudentNumber' => '123456789',
+                        'FirstName' => 'Pieter',
+                        'MiddleName' =>'',
+                        'LastName' => 'Vos',
+                        'Url' => 'pieter-vos',
+                        'Address' => 'Hoofdweg  7 ',
+                        'City' => 'Spijkenisse',
+                        'Zipcode' => '3333GG',
+                        'Deleted' => false,
+                        'Modified' => '2016-06-06 11:47:18',
+                        'Created' => '2016-06-06 11:47:18'
+                    ]
                 ]
             ]
         ];
+        
+        
 
         $this->assertEquals($expected, $data);
     }
@@ -254,7 +211,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 
         $data = [
             'Barcodes' => [
-                "id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "id"=> '87324',
                 "online_id"=> 0,
                 "barcode"=> "stuezdar9s5bko",
                 "type"=> "zebrapas",
@@ -273,6 +230,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "deleted"=> false,
             ]
         ];
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
 
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
@@ -284,9 +243,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $barcodes = $this->Barcodes->find()->count();
         $groups = $this->Groups->find()->count();
 
-        $this->assertEquals($queueFixt+4, $queue);
+        $this->assertEquals($queueFixt+(2*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
-        $this->assertEquals($groupsFixt +1, $groups);
+        $this->assertEquals($groupsFixt + 1, $groups);
 
         $this->assertResponseSuccess();
     }
@@ -294,23 +253,22 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
     public function testUploadGroupExisting()
     {
         //Contains a barcode and a group
-        //Contains a barcode and a group
         $this->Downloadqueue = TableRegistry::get('Downloadqueues');
         $this->Barcodes = TableRegistry::get('Barcodes');
         $this->Groups = TableRegistry::get('Groups');
 
         $data = [
             'Barcodes' => [
-                "online_id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
-                "barcode"=> "stuezdar9s5bko",
+                "online_id"=> '88c35f25-886b-48cc-a51c-7959b80c2061',
+                "barcode"=> "2244",
                 "type"=> "person",
                 "created"=> "\/Date(1392384692000)\/",
                 "modified" => "\/Date(1392384692000)\/",
             ],
             'Groups' => [
-                "online_id"=> 'e5b778cd-68cd-469f-88b3-37846b984868',
+                "online_id"=> '8262ca6b-f23a-4154-afed-fc893c1516d3',
                 "project_id"=> '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
-                "barcode_id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "barcode_id"=> '88c35f25-886b-48cc-a51c-7959b80c2061',
                 "slug"=> "test",
                 "name"=> "test",
                 "modified"=> "\/Date(1393486879563)\/",
@@ -319,6 +277,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $groupsFixt = $this->Groups->find()->count();
@@ -329,7 +290,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $barcodes = $this->Barcodes->find()->count();
         $groups = $this->Groups->find()->count();
 
-        $this->assertEquals($queueFixt+4, $queue);
+        // Barcodes ARE NOT updateable through the API and must not be queued
+        $this->assertEquals($queueFixt+($countPhotographers-1), $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
         $this->assertEquals($groupsFixt, $groups);
 
@@ -347,7 +309,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
 
         $data = [
             'Barcodes' => [
-                "id"=> 'a34c9d93-b89f-4b6d-a10c-8a7e939df834',
+                "id"=> '72676',
                 "online_id"=> 0,
                 "barcode"=> "stuezdar9s5bko",
                 "type"=> "person",
@@ -395,6 +357,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $usersFixt = $this->Users->find()->count();
@@ -409,7 +373,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $groups = $this->Groups->find()->count();
         $persons = $this->Persons->find()->count();
 
-        $this->assertEquals($queueFixt+8, $queue);
+        // Add queue for Barcode, Group and Person. Users are not queued
+        $this->assertEquals($queueFixt+(3*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
         $this->assertEquals($usersFixt +1, $users);
         $this->assertEquals($groupsFixt +1, $groups);
@@ -477,6 +442,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
             ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
         $usersFixt = $this->Users->find()->count();
@@ -491,7 +459,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $groups = $this->Groups->find()->count();
         $persons = $this->Persons->find()->count();
 
-        $this->assertEquals($queueFixt+8, $queue);
+        // Barcodes and Users are not queued
+        $this->assertEquals($queueFixt+(2*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
         $this->assertEquals($usersFixt, $users);
         $this->assertEquals($groupsFixt, $groups);
@@ -516,6 +485,9 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
              ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
 
@@ -524,7 +496,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $queue = $this->Downloadqueue->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        $this->assertEquals($queueFixt + ($countPhotographers-1), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
 
         $this->assertResponseSuccess();
@@ -554,7 +526,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $queue = $this->Downloadqueue->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        //Barcodes must not be queued
+        $this->assertEquals($queueFixt, $queue);
         $this->assertEquals($barcodesFixt, $barcodes);
 
         $this->assertResponseSuccess();
@@ -588,12 +561,13 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
              ]
         ];
 
+        // Check number of photographers because every photographer has a downloadqueue
+        $countPhotographers = $this->Users->find()->where(['Users.type' => 'photographer'])->count();
+        
         $queueFixt = $this->Downloadqueue->find()->count();
         $photosFixt = $this->Photos->find()->count();
         $barcodesFixt = $this->Barcodes->find()->count();
 
-   
-        
         $this->post('/api/v1/upload_item.json', $data);
         $file = new File($this->vfsRoot . '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/HA088268.jpg');
         $this->assertTrue($file->exists());
@@ -602,7 +576,8 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $photos = $this->Photos->find()->count();
         $barcodes = $this->Barcodes->find()->count();
 
-        $this->assertEquals($queueFixt + 2, $queue);
+        // Existing Barcodes and Photos are not queued
+        $this->assertEquals($queueFixt, $queue);
         $this->assertEquals($photosFixt +1, $photos);
         $this->assertEquals($barcodesFixt, $barcodes);
 

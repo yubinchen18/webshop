@@ -16,9 +16,8 @@ use Cake\Utility\Hash;
  * @property \Cake\ORM\Association\BelongsTo $Mailaddresses
  * @property \Cake\ORM\Association\HasMany $Projects
  */
-class SchoolsTable extends Table
+class SchoolsTable extends BaseTable
 {
-
     /**
      * Initialize method
      *

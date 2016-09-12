@@ -16,7 +16,7 @@ use Cake\Filesystem\File;
  * @property \Cake\ORM\Association\BelongsTo $Barcodes
  * @property \Cake\ORM\Association\HasMany $Orderlines
  */
-class PhotosTable extends Table
+class PhotosTable extends BaseTable
 {
     public $baseDir = APP . 'userphotos';
     /**

@@ -19,7 +19,7 @@ $config = [
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => true,
-            'log' => false
+            'log' => true
         ],
     ],
 ];

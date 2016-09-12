@@ -15,7 +15,7 @@ use Cake\ORM\TableRegistry;
  * @property \Cake\ORM\Association\HasMany $Persons
  * @property \Cake\ORM\Association\HasMany $Photos
  */
-class BarcodesTable extends Table
+class BarcodesTable extends BaseTable
 {
 
     /**
@@ -122,13 +122,11 @@ class BarcodesTable extends Table
         $barcodeId = $object['Barcodes']['online_id'];
         if ($object['Barcodes']['online_id'] === 0) {
             unset($object['Barcodes']['id']);
-
             $entity = $this->newEntity($object['Barcodes']);
-            $savedEntity = $this->save($entity);
+            $savedEntity = $this->save($entity, ['api_user' => $user]);
             $barcodeId = $savedEntity->id;
         }
 
-        $this->Downloadqueues->addDownloadQueueItem('Barcodes', $barcodeId, $user);
         unset($object['Barcodes']);
 
         return [$object, $barcodeId];

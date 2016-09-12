@@ -16,7 +16,7 @@ use Cake\ORM\TableRegistry;
  * @property \Cake\ORM\Association\BelongsTo $Barcodes
  * @property \Cake\ORM\Association\BelongsTo $Users
  */
-class PersonsTable extends Table
+class PersonsTable extends BaseTable
 {
 
     /**
