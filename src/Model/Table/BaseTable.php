@@ -21,7 +21,8 @@ class BaseTable extends Table
 {
     private $Downloadqueues;
 
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
         
         $this->Downloadqueues = TableRegistry::get('Downloadqueues');
@@ -38,15 +39,17 @@ class BaseTable extends Table
             'Barcodes'
         ];
         
-        if(!in_array($this->registryAlias(),$queueModels)) {
+        if (!in_array($this->registryAlias(), $queueModels)) {
             return true;
         }
-        if(!empty($options['api_user'])) {
-            return $this->Downloadqueues->addDownloadQueueItem($this->registryAlias(),$entity->id, $options['api_user']);
+        if (!empty($options['api_user'])) {
+            return $this->Downloadqueues->addDownloadQueueItem(
+                $this->registryAlias(),
+                $entity->id,
+                $options['api_user']
+            );
         }
         
-        return $this->Downloadqueues->addDownloadQueueItem($this->registryAlias(),$entity->id);
+        return $this->Downloadqueues->addDownloadQueueItem($this->registryAlias(), $entity->id);
     }
-    
 }
-

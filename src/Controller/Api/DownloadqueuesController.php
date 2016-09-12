@@ -30,7 +30,7 @@ class DownloadqueuesController extends AppController
                 ->where(['Downloadqueues.profile_name' => $this->getUser()]);
         
         $DownloadQueueItems = [];
-        foreach($downloadqueueitems as $queueitem) {
+        foreach ($downloadqueueitems as $queueitem) {
             $model = Inflector::singularize($queueitem->model);
             $item = [
                 'Id' => $queueitem->id,
@@ -149,7 +149,7 @@ class DownloadqueuesController extends AppController
                 $entity = $this->{$model}->patchEntity($entity, $data);
             }
             
-            $savedEntity = $this->{$model}->save($entity,['api_user' => $this->getUser()]);
+            $savedEntity = $this->{$model}->save($entity, ['api_user' => $this->getUser()]);
             
             if ($savedEntity === false) {
                 pr($entity->errors);

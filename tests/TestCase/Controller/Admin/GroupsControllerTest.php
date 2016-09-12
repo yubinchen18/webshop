@@ -150,7 +150,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $this->assertNotEmpty($group);
         
         // Check number of queued items before deletion
-        $countQueueItems = $this->Downloadqueues->find()->count();        
+        $countQueueItems = $this->Downloadqueues->find()->count();
         
         $this->delete('/admin/groups/delete/'.$id);
         $this->assertRedirect('/admin/groups');

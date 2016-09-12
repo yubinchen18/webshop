@@ -85,7 +85,7 @@ class AppController extends Controller
         $loggedUsers = $this->request->session()->read('LoggedInUsers.AllUsers');
         $userPortraits = [];
         if (isset($loggedUsers)) {
-            foreach($loggedUsers as $loggedUser) {
+            foreach ($loggedUsers as $loggedUser) {
                 $portrait = TableRegistry::get('Users')->getUserPortrait($loggedUser);
                 $userPortraits[] = $portrait;
             }

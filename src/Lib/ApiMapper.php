@@ -12,7 +12,7 @@ class ApiMapper
         return self::$fnName($entity);
     }
     
-    public function mapSchool($entity) 
+    public function mapSchool($entity)
     {
         $entity = $entity->school;
         return ['School' => [
@@ -39,7 +39,7 @@ class ApiMapper
         ]];
     }
     
-    public function mapBarcode($entity) 
+    public function mapBarcode($entity)
     {
         $entity = $entity->barcode;
         return ['Barcode' => [
@@ -70,7 +70,7 @@ class ApiMapper
                 "Zipcode" => $entity->address->zipcode,
                 "Deleted" => !empty($entity->deleted),
                 "Modified" => $entity->modified->format('Y-m-d H:i:s'),
-                "Created" => $entity->created->format('Y-m-d H:i:s')    
+                "Created" => $entity->created->format('Y-m-d H:i:s')
             ]
         ];
     }

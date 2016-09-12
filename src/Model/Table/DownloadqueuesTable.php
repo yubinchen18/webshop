@@ -108,7 +108,7 @@ class DownloadqueuesTable extends Table
             'Users.type' => 'photographer'
         ];
         
-        if(!empty($username)) {
+        if (!empty($username)) {
               $conditions['Users.username <>'] = $username;
         }
         
