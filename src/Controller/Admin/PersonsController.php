@@ -139,12 +139,11 @@ class PersonsController extends AppController
     public function createPersonCard($id = null)
     {
         $this->viewBuilder()->layout(false);
-        
+
         //Load the person data
         $data = $this->Persons->get($id, [
             'contain' => ['Groups.Projects.Schools', 'Addresses', 'Barcodes', 'Users']
         ]);
-    
         new PDFCardCreator($data);
     }
 }

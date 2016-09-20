@@ -6,7 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Network\Exception\NotFoundException;
 use App\Lib\ImageHandler;
-
+use Imagick;
 /**
  * Photos Controller
  *
@@ -42,9 +42,11 @@ class PhotosController extends AppController
         if (!empty($persons)) {
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
+                    
                     $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
-                    $dimensions = getimagesize($filePath);
-                    if ($dimensions[0] > $dimensions[1]) {
+                    
+                    list($width, $height) = getimagesize($filePath);
+                    if ($width > $height) {
                         $orientationClass = 'photos-horizontal';
                     } else {
                         $orientationClass = 'photos-vertical';
@@ -82,8 +84,9 @@ class PhotosController extends AppController
             if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
                 //add the orientation data to the photos array
                 $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-                $dimensions = getimagesize($filePath);
-                if ($dimensions[0] > $dimensions[1]) {
+                
+                list($width, $height) = getimagesize($filePath);
+                if ($width > $height) {
                     $orientationClass = 'photos-horizontal';
                 } else {
                     $orientationClass = 'photos-vertical';

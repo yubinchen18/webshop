@@ -61,7 +61,8 @@
                     'controller' => 'Photos',
                     'action' => 'display',
                     'path' => $photo->id,
-                    'size' => 'thumbs'
+                    'size' => 'thumbs',
+                    'rotate' => true
                 ])); ?></td>
                 <td class="col-lg-1"><?= h($photo->type) ?></td>
                 <td class="col-lg-3"><?= h($photo->barcode->person->full_name_sorted) ?></td>

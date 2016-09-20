@@ -162,7 +162,7 @@ class PhotosTable extends BaseTable
     public function autoRotateImage($image, $return = 'original')
     {
         $orientation = $image->getImageOrientation();
-
+        
         switch ($orientation) {
             case 3:
                 $image->rotateimage("#000", 180);
@@ -200,7 +200,7 @@ class PhotosTable extends BaseTable
                 return $medPath;
                 break;
             
-            case "thumb":
+            case "thumbs":
                 return $thumbPath;
                 break;
             
