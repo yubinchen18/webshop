@@ -7,73 +7,6 @@ Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function (RouteBuilder $routes) {
 
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-
-    $routes->fallbacks('DashedRoute');
-    
-    $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
-    $routes->connect(
-        '/photos/:size/:id',
-        [
-            'controller' => 'Photos',
-            'action' => 'display',
-        ],
-        ['path', 'id', 'pass' => ['size','id']]
-    );
-    $routes->connect(
-        '/photos/view/:id',
-        ['controller' => 'Photos', 'action' => 'view'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-    );
-    $routes->connect(
-        '/photos/product-group/:productGroup/:id',
-        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
-        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id']]
-    );
-    $routes->connect(
-        '/photos/product/:layout/:id/:suffix',
-        [
-            'controller' => 'Photos',
-            'action' => 'displayProduct',
-        ],
-        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
-    );
-    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
-    
-    Router::prefix('api', function ($routes) {
-        $routes->extensions(['json']);
-
-        $routes->connect('/v1/get_download_queue', [
-            'controller' => 'Downloadqueues',
-            'action' => 'listQueue',
-            '_ext' => 'json'
-        ]);
-        $routes->connect('/v1/remove_queue_items', [
-            'controller' => 'Downloadqueues',
-            'action' => 'removeFromQueue',
-            '_ext' => 'json'
-        ]);
-        $routes->connect('/v1/upload_item', [
-            'controller' => 'Downloadqueues',
-            'action' => 'uploadItem',
-            '_ext' => 'json'
-        ]);
-
-        $routes->connect('/v1/check_update', ['controller' => 'Update', 'action' => 'index', '_ext' => 'json']);
-        $routes->connect(
-            '/v1/get_photos/:model/:id',
-            ['controller' => 'Photos', 'action' => 'getPhotos', '_ext' => 'json'],
-            ['pass' => ['model','id']]
-        );
-
-        $routes->connect(
-            '/v1/get_photo/:id',
-            ['controller' => 'Photos', 'action' => 'getPhoto', '_ext' => 'json'],
-            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-        );
-    });
-
     Router::prefix('admin', function ($routes) {
         
         $routes->extensions(['csv','json']);
@@ -217,6 +150,14 @@ Router::scope('/', function (RouteBuilder $routes) {
         );
 
         $routes->connect(
+            '/photos/:size/:path/:rotate',
+            [
+                    'controller' => 'Photos',
+                    'action' => 'display',
+                ],
+            ['size','path','rotate', 'pass' => ['size','path','rotate']]
+        );
+        $routes->connect(
             '/photos/:size/:path',
             [
                     'controller' => 'Photos',
@@ -224,6 +165,7 @@ Router::scope('/', function (RouteBuilder $routes) {
                 ],
             ['size','path', 'pass' => ['size','path']]
         );
+        
         $routes->connect('/photos/move', ['controller' => 'Photos', 'action' => 'move']);
         $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
         $routes->connect('/photos/add', ['controller' => 'Photos', 'action' => 'add']);
@@ -242,9 +184,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Photos', 'action' => 'delete'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-
-
-        
         
         $routes->connect(
             '/searches/showResults',
@@ -254,6 +193,72 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
         $routes->connect('/', ['controller' => 'Pages', 'action' => 'display']);
     });
+    
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+   
+    $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
+    $routes->connect(
+        '/photos/:size/:id',
+        [
+            'controller' => 'Photos',
+            'action' => 'display',
+        ],
+        ['path', 'id', 'pass' => ['size','id']]
+    );
+    $routes->connect(
+        '/photos/view/:id',
+        ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/product-group/:productGroup/:id',
+        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
+        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id']]
+    );
+    $routes->connect(
+        '/photos/product/:layout/:id/:suffix',
+        [
+            'controller' => 'Photos',
+            'action' => 'displayProduct',
+        ],
+        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
+    );
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    
+    Router::prefix('api', function ($routes) {
+        $routes->extensions(['json']);
+
+        $routes->connect('/v1/get_download_queue', [
+            'controller' => 'Downloadqueues',
+            'action' => 'listQueue',
+            '_ext' => 'json'
+        ]);
+        $routes->connect('/v1/remove_queue_items', [
+            'controller' => 'Downloadqueues',
+            'action' => 'removeFromQueue',
+            '_ext' => 'json'
+        ]);
+        $routes->connect('/v1/upload_item', [
+            'controller' => 'Downloadqueues',
+            'action' => 'uploadItem',
+            '_ext' => 'json'
+        ]);
+
+        $routes->connect('/v1/check_update', ['controller' => 'Update', 'action' => 'index', '_ext' => 'json']);
+        $routes->connect(
+            '/v1/get_photos/:model/:id',
+            ['controller' => 'Photos', 'action' => 'getPhotos', '_ext' => 'json'],
+            ['pass' => ['model','id']]
+        );
+
+        $routes->connect(
+            '/v1/get_photo/:id',
+            ['controller' => 'Photos', 'action' => 'getPhoto', '_ext' => 'json'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+    });
+
 });
 
 Plugin::routes();
