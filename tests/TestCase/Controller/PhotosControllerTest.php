@@ -177,7 +177,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     
     public function testDisplayRandomSize()
     {
-        $this->get('/photos/display/asdfeager/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $this->get('/photos/asdfeager/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse(ROOT.'/tests/Fixture/'
                 . 'de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/horizontal.jpeg');
@@ -185,7 +185,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     
     public function testDisplayOriginalPhoto()
     {
-        $this->get('/photos/display/original/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $this->get('/photos/original/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse(ROOT . '/tests/Fixture/'
                 . 'de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/horizontal.jpeg');
@@ -193,7 +193,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     
     public function testDisplayThumbPhoto()
     {
-        $this->get('/photos/display/thumbs/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $this->get('/photos/thumbs/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse(ROOT.'/tests/Fixture/'
                 . 'de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/thumbs/horizontal.jpeg');
@@ -201,7 +201,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     
     public function testDisplayMedPhoto()
     {
-        $this->get('/photos/display/med/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
+        $this->get('/photos/med/277d32ec-b56c-44fa-a10a-ddfcb86c19f8');
         $this->assertContentType('jpeg');
         $this->assertFileResponse(ROOT.'/tests/Fixture/'
                 . 'de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/med/horizontal.jpeg');

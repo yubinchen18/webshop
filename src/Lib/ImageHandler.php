@@ -11,6 +11,7 @@ namespace App\Lib;
 
 use Cake\ORM\TableRegistry;
 use App\Lib\Products\CombinationSheet;
+use App\Lib\Products\LoosePrint;
 use App\Model\Entity\Photo;
 
 class ImageHandler
@@ -233,6 +234,10 @@ class ImageHandler
                 $productLayouts = $combinationSheet->getLayouts();
                 break;
             case 'mug':
+                break;
+            case 'loose-prints':
+                $loosePrint = new LoosePrint($layout);
+                $productLayouts = $loosePrint->getLayouts();
                 break;
             default:
                 throw new \Exception('You have to specify a valid product');

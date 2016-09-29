@@ -93,14 +93,7 @@ class PhotosController extends AppController
                 }
                 $photo->orientationClass = $orientationClass;
 
-                //create a thumbnail for combination sheets for the view
-                $imageHandler = new ImageHandler();
-                $combinationSheetThumb = $imageHandler->createProductPreview($photo, 'combination-sheets', [
-                    'resize' => ['width' => 200, 'height' => 180],
-                    'watermark' => false,
-                    'layout' => 'CombinationLayout1'
-                ]);
-                $this->set(compact('photo', 'combinationSheetThumb'));
+                $this->set(compact('photo'));
                 $this->set('_serialize', ['photo']);
             } else {
                 throw new NotFoundException('Not authorized to view this photo');
@@ -270,8 +263,6 @@ class PhotosController extends AppController
                 }
                 $photo->orientationClass = $orientationClass;
                 if (!empty($products)) {
-                    //set thumbnail
-                    $combinationSheetThumb = $products[0];
                     foreach ($products as $product) {
                         //create tmp product preview images
                         $imageHandler = new ImageHandler();
@@ -287,7 +278,7 @@ class PhotosController extends AppController
                 }
                 //pass results to views
                 $templateName = $productGroup.'-index';
-                $this->set(compact('photo', 'products', 'combinationSheetThumb'));
+                $this->set(compact('photo', 'products'));
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);
             } else {

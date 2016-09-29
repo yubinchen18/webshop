@@ -5,7 +5,7 @@
         <div class='row'>
             <div class='col-sm-11 col-xs-12'>
                 <div class="row">
-                    <h2 class='col-xs-12'><?= __('Combinatievellen') ?></h2>
+                    <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
                     <!-- top buttons panel xs only -->
                     <div class='col-xs-12 hidden-lg hidden-md hidden-sm photos-view-buttons-panel-top'>
                         <div class='photos-view-buttons-box1-top'>
@@ -56,7 +56,8 @@
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
                                     </div>
                                     <div class="flex-box dimensions col-xs-7">
-                                        <?= __('13 x 19cm'); ?>
+                                        <?php $size = explode('_', $product->slug); ?>
+                                        <?= $size[1] . ' cm'?>
                                     </div>
                                 </div>
                             </div>
