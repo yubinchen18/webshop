@@ -45,12 +45,6 @@
                             'size' => 'thumbs'
                         ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                         <?= $this->Html->image($layer2Name, [
-                            'url' => $this->Url->build([
-                                'controller' => 'Photos', 
-                                'action' => 'productGroupIndex',
-                                'combination-sheets', 
-                                $photo->id
-                            ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
                     </div>
@@ -58,25 +52,11 @@
             </div>
             <div class="row">
                 <div class="photos-view-products-container col-md-6">
-                    <?php //create a thumbnail for combination sheets for the view
-                        $imageHandler = new App\Lib\ImageHandler();
-                        $combinationSheetThumb = $imageHandler->createProductPreview($photo, 'combination-sheets', [
-                            'resize' => ['width' => 200, 'height' => 180],
-                            'watermark' => false,
-                            'layout' => 'CombinationLayout1'
-                        ]);
-                    ?>
                     <div class="photos-view-products-labels label3 text-center vertical-center">
                         <span><?= __('Combinatievellen') ?></span>
                     </div>
                     <div class="photos-view-products-icon">
-                        <?= $this->Html->image($this->Url->build([
-                            'controller' => 'Photos',
-                            'action' => 'displayProduct',
-                            'layout' => $combinationSheetThumb[0]['layout'],
-                            'id' => $photo->id,
-                            'suffix' => $combinationSheetThumb[0]['suffix']
-                        ]), [
+                        <?= $this->ImageHandler->createProductPreview($photo, [
                             'alt' => $photo->path,
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
@@ -115,7 +95,7 @@
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
                                 'action' => 'productGroupIndex',
-                                'combination-sheets', 
+                                'canvas',
                                 $photo->id
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']

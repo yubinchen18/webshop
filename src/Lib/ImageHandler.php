@@ -239,6 +239,10 @@ class ImageHandler
                 $loosePrint = new LoosePrint($layout);
                 $productLayouts = $loosePrint->getLayouts();
                 break;
+            case 'canvas':
+                $canvas = new LoosePrint($layout);
+                $productLayouts = $canvas->getLayouts();
+                break;
             default:
                 throw new \Exception('You have to specify a valid product');
         }

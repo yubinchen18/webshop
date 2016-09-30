@@ -7,45 +7,7 @@
                 <div class="row">
                     <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
                     <!-- top buttons panel xs only -->
-                    <div class='col-xs-12 hidden-lg hidden-md hidden-sm photos-view-buttons-panel-top'>
-                        <div class='photos-view-buttons-box1-top'>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-25.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-26.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                        </div>
-                        <div class='photos-view-buttons-box2-top'>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-31.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-32.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-33.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                            <div class='photos-view-buttons-button'>
-                                <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-34.png', [
-                                    'class' => ['img-responsive']
-                                ]); ?>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
+                    <?= $this->element('Frontend/topButtonsPanel'); ?>
                     
                     <?php foreach ($products as $product): ?>
                         <div class="col-md-4 col-xs-6 photos-product-container">
@@ -77,42 +39,7 @@
                 </div>
             </div>
             <!-- right buttons panel -->
-            <div class='col-sm-1 hidden-xs photos-view-buttons-panel'>
-                <div class='photos-view-buttons-box1'>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-25.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-26.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                </div>
-                <div class='photos-view-buttons-box2'>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-31.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-32.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-33.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                    <div class='photos-view-buttons-button'>
-                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-34.png', [
-                            'class' => ['img-responsive']
-                        ]); ?>
-                    </div>
-                </div>
-            </div>
+            <?= $this->element('Frontend/rightButtonsPanel'); ?>
         </div>
     </div>
     <!-- Right products panel -->

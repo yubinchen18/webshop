@@ -259,7 +259,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
     });
-
 });
 
 Plugin::routes();

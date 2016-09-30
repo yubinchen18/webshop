@@ -156,7 +156,6 @@ class DownloadqueuesController extends AppController
             }
             $objectId = $savedEntity->id;
             $this->result[] = $objectId;
-            
         }
         return $object;
     }

@@ -7,6 +7,7 @@ use Cake\Filesystem\Folder;
 use Cake\Network\Exception\NotFoundException;
 use App\Lib\ImageHandler;
 use Imagick;
+
 /**
  * Photos Controller
  *
@@ -42,7 +43,6 @@ class PhotosController extends AppController
         if (!empty($persons)) {
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
-                    
                     $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
                     
                     list($width, $height) = getimagesize($filePath);
