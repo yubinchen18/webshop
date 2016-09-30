@@ -1,0 +1,427 @@
+.photos-index-label h2 {
+    color: #66bbff;
+    font-weight: bold;
+}
+
+.photos-horizontal {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    height: auto;
+    width: 100%;
+}
+
+.photos-vertical {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    height: 100%;
+    width: auto;
+}
+
+.photos-horizontal-background {
+    height: 100%;
+    width: 70%;
+    background: #f5f5f5;
+}
+
+.photos-vertical-background {
+    height: 70%;
+    width: 100%;
+    background: #f5f5f5;
+}
+
+.photos-index {
+    .photos-index-row {
+    }
+    .photos-index-container {
+        padding-left: 1%;
+        padding-right: 1%;
+        margin-bottom: 2%;
+    }
+    .photos-index-icon {
+        border: 1px solid #b5b5b5;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+.photos-index-banner {
+    border: 1px solid #b5b5b5;
+    background-image: url('../img/layout/med/Hoogstraten_webshop-onderdelen-05.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding-left: 0px;
+    padding-right: 0px;
+    
+    .photos-index-banner-ul {
+        list-style-type: none;
+        width: 100%;
+    }
+    
+    .photos-index-banner-ul li {
+        background: url('../img/layout/Hoogstraten_webshop-onderdelen-07.png') no-repeat;
+        background-position: 8% 30%;
+        background-size: 8%;
+        padding-left: 20%;
+        border-bottom: 1px solid #b5b5b5;
+        color: #00b4ff;
+        text-align: left;
+    }
+    
+    @media only screen and (max-width: 990px) and (min-width: 426px) {
+        .photos-index-banner-ul li {
+            background-size: 3%;
+        }
+    }
+    
+    @media only screen and (max-width: 425px) and (min-width: 321px) {
+        .photos-index-banner-ul li {
+            background-size: 6%;
+        }
+    }
+    
+    .photos-index-banner-ul h5 {
+        font-weight: bold;
+    }
+    
+    font-weight: 1000;
+    .photos-index-banner-ul li:nth-child(odd) {
+        color: #006eab;
+    }
+    
+    .photos-index-banner-ul li.li-no-background {
+        background: none;
+        padding: 5%;
+        border: none;
+    }
+}
+
+.photos-index-banner-sm {
+    border: 1px solid #b5b5b5;
+    background-image: url('../img/layout/Hoogstraten_webshop-onderdelen-41.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding-left: 3%;
+    padding-right: 0px;
+    width: 100%;
+    height: 100px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+
+    .banner-flex-item {
+        /*border: 1px solid white;*/
+        display: -webkit-flex;
+        display: flex;
+        height: 30px;
+        width: 25%;
+        margin-left: 1%;
+        -webkit-align-items: flex-start;
+        align-items: flex-start;
+        background: url('../img/layout/Hoogstraten_webshop-onderdelen-07.png') no-repeat;
+        background-position: 0% 2%;
+        background-size: auto 50%;
+        padding-left: 20px;
+        color: #00b4ff;
+        font-size: 10px;
+        font-weight: bold;
+    }
+    .long {
+        width: 35%;
+    }
+    .last {
+        /*margin-right: auto;*/
+    }
+    .photos-index-banner-img {
+        position: absolute;
+        height: auto;
+        width: 20%;
+        right: -5%;
+        bottom: 100%;
+        -ms-transform: rotate(9deg); /* IE 9 */
+        -webkit-transform: rotate(9deg); /* Chrome, Safari, Opera */
+        transform: rotate(12deg) translate(0%, 30%);
+    }
+    @media only screen and (max-width: 500px) {
+        .small-font {
+            font-size: 8px;
+        }
+    }
+}
+
+.photos-view-detail {
+    margin-top: 4%;
+    height: auto;
+    
+    h2 {
+        color: #d15400;
+        font-weight: bold;
+    }
+    
+    .photo-container {
+        width: 30%;
+        height: 0;
+        padding-bottom: 30%;
+        margin-right: 1.5%;
+        margin-bottom: 1.5%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .photos-view-detail-container {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        margin-top: 2%;
+        margin-bottom: 1.5%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .photos-view-detail-text {
+        width: 100%;
+        text-align: center;
+        h3 {
+            color: #008eff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    }
+    
+    .photos-view-products-buttons-md {
+        height: 100%;
+        padding-top: 40%;
+        .photos-view-products-select {
+            width: 100%;
+            height: auto;
+        }
+        h3 {
+            color: #008eff;
+            font-weight: bold;
+        }
+        @media only screen and (max-width: 1199px) {
+            h3 {
+                font-size: 20px;
+            }
+        }
+    }
+    .photos-view-products-buttons-sm {
+        height: 100%;
+        .photos-view-products-select {
+            width: 100%;
+            height: auto;
+        }
+        h3 {
+            color: #008eff;
+            font-weight: bold;
+        }
+        @media only screen and (max-width: 425px) {
+            h3 {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+.photos-view-products {
+    border-left: 2px solid #b5b5b5;
+    .photos-view-products-row {
+        height: 100%;
+    }
+
+    .photos-view-products-panel{
+        margin-top: 9%;
+        padding-left: 5%;
+    }
+    
+    .photos-view-products-container {
+        margin-bottom: 5%;
+            
+        .photos-view-products-labels {
+            border-radius: 3px;
+            margin-left: -3%;
+            margin-right: -3%;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @media only screen and (max-width: 550px) {
+            .photos-view-products-labels {
+                font-size: 10px;
+            }
+        }
+        
+        .label1{
+            background: #eda111;
+        }
+        .label2{
+            background: #d17169;
+        }
+        .label3{
+            background: #d05400;
+        }
+        .label4{
+            background: #008dff;
+        }
+        .label5{
+            background: #afc94c;
+        }
+        
+        .photos-view-products-icon {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            margin-top: 5%;
+            margin-left: -5%;
+            margin-right: -5%;
+            margin-bottom: 1.5%;
+            position: relative;
+            overflow: hidden;
+            
+            .photos-horizontal-overlay {
+                width: 101%;
+            }
+            
+            .photos-vertical-overlay {
+                height: 101%;
+            }
+        }
+    }
+}
+
+.photos-product-index {
+    h2 {
+        color: #d15400;
+        font-weight: bold;
+        margin-bottom: 3%;
+    }
+    .photos-product-container {
+        margin-bottom: 3%;
+        .photos-product-label {
+            .row {
+                height: 30px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .flex-box {
+                display: -webkit-flex;
+                display: flex;
+                height: 100%;
+                align-items: center;
+            }
+            .price {
+                color: white;
+                background: #eda111;
+                justify-content: flex-start;
+            }
+            .dimensions {
+                justify-content: flex-end;
+            }
+            .plus-sign {
+                position : absolute;
+                height: 100%;
+                width: auto;
+                top: 0;
+                right: 0;
+                transform: translate(50%,0%);
+            }
+            
+        }
+        .photos-product-icon {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            margin-bottom: 1.5%;
+            position: relative;
+            overflow: hidden;
+        }
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .photos-product-container {
+            width: 100%;
+        }
+    }
+    @media only screen and (max-width: 375px) {
+        h2 {
+            font-size: 20px;
+        }
+    }
+    
+    .photos-view-buttons-panel {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        border-left: 2px solid #b5b5b5;
+        border-bottom: 2px solid #b5b5b5;
+    }
+    
+    .photos-view-buttons-box1 {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 150px;
+        border-bottom: 2px solid #b5b5b5;
+        padding: 10%;
+    }
+    
+    .photos-view-buttons-box2 {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 300px;
+        padding: 10%;
+    }
+    
+    @media only screen and (max-width: 767px) {
+        .photos-view-buttons-panel-top {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            border-bottom: 2px solid #b5b5b5;
+            border-top: 2px solid #b5b5b5; 
+            margin-bottom: 2%;
+            height: 4%;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+            padding: 0;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        .photos-view-buttons-box1-top {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+            border-right: 2px solid #b5b5b5;
+        }
+        .photos-view-buttons-box2-top {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+        }
+        .photos-view-buttons-button {
+            padding: 8px;
+        }
+    }
+}
+

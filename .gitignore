@@ -1,0 +1,12 @@
+/vendor/*
+/tmp/*
+/logs/*
+/node_modules/
+/webroot/css/
+/webroot/js/
+/config/Migrations/schema-dump-development.lock
+/src/userphotos/Testschool/
+/src/userphotos/de-ring-van-putten/
+/src/userphotos/Guido-de-Bres/
+/src/userphotos/unknown/
+/nbproject/*

@@ -1,0 +1,15 @@
+images:
+  - berrygoudswaard/ci:php-5.5
+
+volumes:
+  - /root/.ssh/:/home/ci/.ssh
+
+before_script:
+  - composer config -g github-oauth.github.com $GITHUB_API_KEY
+  - composer self-update
+  - composer global update
+  - composer install --no-interaction
+
+script:
+  - phpunit
+  - phpcs --standard=phpcs.xml -p .
