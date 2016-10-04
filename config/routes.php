@@ -225,6 +225,7 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
     
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);
@@ -258,7 +259,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
     });
-
 });
 
 Plugin::routes();

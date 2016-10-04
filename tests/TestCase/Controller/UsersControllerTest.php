@@ -247,7 +247,7 @@ class UsersControllerTest extends IntegrationTestCase
             ]
         ]);
         
-        $this->get('/users/logout');
+        $this->get('/logout');
         $this->assertSession('Het uitloggen is succesvol', 'Flash.flash.0.message');
         $this->assertSession(null, 'LoggedInUsers');
         $this->assertRedirect('/');

@@ -106,6 +106,5 @@ class SchoolsTable extends BaseTable
                 ->where([
                     'Schools.id' => $options['school_id'],
                   ]);
-                
     }
 }

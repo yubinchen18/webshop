@@ -5,7 +5,9 @@
         <div class='row'>
             <div class='col-sm-11 col-xs-12'>
                 <div class="row">
-                    <h2 class='col-xs-12'><?= __('Combinatievellen') ?></h2>
+                    <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
+                    <!-- top buttons panel xs only -->
+                    <?= $this->element('Frontend/topButtonsPanel'); ?>
                     
                     <?php foreach ($products as $product): ?>
                         <div class="col-md-4 col-xs-6 photos-product-container">
@@ -16,7 +18,8 @@
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
                                     </div>
                                     <div class="flex-box dimensions col-xs-7">
-                                        <?= __('13 x 19cm'); ?>
+                                        <?php $size = explode('_', $product->slug); ?>
+                                        <?= $size[1] . ' cm'?>
                                     </div>
                                 </div>
                             </div>
@@ -35,6 +38,8 @@
                     <?php endforeach; ?>
                 </div>
             </div>
+            <!-- right buttons panel -->
+            <?= $this->element('Frontend/rightButtonsPanel'); ?>
         </div>
     </div>
     <!-- Right products panel -->
