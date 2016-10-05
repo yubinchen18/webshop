@@ -6,11 +6,11 @@
             <thead>
             <tr role="row">
                 <th><?= $this->Paginator->sort('name', __('School')) ?></th>
-                <th><?= $this->Paginator->sort('contact.full_name', __('Naam contact')) ?></th>
-                <th><?= $this->Paginator->sort('contact.phone', __('Telefoonnummer')) ?></th>
-                <th><?= $this->Paginator->sort('visitaddress.city', __('Plaats')) ?></th>
+                <th><?= __('Naam contact') ?></th>
+                <th><?= __('Telefoonnummer') ?></th>
+                <th><?= __('Plaats') ?></th>
                 <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
-                <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
+                <th><?= __('Omzet') ?></th>
                 <th class="actions"><?= __('Acties') ?></th>
             </tr>
             </thead>
@@ -22,7 +22,8 @@
                     <td><?= h($school->contact->phone) ?></td>
                     <td><?= h($school->visitaddress->city) ?></td>
                     <td><?= h($school->created) ?></td>
-                    <td><?= h($school->modified) ?></td>
+                    <td><?= h(count($school->turnover)) ?></td>
+
                     <td class="actions">
                         <?= $this->Html->link('<button class="btn btn-app btn-default btn-xs">
                              <i class="ace-icon fa fa-eye bigger-100"></i>

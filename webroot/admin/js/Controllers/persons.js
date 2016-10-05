@@ -23,7 +23,19 @@ jQuery(function($) {
         });
 
     };
-
-    
+    $(".showstudents").show(function() {
+        _this = this;
+        var personsId = $('.persons-id', $(_this)).val();
+        event.preventDefault(); {
+            $.ajax({
+                url: '/admin/persons/showPhotosStudent/' + personsId,
+                type: 'POST',
+                 success: function(result) {
+                    $('.studentdetails').html(result);
+                    console.log(result);
+                }
+            });
+        }
+    });
 });
 

@@ -85,6 +85,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $countNewQueue = $this->Downloadqueues->find()->count();
         
         $this->assertEquals($countPhotographers+$countQueueItems, $countNewQueue);
+        
     }
 
     public function testAddFailure()

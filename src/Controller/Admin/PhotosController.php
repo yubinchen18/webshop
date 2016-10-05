@@ -40,7 +40,8 @@ class PhotosController extends AppController
                 $projects = $this->Photos->Barcodes->Persons->Groups->Projects
                         ->find('list')
                         ->where(['Projects.school_id' => $this->request->data['school_id']]);
-            }
+            } 
+            
             if (!empty($this->request->data['project_id'])) {
                 $query->andWhere(['Projects.id' => $this->request->data['project_id']]);
                 $groups = $this->Photos->Barcodes->Persons->Groups
@@ -104,7 +105,7 @@ class PhotosController extends AppController
         $file =     $this->Photos->getPath($photo->barcode_id) . DS . $size . DS .
                     $photo->path;
         
-        if ($rotate) {
+        if($rotate) {
             $orig_file = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
             $pic = new \Imagick($orig_file);
             $file = $this->Photos->autoRotateImage($pic, $size);

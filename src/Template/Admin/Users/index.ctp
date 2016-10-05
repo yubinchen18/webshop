@@ -7,8 +7,7 @@
             <tr role="row">
                 <th><?= $this->Paginator->sort('username', __('Gebruikersnaam')) ?></th>
                 <th><?= $this->Paginator->sort('email', __('Email')) ?></th>
-                <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
-                <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
+                <th><?= $this->Paginator->sort('type', __('Rol')) ?></th>
                 <th class="actions"><?= __('Acties') ?></th>
             </tr>
             </thead>
@@ -17,8 +16,7 @@
                 <tr ondblclick="openView('users', '<?= $user->id ?>')">
                     <td><?= h($user->username) ?></td>
                     <td><?= h($user->email) ?></td>
-                    <td><?= h($user->created) ?></td>
-                    <td><?= h($user->modified) ?></td>
+                    <td><?= h($user->type) ?></td>
                     <td class="actions">
                         <?= $this->Html->link('<button class="btn btn-app btn-default btn-xs">
                              <i class="ace-icon fa fa-eye bigger-100"></i>

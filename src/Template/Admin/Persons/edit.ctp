@@ -96,15 +96,6 @@
                         </div>
                     </div>
 
-
-                    <div class="form-group">
-                        <?= $this->Form->label(__('Wachtwoord'), null, ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->input('user.password', ['label' => false, 'class' => 'form-control', 'required' => false]); ?>
-                        </div>
-                    </div>
-                    <?= $this->Form->hidden('user.type', ['value' => 'person']); ?>
-
                     <div class="mailaddress">
                         <hr></hr>
                         <h3><?=__('Adres'); ?></h3>

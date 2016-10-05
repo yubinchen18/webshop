@@ -46,12 +46,12 @@ class AppController extends BaseController
             'action' => 'login',
         ]);
         $this->Auth->config(
-            'unauthorizedRedirect',
-            [
+            'unauthorizedRedirect', [
                 'prefix' => 'admin',
                 'controller' => 'Users',
                 'action' => 'login'
             ]
+            
         );
         $authuser = $this->Auth->user();
         $this->set(compact('authuser'));

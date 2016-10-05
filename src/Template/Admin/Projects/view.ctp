@@ -35,8 +35,7 @@
                         <tr>
                             <th><?= __('Slug') ?></th>
                             <td><?= h($project->school->slug) ?></td>
-                        </tr>                        
-                        <tr>
+                        </tr>
                     </table>
                     
                     <?php if (!empty($project->groups)): ?>
@@ -55,8 +54,56 @@
                         <div class="clearfix"></div>
                     <?php endif; ?>
                         
+                        
                 </div>
+            </div>
+        </div>
+       
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title"><?=__('Klassen'); ?></h4>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="vertical-table">
+                        <tr role="row">
+                            <th><?= __('') ?></th>
+                        </tr>
+                        <tbody>
+                        <?php foreach ($project->groups as $group): ?>
+                            <tr>
+                                <td><?= h($group->name); ?></td>
+                                <td>
+                                    <div enabled="enabled" class="showstudents">                                        
+                                    <input class="group-id" type="hidden" value='<?php echo $group->id?>'>
+                                    <button type="button" class="btn btn-primary btn-xs" style="padding: 2px; margin: 2px;"><?= __(' Toon leerling details'); ?></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                    <div class="clearfix"></div>                    
+                </div>
+            </div>  
+        </div>
+    </div>
+       
+    <div class="row">
+        <div class="projectdetails">
+            <div class="col-md-6">            
             </div>
         </div>
     </div>
 </div>
+   
+
+<?= $this->Html->script('/admin/js/jquery.slug'); ?>
+<?= $this->Html->script('/admin/js/Controllers/projects'); ?>
+

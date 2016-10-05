@@ -17,6 +17,10 @@
     "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
-    "jquery":"^2.2.4"
+    "jquery": "^2.2.4",
+    "lodash": "^4.16.0"
+  },
+  "dependencies": {
+    "lodash": "^4.16.0"
   }
 }

@@ -12,12 +12,12 @@
             </div>
             <div class="widget-body">
                 <div class="widget-main">
-                    <?= $this->Form->create($user, ['class' => 'form-horizontal', 'autocomplete' => 'false']) ?>
+                    <?= $this->Form->create($user, ['class' => 'form-horizontal', 'autocomplete' => 'false', 'enctype' => 'multipart/form-data']) ?>
                     <?= $this->element('Users/form'); ?>
                     <?= $this->Html->link(__('Annuleer'), ['action' => 'index'], ['class' => 'btn btn-sm']); ?>
                     <?= $this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
                 </div>
-            </div>
+            </div>                                   
         </div>
     </div>
 </div>

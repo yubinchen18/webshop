@@ -31,9 +31,33 @@
                             <td><?= h($user->created) ?></td>
                         </tr>
                         <tr>
-                            <th><?= __('Gewijzidg') ?></th>
+                            <th><?= __('Gewijzigd') ?></th>
                             <td><?= h($user->modified) ?></td>
                         </tr>
+                        <tr>
+                            <th><?= __('Status') ?></th>
+                            <td><?= h($user->active == '1' ? __('Actief') : __('Niet actief')) ?></td>    
+                        </tr>
+                        <td class="actions">
+                            <div class="widget-body">
+                            <?= $this->Html->link('<button class="btn btn-app btn-primary btn-xs">
+                             <i class="ace-icon fa fa-pencil-square-o  bigger-100"></i>
+                             </button>',
+                                [
+                                    'action' => 'edit',
+                                    $user->id
+                                ],['escape' => false]) ?>
+                            </div>
+                        </td>
+                        <?php if (!empty($user->profile_photo_filename)):?>
+                            <div class="img-circle pull-right"> 
+                                <img src="<?= $this->Url->build([
+                                        'controller' => 'Users',
+                                        'action' => 'displayProfilePhoto',
+                                        'id' => $user->id,
+                                    ]);?>" style="height: 150px; width: 150px; border-radius: 150px;">                               
+                            </div>
+                        <?php endif; ?>
                     </table>
                 </div>
             </div>

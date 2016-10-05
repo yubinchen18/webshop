@@ -21,12 +21,12 @@ class GroupsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Projects.Schools', 'Barcodes']
+            'contain' => ['Projects.Schools', 'Barcodes', 'Persons']
         ];
         $groups = $this->paginate($this->Groups);
         $this->set(compact('groups'));
     }
-
+    
     /**
      * Fetch all groups for a project
      * @param type $project_id
@@ -49,11 +49,11 @@ class GroupsController extends AppController
     public function view($id = null)
     {
         $group = $this->Groups->get($id, [
-             'contain' => ['Projects.Schools', 'Barcodes']
+             'contain' => ['Projects.Schools', 'Barcodes', 'Persons', 'Projects']
         ]);
-
+                
         $this->set('group', $group);
-    }
+    }            
 
     /**
      * Add method
@@ -146,5 +146,13 @@ class GroupsController extends AppController
         ]);
 
         new PDFCardCreator($data);
+    }
+    
+    public function getStudentsByGroup($id = null) {
+        $groups =  $this->Groups->get($id,[
+           'contain' => ['Persons', 'Projects'] 
+        ]);
+        $this->set(compact('groups', $groups));
+
     }
 }

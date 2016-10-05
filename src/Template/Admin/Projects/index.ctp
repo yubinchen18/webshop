@@ -9,7 +9,8 @@
                 <th><?= $this->Paginator->sort('school.name', __('School')) ?></th>
                 <th><?= $this->Paginator->sort('slug', __('Slug')) ?></th>
                 <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
-                <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
+                <th><?= $this->Paginator->sort('persons', __('Aantal leerlingen/docenten')) ?></th>
+                <th><?= $this->Paginator->sort('turnover', __('Omzet')) ?></th>
                 <th class="actions"><?= __('Acties') ?></th>
             </tr>
             </thead>
@@ -20,7 +21,17 @@
                     <td><?= h($project->school->name) ?></td>
                     <td><?= h($project->slug) ?></td>
                     <td><?= h($project->created) ?></td>
-                    <td><?= h($project->modified) ?></td>
+                    <td>
+                        <?php 
+                            $totalNumberOfPersons= 0;
+                                foreach ($project->groups as $group) {
+                                    $numberOfPersons = count($group->persons);
+                                    $totalNumberOfPersons += $numberOfPersons;
+                                } 
+                            echo $totalNumberOfPersons;
+                        ?>
+                    </td>
+                    <td><?= h(count($project->turnover)) ?></td>
                     <td class="actions">
                         <?= $this->Html->link('<button class="btn btn-app btn-default btn-xs">
                              <i class="ace-icon fa fa-eye bigger-100"></i>

@@ -32,30 +32,20 @@
                     <div class="form-group">
                         <?= $this->Form->label('project_id', __('Project'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'project_id',
-                                    $projects,
-                                    ['empty' => __('(Kies een project)')]
-                                );
-                            ?>
+                            <?= $this->Form->input('project_id', ['label' => false, 'class' => 'form-control','disabled'=>true]); ?>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <?= $this->Form->label('barcode_id', __('Barcode'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'barcode_id',
-                                    $barcodes,
-                                    ['empty' => __('(Kies een barcode)')]
-                                );
-                            ?>
+                            <?= $this->Form->input('barcode_id', ['label' => false, 'class' => 'form-control','disabled'=>true]); ?>
                         </div>
                     </div>
 
                     <hr>
                     <?=$this->Html->link(__('Annuleer'),['action' => 'index'], ['class' => 'btn btn-sm']); ?>
-                    <?=$this->Form->button(__('Voeg toe'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
+                    <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
                 </div>
             </div>
         </div>

@@ -56,7 +56,6 @@
                             <td><?= h($person->modified) ?></td>
                         </tr>
                     </table>
-
                     <hr></hr>
                     <h3><?=__('Klas'); ?></h3>
                     <table class="vertical-table">
@@ -117,7 +116,7 @@
                             <td><?= h($person->user->type) ?></td>
                         </tr>                       
                     </table>
-                    
+                    <br>
                     <div>
                         <?= $this->Html->link(__('Leerlingenkaart maken'),
                             [
@@ -130,6 +129,11 @@
                                 'target' => '_blank'
                             ]
                         ) ?>
+                        <td>
+                            <div enabled="enabled" class="showstudents">                                        
+                                <input class="persons-id" type="hidden" value="<?= $person->id;?>">
+                            </div>
+                        </td>
                     </div>
                     <div class="clearfix"></div>
                     
@@ -137,4 +141,14 @@
             </div>
         </div>
     </div>
+        <div class="row">
+        <div class="studentdetails">
+            <div class="col-md-6">            
+            </div>
+        </div>
+        </div>
 </div>
+
+<?= $this->Html->script('/admin/js/jquery.slug'); ?>
+<?= $this->Html->script('/admin/js/Controllers/persons'); ?>
+    

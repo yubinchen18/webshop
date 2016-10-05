@@ -74,6 +74,9 @@ class UsersTable extends Table
         $validator
             ->requirePresence('genuine', 'create')
             ->notEmpty('genuine');
+        
+        $validator
+            ->notEmpty('profile_photo_filename');
 
         $validator
             ->email('email')

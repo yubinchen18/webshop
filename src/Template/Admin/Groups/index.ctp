@@ -8,8 +8,7 @@
                 <th><?= $this->Paginator->sort('name', __('Naam')) ?></th>
                 <th><?= $this->Paginator->sort('group.name', __('Project')) ?></th>
                 <th><?= $this->Paginator->sort('slug', __('Slug')) ?></th>
-                <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
-                <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
+                <th><?= $this->Paginator->sort('persons', __('Aantal leerlingen')) ?></th>
                 <th class="actions"><?= __('Acties') ?></th>
             </tr>
             </thead>
@@ -19,8 +18,7 @@
                     <td><?= h($group->name) ?></td>
                     <td><?= h($group->project->name) ?></td>
                     <td><?= h($group->slug) ?></td>
-                    <td><?= h($group->created) ?></td>
-                    <td><?= h($group->modified) ?></td>
+                    <td><?= h(count($group->persons)) ?></td>
                     <td class="actions">
                         <?= $this->Html->link('<button class="btn btn-app btn-default btn-xs">
                              <i class="ace-icon fa fa-eye bigger-100"></i>
