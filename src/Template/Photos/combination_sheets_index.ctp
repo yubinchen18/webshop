@@ -16,7 +16,7 @@
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
                                     </div>
                                     <div class="flex-box dimensions col-xs-7">
-                                        <?= __('13 x 19cm'); ?>
+                                        <?= __('13x19 cm'); ?>
                                     </div>
                                 </div>
                             </div>

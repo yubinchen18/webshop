@@ -47,6 +47,10 @@ class ProductsTable extends Table
         $this->hasMany('Orderlines', [
             'foreignKey' => 'product_id'
         ]);
+        $this->hasMany('Cartlines', [
+            'foreignKey' => 'product_id'
+        ]);
+        
         $this->belongsToMany('Productoptions', [
             'foreignKey' => 'product_id',
             'targetForeignKey' => 'productoption_id',

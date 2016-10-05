@@ -10,6 +10,7 @@
                 'class' => ['img-responsive']
             ]); ?>
         </div>
+        <div class="photos-view-buttons-select1"></div>
     </div>
     <div class='photos-view-buttons-box2'>
         <div class='photos-view-buttons-button'>
@@ -34,3 +35,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    
+</script>
