@@ -46,38 +46,6 @@ class AddCarts extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('article', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('productname', 'string', [
-                'default' => null,
-                'limit' => 255,
-                'null' => false,
-            ])
-            ->addColumn('quantity', 'integer', [
-                'default' => null,
-                'limit' => 3,
-                'null' => false,
-            ])
-            ->addColumn('price_ex', 'float', [
-                'default' => null,
-                'null' => false,
-                'precision' => 9,
-                'scale' => 2,
-            ])
-            ->addColumn('vat', 'float', [
-                'default' => null,
-                'null' => false,
-                'precision' => 4,
-                'scale' => 2,
-            ])
-            ->addColumn('exported', 'boolean', [
-                'default' => false,
-                'limit' => null,
-                'null' => false,
-            ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
                 'limit' => null,
