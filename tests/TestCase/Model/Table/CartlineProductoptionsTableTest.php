@@ -24,35 +24,6 @@ class CartlineProductoptionsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.cartline_productoptions',
-        'app.cartlines',
-        'app.carts',
-        'app.users',
-        'app.addresses',
-        'app.invoices',
-        'app.persons',
-        'app.groups',
-        'app.projects',
-        'app.schools',
-        'app.contacts',
-        'app.visitaddresses',
-        'app.deliveryorders',
-        'app.deliveryaddresses',
-        'app.invoiceorders',
-        'app.invoiceaddresses',
-        'app.trxes',
-        'app.orderlines',
-        'app.photex_downloads',
-        'app.orderstatuses',
-        'app.orders_orderstatuses',
-        'app.mailaddresses',
-        'app.barcodes',
-        'app.photos',
-        'app.orders',
-        'app.products',
-        'app.productoptions',
-        'app.productoption_choices',
-        'app.products_productoptions'
     ];
 
     /**

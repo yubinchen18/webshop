@@ -73,33 +73,6 @@ class CartlinesTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('article');
-
-        $validator
-            ->requirePresence('productname', 'create')
-            ->notEmpty('productname');
-
-        $validator
-            ->integer('quantity')
-            ->requirePresence('quantity', 'create')
-            ->notEmpty('quantity');
-
-        $validator
-            ->numeric('price_ex')
-            ->requirePresence('price_ex', 'create')
-            ->notEmpty('price_ex');
-
-        $validator
-            ->numeric('vat')
-            ->requirePresence('vat', 'create')
-            ->notEmpty('vat');
-
-        $validator
-            ->boolean('exported')
-            ->requirePresence('exported', 'create')
-            ->notEmpty('exported');
-
-        $validator
             ->dateTime('deleted')
             ->allowEmpty('deleted');
 

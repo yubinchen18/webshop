@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\CartlinesTable;
+use App\Model\Table\ProductoptionChoicesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\CartlinesTable Test Case
+ * App\Model\Table\ProductoptionChoicesTable Test Case
  */
-class CartlinesTableTest extends TestCase
+class ProductoptionChoicesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\CartlinesTable
+     * @var \App\Model\Table\ProductoptionChoicesTable
      */
-    public $Cartlines;
+    public $ProductoptionChoices;
 
     /**
      * Fixtures
@@ -34,8 +34,8 @@ class CartlinesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Cartlines') ? [] : ['className' => 'App\Model\Table\CartlinesTable'];
-        $this->Cartlines = TableRegistry::get('Cartlines', $config);
+        $config = TableRegistry::exists('ProductoptionChoices') ? [] : ['className' => 'App\Model\Table\ProductoptionChoicesTable'];
+        $this->ProductoptionChoices = TableRegistry::get('ProductoptionChoices', $config);
     }
 
     /**
@@ -45,7 +45,7 @@ class CartlinesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Cartlines);
+        unset($this->ProductoptionChoices);
 
         parent::tearDown();
     }
@@ -76,6 +76,16 @@ class CartlinesTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test defaultConnectionName method
+     *
+     * @return void
+     */
+    public function testDefaultConnectionName()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -2,12 +2,12 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\CartsController;
-use Cake\TestSuite\IntegrationTestCase;
+use App\Test\TestCase\BaseIntegrationTestCase;
 
 /**
  * App\Controller\CartsController Test Case
  */
-class CartsControllerTest extends IntegrationTestCase
+class CartsControllerTest extends BaseIntegrationTestCase
 {
 
     /**
@@ -18,15 +18,33 @@ class CartsControllerTest extends IntegrationTestCase
     public $fixtures = [
         'app.carts'
     ];
-
+    
+    public function setUp()
+    {
+        parent::setUp();
+        $this->loginPerson();
+    }
+    
     /**
      * Test index method
      *
      * @return void
      */
-    public function testIndex()
+    public function testAddToCart()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [ //postdata zelfde als ajax request
+            'productId' => 'person',
+            'optionId' => 'photex',
+            'cartId' => 'uitleg',
+        ];
+       
+        $this->post('/carts/add', $data); //route
+        
+        
+        
+//        debug($this->_response->body());
+        
+        
     }
 
     /**

@@ -10,12 +10,6 @@ use Cake\ORM\Entity;
  * @property string $user_id
  * @property string $deliveryaddress_id
  * @property string $invoiceaddress_id
- * @property float $totalprice
- * @property float $shippingcosts
- * @property string $remarks
- * @property string $trx_id
- * @property string $ideal_status
- * @property string $exportstatus
  * @property string $created
  * @property string $modified
  * @property string $deleted

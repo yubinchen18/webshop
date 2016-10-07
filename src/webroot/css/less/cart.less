@@ -1,0 +1,154 @@
+.addToCartPopup {
+    position: absolute;
+    height: 110%;
+    width: 100%;
+    top: -5%;
+    left: 0%;
+    padding-left: 14px;
+    padding-right: 14px;
+    z-index: 200;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(255, 255, 255, 0.95);
+    
+    .addToCartPopup-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5em;
+        color: white;
+        background-color: #008dff;
+        width: 100%;
+        height: 12%;
+        
+        .addToCartPopup-close {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1em;
+            height: 10%;
+            width: 10%;
+            position: absolute;
+            right: 0;
+            top: -5%;
+            background: red;
+            cursor: pointer;
+        }
+    }
+    
+    .addToCartPopup-body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        height: 88%;
+        /*background: red;*/
+        
+        .addToCartPopup-body-quantity {
+            /*background: yellow;*/
+            height: 32%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            
+            .addToCartPopup-minus {
+                width: 18%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .addToCartPopup-plus {
+                width: 18%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .addToCartPopup-quantity {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: flex-start;
+                height: 100%;
+                width: 48%;
+                .addToCartPopup-quantity-top {
+                    text-align: center;
+                    font-size: 1em;
+                    width: 100%;
+                }
+                .addToCartPopup-quantity-bottom {
+                    font-size: 3em;
+                    font-weight: bold;
+                }
+            }
+        }
+        
+        .addToCartPopup-properties {
+            /*background: pink;*/
+            height: 68%;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 10%;
+            
+            .addToCartPopup-product {
+                width: 100%;
+                /*height: 35%;*/
+            }
+            
+            .addToCartPopup-options {
+                width: 100%;
+                height: 25%;
+                
+                .addToCartPopup-labels {
+                    position: relative;
+                    width: 60%;
+                    height: 100%;
+                    float: left;
+                    display: flex;
+                    align-items: center;
+                }
+                .addToCartPopup-icons {
+                    display: flex;
+                    position: relative;
+                    width: 40%;
+                    height: 100%;
+                    float: right;
+                    align-self: flex-end;
+                    justify-content: center;
+                    align-items: center;
+                    img {
+                        height: 80%;
+                        width: auto;
+                    }
+                }
+            }
+            
+            .addToCartPopup-labels {
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+        }
+        
+        .addToCartPopup-addButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            height: 20%;
+            border-radius: 5px;
+            background-color: #008dff;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none;   /* Chrome/Safari/Opera */
+            -khtml-user-select: none;    /* Konqueror */
+            -moz-user-select: none;      /* Firefox */
+            -ms-user-select: none;       /* Internet Explorer/Edge */
+            user-select: none;         
+        }
+    }
+}

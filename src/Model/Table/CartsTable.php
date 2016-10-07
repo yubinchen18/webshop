@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Users
  * @property \Cake\ORM\Association\BelongsTo $Deliveryaddresses
  * @property \Cake\ORM\Association\BelongsTo $Invoiceaddresses
- * @property \Cake\ORM\Association\BelongsTo $Trxes
  * @property \Cake\ORM\Association\HasMany $Cartlines
  *
  * @method \App\Model\Entity\Cart get($primaryKey, $options = [])
@@ -56,9 +55,6 @@ class CartsTable extends Table
             'foreignKey' => 'invoiceaddress_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Trxes', [
-            'foreignKey' => 'trx_id'
-        ]);
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
@@ -75,26 +71,6 @@ class CartsTable extends Table
         $validator
             ->uuid('id')
             ->allowEmpty('id', 'create');
-
-        $validator
-            ->numeric('totalprice')
-            ->requirePresence('totalprice', 'create')
-            ->notEmpty('totalprice');
-
-        $validator
-            ->numeric('shippingcosts')
-            ->requirePresence('shippingcosts', 'create')
-            ->notEmpty('shippingcosts');
-
-        $validator
-            ->requirePresence('remarks', 'create')
-            ->notEmpty('remarks');
-
-        $validator
-            ->allowEmpty('ideal_status');
-
-        $validator
-            ->allowEmpty('exportstatus');
 
         $validator
             ->allowEmpty('deleted');
@@ -114,7 +90,6 @@ class CartsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['deliveryaddress_id'], 'Deliveryaddresses'));
         $rules->add($rules->existsIn(['invoiceaddress_id'], 'Invoiceaddresses'));
-        $rules->add($rules->existsIn(['trx_id'], 'Trxes'));
 
         return $rules;
     }

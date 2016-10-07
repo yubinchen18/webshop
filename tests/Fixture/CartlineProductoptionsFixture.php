@@ -41,9 +41,9 @@ class CartlineProductoptionsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '4f5cc4c1-2062-45ef-be05-4bcdc324e9da',
-            'cartline_id' => 'c78c686e-0302-47cb-8988-d9ce8f0607b1',
-            'productoption_choice_id' => 'b1cade53-d878-49cc-94ca-f3a7a6c480c9'
+            'id' => '70d58521-73fb-4979-a6ec-966f7cc9d406',
+            'cartline_id' => 'fb707e48-5072-43cd-b571-afe881e5b0b4',
+            'productoption_choice_id' => 'e88e60a4-50a8-48a6-8e7f-c96f880d0e3e'
         ],
     ];
 }

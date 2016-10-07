@@ -50,7 +50,7 @@ class UploadComponent extends Component
     public function create($data)
     {
         $maxsize = 250; 
-        $dir = APP . '/userphotos'.DS.'userProfilePhoto' .DS;
+        $dir = APP . 'userphotos'.DS.'userProfilePhoto' .DS;
         $allowed = ['jpeg', 'jpg', 'png', 'bmp']; 
 
         $pathinfo = pathinfo($data['filename']);

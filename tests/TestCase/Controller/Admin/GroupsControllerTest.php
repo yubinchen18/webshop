@@ -24,7 +24,8 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         'app.projects',
         'app.barcodes',
         'app.users',
-        'app.downloadqueues'
+        'app.downloadqueues',
+        'app.persons'
     ];
 
     public function setUp()

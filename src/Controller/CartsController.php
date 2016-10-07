@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Carts Controller
@@ -10,7 +11,26 @@ use App\Controller\AppController;
  */
 class CartsController extends AppController
 {
-
+    public function beforeAdd() {
+        $this->autoRender = false;
+        if ($this->request->is('post')) {
+            $cartlineData = $this->request->data('cartline');
+            $this->set(compact('cartlineData'));
+            $this->viewBuilder()->layout('ajax');
+            $this->render('/Element/Frontend/addToCartPopup');
+        } else {
+            return false;
+        }
+    }
+    
+    public function addToCart() {
+        debug($this->request->data('cartId'));
+        $cartId = $this->request->data('cartId');
+        $cart = $this->Carts->get($cartId);
+        pr($cart);
+    }
+    
+    
     /**
      * Index method
      *

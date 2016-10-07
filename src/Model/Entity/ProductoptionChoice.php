@@ -4,22 +4,23 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Cartline Entity
+ * ProductoptionChoice Entity
  *
  * @property string $id
+ * @property string $productoption_id
+ * @property string $value
+ * @property string $description
+ * @property bool $default
+ * @property float $price_ex
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  * @property \Cake\I18n\Time $deleted
- * @property string $cart_id
- * @property string $photo_id
- * @property string $product_id
  *
- * @property \App\Model\Entity\Cart $cart
- * @property \App\Model\Entity\Photo $photo
- * @property \App\Model\Entity\Product $product
+ * @property \App\Model\Entity\Productoption $productoption
  * @property \App\Model\Entity\CartlineProductoption[] $cartline_productoptions
+ * @property \App\Model\Entity\OrderlineProductoption[] $orderline_productoptions
  */
-class Cartline extends Entity
+class ProductoptionChoice extends Entity
 {
 
     /**
