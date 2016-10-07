@@ -1,7 +1,6 @@
-<div class='addToCartPopup'>
-    <div class='addToCartPopup-header'>
-        <?= __('Totaal: ') . $this->Number->currency($cartlineData['product_price'], 'EUR') ?>
-        <div class='addToCartPopup-close'>X</div>
+<div class='addToCartPopup' id='<?= $cartlineData['product_id'];?>'>
+    <div class='addToCartPopup-header' data-price=<?= $cartlineData['product_price']; ?>>
+        <?= __('Totaal: €');?><span><?= $cartlineData['product_price'] ?></span>
     </div>
     <div class='addToCartPopup-body'>
         <div class='addToCartPopup-body-quantity'>
@@ -35,19 +34,13 @@
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-            
-            <div class='addToCartPopup-addButton'>
+            <div class='addToCartPopup-addButton' data-cartline='<?= json_encode($cartlineData); ?>'>
                 <?= __('VOEG TOE'); ?>
             </div>
         </div>
     </div>
-    <script>
-        jQuery(function($) {
-            $('.addToCartPopup-close').click(function(){
-                $(this).parent().parent().remove();
-            });
-        });
-    </script>
 </div>
 
+<div class='addToCartPopup-layer'>
+</div>
 

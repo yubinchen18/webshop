@@ -49,9 +49,6 @@
             </div>
             <!-- right buttons panel -->
             <?= $this->element('Frontend/rightButtonsPanel'); ?>
-            <!-- addToCartPopup -->
-            <div class='beforeAddPopup'>
-            </div>
         </div>
     </div>
     <!-- Right products panel -->

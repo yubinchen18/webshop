@@ -24,10 +24,7 @@ class CartsController extends AppController
     }
     
     public function addToCart() {
-        debug($this->request->data('cartId'));
-        $cartId = $this->request->data('cartId');
-        $cart = $this->Carts->get($cartId);
-        pr($cart);
+        pr($this->request);
     }
     
     
