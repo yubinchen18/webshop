@@ -43,6 +43,9 @@ class UsersTable extends Table
         $this->hasMany('Orders', [
             'foreignKey' => 'user_id'
         ]);
+        $this->hasOne('Carts', [
+            'foreignKey' => 'user_id'
+        ]);
         $this->hasMany('OrdersOrderstatuses', [
             'foreignKey' => 'user_id'
         ]);

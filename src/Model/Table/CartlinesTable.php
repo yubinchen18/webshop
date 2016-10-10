@@ -76,6 +76,11 @@ class CartlinesTable extends Table
             ->dateTime('deleted')
             ->allowEmpty('deleted');
 
+        $validator
+            ->integer('quantity')
+            ->requirePresence('quantity', 'create')
+            ->notEmpty('quantity');
+
         return $validator;
     }
 

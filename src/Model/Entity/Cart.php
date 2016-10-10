@@ -8,16 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $user_id
- * @property string $deliveryaddress_id
- * @property string $invoiceaddress_id
  * @property string $created
  * @property string $modified
  * @property string $deleted
  *
  * @property \App\Model\Entity\User $user
- * @property \App\Model\Entity\Deliveryaddress $deliveryaddress
- * @property \App\Model\Entity\Invoiceaddress $invoiceaddress
- * @property \App\Model\Entity\Trx $trx
  * @property \App\Model\Entity\Cartline[] $cartlines
  */
 class Cart extends Entity

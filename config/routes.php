@@ -204,6 +204,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect('/', ['controller' => 'Pages', 'action' => 'display']);
     });
     
+    $routes->extensions(['csv','json']);
+    
     $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
    
@@ -239,7 +241,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     
     $routes->connect('/carts/beforeAdd', [
         'controller' => 'Carts',
-        'action' => 'beforeAdd'
+        'action' => 'beforeAdd',
     ]);
     $routes->connect('/carts/add', [
         'controller' => 'Carts',

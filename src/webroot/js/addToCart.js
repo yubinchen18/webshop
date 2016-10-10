@@ -53,6 +53,8 @@ jQuery(function($) {
         quantityLabel.html(parseInt(quantity));
     });
     
+    
+    //ajax save cartline
     $('.photos-product-index').on('click', '.addToCartPopup-addButton', function(e){
         e.preventDefault();
         var data = $(this).data();
@@ -60,7 +62,7 @@ jQuery(function($) {
         data.cartline.quantity = quantity;
         var cartline = data.cartline;
         $.ajax({
-            url: '/carts/add',
+            url: '/carts/add.json',
             data: {
                 photo_id: cartline.photo_id,
                 product_id: cartline.product_id,
@@ -70,14 +72,13 @@ jQuery(function($) {
                 quantity: cartline.quantity
             },
             method: 'POST',
-            dataType:"json",
+//            dataType:"json",
             success: function(response) {
-                console.log('succes');
                 $('.addToCartPopup').remove();
                 $('.addToCartPopup-layer').remove();
             },
             failure: function(response) {
-                console.log('fail');
+                console.log(response.error);
             }
         });
     });

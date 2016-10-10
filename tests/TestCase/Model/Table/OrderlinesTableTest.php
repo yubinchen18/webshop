@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\CartsTable;
+use App\Model\Table\OrderlinesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\CartsTable Test Case
+ * App\Model\Table\OrderlinesTable Test Case
  */
-class CartsTableTest extends TestCase
+class OrderlinesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\CartsTable
+     * @var \App\Model\Table\OrderlinesTable
      */
-    public $Carts;
+    public $Orderlines;
 
     /**
      * Fixtures
@@ -24,7 +24,8 @@ class CartsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.carts',
+        'app.orderlines',
+        'app.orders',
         'app.users',
         'app.addresses',
         'app.invoices',
@@ -39,21 +40,20 @@ class CartsTableTest extends TestCase
         'app.invoiceorders',
         'app.invoiceaddresses',
         'app.trxes',
-        'app.orderlines',
-        'app.orders',
         'app.photex_downloads',
         'app.orderstatuses',
         'app.orders_orderstatuses',
-        'app.photos',
+        'app.mailaddresses',
         'app.barcodes',
-        'app.products',
+        'app.photos',
+        'app.carts',
         'app.cartlines',
-        'app.cartline_productoptions',
-        'app.productoption_choices',
+        'app.products',
         'app.productoptions',
-        'app.products_productoptions',
+        'app.productoption_choices',
+        'app.cartline_productoptions',
         'app.orderline_productoptions',
-        'app.mailaddresses'
+        'app.products_productoptions'
     ];
 
     /**
@@ -64,8 +64,8 @@ class CartsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Carts') ? [] : ['className' => 'App\Model\Table\CartsTable'];
-        $this->Carts = TableRegistry::get('Carts', $config);
+        $config = TableRegistry::exists('Orderlines') ? [] : ['className' => 'App\Model\Table\OrderlinesTable'];
+        $this->Orderlines = TableRegistry::get('Orderlines', $config);
     }
 
     /**
@@ -75,7 +75,7 @@ class CartsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Carts);
+        unset($this->Orderlines);
 
         parent::tearDown();
     }
@@ -106,6 +106,16 @@ class CartsTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test defaultConnectionName method
+     *
+     * @return void
+     */
+    public function testDefaultConnectionName()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

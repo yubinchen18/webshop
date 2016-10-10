@@ -24,6 +24,7 @@ class CartlinesFixture extends TestFixture
         'cart_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'photo_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'product_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'quantity' => ['type' => 'integer', 'length' => 3, 'unsigned' => false, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'cart_id' => ['type' => 'index', 'columns' => ['cart_id'], 'length' => []],
             'photo_id' => ['type' => 'index', 'columns' => ['photo_id'], 'length' => []],
@@ -46,13 +47,14 @@ class CartlinesFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '2d8b3f3f-9f67-4f17-82b1-77ee576d447e',
-            'created' => '2016-10-05 11:10:00',
-            'modified' => '2016-10-05 11:10:00',
-            'deleted' => '2016-10-05 11:10:00',
-            'cart_id' => '4ed061af-ac49-4879-b6ef-dde0f7dd8ea9',
-            'photo_id' => 'bf5e9af7-5d01-4892-afd4-088c05aafac0',
-            'product_id' => 'd5305c0e-0936-4f2b-a588-c29551f364d1'
+            'id' => '9fe8f00c-af47-4762-9b92-5062e55d7288',
+            'created' => '2016-10-10 01:23:45',
+            'modified' => '2016-10-10 01:23:45',
+            'deleted' => '2016-10-10 01:23:45',
+            'cart_id' => 'b4e05b44-0cc9-4516-b6aa-b91f9beefbe2',
+            'photo_id' => 'afd445b1-43bf-4a4e-9c2a-2dc035826518',
+            'product_id' => '1a34f8fe-747a-4c2c-a47c-e2856db4c326',
+            'quantity' => 1
         ],
     ];
 }

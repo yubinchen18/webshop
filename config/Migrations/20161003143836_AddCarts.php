@@ -76,6 +76,11 @@ class AddCarts extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
+            ->addColumn('quantity', 'integer', [
+                'default' => 0,
+                'limit' => 3,
+                'null' => false,
+            ])
             ->addIndex(
                 [
                     'cart_id',
@@ -104,16 +109,6 @@ class AddCarts extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('deliveryaddress_id', 'uuid', [
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addColumn('invoiceaddress_id', 'uuid', [
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
             ->addColumn('created', 'string', [
                 'default' => null,
                 'limit' => 255,
@@ -132,16 +127,6 @@ class AddCarts extends AbstractMigration
             ->addIndex(
                 [
                     'user_id',
-                ]
-            )
-            ->addIndex(
-                [
-                    'deliveryaddress_id',
-                ]
-            )
-            ->addIndex(
-                [
-                    'invoiceaddress_id',
                 ]
             )
             ->create();

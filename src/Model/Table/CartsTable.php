@@ -10,8 +10,6 @@ use Cake\Validation\Validator;
  * Carts Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Users
- * @property \Cake\ORM\Association\BelongsTo $Deliveryaddresses
- * @property \Cake\ORM\Association\BelongsTo $Invoiceaddresses
  * @property \Cake\ORM\Association\HasMany $Cartlines
  *
  * @method \App\Model\Entity\Cart get($primaryKey, $options = [])
@@ -47,14 +45,6 @@ class CartsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Deliveryaddresses', [
-            'foreignKey' => 'deliveryaddress_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('Invoiceaddresses', [
-            'foreignKey' => 'invoiceaddress_id',
-            'joinType' => 'INNER'
-        ]);
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
@@ -88,8 +78,6 @@ class CartsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-        $rules->add($rules->existsIn(['deliveryaddress_id'], 'Deliveryaddresses'));
-        $rules->add($rules->existsIn(['invoiceaddress_id'], 'Invoiceaddresses'));
 
         return $rules;
     }
