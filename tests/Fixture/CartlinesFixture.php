@@ -52,11 +52,11 @@ class CartlinesFixture extends TestFixture
             'created' => '2016-10-11 14:01:25',
             'modified' => '2016-10-11 14:01:25',
             'deleted' => '2016-10-11 14:01:25',
-            'cart_id' => '9f3918f3-b31d-4784-a574-2fd09852aa45',
-            'photo_id' => '1d5b8859-eeb6-4b9c-a067-d40cb25029b7',
-            'product_id' => 'ab3c4b07-a311-4139-aa51-45ee7cc3039c',
+            'cart_id' => '1db1f83f-1b45-464b-b239-1e0651ba2710',
+            'photo_id' => '59d395fa-e723-43f0-becb-0078425f9a99',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
             'quantity' => 1,
-            'options_hash' => 'Lorem ipsum dolor sit amet'
+            'options_hash' => '3c7000c3dc91896e823fae5253b8d270'
         ],
     ];
 }

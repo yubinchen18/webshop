@@ -18,7 +18,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Cartline newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Cartline[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Cartline|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Cartline patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Cartline patchEntity(\Cake\Datasource\
+ *          EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Cartline[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Cartline findOrCreate($search, callable $callback = null)
  *

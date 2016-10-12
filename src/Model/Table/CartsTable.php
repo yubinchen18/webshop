@@ -16,7 +16,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Cart newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Cart[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Cart|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Cart patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Cart patchEntity(\Cake\Datasource\
+ *          EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Cart[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Cart findOrCreate($search, callable $callback = null)
  *
@@ -88,15 +89,16 @@ class CartsTable extends Table
      * @param type $userId
      * @return boolean
      */
-    public function checkExistingCart($userId) {
+    public function checkExistingCart($userId)
+    {
         $cart = $this->find()
             ->where(['user_id' => $userId])
             ->first();
         
         if (empty($cart)) {
-            $cart = $this->newEntity();
-            $cart->user_id = $userId;
-            if(!$this->save($cart)) {
+            $cart = $this->newEntity(['user_id' => $userId]);
+            
+            if (!$this->save($cart)) {
                 return false;
             }
         }

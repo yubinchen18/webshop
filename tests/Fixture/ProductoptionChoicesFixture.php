@@ -46,15 +46,48 @@ class ProductoptionChoicesFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '54ea36dc-95f9-4fc2-927d-c0e8a0592ca1',
-            'productoption_id' => '10859ec7-0626-4ddc-a665-cefca5be46fe',
-            'value' => 'Lorem ipsum dolor sit amet',
+            'id' => 'b6155209-2c1f-46b8-b164-cb5cff20b0d1',
+            'productoption_id' => 'd865ed8d-640e-44a2-9828-c12d35df753b',
+            'value' => 'sepia',
             'description' => 'Lorem ipsum dolor sit amet',
             'default2' => 1,
             'price_ex' => 1,
-            'created' => '2016-10-05 11:05:49',
-            'modified' => '2016-10-05 11:05:49',
-            'deleted' => '2016-10-05 11:05:49'
+            'created' => '2016-10-12 09:55:30',
+            'modified' => '2016-10-12 09:55:30',
+            'deleted' => '2016-10-12 09:55:30'
+        ],
+        [
+            'id' => '6b0fd44a-85a7-4288-8960-9a0f5c981458',
+            'productoption_id' => 'd865ed8d-640e-44a2-9828-c12d35df753b',
+            'value' => 'geen',
+            'description' => 'Lorem ipsum dolor sit amet',
+            'default2' => 1,
+            'price_ex' => 1,
+            'created' => '2016-10-12 09:55:30',
+            'modified' => '2016-10-12 09:55:30',
+            'deleted' => '2016-10-12 09:55:30'
+        ],
+        [
+            'id' => '7c9cf742-9758-4493-9ee6-5015139b814e',
+            'productoption_id' => 'ebc439ea-c8f7-4259-8e30-4ad3dda56d1a',
+            'value' => 'glans',
+            'description' => 'Lorem ipsum dolor sit amet',
+            'default2' => 1,
+            'price_ex' => 1,
+            'created' => '2016-10-12 09:55:30',
+            'modified' => '2016-10-12 09:55:30',
+            'deleted' => '2016-10-12 09:55:30'
+        ],
+        [
+            'id' => '9f426c8c-8e72-4b9a-b8aa-75b2174ebab5',
+            'productoption_id' => 'ebc439ea-c8f7-4259-8e30-4ad3dda56d1a',
+            'value' => 'mat',
+            'description' => 'Lorem ipsum dolor sit amet',
+            'default2' => 1,
+            'price_ex' => 1,
+            'created' => '2016-10-12 09:55:30',
+            'modified' => '2016-10-12 09:55:30',
+            'deleted' => '2016-10-12 09:55:30'
         ],
     ];
 }

@@ -16,7 +16,7 @@ class ProductoptionsTableTest extends TestCase
      *
      * @var \App\Model\Table\ProductoptionsTable
      */
-    public $Productoptions;
+    public $ProductoptionsTable;
 
     /**
      * Fixtures
@@ -24,6 +24,22 @@ class ProductoptionsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'app.cartline_productoptions',
+        'app.cartlines',
+        'app.carts',
+        'app.users',
+        'app.addresses',
+        'app.persons',
+        'app.groups',
+        'app.projects',
+        'app.schools',
+        'app.barcodes',
+        'app.photos',
+        'app.orders',
+        'app.products',
+        'app.productoptions',
+        'app.productoption_choices',
+        'app.products_productoptions'
     ];
 
     /**
@@ -35,7 +51,7 @@ class ProductoptionsTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Productoptions') ? [] : ['className' => 'App\Model\Table\ProductoptionsTable'];
-        $this->Productoptions = TableRegistry::get('Productoptions', $config);
+        $this->ProductoptionsTable = TableRegistry::get('Productoptions', $config);
     }
 
     /**
@@ -45,19 +61,9 @@ class ProductoptionsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Productoptions);
+        unset($this->ProductoptionsTable);
 
         parent::tearDown();
-    }
-
-    /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
     }
 
     /**
@@ -67,6 +73,8 @@ class ProductoptionsTableTest extends TestCase
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $mock = new \Cake\Validation\Validator();
+        $validator = $this->ProductoptionsTable->validationDefault($mock);
+        $this->assertEquals($mock, $validator);
     }
 }

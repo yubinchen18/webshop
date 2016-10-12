@@ -40,10 +40,17 @@ class ProductoptionsFixture extends TestFixture
     public $records = [
         [
             'id' => 'd865ed8d-640e-44a2-9828-c12d35df753b',
-            'name' => 'Lorem ipsum dolor sit amet',
+            'name' => 'Kleurbewerking',
             'created' => '2016-10-04 12:04:24',
             'modified' => '2016-10-04 12:04:24',
             'deleted' => '2016-10-04 12:04:24'
         ],
+        [
+            'id' => 'ebc439ea-c8f7-4259-8e30-4ad3dda56d1a',
+            'name' => 'Uitvoering',
+            'created' => '2016-10-04 12:04:24',
+            'modified' => '2016-10-04 12:04:24',
+            'deleted' => '2016-10-04 12:04:24'
+        ]
     ];
 }

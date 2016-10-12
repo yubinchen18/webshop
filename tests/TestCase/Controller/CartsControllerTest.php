@@ -21,6 +21,15 @@ class CartsControllerTest extends BaseIntegrationTestCase
         'app.cartlines',
         'app.cartlineProductoptions',
         'app.products',
+        'app.users',
+        'app.photos',
+        'app.productoptions',
+        'app.productoption_choices',
+        'app.persons',
+        'app.barcodes',
+        'app.groups',
+        'app.projects',
+        'app.schools',
     ];
     
     public function setUp()
@@ -28,14 +37,63 @@ class CartsControllerTest extends BaseIntegrationTestCase
         parent::setUp();
         $this->loginPerson();
         $this->Carts = TableRegistry::get('Carts');
+        $this->Photos = TableRegistry::get('Photos');
+        $this->Persons = TableRegistry::get('Persons');
+        $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
     }
+    
+    public function testBeforeAddOk()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $data = [
+            'cartline' => [
+                'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+                'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+                'product_name' => 'product1',
+                'product_options' => [
+                    0 => [
+                        'name' => 'Uitvoering',
+                        'value' => 'glans',
+                        'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+                    ],
+                    1 => [
+                        'name' => 'Kleurbewerking',
+                        'value' => 'geen',
+                        'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+                    ]
+                ],
+                'product_price' => 9.99
+            ]
+        ];
+        
+        $this->post('/carts/beforeAdd', $data); //route
+        
+        $expected = '{"photo_id":"277d32ec-b56c-44fa-a10a-ddfcb86c19f8",'
+                . '"product_id":"3a1bef8f-f977-4a0e-8c29-041961247d2d",'
+                . '"product_name":"product1","product_options":'
+                . '[{"name":"Uitvoering","value":"glans",'
+                . '"icon":"layout\/Hoogstraten_webshop-onderdelen-25.png"},'
+                . '{"name":"Kleurbewerking","value":"geen",'
+                . '"icon":"layout\/Hoogstraten_webshop-onderdelen-31.png"}],'
+                . '"product_price":9.99}';
+        $this->assertResponseContains($expected);
+    }
+    
+    public function testBeforeAddWrongMethod()
+    {
+        $response = $this->get('/carts/beforeAdd'); //route
+        
+        $expected = false;
+        $this->assertEquals($expected, $response);
+    }
+    
     
     /**
      * Test add method
      *
      * @return void
      */
-    public function testAddC()
+    public function testAddToNewCart()
     {
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $productOptions = [
@@ -59,45 +117,296 @@ class CartsControllerTest extends BaseIntegrationTestCase
             'product_price' => 9.99,
             'quantity' => 5
         ];
-       
-        $this->post('/carts/add', $data); //route
-        $cart = $this->Carts->find()->all();
-//        pr($cart);die();
-//        $this->assertEquals()
-        
-        
-//        debug($this->_response->body());
-        
-        
+        $this->post('/carts/add.json', $data); //route
+        $carts = $this->Carts->find()->all();
+        $this->assertEquals(2, count($carts));
     }
-
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
+    
+    public function testAddToExistingCart()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->loginPerson2();
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'geen',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+//        91017bf5-5b19-438b-bd44-b0c4e1eaf903
+        $carts = $this->Carts->find()->all();
+        $this->assertEquals(1, count($carts));
     }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
+    
+    public function testAddNewCartline()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'geen',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $carts = $this->Carts->find()->all()->toArray();
+        $cartlines = $this->Carts->Cartlines->find()
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->all();
+        $newCartline = $this->Carts->Cartlines->find()
+                ->where(['cart_id' => $carts[1]->id])
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->first();
+        $newCartlineOption1 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'glans']);
+                })
+                ->toArray();
+        $newCartlineOption2 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'geen']);
+                })
+                ->toArray();
+        
+        $this->assertEquals(2, count($carts));
+        $this->assertEquals(2, count($cartlines));
+        $this->assertEquals('277d32ec-b56c-44fa-a10a-ddfcb86c19f8', $newCartline->photo_id);
+        $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
+        $this->assertEquals(5, $newCartline->quantity);
+        $this->assertEquals(2, count($newCartline->cartline_productoptions));
+        $this->assertEquals(1, count($newCartlineOption1));
+        $this->assertEquals(1, count($newCartlineOption2));
+        //debug($this->_response->body());
     }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
+    
+    public function testEditExistingCartlineWithNewQuantity()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->loginPerson2();
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'sepia',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-33.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '59d395fa-e723-43f0-becb-0078425f9a99',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $carts = $this->Carts->find()->all()->toArray();
+        $cartlines = $this->Carts->Cartlines->find()
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->all();
+        $newCartline = $this->Carts->Cartlines->find()
+                ->where(['cart_id' => $carts[0]->id])
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->first();
+        $newCartlineOption1 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'glans']);
+                })
+                ->toArray();
+        $newCartlineOption2 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'sepia']);
+                })
+                ->toArray();
+        
+        $this->assertEquals(1, count($carts));
+        $this->assertEquals(1, count($cartlines));
+        $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $newCartline->photo_id);
+        $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
+        $this->assertEquals(6, $newCartline->quantity);
+        $this->assertEquals(2, count($newCartline->cartline_productoptions));
+        $this->assertEquals(1, count($newCartlineOption1));
+        $this->assertEquals(1, count($newCartlineOption2));
+    }
+    
+    public function testAddNewCartlineWithExistingProductWithDifferentOptions()
+    {
+        $this->loginPerson2();
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'geen',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '59d395fa-e723-43f0-becb-0078425f9a99',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 3
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $carts = $this->Carts->find()->all()->toArray();
+        $cartlines = $this->Carts->Cartlines->find()
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->all();
+
+        $newCartline = $this->Carts->Cartlines->find()
+                ->where(['cart_id' => $carts[0]->id])
+                ->contain(['CartlineProductoptions.ProductoptionChoices'])
+                ->last();
+        $newCartlineOption1 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'glans']);
+                })
+                ->toArray();
+        $newCartlineOption2 = $this->Carts->Cartlines->CartlineProductoptions->find()
+                ->where(['cartline_id' => $newCartline->id])
+                ->matching('ProductoptionChoices', function ($q) {
+                    return $q->where(['ProductoptionChoices.value' => 'geen']);
+                })
+                ->toArray();
+        
+        $this->assertEquals(1, count($carts));
+        $this->assertEquals(2, count($cartlines));
+        $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $newCartline->photo_id);
+        $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
+        $this->assertEquals(3, $newCartline->quantity);
+        $this->assertEquals(2, count($newCartline->cartline_productoptions));
+        $this->assertEquals(1, count($newCartlineOption1));
+        $this->assertEquals(1, count($newCartlineOption2));
+    }
+    
+    public function testAddFails()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'geen',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-bestaatniet',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $this->assertEquals(['message' => 'Could not save new cartline'], $this->viewVariable('response'));
+    }
+    
+    public function testAddOptionsFail()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'asdf',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $this->assertEquals([
+            'message' => 'Could not save product options to cartline'
+        ], $this->viewVariable('response'));
+    }
+    
+    public function testAddInvalidMethod()
+    {
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'asdf',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-31.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        $this->post('/carts/add.json', $data); //route
+        $this->assertEquals(['message' => 'Invalid method error'], $this->viewVariable('response'));
     }
 }

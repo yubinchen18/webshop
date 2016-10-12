@@ -40,7 +40,7 @@ class CartsFixture extends TestFixture
     public $records = [
         [
             'id' => '1db1f83f-1b45-464b-b239-1e0651ba2710',
-            'user_id' => '4526e927-eb16-47b5-abcb-f21cc5983bab',
+            'user_id' => '61d2a03c-08f9-400b-9942-9d2f3a843aaa',
             'created' => 'Lorem ipsum dolor sit amet',
             'modified' => 'Lorem ipsum dolor sit amet',
             'deleted' => 'Lorem ipsum dolor sit amet'

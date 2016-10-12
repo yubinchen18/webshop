@@ -17,7 +17,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\ProductoptionChoice newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\ProductoptionChoice[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\ProductoptionChoice|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\ProductoptionChoice patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\ProductoptionChoice patchEntity(\Cake\Datasource\
+ *          EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\ProductoptionChoice[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\ProductoptionChoice findOrCreate($search, callable $callback = null)
  *
@@ -104,7 +105,7 @@ class ProductoptionChoicesTable extends Table
     
     public function checkIdByName($optionName, $optionValue)
     {
-        return $this->find()
+        $choice = $this->find()
             ->select('id')
             ->where([
                 'productoption_id' => $this->Productoptions->find()
@@ -114,7 +115,10 @@ class ProductoptionChoicesTable extends Table
                     ->id,
                 'value' => $optionValue
             ])
-            ->first()
-            ->id;
+            ->first();
+        if (!empty($choice)) {
+            return $choice->id;
+        }
+        return false;
     }
 }

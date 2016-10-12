@@ -24,7 +24,8 @@ class CartsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        
+        'app.carts',
+        'app.users',
     ];
 
     /**
@@ -52,32 +53,22 @@ class CartsTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
      *
-     * @return void
      */
-    public function testInitialize()
+    public function testReturnNewCart()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $userId = '91017bf5-5b19-438b-bd44-b0c4e1eaf903';
+        $this->Carts->checkExistingCart($userId);
+        $allcarts = $this->Carts->find()->all();
+        $this->assertEquals(2, count($allcarts));
     }
-
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
+    
+    public function testReturnExistingCart()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $userId = '61d2a03c-08f9-400b-9942-9d2f3a843aaa';
+        $cart = $this->Carts->checkExistingCart($userId);
+        $allcarts = $this->Carts->find()->all();
+        $this->assertEquals(1, count($allcarts));
+        $this->assertEquals('1db1f83f-1b45-464b-b239-1e0651ba2710', $cart->id);
     }
 }

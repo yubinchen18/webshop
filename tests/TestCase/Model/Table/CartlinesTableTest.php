@@ -16,7 +16,7 @@ class CartlinesTableTest extends TestCase
      *
      * @var \App\Model\Table\CartlinesTable
      */
-    public $Cartlines;
+    public $CartlinesTable;
 
     /**
      * Fixtures
@@ -24,7 +24,22 @@ class CartlinesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        
+               'app.cartline_productoptions',
+        'app.cartlines',
+        'app.carts',
+        'app.users',
+        'app.addresses',
+        'app.persons',
+        'app.groups',
+        'app.projects',
+        'app.schools',
+        'app.barcodes',
+        'app.photos',
+        'app.orders',
+        'app.products',
+        'app.productoptions',
+        'app.productoption_choices',
+        'app.products_productoptions'
     ];
 
     /**
@@ -36,7 +51,7 @@ class CartlinesTableTest extends TestCase
     {
         parent::setUp();
         $config = TableRegistry::exists('Cartlines') ? [] : ['className' => 'App\Model\Table\CartlinesTable'];
-        $this->Cartlines = TableRegistry::get('Cartlines', $config);
+        $this->CartlinesTable = TableRegistry::get('Cartlines', $config);
     }
 
     /**
@@ -46,38 +61,78 @@ class CartlinesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Cartlines);
+        unset($this->CartlinesTable);
 
         parent::tearDown();
     }
 
     /**
-     * Test initialize method
+     * Test checkExistingCartline method
      *
      * @return void
      */
-    public function testInitialize()
+    public function testCheckExistingCartlineReturnsExisting()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        $cartId = '1db1f83f-1b45-464b-b239-1e0651ba2710';
+        $productId = '3a1bef8f-f977-4a0e-8c29-041961247d2d';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'sepia',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-33.png'
+            ]
+        ];
 
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        
+        $cartline = $this->CartlinesTable->checkExistingCartline($cartId, $productId, $productOptions);
+        $this->assertEquals('97e1c06c-7a87-468d-80d2-766a982214de', $cartline->id);
     }
-
+    
     /**
-     * Test buildRules method
+     * Test checkExistingCartline method
      *
      * @return void
      */
-    public function testBuildRules()
+    public function testCheckExistingCartlineReturnsNew()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $cartId = '1db1f83f-1b45-464b-b239-1e0651ba2710';
+        $productId = '3a1bef8f-f977-4a0e-8c29-041961247d2d';
+        $productOptions = [
+            0 => [
+                'name' => 'Uitvoering',
+                'value' => 'glans',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-25.png',
+            ],
+            1 => [
+                'name' => 'Kleurbewerking',
+                'value' => 'geen',
+                'icon' => 'layout/Hoogstraten_webshop-onderdelen-33.png'
+            ]
+        ];
+
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'product_name' => 'product1',
+            'product_options' => $productOptions,
+            'product_price' => 9.99,
+            'quantity' => 5
+        ];
+        
+        $cartline = $this->CartlinesTable->checkExistingCartline($cartId, $productId, $productOptions);
+        $this->assertEquals(true, $cartline->isNew());
     }
 }
