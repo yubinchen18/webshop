@@ -22,9 +22,6 @@ class CartsFixture extends TestFixture
         'created' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'modified' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'deleted' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        '_indexes' => [
-            'user_id' => ['type' => 'index', 'columns' => ['user_id'], 'length' => []],
-        ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -42,8 +39,8 @@ class CartsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '88250809-7d1d-42ed-98f3-52380d8f9fa8',
-            'user_id' => '3423535a-8273-4308-9bf7-9a8944a0692e',
+            'id' => '1db1f83f-1b45-464b-b239-1e0651ba2710',
+            'user_id' => '4526e927-eb16-47b5-abcb-f21cc5983bab',
             'created' => 'Lorem ipsum dolor sit amet',
             'modified' => 'Lorem ipsum dolor sit amet',
             'deleted' => 'Lorem ipsum dolor sit amet'

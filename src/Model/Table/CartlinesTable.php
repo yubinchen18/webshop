@@ -99,4 +99,25 @@ class CartlinesTable extends Table
 
         return $rules;
     }
+    
+    /**
+     * Check if user chosen cartline with options already exists or else
+     * make new cartline record
+     */
+    public function checkExistingCartline($cartId, $productId, array $productOptions)
+    {
+        $cartline = $this->find()
+            ->where([
+                'cart_id' => $cartId,
+                'product_id' => $productId,
+                'options_hash' => md5(json_encode($productOptions))
+            ])
+            ->first();
+
+        // or create new cart
+        if (empty($cartline)) {
+            $cartline = $this->Carts->Cartlines->newEntity();
+        }
+        return $cartline;
+    }
 }

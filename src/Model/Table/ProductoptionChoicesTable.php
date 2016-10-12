@@ -101,4 +101,20 @@ class ProductoptionChoicesTable extends Table
 
         return $rules;
     }
+    
+    public function checkIdByName($optionName, $optionValue)
+    {
+        return $this->find()
+            ->select('id')
+            ->where([
+                'productoption_id' => $this->Productoptions->find()
+                    ->select('id')
+                    ->where(['name' => $optionName])
+                    ->first()
+                    ->id,
+                'value' => $optionValue
+            ])
+            ->first()
+            ->id;
+    }
 }

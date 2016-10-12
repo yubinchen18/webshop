@@ -81,4 +81,25 @@ class CartsTable extends Table
 
         return $rules;
     }
+    
+    /**
+     * Check if user already has a cart or else
+     * make new cart
+     * @param type $userId
+     * @return boolean
+     */
+    public function checkExistingCart($userId) {
+        $cart = $this->find()
+            ->where(['user_id' => $userId])
+            ->first();
+        
+        if (empty($cart)) {
+            $cart = $this->newEntity();
+            $cart->user_id = $userId;
+            if(!$this->save($cart)) {
+                return false;
+            }
+        }
+        return $cart;
+    }
 }

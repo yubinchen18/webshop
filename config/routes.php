@@ -245,7 +245,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     ]);
     $routes->connect('/carts/add', [
         'controller' => 'Carts',
-        'action' => 'addToCart'
+        'action' => 'add'
     ]);
     
     Router::prefix('api', function ($routes) {

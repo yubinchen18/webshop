@@ -23,7 +23,7 @@
             <div class="photos-view-buttons-select"></div>
         </div>
         <div class='button-zwartWit photos-view-buttons-button' 
-             data-option-value='{"name": "Kleurbewerking", "value": "zwartWit", "icon": "layout/Hoogstraten_webshop-onderdelen-32.png"}'>
+             data-option-value='{"name": "Kleurbewerking", "value": "zwart/wit", "icon": "layout/Hoogstraten_webshop-onderdelen-32.png"}'>
             <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-32.png', [
                 'class' => ['img-responsive']
             ]); ?>
@@ -35,7 +35,7 @@
             ]); ?>
         </div>
         <div class='button-special photos-view-buttons-button' 
-             data-option-value='{"name": "Kleurbewerking", "value": "special", "icon": "layout/Hoogstraten_webshop-onderdelen-34.png"}'>
+             data-option-value='{"name": "Kleurbewerking", "value": "speciaal", "icon": "layout/Hoogstraten_webshop-onderdelen-34.png"}'>
             <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-34.png', [
                 'class' => ['img-responsive']
             ]); ?>
