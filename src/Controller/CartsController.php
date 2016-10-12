@@ -36,7 +36,6 @@ class CartsController extends AppController
      */
     public function add()
     {
-        $this->autoRender = false;
         if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data();
             $userId = $this->Auth->user('id');
