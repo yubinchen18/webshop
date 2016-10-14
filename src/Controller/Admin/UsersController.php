@@ -59,9 +59,8 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id);{
+        $user = $this->Users->get($id);
         $this->set('user', $user);
-        }
     }
 
     /**

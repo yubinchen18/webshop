@@ -18,17 +18,15 @@ class CartsController extends AppController
      */
     public function beforeAdd()
     {
-        $this->autoRender = false;
-        if ($this->request->is('post')) {
+        if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data('cartline');
             $this->set(compact('cartlineData'));
             $this->viewBuilder()->layout('ajax');
-            $this->render('/Element/Frontend/addToCartPopup');
-        } else {
-            return false;
+            return;
         }
+        return false;
     }
-
+    
     /**
      * Add method
      *
@@ -38,9 +36,8 @@ class CartsController extends AppController
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data();
-            $userId = $this->Auth->user('id');
-            $response = [];
-            $cart = $this->Carts->checkExistingCart($userId);
+            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen')];
+            $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
             $cartline = $this->Carts->Cartlines
                 ->checkExistingCartline($cart->id, $cartlineData['product_id'], $productOptions);
@@ -55,7 +52,7 @@ class CartsController extends AppController
             
             $this->Carts->Cartlines->patchEntity($cartline, $data);
             if (!$this->Carts->Cartlines->save($cartline)) {
-                $response = ['message' => 'Could not save new cartline'];
+                $response = ['success' => false, 'message' => __('Could not save new cartline')];
                 $this->set(compact('response'));
                 $this->set('_serialize', 'response');
                 return;
@@ -71,14 +68,14 @@ class CartsController extends AppController
                         $this->Carts->Cartlines->Products->Productoptions->ProductoptionChoices
                             ->checkIdByName($productOption['name'], $productOption['value']);
                     if (!$this->Carts->Cartlines->CartlineProductoptions->save($cartlineProductoption)) {
-                        $response = ['message' => 'Could not save product options to cartline'];
+                        $response = ['success' => false, 'message' => __('Could not save product options to cartline')];
                         $this->set(compact('response'));
                         $this->set('_serialize', 'response');
                         return;
                     }
                 }
             }
-            $response = ['message' => 'Cart successfully saved'];
+            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen')];
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;

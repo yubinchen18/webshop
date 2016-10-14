@@ -41,8 +41,6 @@ class UploadComponent extends Component
                 $this->create($data);
             }
             return $filename;
-            pr('yo');
-            die();
         }
         return false;
     }

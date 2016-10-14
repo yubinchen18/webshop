@@ -17,8 +17,7 @@ jQuery(function($) {
     // close popup
     $('.photos-product-index').on('click', '.addToCartPopup-layer', function(e){
 	e.preventDefault();
-        $('.addToCartPopup').remove();
-        $(this).remove();
+        $(this).parent().remove();
     });
     
     // decrease amount
@@ -74,8 +73,24 @@ jQuery(function($) {
             method: 'POST',
 //            dataType:"json",
             success: function(response) {
-                $('.addToCartPopup').remove();
-                $('.addToCartPopup-layer').remove();
+                $('.addToCartPopup').parent().remove();
+                
+                // add confirmation message
+                if(response.success == true) {
+                    $('.addToCartPopup-confirmation').addClass('alert-success');
+                    $('#msg').html(response.message);
+                    $('.addToCartPopup-confirmation').show();
+                    setTimeout(function() {
+                        $('.addToCartPopup-confirmation').hide();
+                    },2000);
+                } else {
+                    $('.addToCartPopup-confirmation').addClass('alert-danger');
+                    $('#msg').html(response.message);
+                    $('.addToCartPopup-confirmation').show();
+                    setTimeout(function() {
+                        $('.addToCartPopup-confirmation').hide();
+                    },2000);
+                }
             },
             failure: function(response) {
                 console.log(response.error);

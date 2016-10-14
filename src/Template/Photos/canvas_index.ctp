@@ -7,6 +7,9 @@
                 <div class="row">
                     <h2 class='col-xs-12'><?= __('Canvas') ?></h2>
                     
+                    <div class='addToCartPopup-confirmation col-md-4 col-xs-5 alert'>
+                        <span id='msg'></span>
+                    </div>
                     <?php foreach ($products as $product): ?>
                         <div class="col-md-4 col-xs-6 photos-product-container">
                             <div class="photos-product-label">

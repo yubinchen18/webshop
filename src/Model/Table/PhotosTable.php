@@ -189,7 +189,7 @@ class PhotosTable extends BaseTable
         
         $image->writeImage($imgPath);
         
-        $image->scaleImage(0, 250);
+        $image->scaleImage(0, 400);
         $image->writeImage($medPath);
         
         $image->scaleImage(0, 100);
