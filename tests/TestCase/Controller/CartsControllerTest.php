@@ -81,10 +81,8 @@ class CartsControllerTest extends BaseIntegrationTestCase
     
     public function testBeforeAddWrongMethod()
     {
-        $response = $this->get('/carts/beforeAdd'); //route
-        
-        $expected = false;
-        $this->assertEquals($expected, $response);
+        $this->get('/carts/beforeAdd'); //route
+        $this->assertResponseContains('Bad Request');
     }
     
     
@@ -411,6 +409,6 @@ class CartsControllerTest extends BaseIntegrationTestCase
             'quantity' => 5
         ];
         $this->post('/carts/add.json', $data); //route
-        $this->assertEquals(['message' => 'Invalid method error'], $this->viewVariable('response'));
+        $this->assertEquals(['success' => false, 'message' => 'Invalid method error'], $this->viewVariable('response'));
     }
 }

@@ -2,8 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
-use App\Model\Entity\Cart;
+use Cake\Network\Exception\BadRequestException;
 
 /**
  * Carts Controller
@@ -24,7 +23,7 @@ class CartsController extends AppController
             $this->viewBuilder()->layout('ajax');
             return;
         }
-        return false;
+        throw new BadRequestException();
     }
     
     /**
@@ -80,7 +79,7 @@ class CartsController extends AppController
             $this->set('_serialize', 'response');
             return;
         }
-        $response = ['message' => 'Invalid method error'];
+        $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
     }
