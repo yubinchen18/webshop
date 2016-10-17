@@ -119,16 +119,10 @@ class DownloadqueuesController extends AppController
 
             if ($model == "Photos") {
                 $path = $this->Photos->getPath($data['barcode_id']);
-                foreach ($data['data'] as $key => $imagedata) {
-                    $filename = basename($data['path']);
+                $photoFile = base64_decode($data['data']);
+                $filename = basename($data['path']);
 
-                    if ($key != 'original') {
-                        $filename .= '_' . $key;
-                    }
-
-                    $decoded = base64_decode($imagedata);
-                    file_put_contents($path . DS . $filename, $decoded);
-                }
+                file_put_contents($path . DS . $filename, $photoFile);
             }
             
             if ($model == "Persons") {
@@ -136,7 +130,7 @@ class DownloadqueuesController extends AppController
                 $data['address'] = $this->Addresses->setEntityData($data);
             }
            
-            if ($data['online_id'] === 0) { //new
+            if (empty($data['online_id'])) { //new
                 unset($data['id']);
                 $entity = $this->{$model}->newEntity($data);
             } else {
