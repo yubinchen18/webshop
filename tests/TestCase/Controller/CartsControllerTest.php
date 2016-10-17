@@ -350,7 +350,10 @@ class CartsControllerTest extends BaseIntegrationTestCase
             'quantity' => 5
         ];
         $this->post('/carts/add.json', $data); //route
-        $this->assertEquals(['message' => 'Could not save new cartline'], $this->viewVariable('response'));
+        $this->assertEquals([
+            'success' => false,
+            'message' => 'Could not save new cartline'
+        ], $this->viewVariable('response'));
     }
     
     public function testAddOptionsFail()
@@ -379,6 +382,7 @@ class CartsControllerTest extends BaseIntegrationTestCase
         ];
         $this->post('/carts/add.json', $data); //route
         $this->assertEquals([
+            'success' => false,
             'message' => 'Could not save product options to cartline'
         ], $this->viewVariable('response'));
     }
