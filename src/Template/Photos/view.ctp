@@ -22,7 +22,7 @@
             <!-- Large screen -->
             <div class="photos-view-products-buttons-md col-md-3 hidden-sm hidden-xs">
                 <div class="photos-view-products-select">
-                    <h3><?= __('Selecteer een product >') ?></h3>
+                    <h3><?= __('Selecteer<br /> een product >') ?></h3>
                 </div>
             </div>
         </div>
