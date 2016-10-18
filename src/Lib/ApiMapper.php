@@ -66,6 +66,7 @@ class ApiMapper
                 "LastName" => $entity->lastname,
                 "Url" => $entity->slug,
                 "Address" => $entity->address->full_address,
+                "Gender" => $entity->address->gender,
                 "City" => $entity->address->city,
                 "Zipcode" => $entity->address->zipcode,
                 "Deleted" => !empty($entity->deleted),
