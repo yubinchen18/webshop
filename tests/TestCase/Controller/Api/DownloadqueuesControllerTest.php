@@ -544,9 +544,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "id"=> '44a4e893-3f80-474f-8a8f-2870513c9d1d',
                 "online_id"=> 0,
                 "barcode_id"=> 'df99d62f-258c-424d-a1fe-af3213e70867',
-                "data" => [
-                    "original" => $this->getBaseImage()
-                ],
+                "data" => $this->getBaseImage(),
                 "type"=> "sibling",
                 'path' => 'HA088268.jpg',
                 "modified"=> "\/Date(1393595241733)\/",

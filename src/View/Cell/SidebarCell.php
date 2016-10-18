@@ -127,7 +127,7 @@ class SidebarCell extends Cell
                         ]
                     ],
                 ];
-            case 'user':
+case 'user':
                 return [
                     [
                         'name' => __('Dashboard'),
