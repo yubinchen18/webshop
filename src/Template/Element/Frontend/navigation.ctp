@@ -1,43 +1,43 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="row">
-            <a class="col-xs-3">Logo</a>
+            <?= $this->Html->link(
+                    $this->Html->image('/img/layout/logo-hoogstraten-fotografie.png',
+                        ['alt' => 'logo']),
+                    ['controller' => 'Photos', 'action' => 'index'],
+                    ['escape' => false, 'class' => 'col-xs-3', 'id' => 'logo-top']
+            );  ?>
             <!-- user portraits -->
             <?php if (isset($userPortraits)): ?>
-                <div class='col-xs-7 portraits-container'>
+                <div class='col-xs-6 col-md-7 hidden-sm hidden-xs portraits-container'>
                     <?php foreach($userPortraits as $userPortrait): ?>
                         <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
             <!-- Desktop screen -->
-            <div class="col-sm-2 hidden-sm hidden-xs">
+            <div class="col-sm-9 col-md-2">
                 <div class="cart-btn desktopmenu">
-                    <div class="row">
-                        <div class="dropdown col-md-12">
-                            <a href="/cart"><img src="/img/layout/cart.png" /></a>
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown"><img src="/img/layout/menu.png" /></a>
-                            <ul class="dropdown-menu pull-right">
-                              <li><a href="#">HTML</a></li>
-                              <li><a href="#" class="even">CSS</a></li>
-                              <li><a href="#">JavaScript</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Small screen -->
-            <div class="col-xs-2 hidden-md hidden-lg">
-                <div class="cart-btn">
                     <div class="dropdown">
-                        <a href="/cart"><img src="/img/layout/cart.png" /></a>
-                        <a class="dropdown-toggle" data-toggle="dropdown"><img src="/img/layout/menu.png" /></a>
-                        <ul class="dropdown-menu col-xs-12">
+                        <?= $this->Html->link(
+                                $this->Html->image('/img/layout/menu.png',
+                                    ['alt' => 'logo', 'class' => 'img-responsive']),
+                                '#',
+                                ['escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false']
+                        );  ?>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdown">
                           <li><a href="#">HTML</a></li>
                           <li><a href="#" class="even">CSS</a></li>
                           <li><a href="#">JavaScript</a></li>
                         </ul>
-                    </div>
+                    </div>  
+                    <?= $this->Html->link(
+                            $this->Html->image('/img/layout/cart.png',
+                                ['alt' => 'logo', 'class' => 'img-responsive']),
+                            ['controller' => 'Photos', 'action' => 'index'],
+                            ['escape' => false]
+                    );  ?>
+                     
                 </div>
             </div>
         </div>
