@@ -6,6 +6,7 @@ use Cake\Utility\Security;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use App\Controller\Component\AvatarComponent;
+
 /**
  * Users Controller
  *
@@ -58,9 +59,8 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id);{ 
+        $user = $this->Users->get($id);
         $this->set('user', $user);
-        }
     }
 
     /**
@@ -69,13 +69,14 @@ class UsersController extends AppController
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {   
+    {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             if (!empty($this->request->data['Upload'])) {
-                $this->request->data['profile_photo_filename'] = $this->Upload->avatarUpload($this->request->data['Upload']);
+                $this->request->data['profile_photo_filename'] =
+                    $this->Upload->avatarUpload($this->request->data['Upload']);
                 unset($this->request->data['Upload']);
-            }            
+            }
             $this->request->data['genuine'] = $this->request->data['password'];
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
@@ -84,7 +85,6 @@ class UsersController extends AppController
             } else {
                 $this->Flash->error(__('De gebruiker kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
-           
         }
         $this->set(compact('user'));
     }
@@ -105,9 +105,10 @@ class UsersController extends AppController
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (!empty($this->request->data['Upload'])) {
-                $this->request->data['profile_photo_filename'] = $this->Upload->avatarUpload($this->request->data['Upload'], true);
+                $this->request->data['profile_photo_filename'] =
+                    $this->Upload->avatarUpload($this->request->data['Upload'], true);
                 unset($this->request->data['Upload']);
-            }       
+            }
             if (isset($this->request->data['password'])) {
                 $this->request->data['genuine'] = $this->request->data['password'];
             }
@@ -188,6 +189,5 @@ class UsersController extends AppController
 //        $this->response->type(['jpg' => 'image/jpeg']);
         $this->response->file($file, ['name' => 'path']);
         return $this->response;
-
     }
 }

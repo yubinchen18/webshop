@@ -29,7 +29,11 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         'app.persons',
         'app.addresses',
         'app.users',
-        'app.products'
+        'app.products',
+        'app.productoptions',
+        'app.productoption_choices',
+        'app.products_productoptions'
+
     ];
     
     public function setUp()
@@ -39,26 +43,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->Photos = TableRegistry::get('Photos');
         $this->Persons = TableRegistry::get('Persons');
         $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
-        $this->session([
-            'Auth' => [
-                'User' => [
-                    'id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
-                    'username' => 'person',
-                    'password' => '$2y$10$JBK87/tveJzabHpc7kcaxuXNqpIBwihGRnnp8s6jTWZh.SC8itldy', //photex
-                    'genuine' => '968e999ace62ee0f0956c43fe3c2289917d71cc02c86906fa85e517d1946deed', //photex
-                    'email' => 'person@person.nl',
-                    'type' => 'person',
-                    'created' => '2016-05-25 09:02:25',
-                    'modified' => '2016-05-25 09:02:25',
-                    'deleted' => null,
-                    'address_id' => '0a2d28b2-cd01-4a11-afd5-e96d8d7f3ee3'
-                ]
-            ],
-            'LoggedInUsers' => [
-                'AllUsers' => [0 => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'],
-                'ActiveUser' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
-            ]
-        ]);
+        $this->loginPerson();
     }
     
     /**

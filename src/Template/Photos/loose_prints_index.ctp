@@ -8,14 +8,25 @@
                     <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
                     <!-- top buttons panel xs only -->
                     <?= $this->element('Frontend/topButtonsPanel'); ?>
-                    
+                    <div class='addToCartPopup-confirmation col-md-4 col-xs-5 alert'>
+                        <span id='msg'></span>
+                    </div>
                     <?php foreach ($products as $product): ?>
                         <div class="col-md-4 col-xs-6 photos-product-container">
                             <div class="photos-product-label">
                                 <div class="row">
                                     <div class="flex-box price col-xs-5">
                                         <?= $this->Number->currency($product->price_ex, 'EUR'); ?>
-                                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', ['class' => 'plus-sign'])  ?>
+                                        <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
+                                            'class' => 'plus-sign',
+                                            'data-cartline' => json_encode([
+                                                'photo_id' => $photo->id,
+                                                'product_id' => $product->id,
+                                                'product_price' => $product->price_ex,
+                                                'product_name' => $product->name,
+                                                'product_options' => ''
+                                            ]),
+                                        ])?>
                                     </div>
                                     <div class="flex-box dimensions col-xs-7">
                                         <?php $size = explode('_', $product->slug); ?>

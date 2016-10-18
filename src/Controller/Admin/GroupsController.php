@@ -53,7 +53,7 @@ class GroupsController extends AppController
         ]);
                 
         $this->set('group', $group);
-    }            
+    }
 
     /**
      * Add method
@@ -148,11 +148,11 @@ class GroupsController extends AppController
         new PDFCardCreator($data);
     }
     
-    public function getStudentsByGroup($id = null) {
-        $groups =  $this->Groups->get($id,[
-           'contain' => ['Persons', 'Projects'] 
+    public function getStudentsByGroup($id = null)
+    {
+        $groups =  $this->Groups->get($id, [
+           'contain' => ['Persons', 'Projects']
         ]);
         $this->set(compact('groups', $groups));
-
     }
 }

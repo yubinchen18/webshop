@@ -249,6 +249,7 @@ class PhotosController extends AppController
                 $productTable = TableRegistry::get('Products');
                 $products = $productTable->find()
                         ->where(['product_group' => $productGroup])
+                        ->contain(['Productoptions.ProductoptionChoices'])
                         ->orderAsc('article')
                         ->toArray();
                 
