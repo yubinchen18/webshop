@@ -5,7 +5,7 @@
                     $this->Html->image('/img/layout/logo-hoogstraten-fotografie.png',
                         ['alt' => 'logo', 'class' => 'img-responsive']),
                     ['controller' => 'Photos', 'action' => 'index'],
-                    ['escape' => false, 'class' => 'col-xs-3', 'id' => 'logo-top']
+                    ['escape' => false, 'class' => 'col-xs-6 col-sm-3', 'id' => 'logo-top']
             );  ?>
             <!-- user portraits -->
             <?php if (isset($userPortraits)): ?>
@@ -16,7 +16,7 @@
                 </div>
             <?php endif; ?>
             <!-- Desktop screen -->
-            <div class="col-sm-9 col-md-2 col-xs-offset-3 col-md-offset-0">
+            <div class="col-sm-9 col-md-2 col-xs-offset-5 col-sm-offset-3 col-md-offset-0">
                 <div class="cart-btn desktopmenu">
                     <div class="dropdown">
                         <?= $this->Html->link(
@@ -63,7 +63,7 @@
                 <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-11.png', [
                     'class' => ['img-responsive', 'navbar-back-to-index-img']
                 ]); ?>
-                <div class="text-center navbar-back-to-index-text hidden-xs hidden-sm">
+                <div class="text-center navbar-back-to-index-text hidden-xs">
                     <?= __("TERUG NAAR OVERZICHT"); ?>
                 </div>
             </div>
