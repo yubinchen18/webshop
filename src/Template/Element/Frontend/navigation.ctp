@@ -26,9 +26,11 @@
                                 ['escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false']
                         );  ?>
                         <ul class="dropdown-menu pull-right" aria-labelledby="dropdown">
-                          <li><a href="#">HTML</a></li>
-                          <li><a href="#" class="even">CSS</a></li>
-                          <li><a href="#">JavaScript</a></li>
+                          <li><?= $this->Html->link(__('Hoe werkt het'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Opties'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Info voor scholen'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Klantenservice'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Veelgestelde'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
                         </ul>
                     </div>  
                     <?= $this->Html->link(
