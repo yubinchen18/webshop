@@ -1,43 +1,43 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="row">
-            <a class="col-xs-3">Logo</a>
+            <?= $this->Html->link(
+                    $this->Html->image('/img/layout/logo-hoogstraten-fotografie.png',
+                        ['alt' => 'logo', 'class' => 'img-responsive']),
+                    ['controller' => 'Photos', 'action' => 'index'],
+                    ['escape' => false, 'class' => 'col-xs-6 col-sm-3', 'id' => 'logo-top']
+            );  ?>
             <!-- user portraits -->
             <?php if (isset($userPortraits)): ?>
-                <div class='col-xs-7 portraits-container'>
+                <div class='col-xs-6 col-md-7 col-xs-offset-3 hidden-sm hidden-xs portraits-container'>
                     <?php foreach($userPortraits as $userPortrait): ?>
                         <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
             <!-- Desktop screen -->
-            <div class="col-sm-2 hidden-sm hidden-xs">
+            <div class="col-sm-9 col-md-2 col-xs-offset-5 col-sm-offset-3 col-md-offset-0">
                 <div class="cart-btn desktopmenu">
-                    <div class="row">
-                        <div class="dropdown col-md-12">
-                            <a href="/cart"><img src="/img/layout/cart.png" /></a>
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown"><img src="/img/layout/menu.png" /></a>
-                            <ul class="dropdown-menu pull-right">
-                              <li><a href="#">HTML</a></li>
-                              <li><a href="#" class="even">CSS</a></li>
-                              <li><a href="#">JavaScript</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Small screen -->
-            <div class="col-xs-2 hidden-md hidden-lg">
-                <div class="cart-btn">
                     <div class="dropdown">
-                        <a href="/cart"><img src="/img/layout/cart.png" /></a>
-                        <a class="dropdown-toggle" data-toggle="dropdown"><img src="/img/layout/menu.png" /></a>
-                        <ul class="dropdown-menu col-xs-12">
-                          <li><a href="#">HTML</a></li>
-                          <li><a href="#" class="even">CSS</a></li>
-                          <li><a href="#">JavaScript</a></li>
+                        <?= $this->Html->link(
+                                $this->Html->image('/img/layout/menu.png',
+                                    ['alt' => 'logo', 'class' => 'img-responsive']),
+                                '#',
+                                ['escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false']
+                        );  ?>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdown">
+                          <li><?= $this->Html->link(__('Hoe werkt het'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Opties'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Info voor scholen'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Klantenservice'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Veelgestelde'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
                         </ul>
-                    </div>
+                    </div>  
+                    <?= $this->Html->image('/img/layout/cart.png',
+                            ['alt' => 'logo', 
+                             'class' => 'img-responsive',
+                             'url' => ['controller' => 'Photos', 'action' => 'index']]);  ?>
+                     
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                 <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-11.png', [
                     'class' => ['img-responsive', 'navbar-back-to-index-img']
                 ]); ?>
-                <div class="text-center navbar-back-to-index-text">
+                <div class="text-center navbar-back-to-index-text hidden-xs">
                     <?= __("TERUG NAAR OVERZICHT"); ?>
                 </div>
             </div>
