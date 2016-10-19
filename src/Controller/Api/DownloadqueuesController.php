@@ -146,8 +146,8 @@ class DownloadqueuesController extends AppController
             
             $savedEntity = $this->{$model}->save($entity, ['api_user' => $this->getUser()]);
             
-            if ($savedEntity->errors()) {
-                var_dump($savedEntity->errors());
+            if (!$savedEntity) {
+                var_dump($entity->errors());
 		die();
             }
             $objectId = $savedEntity->id;
