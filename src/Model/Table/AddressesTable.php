@@ -105,12 +105,12 @@ class AddressesTable extends Table
     public function setEntityData($data) //setAddress
     {
         return [
-            'street' => $data['address'],
-            'number' => 0,
-            'extension' => null,
+            'street' => $data['street'],
+            'number' => $data['number'],
+            'extension' => $data['extension'],
             'city' => $data['city'],
             'zipcode' => $data['zipcode'],
-            'gender' => null,
+            'gender' => $data['gender'],
             'firstname' => $data['firstname'],
             'prefix' => $data['prefix'],
             'lastname' => $data['lastname']
