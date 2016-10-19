@@ -66,11 +66,15 @@ class AppController extends Controller
 
     public function getUser()
     {
+//	var_dump($this->request->env()); die();
         return $this->request->env('PHP_AUTH_USER');
     }
 
     private function saveRequest()
     {
+	if(empty($this->getUser())) {
+		return true;
+	}
         $this->Logs = TableRegistry::get('Logs');
         $entity = $this->Logs->newEntity();
         $entity->username = $this->getUser();

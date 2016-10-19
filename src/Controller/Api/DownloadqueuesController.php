@@ -127,7 +127,6 @@ class DownloadqueuesController extends AppController
             }
             
             if ($model == "Persons") {
-                $data['user_id'] = $this->userId;
                 $data['address'] = $this->Addresses->setEntityData($data);
             }
            
@@ -141,13 +140,15 @@ class DownloadqueuesController extends AppController
                     $this->Persons->processPersons($data);
                 }
                 $entity = $this->{$model}->get($data['id']);
+		unset($data['id']);
                 $entity = $this->{$model}->patchEntity($entity, $data);
             }
             
             $savedEntity = $this->{$model}->save($entity, ['api_user' => $this->getUser()]);
             
             if ($savedEntity === false) {
-                pr($entity->errors);
+                var_dump($savedEntity->errors);
+		die();
             }
             $objectId = $savedEntity->id;
             $this->result[] = $objectId;

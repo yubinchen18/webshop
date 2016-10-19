@@ -132,7 +132,7 @@ class UsersTable extends Table
         unset($object['Users']['created']);
 
         $userId = $object['Users']['online_id'];
-        if ($object['Users']['online_id'] === 0) {
+        if (empty($object['Users']['online_id'])) {
             unset($object['Users']['id']);
 
             $object['Users']['password'] = (new DefaultPasswordHasher)->hash($object['Users']['real_pass']);
