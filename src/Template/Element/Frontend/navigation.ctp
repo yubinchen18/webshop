@@ -33,12 +33,10 @@
                           <li><?= $this->Html->link(__('Veelgestelde'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
                         </ul>
                     </div>  
-                    <?= $this->Html->link(
-                            $this->Html->image('/img/layout/cart.png',
-                                ['alt' => 'logo', 'class' => 'img-responsive']),
-                            ['controller' => 'Photos', 'action' => 'index'],
-                            ['escape' => false]
-                    );  ?>
+                    <?= $this->Html->image('/img/layout/cart.png',
+                            ['alt' => 'logo', 
+                             'class' => 'img-responsive',
+                             'url' => ['controller' => 'Photos', 'action' => 'index']]);  ?>
                      
                 </div>
             </div>
