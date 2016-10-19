@@ -2,11 +2,23 @@ a {
     text-decoration: none;
 }
 .navbar {
-    background: url('/img/layout/header.png') center center no-repeat #19161a !important;
+    background: #19161a; /* Old browsers */
+    background: -moz-linear-gradient(left, #19161a 0%, #435063 50%, #435063 51%, #19161a 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #19161a 0%,#435063 50%,#435063 51%,#19161a 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #19161a 0%,#435063 50%,#435063 51%,#19161a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19161a', endColorstr='#19161a',GradientType=1 ); /* IE6-9 */
     min-height: 97px;
     border-bottom: 6px solid #eda111;
-    overflow: hidden;
-     .navbar-brand {
+    #logo-top {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex; 
+        align-items: center;
+    }
+    .navbar-brand {
         line-height: 97px;
     }
     .cart-btn {
@@ -38,6 +50,21 @@ a {
             width: 70%;
             right: 10px;
             top: 8px;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .navbar-back-to-index {
+            height: 53px;
+            width: 90px;
+            border-radius: 90px 90px 0 0;
+            -moz-border-radius: 90px 90px 0 0;
+            -webkit-border-radius: 90px 90px 0 0;
+            right: 34%;
+            .navbar-back-to-index-img {
+                left: 33%;
+                height: 60%;
+                top: 22%;
+            }
         }
     }
     .portraits-container {
@@ -88,14 +115,37 @@ a {
     }
 }
 .desktopmenu {
-    .dropdown-menu {
-        top: 83px;
+    a {
+        width: 65px;
+        float: right;
     }
     ul.dropdown-menu {
+        top: 83px;
         margin: 0px !important;
+        width: 400px;
+        text-align: right;
     }
-    ul.dropdown-menu  {
-        width: 400px !important;
+    ul.dropdown-menu li a{
+        float: left;
+        width: 100%;
+        padding-top: 12px;
+        height: 44px;
+        font-weight: bold;
+    }
+    @media only screen and (max-width: 768px) {
+        .dropdown {
+            position: inherit;
+        }
+        ul.dropdown-menu {
+            width: 776px;
+            position: absolute;
+            right: -9px;
+            top: 97px;
+        }
+        ul.dropdown-menu li a {
+            
+            
+        }
     }
 }
 div#content {
