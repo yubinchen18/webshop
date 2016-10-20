@@ -71,7 +71,7 @@ class PhotosController extends AppController
     public function getPhoto($id)
     {
         $photo = $this->Photos->get($id);
-        $file = $this->Photos->getPath($photo->barcode_id);
+        $file = $this->Photos->getPath($photo->barcode_id) . DS. $photo->path;
 
         $mimetype = mime_content_type($file);
         $size   = filesize($file);
