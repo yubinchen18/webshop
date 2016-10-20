@@ -71,7 +71,8 @@ class PhotosController extends AppController
     public function getPhoto($id)
     {
         $photo = $this->Photos->get($id);
-        $file = ROOT . DS . $photo->path;
+        $file = $this->Photos->getPath($photo->barcode_id);
+
         $mimetype = mime_content_type($file);
         $size   = filesize($file);
 
@@ -84,6 +85,6 @@ class PhotosController extends AppController
         header('Cache-Control: public');
         header('Pragma: public');
         header('Content-Length: ' . $size);
-        readfile($file);
+        readfile($file);exit;
     }
 }
