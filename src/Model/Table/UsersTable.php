@@ -148,6 +148,25 @@ class UsersTable extends Table
         return [$object, $userId];
     }
 
+    public function newUser($data) 
+    {
+        $user = $this->newEntity();
+        
+        $username = substr($data['firstname'],0,4) . substr($data['zipcode'],0,2). substr($data['type'],1,3);
+        $password = $this->Users->generateRandom();
+        $data = [
+            'username' => $this->Users->checkUsername($username),
+            'password' => (new DefaultPasswordHasher)->hash($password),
+            'genuine' => $password
+        ];
+        
+        $user = $this->patchEntity($user, $data);
+        $user = $this->save($user);
+        
+        return $user->id;
+        
+    }
+    
     public function checkUsername($username)
     {
         $users = $this->find('list', [
