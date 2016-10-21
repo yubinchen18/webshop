@@ -24,31 +24,55 @@ jQuery(function($) {
     $('.photos-product-index').on('click', '.addToCartPopup-minus img', function(e){
 	e.preventDefault();
         var selfContainer = $(this).parent().parent().parent().parent();
-        var price = parseFloat(selfContainer.find('.addToCartPopup-header').data('price')).toFixed(2);
-        var priceLabel = selfContainer.find('.addToCartPopup-header span');
+         var price = parseFloat(selfContainer.find('.addToCartPopup-header').data('price')).toFixed(2);
+        
         var quantityLabel = selfContainer.find('.addToCartPopup-quantity-bottom');
-        var quantity = parseFloat(quantityLabel.html()).toFixed(2);
-        if (quantity > 1) {
+        var quantity = parseInt(quantityLabel.html());
+        if(quantity > 1) {
             quantity--;
         }
-        // update values
-        var totalPrice = parseFloat(quantity * price).toFixed(2);
+        
+        var discountPrice = parseFloat(selfContainer.find('.addToCartPopup-header').data('discount'));
+        
+        if(discountPrice < 1) {
+            discountPrice = price;
+        }
+        
+        totalPrice = parseFloat(price);
+        for(n=2;n<=quantity;n++) {
+            totalPrice += parseFloat(discountPrice);
+        }
+        var priceLabel = selfContainer.find('.addToCartPopup-header span');
         priceLabel.html(totalPrice);
         quantityLabel.html(parseInt(quantity));
     });
     
     // increase amount
     $('.photos-product-index').on('click', '.addToCartPopup-plus img', function(e){
+        totalPrice = 0.00;
 	e.preventDefault();
         var selfContainer = $(this).parent().parent().parent().parent();
-        var price = parseFloat(selfContainer.find('.addToCartPopup-header').data('price')).toFixed(2);
-        var priceLabel = selfContainer.find('.addToCartPopup-header span');
-        var quantityLabel = selfContainer.find('.addToCartPopup-quantity-bottom');
-        var quantity = parseFloat(quantityLabel.html()).toFixed(2);
-        quantity++;
         
-        var totalPrice = parseFloat(quantity * price).toFixed(2);
-        priceLabel.html(totalPrice);
+        var price = parseFloat(selfContainer.find('.addToCartPopup-header').data('price')).toFixed(2);
+        
+        var quantityLabel = selfContainer.find('.addToCartPopup-quantity-bottom');
+        var quantity = parseInt(quantityLabel.html());
+            quantity++;
+
+        var discountPrice = parseFloat(selfContainer.find('.addToCartPopup-header').data('discount'));
+        
+        if(discountPrice < 1) {
+            discountPrice = price;
+        }
+        
+        totalPrice = parseFloat(price);
+        for(n=2;n<=quantity;n++) {
+            totalPrice += parseFloat(discountPrice);
+        }
+
+        var priceLabel = selfContainer.find('.addToCartPopup-header span');
+        
+        priceLabel.html(parseFloat(totalPrice).toFixed(2).replace('.',','));
         quantityLabel.html(parseInt(quantity));
     });
     
@@ -68,6 +92,7 @@ jQuery(function($) {
                 product_name: cartline.product_name,
                 product_options: cartline.product_options,
                 product_price: cartline.product_price,
+                discount: cartline.discount,
                 quantity: cartline.quantity
             },
             method: 'POST',

@@ -18,7 +18,11 @@ class CartsController extends AppController
     public function beforeAdd()
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {
+            
+            $this->loadModel('Products');
+            $product = $this->Products->get($this->request->data['cartline']['product_id']);
             $cartlineData = $this->request->data('cartline');
+            $cartlineData['discount_price'] = ($product->has_discount == 1) ? 3.78 : 0;
             $this->set(compact('cartlineData'));
             $this->viewBuilder()->layout('ajax');
             return;
