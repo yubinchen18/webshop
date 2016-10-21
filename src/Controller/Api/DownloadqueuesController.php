@@ -103,7 +103,7 @@ class DownloadqueuesController extends AppController
             }
         }
         $object = $this->process($object);
-        $this->set('result', [$this->result]);
+        $this->set('result', $this->result);
     }
     
     private function process($object)
