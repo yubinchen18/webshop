@@ -135,6 +135,7 @@ class DownloadqueuesController extends AppController
                 $entity = $this->{$model}->newEntity($data);
                 if($model == "Persons") {
                     $data['user_id'] = $this->Users->newUser($data);
+                    $this->result['user_id'] = $data['user_id'];
                 }
                 
             } else {
@@ -154,7 +155,7 @@ class DownloadqueuesController extends AppController
 		die();
             }
             $objectId = $savedEntity->id;
-            $this->result[] = $objectId;
+            $this->result['id'] = $objectId;
         }
         return $object;
     }

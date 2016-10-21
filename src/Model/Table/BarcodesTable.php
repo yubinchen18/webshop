@@ -119,8 +119,8 @@ class BarcodesTable extends BaseTable
         unset($object['Barcodes']['modified']);
         unset($object['Barcodes']['created']);
 
-        $barcodeId = $object['Barcodes']['online_id'];
-        if (empty($object['Barcodes']['online_id'])) {
+        $barcodeId = !empty($object['Barcodes']['online_id'])?$object['Barcodes']['online_id']:null;
+        if (empty($barcodeId)) {
             unset($object['Barcodes']['id']);
             $entity = $this->newEntity($object['Barcodes']);
             $savedEntity = $this->save($entity, ['api_user' => $user]);
