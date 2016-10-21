@@ -131,8 +131,8 @@ class UsersTable extends Table
         unset($object['Users']['modified']);
         unset($object['Users']['created']);
 
-        $userId = $object['Users']['online_id'];
-        if (empty($object['Users']['online_id'])) {
+        $userId = !empty($object['Users']['online_id'])?$object['Users']['online_id']:null;
+        if (empty($userId)) {
             unset($object['Users']['id']);
 
             $object['Users']['password'] = (new DefaultPasswordHasher)->hash($object['Users']['real_pass']);
@@ -145,7 +145,7 @@ class UsersTable extends Table
 
         unset($object['Users']);
 
-        return [$object, $userId,];
+        return [$object, $userId];
     }
 
     public function checkUsername($username)
