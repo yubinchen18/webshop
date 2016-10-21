@@ -92,18 +92,18 @@ class DownloadqueuesController extends AppController
         if (!empty($object['Users'])) {
             list($object, $userId) = $this->Users->processUsers($object, $this->getUser());
             $this->userId = $userId;
-            $this->result[] = $userId;
+            $this->result['id'] = $userId;
         }
 
         if (!empty($object['Barcodes'])) {
             list($object, $barcodeId) = $this->Barcodes->processBarcodes($object, $this->getUser());
             if (isset($barcodeId)) {
-                $this->result[] = $barcodeId;
+                $this->result['id'] = $barcodeId;
                 $this->barcodeId = $barcodeId;
             }
         }
         $object = $this->process($object);
-        $this->set('result', $this->result);
+        $this->set('result', [$this->result]);
     }
     
     private function process($object)
