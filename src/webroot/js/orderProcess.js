@@ -79,6 +79,7 @@ jQuery(function($) {
                         $('.quantity-'+localQuantity.data('id')).parent().html('<div class="quantity-'+localQuantity.data('id')+'">1 x &euro; '+ price.replace('.',',') + '</div>');
                     }
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
+                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
                 }
             },
@@ -98,17 +99,32 @@ jQuery(function($) {
                     cartline_quantity: localQuantity.val(),
                 },
                 method: 'POST',
-    //            dataType:"json",
+                dataType:"json",
                 success: function(response) {
                     $('.'+localQuantity.attr('id')).html(localQuantity.val());
                     $('.price-'+localQuantity.data('id')).html(response.cartline.subtotal.toString().replace(".", ","));
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
+                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
                 },
                 failure: function(response) {
-                    console.log(response);
                 }
             });
         }
+    });
+    
+    $('.cartline-close').on('click', function() {
+       if(confirm('Weet u zeker dat u dit product wilt verwijderen?')) {
+          var divId = $(this).parent().attr('id');
+          $.ajax({
+            url: '/carts/delete/'+ divId +'.json',
+            success: function(response) {
+                $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
+                $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
+                $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                $('div#'+divId).remove();
+            }
+          });
+       }
     });
 });

@@ -116,7 +116,7 @@
                                     <div class='row'>
                                         <div class='col-sm-8'><?= __('Verwerkingskosten: '); ?></div>
                                         <div class='col-sm-4'>
-                                            <span><?= __('€ '); ?><span id='order-shippingCost'>
+                                            <span><?= __('€ '); ?><span id='order-shippingcosts'>
                                                 <?= $this->Number->format($shippingCost, [
                                                     'places' => 2
                                                 ]); ?>
@@ -141,9 +141,12 @@
                             </div>
                         </div>
 
-                        <div class='order-place-order col-sm-3 col-sm-offset-9'>
+                        <div class='col-sm-3 '>
+                            <a href="/photos" class="btn btn-default" type="button"><?=__('Naar foto-overzicht'); ?></a>
+                        </div>
+                        <div class='order-place-order col-sm-3 col-sm-offset-6'>
                             <span class="input-group-btn">
-                                <button class="btn btn-success" type="submit"><?=__('Bestelling afronden'); ?></button>
+                                <button class="btn btn-success" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
                             </span>
                         </div>
                     </div>
@@ -151,7 +154,7 @@
             
             <?php else: ?>
                 <div>
-                    <h2><?= __('Uw winkelwagen is leeg'); ?></h2>
+                    <h3><?= __('Uw winkelwagen is leeg'); ?></h3>
                 </div>
             <?php endif; ?>
         </div>

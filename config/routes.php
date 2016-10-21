@@ -255,6 +255,10 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'update'
     ]);
+    $routes->connect('/carts/delete/:id',
+        ['controller' => 'Carts','action' => 'delete'],
+        ['pass' => ['model','id']]
+    );
     
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);

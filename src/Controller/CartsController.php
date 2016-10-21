@@ -193,4 +193,27 @@ class CartsController extends AppController
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
     }
+    
+    public function delete($id)
+    {
+        $line = $this->Carts->Cartlines->find()
+                ->where(['Cartlines.id' => $id])
+                ->first();
+
+        if(!empty($line->id)) {
+            $this->Carts->Cartlines->delete($line);
+            
+            $cartTotals = $this->Carts->getCartTotals($line->cart_id);
+            $response = [
+                'success' => true,
+                'message' => 'Cartline deleted',
+                'orderSubtotal' => $cartTotals['products'],
+                'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
+                'shippingCost' => $cartTotals['shippingcosts']
+            ];
+            $this->set(compact('response'));
+            $this->set('_serialize', 'response');
+        }
+    }
+    
 }
