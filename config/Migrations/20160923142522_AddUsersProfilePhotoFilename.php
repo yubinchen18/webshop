@@ -14,7 +14,7 @@ class AddUsersProfilePhotoFilename extends AbstractMigration
     {
         $table = $this->table('users');
         $table->addColumn('profile_photo_filename', 'string', [
-            'null' => false,
+            'null' => true,
             'default' => null,
             'after' => 'active'
         ])->update();

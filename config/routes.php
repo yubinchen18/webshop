@@ -247,6 +247,14 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'add'
     ]);
+    $routes->connect('/carts/display', [
+        'controller' => 'Carts',
+        'action' => 'display'
+    ]);
+    $routes->connect('/carts/update', [
+        'controller' => 'Carts',
+        'action' => 'update'
+    ]);
     
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);

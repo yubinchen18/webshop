@@ -93,6 +93,16 @@ class CartsTable extends Table
     {
         $cart = $this->find()
             ->where(['user_id' => $userId])
+            ->contain([
+                'Cartlines' => function($q) {
+                    return $q->order(['Cartlines.created'])
+                            ->contain([
+                                'CartlineProductoptions.ProductoptionChoices.Productoptions'
+                            ]);
+                },
+                'Cartlines.Photos',
+                'Cartlines.Products'
+            ])
             ->first();
         
         if (empty($cart)) {

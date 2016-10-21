@@ -155,10 +155,15 @@ class UsersController extends AppController
 
     public function login()
     {
+        $session = $this->request->session();
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
+                $data = $session->read('LoggedInUsers.AllUsers');
+                $data[] = $user['id'];
+                $session->write('LoggedInUsers.AllUsers', $data);
+                $session->write('LoggedInUsers.ActiveUser', $user['id']);
                 return $this->redirect($this->Auth->redirectUrl());
             } else {
                 $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
@@ -177,6 +182,11 @@ class UsersController extends AppController
             'element' => 'default',
             'params' => ['class' => 'success']
         ]);
+        
+        //clear extra users data from session
+        if ($this->request->session()->read('LoggedInUsers')) {
+            $this->request->session()->delete('LoggedInUsers');
+        }
         return $this->redirect($this->Auth->logout());
     }
     
