@@ -1,6 +1,6 @@
 <div>
     <div class='addToCartPopup' id='<?= $cartlineData['product_id'];?>'>
-        <div class='addToCartPopup-header' data-price=<?= $cartlineData['product_price']; ?>>
+        <div class='addToCartPopup-header' data-price="<?= $cartlineData['product_price']; ?>" data-discount="<?= $cartlineData['discount_price']; ?>">
             <?= __('Totaal: €');?><span><?= $this->Number->format($cartlineData['product_price'], ['places' => 2]); ?></span>
         </div>
         <div class='addToCartPopup-body'>
