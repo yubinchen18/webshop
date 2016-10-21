@@ -71,8 +71,14 @@
                         </div>
                         
                         <div class='cartline-product-unitPrice col-xs-2'>
+                            <?php if($cartline->product->has_discount == 1 && $cartline->quantity > 1): ?>
+                            <span class='quantity-<?= $cartline->id; ?>'></span>
+                                <div class='normalprice'>1 x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
+                                <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->discountprice, 'EUR'); ?></div>
+                            <?php else: ?>
                             <span class='quantity-<?= $cartline->id; ?>'><?= $cartline->quantity; ?></span>
                             <span> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></span>
+                            <?php endif; ?>
                         </div>
                         
                         <div class='cartline-product-price col-xs-1'>

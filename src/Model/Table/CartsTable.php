@@ -114,4 +114,53 @@ class CartsTable extends Table
         }
         return $cart;
     }
+    
+    public function getCartTotals($cart_id)
+    {
+        $cart = $this->get($cart_id,[
+            'contain' => [
+                'Cartlines.Products'
+            ]
+        ]);
+        
+        $totals = [
+            'products' => 0,
+            'discount' => 0,
+            'tax' => 0,
+            'shippingcosts' => 3.95
+        ];
+        
+        $total_lines = 0;
+        $high_shipping = false;
+        foreach($cart->cartlines as $line) {
+            $total_lines++;
+            
+            // Calculate line price
+            $subtotal = $line->product->price_ex * $line->quantity;
+            $discount = 0;
+            if($line->product->has_discount === 1) {
+                $subtotal = $line->product->price_ex;
+                for($n=2;$n<=$line->quantity;$n++) {
+                    $subtotal += 3.78;
+                    $discount += ($line->product->price_ex - 3.78);
+                }
+            }
+            
+            $totals['products'] += $subtotal;
+            $totals['discount'] += $discount;
+            
+            if(!empty($line->product->high_shipping)) {
+                $high_shipping = true;
+            }
+        }
+        
+        if($total_lines > 2) {
+            $totals['shippingcosts'] = 0;
+        }
+        if($high_shipping) {
+            $totals['shippingcosts'] = 12.50;
+        }
+        return $totals;
+        
+    }
 }

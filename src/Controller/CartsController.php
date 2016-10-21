@@ -115,14 +115,25 @@ class CartsController extends AppController
                 ]);
                 //add the image data to product object and calc subtotal price
                 $cartline->product->image = $image[0];
-                $cartline->subtotal = $cartline->quantity * $cartline->product->price_ex;
-                $orderSubtotal = $orderSubtotal + $cartline->subtotal;
-                $shippingCost = 3.95;
-                $orderTotal = $orderSubtotal + $shippingCost;
+                
+                $cartline->subtotal = $cartline->product->price_ex * $cartline->quantity;
+                if($cartline->product->has_discount === 1) {
+                    $cartline->discountprice = 3.78;
+                    $cartline->subtotal = $cartline->product->price_ex;
+                    for($n=2;$n<=$cartline->quantity;$n++) {
+                        $cartline->subtotal += 3.78;
+                    }
+                }
             }
         }
         
-        $this->set(compact('cart', 'orderSubtotal', 'orderTotal', 'shippingCost'));
+        $totals = $this->Carts->getCartTotals($cart->id);
+        $orderSubtotal = $totals['products'];
+        $shippingCost = $totals['shippingcosts'];
+        $orderTotal = $orderSubtotal + $shippingCost;
+        $discount = $totals['discount'];
+        
+        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost'));
     }
     
     public function update()
@@ -131,6 +142,7 @@ class CartsController extends AppController
             $postData = $this->request->data();
             $cartline = $this->Carts->Cartlines->find()
                 ->where(['Cartlines.id' => $postData['cartline_id']])
+                ->contain(['Products'])
                 ->first();
             
             if (empty($cartline)) {
@@ -150,26 +162,27 @@ class CartsController extends AppController
             
             $newCartline = $this->Carts->Cartlines->find()
                 ->where(['Cartlines.id' => $postData['cartline_id']])
-                ->contain(['Products', 'Carts.Cartlines.Products'])
+                ->contain(['Products'])
                 ->first();
             
             $newCartline->subtotal = $newCartline->product->price_ex * $newCartline->quantity;
+            if($newCartline->product->has_discount === 1) {
+                $newCartline->discountprice = 3.78;
+                $newCartline->subtotal = $newCartline->product->price_ex;
+                for($n=2;$n<=$cartline->quantity;$n++) {
+                    $newCartline->subtotal += 3.78;
+                }
+            }
+
+            $cartTotals = $this->Carts->getCartTotals($newCartline->cart_id);
             
-            //price calculations;
-            $shippingCost = 3.95;
-            $orderSubtotal = 0;
-            foreach ($newCartline->cart->cartlines as $allCartline) {
-                $newSubtotal = $allCartline->product->price_ex * $allCartline->quantity;
-                $orderSubtotal += $newSubtotal;
-            };
-            $orderTotal = $orderSubtotal + $shippingCost;
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
                 'cartline' => $newCartline,
-                'orderSubtotal' => $orderSubtotal,
-                'orderTotal' => $orderTotal,
-                'shippingCost' => $shippingCost
+                'orderSubtotal' => $cartTotals['products'],
+                'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
+                'shippingCost' => $cartTotals['shippingcosts']
             ];
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
