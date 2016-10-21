@@ -36,8 +36,7 @@
                     <?= $this->Html->image('/img/layout/cart.png',
                             ['alt' => 'logo', 
                              'class' => 'img-responsive',
-                             'url' => ['controller' => 'Photos', 'action' => 'index']]);  ?>
-                     
+                             'url' => ['controller' => 'Carts', 'action' => 'display']]);  ?>
                 </div>
             </div>
         </div>
@@ -52,7 +51,7 @@
                 break;
             case 'productGroupIndex':
                 $backUrl = $viewUrl;
-            break;
+                break;
             default:
                 $backUrl = $indexUrl;
         }?>

@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Network\Exception\BadRequestException;
+use App\Lib\ImageHandler;
 
 /**
  * Carts Controller
@@ -79,6 +80,98 @@ class CartsController extends AppController
             $this->set('_serialize', 'response');
             return;
         }
+        $response = ['success' => false, 'message' => __('Invalid method error')];
+        $this->set(compact('response'));
+        $this->set('_serialize', 'response');
+    }
+    
+    public function display()
+    {
+        $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+        $orderSubtotal = 0;
+        
+        //add the orientation data to the photos array in cart
+        if (!empty($cart->cartlines)) {
+            
+            foreach ($cart->cartlines as $cartline) {
+                //add the orientation data to the photos array
+                $filePath = $this->Carts->Cartlines->Photos->getPath($cartline->photo->barcode_id) . DS . $cartline->photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $cartline->photo->orientationClass = $orientationClass;
+                //create tmp product preview images
+                $imageHandler = new ImageHandler();
+                $image = $imageHandler->createProductPreview($cartline->photo, $cartline->product->product_group, [
+                    'resize' => ['width' => 200, 'height' => 180],
+                    'layout' => $cartline->product->layout
+                ]);
+                //add the image data to product object and calc subtotal price
+                $cartline->product->image = $image[0];
+                $cartline->subtotal = $cartline->quantity * $cartline->product->price_ex;
+                $orderSubtotal = $orderSubtotal + $cartline->subtotal;
+                $shippingCost = 3.95;
+                $orderTotal = $orderSubtotal + $shippingCost;
+            }
+        }
+        
+        $this->set(compact('cart', 'orderSubtotal', 'orderTotal', 'shippingCost'));
+    }
+    
+    public function update()
+    {
+        if ($this->request->is('ajax') && !empty($this->request->data)) {
+            $postData = $this->request->data();
+            $cartline = $this->Carts->Cartlines->find()
+                ->where(['Cartlines.id' => $postData['cartline_id']])
+                ->first();
+            
+            if (empty($cartline)) {
+                $response = ['success' => false, 'message' => __('Cartline not found')];
+                $this->set(compact('response'));
+                $this->set('_serialize', 'response');
+                return;
+            };
+            
+            $cartline->quantity = $postData['cartline_quantity'];
+            if (!$this->Carts->Cartlines->save($cartline)) {
+                $response = ['success' => false, 'message' => __('Could not save cartline')];
+                $this->set(compact('response'));
+                $this->set('_serialize', 'response');
+                return;
+            }
+            
+            $newCartline = $this->Carts->Cartlines->find()
+                ->where(['Cartlines.id' => $postData['cartline_id']])
+                ->contain(['Products', 'Carts.Cartlines.Products'])
+                ->first();
+            
+            $newCartline->subtotal = $newCartline->product->price_ex * $newCartline->quantity;
+            
+            //price calculations;
+            $shippingCost = 3.95;
+            $orderSubtotal = 0;
+            foreach ($newCartline->cart->cartlines as $allCartline) {
+                $newSubtotal = $allCartline->product->price_ex * $allCartline->quantity;
+                $orderSubtotal += $newSubtotal;
+            };
+            $orderTotal = $orderSubtotal + $shippingCost;
+            $response = [
+                'success' => true,
+                'message' => 'Cartline successfully updated',
+                'cartline' => $newCartline,
+                'orderSubtotal' => $orderSubtotal,
+                'orderTotal' => $orderTotal,
+                'shippingCost' => $shippingCost
+            ];
+            $this->set(compact('response'));
+            $this->set('_serialize', 'response');
+            return;
+        }
+        
         $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
