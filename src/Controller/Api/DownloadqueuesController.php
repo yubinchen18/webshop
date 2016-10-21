@@ -132,12 +132,12 @@ class DownloadqueuesController extends AppController
            
             if (empty($data['online_id'])) { //new
                 unset($data['id']);
-                $entity = $this->{$model}->newEntity($data);
                 if($model == "Persons") {
                     $data['user_id'] = $this->Users->newUser($data);
                     $this->result['user_id'] = $data['user_id'];
                 }
                 
+                $entity = $this->{$model}->newEntity($data);
             } else {
                 $data['id'] = $data['online_id']; //existing
                 if ($model == "Persons") {
