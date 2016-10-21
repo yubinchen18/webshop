@@ -153,9 +153,9 @@ class UsersTable extends Table
         $user = $this->newEntity();
         
         $username = substr($data['firstname'],0,4) . substr($data['zipcode'],0,2). substr($data['type'],1,3);
-        $password = $this->Users->generateRandom();
+        $password = $this->generateRandom();
         $data = [
-            'username' => $this->Users->checkUsername($username),
+            'username' => $this->checkUsername($username),
             'password' => (new DefaultPasswordHasher)->hash($password),
             'genuine' => $password
         ];
