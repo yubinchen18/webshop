@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Network\Request;
 
 $config = [
-    'debug' => true,
+    'debug' => false,
     'environment' => 'dev',
     'forceSsl' => false,
     'Datasources' => [
@@ -19,7 +19,7 @@ $config = [
             'timezone' => 'UTC',
             'cacheMetadata' => true,
             'quoteIdentifiers' => true,
-            'log' => true
+            'log' => false
         ],
     ],
 ];
