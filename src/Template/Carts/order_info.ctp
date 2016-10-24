@@ -1,0 +1,229 @@
+<div class='order-info row'>
+    <!-- left panel -->
+    <div class="order-info-details col-md-9">
+        <h2><?= __('Uw gegevens');?></h2>
+        <?= $this->Form->create(null, []); ?>
+            <div class="form-group row gender">
+                <div class="col-md-10">
+                    <?php $options = ['m' => 'De heer', 'f' => 'Mevrouw'];
+                    echo $this->Form->select('gender', $options, [
+                        'required' => true,
+                    ]); ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-md-4'>
+                    <?= $this->Form->input('firstname', [
+                        'type' => 'text',
+                        'label' => false,
+                        'placeholder' => __('Naam'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+                <div class='col-md-2'>
+                    <?= $this->Form->input('prefix', [
+                        'type' => 'text',
+                        'label' => false,
+                        'placeholder' => __('Tussenvoegsel'),
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+                <div class='col-md-4'>
+                    <?= $this->Form->input('lastname', [
+                        'type' => 'text',
+                        'label' => false,
+                        'placeholder' => __('Achternaam'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-md-6'>
+                    <?= $this->Form->input('street', [
+                        'label' => false,
+                        'placeholder' => __('Straatnaam'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+                <div class='col-md-2'>
+                    <?= $this->Form->input('number', [
+                        'label' => false,
+                        'placeholder' => __('Huisnummer'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+                <div class='col-md-2'>
+                    <?= $this->Form->input('extension', [
+                        'label' => false,
+                        'placeholder' => __('Toevoeging'),
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-md-10'>
+                    <?= $this->Form->input('zipcode', [
+                        'label' => false,
+                        'placeholder' => __('Postcode'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-md-10'>
+                    <?= $this->Form->input('city', [
+                        'label' => false,
+                        'placeholder' => __('Plaatsnaam'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class='form-group row'>
+                <div class='col-md-10'>
+                    <?= $this->Form->input('email', [
+                        'type' => 'email',
+                        'label' => false,
+                        'placeholder' => __('Email'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class='form-group row'>
+                <div class='col-md-10'>
+                    <?= $this->Form->input('phone', [
+                        'label' => false,
+                        'placeholder' => __('Telefoonnummer'),
+                        'required' => true,
+                        'class' => 'form-control'
+                    ]); ?>
+                </div>
+            </div>
+            <div class='form-group row'>
+                <div class='col-md-10'>
+                    <?= $this->Form->input('different-address', [
+                        'label' => __('Verstuur naar ander adres'),
+                        'type' => 'checkbox',
+                        'templates' => [
+                            'formGroup' => '{{input}}{{label}}'
+                        ],
+                        'id' => 'different-address'
+                    ]); ?>
+                </div>
+            </div>
+
+            <div id='alternative-address' style='display:none'>
+                <div class="form-group row gender">
+                    <div class="col-md-10">
+                        <?php $options = ['m' => 'De heer', 'f' => 'Mevrouw'];
+                        echo $this->Form->select('alternative.gender', $options, [
+                            'required' => true,
+                        ]); ?>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-md-4'>
+                        <?= $this->Form->input('alternative.firstname', [
+                            'type' => 'text',
+                            'label' => false,
+                            'placeholder' => __('Naam'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                    <div class='col-md-2'>
+                        <?= $this->Form->input('alternative.prefix', [
+                            'type' => 'text',
+                            'label' => false,
+                            'placeholder' => __('Tussenvoegsel'),
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                    <div class='col-md-4'>
+                        <?= $this->Form->input('alternative.lastname', [
+                            'type' => 'text',
+                            'label' => false,
+                            'placeholder' => __('Achternaam'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-md-6'>
+                        <?= $this->Form->input('alternative.street', [
+                            'label' => false,
+                            'placeholder' => __('Straatnaam'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                    <div class='col-md-2'>
+                        <?= $this->Form->input('alternative.number', [
+                            'label' => false,
+                            'placeholder' => __('Huisnummer'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                    <div class='col-md-2'>
+                        <?= $this->Form->input('alternative.extension', [
+                            'label' => false,
+                            'placeholder' => __('Toevoeging'),
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-md-10'>
+                        <?= $this->Form->input('alternative.zipcode', [
+                            'label' => false,
+                            'placeholder' => __('Postcode'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-md-10'>
+                        <?= $this->Form->input('alternative.city', [
+                            'label' => false,
+                            'placeholder' => __('Plaatsnaam'),
+                            'required' => true,
+                            'class' => 'form-control'
+                        ]); ?>
+                    </div>
+                </div>
+            </div>
+        
+            <h3>
+                <?= __('Betaling'); ?>
+            </h3>
+        
+            <div class='form-group row'>
+                <div class='col-md-10'>
+                    <?= $this->Form->select('paymentmethod', [
+                        'transfer' => 'Bankoverschrijving',
+                        'ideal' => 'iDEAL'
+                    ]); ?>
+                </div>
+            </div>
+        
+        
+        <?= $this->Form->button(__('Ga verder'), [
+            'type' => 'submit',
+            'id' => 'order-info-submit',
+            'class' => 'btn btn-success'
+        ]); ?>
+        <?= $this->Form->end(); ?>
+    </div>
+    <!-- right panel -->
+    <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
+    </div>
+</div>

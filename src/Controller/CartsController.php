@@ -180,4 +180,7 @@ class CartsController extends AppController
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
     }
+    
+    public function orderInfo() {
+    }
 }

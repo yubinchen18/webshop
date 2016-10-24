@@ -83,4 +83,12 @@ jQuery(function($) {
             });
         }
     });
+    
+    $('#different-address').change(function() {
+        if(this.checked) {
+            $('#alternative-address').show();
+        } else {
+            $('#alternative-address').hide();
+        }
+    });
 });
