@@ -45,6 +45,17 @@ class SidebarCell extends Cell
                         'icon' => 'fa fa-tachometer'
                     ],
                     [
+                        'name' => __('Orders'),
+                        'url' => ['controller' => 'Orders', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-credit-card',
+                        'children' => [
+                            [
+                                'name' => __('Overzicht'),
+                                'url' => ['controller' => 'Orders', 'action' => 'index', 'prefix' => 'admin']
+                            ]
+                        ]
+                    ],
+                    [
                         'name' => __('Gebruikers'),
                         'url' => ['controller' => 'Users', 'action' => 'index', 'prefix' => 'admin'],
                         'icon' => 'fa fa-users',
@@ -126,6 +137,7 @@ class SidebarCell extends Cell
                         'children' => [
                         ]
                     ],
+                    
                 ];
 case 'user':
                 return [
