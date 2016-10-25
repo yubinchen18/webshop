@@ -135,4 +135,63 @@ class AddressesTable extends Table
                 ->limit(6)
                 ->order(['Addresses.lastname' => 'asc']);
     }
+    
+    /**
+     * Method to create a new address 
+     * 
+     * @param array $data
+     * @return string $address_id
+     */
+    private function createNewAddress($data)
+    {
+        $address = $this->newEntity();
+        $addressData = [
+            'gender' => $data['gender'],
+            'firstname' => $data['firstname'],
+            'prefix' => !empty($data['prefix']) ? $data['prefix'] : null,
+            'lastname' => $data['lastname'],
+            'street' => $data['street'],
+            'number' => $data['number'],
+            'extension' =>  !empty($data['extension']) ? $data['extension'] : null,
+            'zipcode' => $data['zipcode'],
+            'city' => $data['city'],
+            'email' => !empty($data['email']) ? $data['email'] : null,
+            'phone' => !empty($data['phone']) ? $data['phone'] : null
+        ];
+        $this->patchEntity($address, $addressData);
+        $address = $this->save($address);
+        return $address->id;
+    }
+    
+    /**
+     * Method to get or add an address based on raw data
+     * @param array $data
+     * 
+     * @return string $address_id
+     */
+    public function getAddressId($data) {
+        
+        if(!isset($data['street']) ||
+           !isset($data['number']) ||
+           !isset($data['zipcode']) ||
+           !isset($data['city'])
+        ) {
+            return false;
+        }
+        
+        $address = $this->find()
+             ->where([
+                 'street' => $data['street'],
+                 'number' => $data['number'],
+                 'zipcode' => $data['zipcode'],
+                 'city' => $data['city'],
+             ]);
+        
+        if($address->count() > 0) {
+            return $address->first()->id;
+        }
+        
+        return $this->createNewAddress($data);
+    }
+    
 }

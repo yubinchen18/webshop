@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Network\Request;
 
 $config = [
-    'debug' => false,
+    'debug' => true,
     'environment' => 'dev',
     'forceSsl' => false,
     'Datasources' => [

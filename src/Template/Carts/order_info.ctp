@@ -2,7 +2,7 @@
     <!-- left panel -->
     <div class="order-info-details col-md-9">
         <h2><?= __('Uw gegevens');?></h2>
-        <?= $this->Form->create(null, []); ?>
+        <?= $this->Form->create(null, ['url' => ['controller' => 'Orders', 'action' => 'add']]); ?>
             <div class="form-group row gender">
                 <div class="col-md-10">
                     <?= $this->Form->select('gender', 
@@ -123,7 +123,7 @@
                     <div class="col-md-10">
                         <?= $this->Form->select('alternative.gender', 
                                 ['m' => __('De heer'), 'f' => __('Mevrouw')], [
-                                'required' => true,
+                                'required' => false,
                         ]); ?>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                             'type' => 'text',
                             'label' => false,
                             'placeholder' => __('Naam'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -150,7 +150,7 @@
                             'type' => 'text',
                             'label' => false,
                             'placeholder' => __('Achternaam'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -160,7 +160,7 @@
                         <?= $this->Form->input('alternative.street', [
                             'label' => false,
                             'placeholder' => __('Straatnaam'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -168,7 +168,7 @@
                         <?= $this->Form->input('alternative.number', [
                             'label' => false,
                             'placeholder' => __('Huisnummer'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -185,7 +185,7 @@
                         <?= $this->Form->input('alternative.zipcode', [
                             'label' => false,
                             'placeholder' => __('Postcode'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -195,7 +195,7 @@
                         <?= $this->Form->input('alternative.city', [
                             'label' => false,
                             'placeholder' => __('Plaatsnaam'),
-                            'required' => true,
+                            'required' => false,
                             'class' => 'form-control'
                         ]); ?>
                     </div>
@@ -209,8 +209,8 @@
             <div class='form-group row'>
                 <div class='col-md-10'>
                     <?= $this->Form->select('paymentmethod', [
-                        'transfer' => 'Bankoverschrijving',
-                        'ideal' => 'iDEAL'
+                        'transfer' => __('Bankoverschrijving'),
+                        'ideal' => __('iDeal')
                     ]); ?>
                 </div>
             </div>
