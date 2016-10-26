@@ -244,7 +244,8 @@ class ImageHandler
                 $productLayouts = $canvas->getLayouts();
                 break;
             default:
-                throw new \Exception('You have to specify a valid product');
+                $canvas = new LoosePrint($layout);
+                $productLayouts = $canvas->getLayouts();
         }
         
         foreach ($productLayouts as $layoutName => $layout) {
