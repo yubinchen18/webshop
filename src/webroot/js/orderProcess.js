@@ -134,5 +134,5 @@ jQuery(function($) {
         } else {
             $('#alternative-address').hide();
         }
-    }
+    });
 });

@@ -26,7 +26,7 @@
                     <td><?= h(count($order->orderlines)) ?></td>
                     <td><?= h($this->Number->currency($order->totalprice, 'EUR')); ?></td>
                     <td><?= h($order->payment_method); ?></td>
-                    <td><?= h($order->orderstatuses[0]->name); ?></td>
+                    <td><?= h($order->orders_orderstatuses[0]->orderstatus->name); ?></td>
                     <td><?= h($order->created) ?></td>
                     <td><?= h($order->modified) ?></td>
                     <td class="actions">
