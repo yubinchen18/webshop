@@ -32,7 +32,7 @@ class OrdersController extends AppController
             throw new BadRequestException();
         }
         $this->Carts = TableRegistry::get('Carts');
-        $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')]);
+        $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
         $totals = $this->Carts->getCartTotals($cart->id);
         $data = $this->request->data;
      
@@ -134,7 +134,8 @@ class OrdersController extends AppController
     
     public function idealResult()
     {
-        $data['Transaction']['transactionId'] = $this->request->session()->read('order')->trx_id;
+        $order = $this->request->session()->read('order');
+        $data['Transaction']['transactionId'] = $order->trx_id;
         
         $result = $this->CakeIdeal->sendStatusRequest($data);
         
@@ -159,8 +160,13 @@ class OrdersController extends AppController
     
     public function success()
     {
+        $order = $this->request->session()->read('order');
+        
+        $this->request->session()->write('order',null);
+        $cart = $this->Orders->Carts->find('byUserid',['user_id' => $this->Auth->user('id')])->first();
+        $newcart = $this->Orders->Carts->patchEntity($cart,['order_id' => $order->id]);
+        $this->Orders->Carts->save($newcart);
         $this->set(compact('order'));
-        $this->request->session->write('order',null);
     }
     
     public function failure()

@@ -67,6 +67,10 @@ class OrdersTable extends Table
         $this->belongsTo('Trxes', [
             'foreignKey' => 'trx_id'
         ]);
+        $this->belongsTo('Carts', [
+            'foreignKey' => 'order_id',
+            'joinType' => 'LEFT'
+        ]);
         $this->hasMany('Invoices', [
             'foreignKey' => 'order_id'
         ]);

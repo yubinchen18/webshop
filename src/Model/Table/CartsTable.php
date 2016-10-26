@@ -46,6 +46,10 @@ class CartsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasOne('Carts', [
+            'foreignKey' => 'cart_id',
+            'joinType' => 'LEFT'
+        ]);
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
@@ -89,8 +93,10 @@ class CartsTable extends Table
             return false;
         }
         
-        return $this->find()
-           ->where(['user_id' => $options['user_id']])
+        return $this->find()->where([
+               'Carts.user_id' => $options['user_id'],
+               'Carts.order_id IS NULL'
+            ])
            ->contain([
                'Cartlines' => function($q) {
                    return $q->order(['Cartlines.created'])
@@ -100,8 +106,7 @@ class CartsTable extends Table
                },
                'Cartlines.Photos',
                'Cartlines.Products'
-           ])
-           ->first();
+           ]);
     }
     
     /**
@@ -112,7 +117,7 @@ class CartsTable extends Table
      */
     public function checkExistingCart($userId)
     {
-        $cart = $this->find('byUserid', ['user_id' => $userId]);
+        $cart = $this->find('byUserid', ['user_id' => $userId])->first();
             
         if (empty($cart)) {
             $cart = $this->newEntity(['user_id' => $userId]);
