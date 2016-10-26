@@ -236,6 +236,7 @@ class ImageHandler
             case 'mug':
                 break;
             case 'loose-prints':
+            default:
                 $loosePrint = new LoosePrint($layout);
                 $productLayouts = $loosePrint->getLayouts();
                 break;
@@ -243,8 +244,6 @@ class ImageHandler
                 $canvas = new LoosePrint($layout);
                 $productLayouts = $canvas->getLayouts();
                 break;
-            default:
-                throw new \Exception('You have to specify a valid product');
         }
         
         foreach ($productLayouts as $layoutName => $layout) {
