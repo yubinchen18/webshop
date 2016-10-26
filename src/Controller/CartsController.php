@@ -91,7 +91,22 @@ class CartsController extends AppController
     
     public function orderInfo() 
     {
+        if(!empty($this->request->session()->read('order'))) {
+            $order = $this->request->session()->read('order');
+            
+            $this->request->data = $this->Carts->Orders->Invoiceaddresses->get($order->invoiceaddress_id);
+            $this->request->data['paymentmethod'] = $order->payment_method;
+            if($order->invoiceaddress_id != $order->deliveryaddress_id) {
+                $this->request->data['different-address'] = 1;
+                $this->request->data['alternative'] = $this->Carts->Orders->Deliveryaddresses->get($order->deliveryaddress_id);
+            }
+        }
+        $this->loadComponent('CakeIdeal.CakeIdeal',[
+            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+        ]);
         
+        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+        $this->set(compact('issuers'));
     }
     
     public function display()

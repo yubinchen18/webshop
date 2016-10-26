@@ -208,13 +208,26 @@
         
             <div class='form-group row'>
                 <div class='col-md-10'>
-                    <?= $this->Form->select('paymentmethod', [
-                        'transfer' => __('Bankoverschrijving'),
-                        'ideal' => __('iDeal')
-                    ]); ?>
+                    <?= $this->Form->input('paymentmethod', [
+                            'label' => __('Hoe wilt u betalen?'),
+                            'class' => 'form-control',
+                            'options' => [
+                                'transfer' => __('Bankoverschrijving'),
+                                'ideal' => __('iDeal'),
+                            ]]); 
+                    ?>
                 </div>
             </div>
         
+            <div class='form-group row' id="ideal-issuers">
+                <div class='col-md-10'>
+                    <?= $this->Form->input('issuerId', [
+                            'label' => __('Kies uw bank'),
+                            'class' => 'form-control',
+                            'options' => $issuers]); 
+                    ?>
+                </div>
+            </div>
         
         <?= $this->Form->button(__('Ga verder'), [
             'type' => 'submit',

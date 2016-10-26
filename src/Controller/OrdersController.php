@@ -98,6 +98,7 @@ class OrdersController extends AppController
                 
             case "ideal":
                 $this->request->session()->write('order', $order);
+                $this->request->session()->write('ideal-issuer', $this->request->data['issuerId']);
                 return $this->redirect(['controller' => 'orders', 'action' => 'payment']);
                 break;
         }
@@ -105,39 +106,40 @@ class OrdersController extends AppController
     
     public function payment()
     {
-        $issuers = $this->CakeIdeal->sendDirectoryRequest();
-        
+        $issuer = $this->request->session()->read('ideal-issuer');
         $order = $this->request->session()->read('order');
         $ordertotal = ($order->totalprice + $order->shippingcosts);
         
-        if($this->request->is('post')) {
-            $trxData = [
-                        'Issuer' => [
-                                'issuerId' =>  $this->request->data['issuer']
-                        ],
-                        'Transaction' => [
-                                'amount' => $ordertotal,
-                                'entranceCode' => $order->ident,
-                                'purchaseId' => date('YmdHis'),
-                                'description' => sprintf('Hoogstraten fotografie order: %s', $order->ident)
-                        ],
-                        'Merchant' => [
-                                'merchantReturnUrl' => Router::url(
-                                    ['controller' => 'Orders', 'action' => 'ideal_result'],
-                                    ['full' => true]
-                                )
-                        ]
-                ];
-            
-            $request = $this->CakeIdeal->sendTransactionRequest($trxData);
-            
-            $order = $this->Orders->patchEntity($order, ['trx_id' => $request['Transaction']['transactionID']]);
-            $this->Orders->save($order);
-            $this->request->session()->write('order', $order);
-            return $this->redirect($request['Issuer']['issuerAuthenticationURL']);
+        if(empty($issuer) || empty($order)) {
+            $this->Flash->error(__("Niet alle benodigde gegevens zijn ingevuld"));
+            return $this->redirect(['controller' => 'Carts', 'action' => 'orderInfo']);
         }
         
-        $this->set(compact('issuers'));
+        $trxData = [
+                    'Issuer' => [
+                            'issuerId' =>  $issuer
+                    ],
+                    'Transaction' => [
+                            'amount' => $ordertotal,
+                            'entranceCode' => $order->ident,
+                            'purchaseId' => date('YmdHis'),
+                            'description' => sprintf('Hoogstraten fotografie order: %s', $order->ident)
+                    ],
+                    'Merchant' => [
+                            'merchantReturnUrl' => Router::url(
+                                ['controller' => 'Orders', 'action' => 'ideal_result'],
+                                ['full' => true]
+                            )
+                    ]
+            ];
+
+        $request = $this->CakeIdeal->sendTransactionRequest($trxData);
+
+        $order = $this->Orders->patchEntity($order, ['trx_id' => $request['Transaction']['transactionID']]);
+        $this->Orders->save($order);
+        $this->request->session()->write('order', $order);
+        
+        return $this->redirect($request['Issuer']['issuerAuthenticationURL']);
     }
     
     public function idealResult()

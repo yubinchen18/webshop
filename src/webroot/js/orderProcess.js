@@ -128,11 +128,25 @@ jQuery(function($) {
        }
     });
     
+    if($('#different-address:checked')) {
+        $('#alternative-address').show();
+    }
     $('#different-address').change(function() {
         if(this.checked) {
             $('#alternative-address').show();
         } else {
             $('#alternative-address').hide();
+        }
+    });
+    
+    $('#ideal-issuers').hide();
+    if($('#paymentmethod').val() == 'ideal') {
+        $('#ideal-issuers').show();
+    }
+    $('#paymentmethod').on('change', function() {
+        $('#ideal-issuers').hide();
+        if($('#paymentmethod').val() == 'ideal') {
+            $('#ideal-issuers').show();
         }
     });
 });

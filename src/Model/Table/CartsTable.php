@@ -46,8 +46,8 @@ class CartsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasOne('Carts', [
-            'foreignKey' => 'cart_id',
+        $this->hasOne('Orders', [
+            'foreignKey' => 'order_id',
             'joinType' => 'LEFT'
         ]);
         $this->hasMany('Cartlines', [
