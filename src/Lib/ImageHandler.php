@@ -236,6 +236,7 @@ class ImageHandler
             case 'mug':
                 break;
             case 'loose-prints':
+            default:
                 $loosePrint = new LoosePrint($layout);
                 $productLayouts = $loosePrint->getLayouts();
                 break;
@@ -243,9 +244,6 @@ class ImageHandler
                 $canvas = new LoosePrint($layout);
                 $productLayouts = $canvas->getLayouts();
                 break;
-            default:
-                $canvas = new LoosePrint($layout);
-                $productLayouts = $canvas->getLayouts();
         }
         
         foreach ($productLayouts as $layoutName => $layout) {
