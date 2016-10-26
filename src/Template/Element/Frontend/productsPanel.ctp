@@ -45,6 +45,12 @@
                             'size' => 'thumbs'
                         ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                         <?= $this->Html->image($layer2Name, [
+                            'url' => $this->Url->build([
+                               'controller' => 'Photos',
+                                'action' => 'productGroupIndex',
+                                'funproducts',
+                                $photo->id
+                            ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
                     </div>

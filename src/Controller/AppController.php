@@ -91,6 +91,17 @@ class AppController extends Controller
             }
             $this->set(compact('userPortraits'));
         }
+        
+        $this->Carts = TableRegistry::get('Carts');
+        $cart = $this->Carts->find('byUserid',['user_id' => $this->Auth->user('id')])->first();
+        if($cart) {
+            $cartcount = 0;
+            foreach($cart['cartlines'] as $line) {
+                $cartcount += $line['quantity'];
+            }
+            $this->set(compact('cartcount'));
+        }
+        
     }
 
     public function isAuthorized($user)
