@@ -5,7 +5,7 @@
                aria-describedby="dynamic-table_info">
             <thead>
             <tr role="row">
-                <th><?= $this->Paginator->sort('ident', __('Order-ident')) ?></th>
+                <th><?= $this->Paginator->sort('ident', __('Ordernummer')) ?></th>
                 <th><?= $this->Paginator->sort('invoiceaddress.full_name', __('Klant')) ?></th>
                 <th><?= $this->Paginator->sort('user.person.group.project.school.name', __('School')) ?></th>
                 <th><?= $this->Paginator->sort('orderlines', __('Aantal producten')) ?></th>
@@ -24,7 +24,7 @@
                     <td><?= h($order->user->persons[0]->group->project->school->name) ?></td>
                     <td><?= h(count($order->orderlines)) ?></td>
                     <td><?= h($this->Number->currency($order->totalprice, 'EUR')); ?></td>
-                    <td><?= h($order->payment_method); ?></td>
+                    <td><?= h($order->payment_method == 'ideal' ? "iDeal" : "Overboeking"); ?></td>
                     <td><?= h($order->created) ?></td>
                     <td><?= h($order->modified) ?></td>
                     <td class="actions">

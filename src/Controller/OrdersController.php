@@ -69,11 +69,20 @@ class OrdersController extends AppController
                 $productoptions[] = ['productoption_choice_id' => $option->productoption_choice_id];
             }
             
+            $lineprice = 0;
+            if($line->product->has_discount === 1) {
+                $line->discountprice = 3.78;
+                $lineprice = $line->product->price_ex;
+                for($n=2;$n<=$line->quantity;$n++) {
+                    $lineprice += 3.78;
+                }
+            }
+            
             $orderline = [
                 'article' => $line->product->article,
                 'productname' => $line->product->name,
                 'quantity' => $line->quantity,
-                'price_ex' => $line->product->price_ex,
+                'price_ex' => $lineprice,
                 'vat' => $line->product->vat,
                 'exported' => 0,
                 'order_id' => $order->id,
@@ -83,6 +92,7 @@ class OrdersController extends AppController
             if(!empty($productoptions)) {
                 $orderline['orderline_productoptions'] = $productoptions;
             }
+            
             $line = $this->Orders->Orderlines->newEntity($orderline, ['associated' => ['OrderlineProductoptions']]);
             if(!$this->Orders->Orderlines->save($line)) {
                 $this->Orders->delete($order);
@@ -201,6 +211,7 @@ class OrdersController extends AppController
     
     public function failure()
     {
+        $order = $this->request->session()->read('order');
         $this->set(compact('order'));
     }
 }

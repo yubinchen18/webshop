@@ -31,7 +31,8 @@ class OrdersController extends AppController
                 'Users.Persons.Groups.Projects.Schools',
                 'Deliveryaddresses',
                 'Invoiceaddresses'
-            ]
+            ],
+            'order' => ['Orders.created' => 'DESC']
         ];
         $orders = $this->paginate($this->Orders);
         $this->set(compact('orders'));

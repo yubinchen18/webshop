@@ -13,7 +13,7 @@
                 <div class="widget-main">
                      <table class="vertical-table">
                         <tr>
-                            <th><?= __('Order-ident') ?></th>
+                            <th><?= __('Ordernummer') ?></th>
                             <td><?= h($order->ident) ?></td>
                         </tr>
                         <tr>

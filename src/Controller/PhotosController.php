@@ -269,7 +269,7 @@ class PhotosController extends AppController
                         $imageHandler = new ImageHandler();
                         $image = $imageHandler->createProductPreview($photo, $product->product_group, [
                             'resize' => ['width' => 200, 'height' => 180],
-                            'layout' => $product->layout
+                            'layout' => !empty($product->layout) ? $product->layout : 'all'
                         ]);
                         //add the image data to product object
                         $product->image = $image[0];
@@ -277,6 +277,7 @@ class PhotosController extends AppController
                 } else {
                     throw new NotFoundException('No products found.');
                 }
+                
                 //pass results to views
                 $templateName = $productGroup.'-index';
                 $this->set(compact('photo', 'products'));

@@ -128,7 +128,8 @@ jQuery(function($) {
        }
     });
     
-    if($('#different-address:checked')) {
+    $('#alternative-address').hide();
+    if($('#different-address').prop('checked')) {
         $('#alternative-address').show();
     }
     $('#different-address').change(function() {
