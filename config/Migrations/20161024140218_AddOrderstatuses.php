@@ -12,12 +12,20 @@ class AddOrderstatuses extends AbstractMigration
      */
     public function change()
     {
+        $table = $this->table('orderstatuses');
+        $table->addColumn('alias','string',[
+            'null' => true,
+            'after' => 'name',
+            'length' => 80
+        ])->update();
+        
         $this->query(
-            "INSERT INTO `orderstatuses` (`id`, `name`, `description`, `created`, `modified`, `deleted`) VALUES
-            (UUID(), 'Betaald', 'Betaald maar nog niet verwerkt', '2016-10-24 16:27:15', '2016-10-24 16:27:15', NULL),
-            (UUID(), 'Verzonden naar Photex', 'via FTP naar afdrukcentrale daar wordt de order verwerkt', '2016-10-24 16:28:55', '2016-10-24 16:28:55', NULL),
-            (UUID(), 'Verzonden naar eindklant', 'Door Photex/afdrukcentrale verzonden via DHL of PostNL', '2016-10-24 16:30:32', '2016-10-24 16:30:32', NULL),
-            (UUID(), 'Geannuleerd', NULL, '2016-10-24 16:30:32', '2016-10-24 16:30:32', NULL);
+            "INSERT INTO `orderstatuses` (`id`, `name`,`alias`, `description`, `created`, `modified`, `deleted`) VALUES
+            (UUID(), 'Betaald','payment_received', 'Betaald maar nog niet verwerkt', NOW(), NOW(), NULL),
+            (UUID(), 'Betaald','payment_failed', 'Betaling mislukt', NOW(), NOW(), NULL),
+            (UUID(), 'Verzonden naar Photex','to_photex', 'via FTP naar afdrukcentrale daar wordt de order verwerkt', NOW(), NOW(), NULL),
+            (UUID(), 'Verzonden naar eindklant','shipped_to_customer', 'Door afdrukcentrale verzonden via PostNL', NOW(), NOW(), NULL),
+            (UUID(), 'Geannuleerd','cancelled', NULL, NOW(), NOW(), NULL);
             "
         );
     }
