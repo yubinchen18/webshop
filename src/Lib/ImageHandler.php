@@ -237,7 +237,6 @@ class ImageHandler
                 break;
             case 'loose-prints':
             default:
-                
                 $loosePrint = new LoosePrint($layout);
                 $productLayouts = $loosePrint->getLayouts();
                 break;
