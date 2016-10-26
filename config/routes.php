@@ -195,6 +195,23 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
         
+        $routes->connect('/orders', ['controller' => 'Orders', 'action' => 'index']);
+        $routes->connect(
+            '/orders/view/:id',
+            ['controller' => 'Orders', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/orders/edit/:id',
+            ['controller' => 'Orders', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/orders/delete/:id',
+            ['controller' => 'Orders', 'action' => 'delete'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        
         $routes->connect(
             '/searches/showResults',
             ['controller' => 'Searches', 'action' => 'showResults']

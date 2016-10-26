@@ -76,6 +76,9 @@ class OrdersTable extends Table
         $this->hasMany('PhotexDownloads', [
             'foreignKey' => 'order_id'
         ]);
+        $this->hasMany('OrdersOrderstatuses', [
+            'foreignKey' => 'order_id'
+        ]);
         $this->belongsToMany('Orderstatuses', [
             'foreignKey' => 'order_id',
             'targetForeignKey' => 'orderstatus_id',
