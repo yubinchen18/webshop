@@ -280,7 +280,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'orderInfo'
     ]);
-    
+    $routes->connect('/orders/:action',
+            ['controller' => 'Orders'],
+            []);
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);
 

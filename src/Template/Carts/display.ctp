@@ -3,7 +3,7 @@
     <div class="cart-cartlines-index col-md-9">
         <h2><?= __('Winkelwagen');?></h2>
         
-        <?=$this->Form->create(null, ['class' => 'orderForm', 'url' => '/'.__('cart').'/'.__('add')]); ?>
+        <?=$this->Form->create(null, ['class' => 'orderForm', 'url' => '/carts/orderInfo']); ?>
         <div class='row col-md-12 col-xs-12'>
             <div class='cartlines-header col-xs-3'><?= __('Foto'); ?></div>
             <div class='cartlines-header col-xs-3'><?= __('Product detail'); ?></div>

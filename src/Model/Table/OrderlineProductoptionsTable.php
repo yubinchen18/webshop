@@ -16,7 +16,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\OrderlineProductoption newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\OrderlineProductoption[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\OrderlineProductoption|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\OrderlineProductoption patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\OrderlineProductoption patchEntity(\Cake\Datasource\
+ *          EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\OrderlineProductoption[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\OrderlineProductoption findOrCreate($search, callable $callback = null)
  */

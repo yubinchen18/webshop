@@ -89,6 +89,11 @@ class CartsController extends AppController
         $this->set('_serialize', 'response');
     }
     
+    public function orderInfo() 
+    {
+        
+    }
+    
     public function display()
     {
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));

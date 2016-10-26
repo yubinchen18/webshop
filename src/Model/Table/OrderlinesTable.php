@@ -6,24 +6,22 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+// @codingStandardsIgnoreStart
 /**
- * Orderlines Model
- *
- * @property \Cake\ORM\Association\BelongsTo $Orders
- * @property \Cake\ORM\Association\BelongsTo $Photos
- * @property \Cake\ORM\Association\BelongsTo $Products
- * @property \Cake\ORM\Association\HasMany $OrderlineProductoptions
+ * Orders Model
  *
  * @method \App\Model\Entity\Orderline get($primaryKey, $options = [])
  * @method \App\Model\Entity\Orderline newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Orderline[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Orderline|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Orderline patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Orderline patchEntity(\Cake\Datasource\EntityInterface $entity,
+ *                                  array $data, array $options = [])
  * @method \App\Model\Entity\Orderline[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Orderline findOrCreate($search, callable $callback = null)
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
+// @codingStandardsIgnoreEnd
 class OrderlinesTable extends Table
 {
 
@@ -72,37 +70,6 @@ class OrderlinesTable extends Table
             ->uuid('id')
             ->allowEmpty('id', 'create');
 
-        $validator
-            ->allowEmpty('article');
-
-        $validator
-            ->requirePresence('productname', 'create')
-            ->notEmpty('productname');
-
-        $validator
-            ->integer('quantity')
-            ->requirePresence('quantity', 'create')
-            ->notEmpty('quantity');
-
-        $validator
-            ->numeric('price_ex')
-            ->requirePresence('price_ex', 'create')
-            ->notEmpty('price_ex');
-
-        $validator
-            ->numeric('vat')
-            ->requirePresence('vat', 'create')
-            ->notEmpty('vat');
-
-        $validator
-            ->boolean('exported')
-            ->requirePresence('exported', 'create')
-            ->notEmpty('exported');
-
-        $validator
-            ->dateTime('deleted')
-            ->allowEmpty('deleted');
-
         return $validator;
     }
 
@@ -116,9 +83,8 @@ class OrderlinesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['order_id'], 'Orders'));
-        $rules->add($rules->existsIn(['photo_id'], 'Photos'));
-        $rules->add($rules->existsIn(['product_id'], 'Products'));
 
         return $rules;
     }
+    
 }

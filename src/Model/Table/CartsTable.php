@@ -46,6 +46,10 @@ class CartsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasOne('Carts', [
+            'foreignKey' => 'cart_id',
+            'joinType' => 'LEFT'
+        ]);
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
@@ -83,6 +87,28 @@ class CartsTable extends Table
         return $rules;
     }
     
+    public function findByUserid($query, $options = [])
+    {
+        if(empty($options['user_id'])) {
+            return false;
+        }
+        
+        return $this->find()->where([
+               'Carts.user_id' => $options['user_id'],
+               'Carts.order_id IS NULL'
+            ])
+           ->contain([
+               'Cartlines' => function($q) {
+                   return $q->order(['Cartlines.created'])
+                           ->contain([
+                               'CartlineProductoptions.ProductoptionChoices.Productoptions'
+                           ]);
+               },
+               'Cartlines.Photos',
+               'Cartlines.Products'
+           ]);
+    }
+    
     /**
      * Check if user already has a cart or else
      * make new cart
@@ -91,20 +117,8 @@ class CartsTable extends Table
      */
     public function checkExistingCart($userId)
     {
-        $cart = $this->find()
-            ->where(['user_id' => $userId])
-            ->contain([
-                'Cartlines' => function($q) {
-                    return $q->order(['Cartlines.created'])
-                            ->contain([
-                                'CartlineProductoptions.ProductoptionChoices.Productoptions'
-                            ]);
-                },
-                'Cartlines.Photos',
-                'Cartlines.Products'
-            ])
-            ->first();
-        
+        $cart = $this->find('byUserid', ['user_id' => $userId])->first();
+            
         if (empty($cart)) {
             $cart = $this->newEntity(['user_id' => $userId]);
             

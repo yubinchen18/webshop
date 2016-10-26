@@ -67,6 +67,10 @@ class OrdersTable extends Table
         $this->belongsTo('Trxes', [
             'foreignKey' => 'trx_id'
         ]);
+        $this->belongsTo('Carts', [
+            'foreignKey' => 'order_id',
+            'joinType' => 'LEFT'
+        ]);
         $this->hasMany('Invoices', [
             'foreignKey' => 'order_id'
         ]);
@@ -78,11 +82,6 @@ class OrdersTable extends Table
         ]);
         $this->hasMany('OrdersOrderstatuses', [
             'foreignKey' => 'order_id'
-        ]);
-        $this->belongsToMany('Orderstatuses', [
-            'foreignKey' => 'order_id',
-            'targetForeignKey' => 'orderstatus_id',
-            'joinTable' => 'orders_orderstatuses'
         ]);
     }
 
@@ -109,8 +108,7 @@ class OrdersTable extends Table
             ->notEmpty('shippingcosts');
 
         $validator
-            ->requirePresence('remarks', 'create')
-            ->notEmpty('remarks');
+            ->allowEmpty('remarks');
 
         $validator
             ->allowEmpty('ideal_status');
@@ -120,10 +118,6 @@ class OrdersTable extends Table
 
         $validator
             ->allowEmpty('deleted');
-
-        $validator
-            ->requirePresence('ident', 'create')
-            ->notEmpty('ident');
 
         return $validator;
     }
@@ -142,6 +136,24 @@ class OrdersTable extends Table
         $rules->add($rules->existsIn(['invoiceaddress_id'], 'Invoiceaddresses'));
 
         return $rules;
+    }
+    
+    private function createIdent()
+    {
+        $ident = $this->find()->select(['ident' => 'MAX(`ident`)'])->first();
+        
+        if(empty($ident)) {
+            return 100000;
+        }
+        return $ident->ident+1;
+    }
+    
+    public function beforeSave($event, $entity, $options) 
+    {
+        if($entity->isNew()) {
+            $entity->ident = $this->createIdent();
+        }
+        return $entity;
     }
     
     /**

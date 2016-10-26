@@ -11,7 +11,6 @@
                 <th><?= $this->Paginator->sort('orderlines', __('Aantal producten')) ?></th>
                 <th><?= $this->Paginator->sort('totalprice', __('Totaalbedrag')) ?></th>
                 <th><?= $this->Paginator->sort('payment_method', __('Betalingsmethode')) ?></th>
-                <th><?= $this->Paginator->sort('orderstatus', __('Verwerkingsstatus')) ?></th>
                 <th><?= $this->Paginator->sort('created', __('Aangemaakt')) ?></th>
                 <th><?= $this->Paginator->sort('modified', __('Gewijzigd')) ?></th>
                 <th class="actions"><?= __('Acties') ?></th>
@@ -26,7 +25,6 @@
                     <td><?= h(count($order->orderlines)) ?></td>
                     <td><?= h($this->Number->currency($order->totalprice, 'EUR')); ?></td>
                     <td><?= h($order->payment_method); ?></td>
-                    <td><?= h($order->orders_orderstatuses[0]->orderstatus->name); ?></td>
                     <td><?= h($order->created) ?></td>
                     <td><?= h($order->modified) ?></td>
                     <td class="actions">

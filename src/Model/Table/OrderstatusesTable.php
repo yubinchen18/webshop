@@ -40,10 +40,8 @@ class OrderstatusesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsToMany('Orders', [
+        $this->hasMany('OrdersOrderstatuses', [
             'foreignKey' => 'orderstatus_id',
-            'targetForeignKey' => 'order_id',
-            'joinTable' => 'orders_orderstatuses'
         ]);
     }
 
@@ -71,5 +69,16 @@ class OrderstatusesTable extends Table
             ->allowEmpty('deleted');
 
         return $validator;
+    }
+    
+    public function findByAlias($query, $options = [])
+    {
+        if(empty($options['alias'])) {
+            return false;
+        }
+        
+        return $this->find()
+                ->where(['alias' => $options['alias']]);
+        
     }
 }

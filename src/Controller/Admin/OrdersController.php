@@ -34,7 +34,6 @@ class OrdersController extends AppController
             ]
         ];
         $orders = $this->paginate($this->Orders);
-
         $this->set(compact('orders'));
         $this->set('_serialize', ['orders']);
     }
@@ -74,7 +73,7 @@ class OrdersController extends AppController
             }
         }
         
-        $orderstatuses = $this->Orders->Orderstatuses
+        $orderstatuses = $this->Orders->OrdersOrderstatuses->Orderstatuses
                 ->find()
                 ->all();
         foreach ($orderstatuses as $orderstatus) {
