@@ -40,18 +40,24 @@ class CartsController extends AppController
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data();
+//            pr($cartlineData);die();
             $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen')];
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
             $cartline = $this->Carts->Cartlines
                 ->checkExistingCartline($cart->id, $cartlineData['product_id'], $productOptions);
+            
+            $hash = json_encode($productOptions);
+            $hash .= $cartlineData['product_id'];
+            $hash .= $cartlineData['photo_id'];
+            
             $data = [
                 'cart_id' => $cart->id,
                 'photo_id' => $cartlineData['photo_id'],
                 'product_id' => $cartlineData['product_id'],
                 'quantity' => ($cartline->quantity) ? $cartline->quantity + (int)$cartlineData['quantity']
                     : (int)$cartlineData['quantity'],
-                'options_hash' => md5(json_encode($productOptions))
+                'options_hash' => md5($hash)
             ];
             
             $this->Carts->Cartlines->patchEntity($cartline, $data);
