@@ -79,8 +79,20 @@
                         <span><?= __('Digitale downloads') ?></span>
                     </div>
                     <div class="photos-view-products-icon">
+                        <?= $this->Html->image($this->Url->build([
+                            'controller' => 'Photos',
+                            'action' => 'display',
+                            'id' => $photo->id,
+                            'size' => 'thumbs'
+                        ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                         <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03.png', [
-                            'class' => [$photo->orientationClass, 'img-responsive']
+                            'url' => $this->Url->build([
+                                'controller' => 'Photos', 
+                                'action' => 'productGroupIndex',
+                                'digital',
+                                $photo->id
+                            ]),
+                            'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
                     </div>
                 </div>

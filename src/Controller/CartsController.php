@@ -116,7 +116,6 @@ class CartsController extends AppController
         
         //add the orientation data to the photos array in cart
         if (!empty($cart->cartlines)) {
-            
             foreach ($cart->cartlines as $cartline) {
                 //add the orientation data to the photos array
                 $filePath = $this->Carts->Cartlines->Photos->getPath($cartline->photo->barcode_id) . DS . $cartline->photo->path;

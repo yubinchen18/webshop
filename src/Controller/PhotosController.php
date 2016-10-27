@@ -236,13 +236,13 @@ class PhotosController extends AppController
         //check if user is auth to view this photo id
         $session = $this->request->session();
         $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
-        
+
         //load the photo
         $photo = $this->Photos->find()
             ->where(['Photos.id' => $photoId])
             ->contain(['Barcodes.Persons'])
             ->first();
-
+        
         if (!empty($photo)) {
             if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
                 //load products
