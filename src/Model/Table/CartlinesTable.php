@@ -105,13 +105,11 @@ class CartlinesTable extends Table
      * Check if user chosen cartline with options already exists or else
      * make new cartline record
      */
-    public function checkExistingCartline($cartId, $productId, array $productOptions)
+    public function checkExistingCartline($cartId, $hash)
     {
         $cartline = $this->find()
             ->where([
-                'cart_id' => $cartId,
-                'product_id' => $productId,
-                'options_hash' => md5(json_encode($productOptions))
+                'options_hash' => $hash
             ])
             ->first();
 
