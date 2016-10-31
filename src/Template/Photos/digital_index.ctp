@@ -19,6 +19,8 @@
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
                                             'class' => 'plus-sign',
                                             'data-cartline' => json_encode([
+                                                'digital_product' => $digitalProduct,
+                                                'digital_pack' => $digitalPack,
                                                 'photo_id' => $photo->id,
                                                 'product_id' => $product->id,
                                                 'product_price' => $product->price_ex,
@@ -41,7 +43,15 @@
                                     ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endforeach; ?>   
+                </div>
+                <div class="panel panel-default navigation-groups-picture hidden">
+                    <div class="panel-body text-center">
+                        <?= $this->Html->link(
+                                __('< Kies gratis een groepsfoto (niet digitaal). '),
+                                'photos'
+                        )?>
+                    </div>
                 </div>
             </div>
         </div>

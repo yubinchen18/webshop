@@ -40,7 +40,6 @@ class CartsController extends AppController
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data();
-
             $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen')];
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
@@ -68,7 +67,7 @@ class CartsController extends AppController
                 $this->set('_serialize', 'response');
                 return;
             }
-
+            
             //check if there are product options and save them
             $this->Carts->Cartlines->CartlineProductOptions->deleteAll(['cartline_id' => $cartline->id]);
             if (array_key_exists('product_options', $cartlineData) && !empty($cartlineData['product_options'])) {
@@ -86,7 +85,13 @@ class CartsController extends AppController
                     }
                 }
             }
-            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen')];
+            
+            $digitalPack = false;
+            if($cartlineData['digital_pack']) {
+                $digitalPack = true;
+            }
+            
+            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack];
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;

@@ -273,6 +273,15 @@ class PhotosController extends AppController
                         ]);
                         //add the image data to product object
                         $product->image = $image[0];
+                        
+                        $digitalProduct = false;
+                        if($product->product_group === 'digital') {
+                            $digitalProduct = true;
+                        }
+                        $digitalPack = false;
+                        if($product->article === 'DPACK') {
+                            $digitalPack = true;
+                        }
                     }
                 } else {
                     throw new NotFoundException('No products found.');
@@ -282,6 +291,8 @@ class PhotosController extends AppController
                 $templateName = $productGroup.'-index';
                 $this->set(compact('photo', 'products'));
                 $this->set('_serialize', ['images']);
+                $this->set('digitalProduct', $digitalProduct);
+                $this->set('digitalPack', $digitalPack);
                 $this->render($templateName);
             } else {
                 throw new NotFoundException('Not authorized to view this photo');

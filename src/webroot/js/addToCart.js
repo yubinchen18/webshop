@@ -92,6 +92,8 @@ jQuery(function($) {
                 product_name: cartline.product_name,
                 product_options: cartline.product_options,
                 product_price: cartline.product_price,
+                digital_product: cartline.digital_product,
+                digital_pack: cartline.digital_pack,
                 discount: cartline.discount,
                 quantity: cartline.quantity
             },
@@ -99,7 +101,6 @@ jQuery(function($) {
 //            dataType:"json",
             success: function(response) {
                 $('.addToCartPopup').parent().remove();
-                
                 // add confirmation message
                 if(response.success == true) {
                     $('.addToCartPopup-confirmation').addClass('alert-success');
@@ -108,6 +109,9 @@ jQuery(function($) {
                     setTimeout(function() {
                         $('.addToCartPopup-confirmation').hide();
                     },2000);
+                    if(response.digital === true) {
+                        $('.navigation-groups-picture').removeClass('hidden');
+                    }
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);
