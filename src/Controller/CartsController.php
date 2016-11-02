@@ -50,7 +50,7 @@ class CartsController extends AppController
             $hash = md5($hash);
             
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
-            
+       
             $data = [
                 'cart_id' => $cart->id,
                 'photo_id' => $cartlineData['photo_id'],
@@ -86,12 +86,10 @@ class CartsController extends AppController
                 }
             }
             
-            $digitalPack = false;
-            if($cartlineData['digital_pack']) {
-                $digitalPack = true;
-            }
+            $digitalPack = (isset($cartlineData['digital_pack'])) ? true : false;
+            $redirect = (isset($cartlineData['redirect'])) ? true : false;
             
-            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack];
+            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $redirect];
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;
@@ -125,7 +123,8 @@ class CartsController extends AppController
     {
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
         $orderSubtotal = 0;
-        
+        $groupSelectedArr = array();
+        $totalDigitalPacks = 0;
         //add the orientation data to the photos array in cart
         if (!empty($cart->cartlines)) {
             foreach ($cart->cartlines as $cartline) {
@@ -146,7 +145,7 @@ class CartsController extends AppController
                 ]);
                 //add the image data to product object and calc subtotal price
                 $cartline->product->image = $image[0];
-                
+          
                 $cartline->subtotal = $cartline->product->price_ex * $cartline->quantity;
                 if($cartline->product->has_discount === 1) {
                     $cartline->discountprice = 3.78;
@@ -154,6 +153,13 @@ class CartsController extends AppController
                     for($n=2;$n<=$cartline->quantity;$n++) {
                         $cartline->subtotal += 3.78;
                     }
+                }  
+                
+                if ($cartline->product->article === "DPack") { $totalDigitalPacks++; }
+                if ($cartline->product->article === "GAF 13x19") {
+                    for($i=0; $i<$cartline->quantity;$i++) {
+                        $groupSelectedArr[] = true; 
+                    }    
                 }
             }
         }
@@ -163,8 +169,9 @@ class CartsController extends AppController
         $shippingCost = $totals['shippingcosts'];
         $orderTotal = $orderSubtotal + $shippingCost;
         $discount = $totals['discount'];
+        $groupSelected = (count($groupSelectedArr) >= $totalDigitalPacks) ? true : false;
         
-        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost'));
+        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'groupSelected'));
     }
     
     public function update()

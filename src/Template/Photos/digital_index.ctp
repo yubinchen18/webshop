@@ -25,7 +25,7 @@
                                                 'product_id' => $product->id,
                                                 'product_price' => $product->price_ex,
                                                 'product_name' => $product->name,
-                                                'product_options' => ''
+                                                'product_options' => '',
                                             ]),
                                         ])?>
                                     </div>
@@ -44,14 +44,6 @@
                             </div>
                         </div>
                     <?php endforeach; ?>   
-                </div>
-                <div class="panel panel-default navigation-groups-picture hidden">
-                    <div class="panel-body text-center">
-                        <?= $this->Html->link(
-                                __('< Kies gratis een groepsfoto (niet digitaal). '),
-                                'photos'
-                        )?>
-                    </div>
                 </div>
             </div>
         </div>

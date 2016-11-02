@@ -92,21 +92,20 @@ class PhotosTable extends BaseTable
                 ->contain(['Groups.Projects.Schools', 'Persons.Groups.Projects.Schools'])
                 ->first();
 
-
         $path = $this->getPathObject();
+        
+        if ($barcode->type == "group") {
+            $pathToCreate = $barcode->group->project->school->slug . DS .
+                $barcode->group->project->slug . DS .
+                $barcode->group->slug;
+                $path->create($pathToCreate);
+                $path->cd($pathToCreate);
+            return $path->path;
+        }
         
         if (empty($barcode->person->group->project->school->slug)) {
             $path->create('unknown');
             $path->cd('unknown');
-
-            return $path->path;
-        }
-        if ($barcode->type == "group") {
-            $pathToCreate = $barcode->person->group->project->school->slug . DS .
-                $barcode->person->group->project->slug . DS .
-                $barcode->person->group->slug;
-                $path->create($pathToCreate);
-                $path->cd($pathToCreate);
 
             return $path->path;
         }

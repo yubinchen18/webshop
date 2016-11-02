@@ -2,7 +2,6 @@
     <!-- left panel -->
     <div class="cart-cartlines-index col-md-9">
         <h2><?= __('Winkelwagen');?></h2>
-        
         <?=$this->Form->create(null, ['class' => 'orderForm', 'url' => '/carts/orderInfo']); ?>
         <div class='row col-md-12 col-xs-12'>
             <div class='cartlines-header col-xs-3'><?= __('Foto'); ?></div>
@@ -11,8 +10,7 @@
             <div class='cartlines-header col-xs-2'><?= __('Stukprijs'); ?></div>
             <div class='cartlines-header col-xs-1'><?= __('Prijs'); ?></div>
             <div class='cartlines-header col-xs-1'><?= __('Wis'); ?></div>
-            
-            <?php if (!empty($cart->cartlines)): ?>
+            <?php if (!empty($cart->cartlines)): ?>        
                 <?php foreach($cart->cartlines as $cartline): ?>
                     <div class='row col-xs-12 cartline-row' id='<?= $cartline->id; ?>'>
                         <div class='cartline-photo-container col-xs-2'>
@@ -51,6 +49,7 @@
                                 <div class="row">
                                     <div class="col-xs-11">
                                         <div class="input-group">
+                                            <?php if($cartline->product->product_group != "digital" && $cartline->product->article != "GAF 13x19") : ?>
                                             <span class="input-group-btn">
                                                 <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
                                                   -
@@ -64,6 +63,7 @@
                                                     +
                                                 </button>
                                             </span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -93,8 +93,17 @@
                             <span class='close'>&times;</span>
                         </div>
                     </div>
+                    <?php if($cartline->product->article === 'DPack' && !$groupSelected) : ?>
+                    <div class="col-xs-12 panel panel-info navigation-groups-picture">
+                        <div class="panel-body text-center">
+                            <?= $this->Html->link(
+                                    __('< Kies gratis een groepsfoto naar keuze (niet digitaal). '),
+                                    'photos/groups/'.$cartline->photo->barcode_id
+                            )?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
-            
                 <!-- Summary -->
                 <div class='order-summary col-sm-12'>
                     <div class='row'>
@@ -146,7 +155,7 @@
                         </div>
                         <div class='order-place-order col-sm-3 col-sm-offset-6'>
                             <span class="input-group-btn">
-                                <button class="btn btn-success" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
+                                <button class="btn btn-success <?php if(!$groupSelected) { ?>disabled<?php } ?>" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
                             </span>
                         </div>
                     </div>

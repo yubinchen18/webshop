@@ -81,9 +81,10 @@ jQuery(function($) {
     $('.photos-product-index').on('click', '.addToCartPopup-addButton', function(e){
         e.preventDefault();
         var data = $(this).data();
-        var quantity = parseInt($(this).parent().parent().find('.addToCartPopup-quantity-bottom').html());
-        data.cartline.quantity = quantity;
         var cartline = data.cartline;
+        var quantity = parseInt($(this).parent().parent().find('.addToCartPopup-quantity-bottom').html());
+        quantity = (isNaN(quantity)) ? 1 : quantity;
+        cartline.quantity = quantity;
         $.ajax({
             url: '/carts/add.json',
             data: {
@@ -95,11 +96,15 @@ jQuery(function($) {
                 digital_product: cartline.digital_product,
                 digital_pack: cartline.digital_pack,
                 discount: cartline.discount,
-                quantity: cartline.quantity
+                quantity: cartline.quantity,
+                redirect: cartline.redirect
             },
             method: 'POST',
 //            dataType:"json",
             success: function(response) {
+                if(response.redirect) {
+                    window.location.href = "/carts/display";
+                }
                 $('.addToCartPopup').parent().remove();
                 // add confirmation message
                 if(response.success == true) {
@@ -109,9 +114,6 @@ jQuery(function($) {
                     setTimeout(function() {
                         $('.addToCartPopup-confirmation').hide();
                     },2000);
-                    if(response.digital === true) {
-                        $('.navigation-groups-picture').removeClass('hidden');
-                    }
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);

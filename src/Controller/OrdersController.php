@@ -5,6 +5,10 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Routing\Router;
+use App\Lib\ImageHandler;
+use ZipArchive;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 /**
  * Orders Controller
  *
@@ -57,7 +61,7 @@ class OrdersController extends AppController
             ]
         ];
         
-        $order = $this->Orders->newEntity($orderData);
+        $order = $this->Orders->newEntity($orderData);    
         if(!($order = $this->Orders->save($order, ['associated' => 'OrdersOrderstatuses']))) {
             $this->Flash->error(__("Uw bestelling kon niet worden opgeslagen"));
             return $this->redirect(['controller' => 'carts', 'action' => 'orderInfo']);
@@ -98,9 +102,8 @@ class OrdersController extends AppController
                 $this->Orders->delete($order);
                 $this->Flash->error(__("Uw bestelling kon niet worden opgeslagen"));
                 return $this->redirect(['controller' => 'carts', 'action' => 'orderInfo']);
-            }
+            }      
         }
-        
         switch ($order->payment_method) {
             default:
                 return $this->redirect(['controller' => 'orders', 'action' => 'success']);
@@ -201,7 +204,6 @@ class OrdersController extends AppController
     public function success()
     {
         $order = $this->request->session()->read('order');
-        
         $this->request->session()->write('order',null);
         $cart = $this->Orders->Carts->find('byUserid',['user_id' => $this->Auth->user('id')])->first();
         $newcart = $this->Orders->Carts->patchEntity($cart,['order_id' => $order->id]);
@@ -213,6 +215,70 @@ class OrdersController extends AppController
     {
         $order = $this->request->session()->read('order');
         $this->set(compact('order'));
+    }
+    
+    public function download($orderId = null) {
+        //check if orderstatus == payment_received //eb576876-a033-11e6-ad76-6002923e9933
+        $idStatusPaid = $this->Orders->OrdersOrderstatuses
+            ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
+            ->first()
+            ->id;
+        
+        $paidOrder = $this->Orders->OrdersOrderstatuses->find()
+                ->contain('Orders')
+                ->where(['Orders.id' => $orderId, 'orderstatus_id' => $idStatusPaid])
+                ->first();
+        
+        if(!$paidOrder) { return $this->redirect(['controller' => 'Photos', 'action' => 'index']); }
+        
+        //open zip file
+        $zipFile = new ZipArchive();
+        $fileName = TMP . 'zip' . DS .$orderId.'.zip';
+        $folder = TMP . 'zip' . DS;
+        if (!file_exists($folder)) {
+            mkdir($folder, 0777, true);
+        }
+        if ($zipFile->open($fileName, ZipArchive::CREATE)!==TRUE) {
+            exit("cannot open <$filename>\n");
+        }
+        
+        //add files to zip
+        $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->toArray();
+        foreach ($orderlines as $line) {  
+            if($line->article === 'GAF 13x19') {
+                continue;
+            }
+            $photoId = $line['photo_id']; 
+            $this->Photos = TableRegistry::get('Photos');
+            $photo = $this->Photos->find()
+                  ->where(['id' => $photoId])
+                  ->first();
+            $rawPath = $this->Photos->getPath($photo->barcode_id);
+
+            if($line->article === 'DPack') {
+                $dir = new Folder($rawPath);
+                $files = $dir->find('.*\.jpg|.gif|.png');
+                foreach ($files as $file) {
+                    $photoPath = $rawPath . DS . $file;
+                    $zipFile->addFile($photoPath, $file);
+                }
+            }
+            if($line->article != 'DPack') {
+                $photoPath = $rawPath . DS . $photo->path;
+                //add to the zip file
+                $zipFile->addFile($photoPath, $photo->path);
+            }
+        }
+        $zipFile->close();
+
+        //send zip to the customer through response
+        header("Content-Type: application/zip");
+        header("Content-Length: " . filesize($fileName));
+        header("Content-Disposition: attachment; filename= . $fileName");
+        readfile($fileName);
+
+        unlink($fileName); 
+        //http://hswebshop2016.local.dev.xseeding.nl/orders/download/c3bf9f4a-2a98-443f-93b5-35faacf06a19
     }
 }
  

@@ -253,6 +253,14 @@ Router::scope('/', function (RouteBuilder $routes) {
         ],
         ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
+    $routes->connect('/photos/groups/:id', 
+        ['controller' => 'Photos', 'action' => 'groups'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
+    $routes->connect('/orders/download/:id', 
+        ['controller' => 'Orders', 'action' => 'download'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
+    $routes->connect('/orders/removeFile/**', 
+        ['controller' => 'Orders', 'action' => 'removeFile']);
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
     

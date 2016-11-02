@@ -274,14 +274,8 @@ class PhotosController extends AppController
                         //add the image data to product object
                         $product->image = $image[0];
                         
-                        $digitalProduct = false;
-                        if($product->product_group === 'digital') {
-                            $digitalProduct = true;
-                        }
-                        $digitalPack = false;
-                        if($product->article === 'DPACK') {
-                            $digitalPack = true;
-                        }
+                        $digitalProduct = ($product->product_group === 'digital') ? true : false;
+                        $digitalPack = ($product->article === 'DPack') ? true : false;       
                     }
                 } else {
                     throw new NotFoundException('No products found.');
@@ -289,10 +283,8 @@ class PhotosController extends AppController
                 
                 //pass results to views
                 $templateName = $productGroup.'-index';
-                $this->set(compact('photo', 'products'));
+                $this->set(compact('photo', 'products', 'digitalProduct', 'digitalPack'));
                 $this->set('_serialize', ['images']);
-                $this->set('digitalProduct', $digitalProduct);
-                $this->set('digitalPack', $digitalPack);
                 $this->render($templateName);
             } else {
                 throw new NotFoundException('Not authorized to view this photo');
@@ -300,5 +292,52 @@ class PhotosController extends AppController
         } else {
             throw new NotFoundException('Photo not found');
         }
+    }
+    
+    public function groups($barcode = null) 
+    {
+        //check if user is auth to view this photo id
+        $session = $this->request->session();
+        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
+        
+        $this->Persons = TableRegistry::get('Persons');
+        $person = $this->Persons->find()
+                ->contain(['Groups'], true)
+                ->where(['Persons.barcode_id' => $barcode])
+                ->first();
+
+        $this->Photos = TableRegistry::get('Photos');
+        $photos = $this->Photos->find()
+                ->where(['barcode_id' => $person->group->barcode_id])
+                ->toArray();
+        
+        $this->Products = TableRegistry::get('Products');
+        $product = $this->Products->find()
+                ->where(['article' => 'GAF 13x19'])
+                ->first();
+        
+        if (!empty($photos)) {
+            foreach($photos as $photo) {
+                if (in_array($person->user_id, $loggedInUsersIds)) {
+                    //add the orientation data to the photos array
+                    $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+
+                    list($width, $height) = getimagesize($filePath);
+                    if ($width > $height) {
+                        $orientationClass = 'photos-horizontal';
+                    } else {
+                        $orientationClass = 'photos-vertical';
+                    }
+                    $photo->orientationClass = $orientationClass;
+
+                    $this->set(compact('photo'));
+                    $this->set('_serialize', ['photo']);
+                } else {
+                    throw new NotFoundException('Not authorized to view this photo');
+                }
+            }
+        }
+        $this->set(compact('groups','photos', 'product'));
+        $this->set('_serialize', ['photos']);
     }
 }
