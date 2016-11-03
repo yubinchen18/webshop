@@ -67,5 +67,45 @@ class ProductsFixture extends TestFixture
             'layout' => 'CombinationLayout1',
             'product_group' => 'combination-sheets'
         ],
+        [
+            'id' => '3373b17f-496d-4a57-bbc4-d39f5a2f644a',
+            'name' => 'Digitaal alles',
+            'article' => 'DPack',
+            'slug' => 'dpack',
+            'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. '
+            . 'Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, '
+            . 'pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. '
+            . 'Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, '
+            . 'tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+            'price_ex' => 35.00,
+            'vat' => 1,
+            'high_shipping' => 1,
+            'active' => 1,
+            'created' => '2016-08-22 08:54:02',
+            'modified' => '2016-08-22 08:54:02',
+            'deleted' => '2016-08-22 08:54:02',
+            'layout' => 'LooseLayout1',
+            'product_group' => 'digital'
+        ],
+        [
+            'id' => '5b47630b-fa53-4359-8137-22c8657837b1',
+            'name' => 'Gratis Klassenfoto',
+            'article' => 'GAF 13x19',
+            'slug' => 'gaf-13x-19',
+            'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. '
+            . 'Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, '
+            . 'pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. '
+            . 'Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, '
+            . 'tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+            'price_ex' => 0.00,
+            'vat' => 1,
+            'high_shipping' => 1,
+            'active' => 1,
+            'created' => '2016-08-22 08:54:02',
+            'modified' => '2016-08-22 08:54:02',
+            'deleted' => '2016-08-22 08:54:02',
+            'layout' => 'LooseLayout1',
+            'product_group' => 'loose-prints'
+        ],
     ];
 }

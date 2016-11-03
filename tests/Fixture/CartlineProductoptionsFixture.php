@@ -50,5 +50,10 @@ class CartlineProductoptionsFixture extends TestFixture
             'cartline_id' => '97e1c06c-7a87-468d-80d2-766a982214de',
             'productoption_choice_id' => 'b6155209-2c1f-46b8-b164-cb5cff20b0d1'
         ],
+        [
+            'id' => '23d469b2-ea75-4816-8c6c-8fecdafe2aa2',
+            'cartline_id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0',
+            'productoption_choice_id' => 'd865ed8d-640e-44a2-9828-c12d35df753b'
+        ],
     ];
 }

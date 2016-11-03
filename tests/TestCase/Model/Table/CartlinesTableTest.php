@@ -75,6 +75,7 @@ class CartlinesTableTest extends TestCase
     {
         $cartId = '1db1f83f-1b45-464b-b239-1e0651ba2710';
         $productId = '3a1bef8f-f977-4a0e-8c29-041961247d2d';
+        $hash = '3c7000c3dc91896e823fae5253b8d270';
         $productOptions = [
             0 => [
                 'name' => 'Uitvoering',
@@ -89,15 +90,15 @@ class CartlinesTableTest extends TestCase
         ];
 
         $data = [
-            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
-            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d',
+            'photo_id' => '59d395fa-e723-43f0-becb-0078425f9a99',
+            'product_id' => $productId,
             'product_name' => 'product1',
             'product_options' => $productOptions,
             'product_price' => 9.99,
             'quantity' => 5
         ];
         
-        $cartline = $this->CartlinesTable->checkExistingCartline($cartId, $productId, $productOptions);
+        $cartline = $this->CartlinesTable->checkExistingCartline($cartId, $hash);
         $this->assertEquals('97e1c06c-7a87-468d-80d2-766a982214de', $cartline->id);
     }
     

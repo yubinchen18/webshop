@@ -48,7 +48,7 @@ class CartsController extends AppController
             $hash .= $cartlineData['product_id'];
             $hash .= $cartlineData['photo_id'];
             $hash = md5($hash);
-            
+        
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
        
             $data = [

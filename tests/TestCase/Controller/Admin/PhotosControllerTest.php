@@ -26,7 +26,10 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         'app.photos',
         'app.barcodes',
         'app.schools',
-        'app.logs'
+        'app.logs',
+        'app.carts',
+        'app.cartlines',
+        'app.products'
     ];
 
     public function setUp()
@@ -40,8 +43,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     {
         $this->get('/admin/photos');
         $photos = $this->viewVariable('photos');
-        
-        $this->assertEquals(5, $photos->count());
+        $this->assertEquals(5, $photos->count()); //6
     }
     
     public function testIndexFiltered()

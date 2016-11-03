@@ -85,5 +85,14 @@ class PhotosFixture extends TestFixture
             'modified' => '2016-06-27 12:53:08',
             'deleted' => null
         ],
+        [
+            'id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
+            'path' => 'vertical.jpg',
+            'type' => 'image',
+            'barcode_id' => '6844d1e7-d6b2-4e23-8bbe-d671b698d1c3',
+            'created' => '2016-10-27 12:53:08',
+            'modified' => '2016-10-27 12:53:08',
+            'deleted' => null
+        ],
     ];
 }

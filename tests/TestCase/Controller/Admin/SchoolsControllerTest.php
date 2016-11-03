@@ -20,6 +20,7 @@ class SchoolsControllerTest extends BaseIntegrationTestCase
         'app.schools',
         'app.barcodes',
         'app.addresses',
+        'app.carts',
         'app.contacts',
         'app.projects',
         'app.groups',

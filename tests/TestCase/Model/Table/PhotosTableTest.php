@@ -23,7 +23,13 @@ class PhotosTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [];
+    public $fixtures = [
+        'app.barcodes',
+        'app.groups',
+        'app.projects',
+        'app.schools',
+        'app.persons'
+    ];
 
      /**
      * setUp method
@@ -37,6 +43,18 @@ class PhotosTableTest extends TestCase
         $this->Photos = TableRegistry::get('Photos', $config);
     }
 
+    public function testGetPathGroupType() 
+    {
+        $path = $this->Photos->getPath('6844d1e7-d6b2-4e23-8bbe-d671b698d1c3');
+        $this->assertTextEndsWith('de-ring-van-putten/eindejaars-2016/groep-8b', $path);
+    }
+    
+    public function testGetPathPersonType()
+    {
+        $path = $this->Photos->getPath('105ea78c-2e11-4b7f-b42c-05443169d43a');
+        $this->assertTextEndsWith('de-ring-van-putten/eindejaars-2016/klas-2a/jan-de-boer', $path);
+    }
+    
     /**
      * tearDown method
      *

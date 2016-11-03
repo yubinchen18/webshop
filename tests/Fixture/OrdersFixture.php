@@ -54,19 +54,35 @@ cancelled
     public $records = [
         [
             'id' => '9861815c-edaa-4ce3-b914-09a13d9fc99e',
-            'user_id' => 'c4b06162-5bfa-4f1c-af86-694ddecd24a2',
+            'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903',
             'deliveryaddress_id' => 'a573506c-d35d-4aee-8feb-7f3546fb6f48',
             'invoiceaddress_id' => 'ce9bf008-b23f-4144-ab23-4e98c78afede',
             'totalprice' => 1,
             'shippingcosts' => 1,
             'remarks' => 'Lorem ipsum dolor sit amet',
-            'trx_id' => 'Lorem ipsum dolor sit amet',
-            'ideal_status' => 'Lorem ipsum dolor sit amet',
-            'exportstatus' => 'Lorem ipsum dolor sit amet',
+            'trx_id' => NULL,
+            'ideal_status' => NULL,
+            'exportstatus' => 'new',
             'created' => 'Lorem ipsum dolor sit amet',
             'modified' => 'Lorem ipsum dolor sit amet',
             'deleted' => 'Lorem ipsum dolor sit amet',
-            'ident' => 'Lorem ipsum dolor sit amet'
+            'ident' => 10
+        ],
+        [
+            'id' => '79ac1071-1940-4513-9faf-f57893ca3ade',
+            'user_id' => '7f04642a-34a2-4d3d-ae8a-c79e26f5bbfa',
+            'deliveryaddress_id' => 'a573506c-d35d-4aee-8feb-7f3546fb6f48',
+            'invoiceaddress_id' => 'ce9bf008-b23f-4144-ab23-4e98c78afede',
+            'totalprice' => 1,
+            'shippingcosts' => 1,
+            'remarks' => 'Lorem ipsum dolor sit amet',
+            'trx_id' => NULL,
+            'ideal_status' => NULL,
+            'exportstatus' => 'new',
+            'created' => 'Lorem ipsum dolor sit amet',
+            'modified' => 'Lorem ipsum dolor sit amet',
+            'deleted' => 'Lorem ipsum dolor sit amet',
+            'ident' => 11
         ],
     ];
 }

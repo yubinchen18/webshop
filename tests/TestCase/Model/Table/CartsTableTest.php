@@ -26,6 +26,9 @@ class CartsTableTest extends TestCase
     public $fixtures = [
         'app.carts',
         'app.users',
+        'app.cartlines',
+        'app.photos',
+        'app.products'
     ];
 
     /**
@@ -65,10 +68,10 @@ class CartsTableTest extends TestCase
     
     public function testReturnExistingCart()
     {
-        $userId = '61d2a03c-08f9-400b-9942-9d2f3a843aaa';
+        $userId = 'c4b06162-5bfa-4f1c-af86-694ddecd24a2';
         $cart = $this->Carts->checkExistingCart($userId);
         $allcarts = $this->Carts->find()->all();
-        $this->assertEquals(1, count($allcarts));
+        $this->assertEquals(2, count($allcarts));
         $this->assertEquals('1db1f83f-1b45-464b-b239-1e0651ba2710', $cart->id);
     }
 }

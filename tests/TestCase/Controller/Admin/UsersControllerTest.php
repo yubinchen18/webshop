@@ -19,6 +19,9 @@ class UsersControllerTest extends BaseIntegrationTestCase
      */
     public $fixtures = [
         'app.users',
+        'app.carts',
+        'app.cartlines',
+        'app.products'
     ];
 
     public function setUp()

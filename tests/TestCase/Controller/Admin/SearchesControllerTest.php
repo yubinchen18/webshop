@@ -18,6 +18,8 @@ class SearchesControllerTest extends BaseIntegrationTestCase
     public $fixtures = [
         'app.addresses',
         'app.barcodes',
+        'app.carts',
+        'app.cartlines',
         'app.contacts',
         'app.groups',
         'app.persons',

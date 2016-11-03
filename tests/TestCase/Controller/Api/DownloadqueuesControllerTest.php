@@ -168,8 +168,11 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                         'FirstName' => 'Pieter',
                         'MiddleName' =>'',
                         'LastName' => 'Vos',
-                        'Url' => 'pieter-vos',
-                        'Address' => 'Hoofdweg  7 ',
+                        'slug' => 'pieter-vos',
+                        'Street' => 'Hoofdweg',
+                        'Number' => 7,
+                        'Extension' => '',
+                        'Gender' => 'Man',
                         'City' => 'Spijkenisse',
                         'Zipcode' => '3333GG',
                         'Deleted' => false,
@@ -350,7 +353,11 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "prefix"=> "",
                 "zipcode"=> "3027 JM ROTTERDAM",
                 "city"=> "spijkenisse",
-                "address"=> "Multatulistraat 7 d",
+                "gender"=> "male",
+                "type"=> "student",
+                "street" => "Multatulistraat",
+                "number" => 7,
+                "extension" => "d",
                 "created"=> "\/Date(1391594379000)\/",
                 "modified"=> "\/Date(1393343552463)\/",
                 "deleted"=> false,
@@ -364,7 +371,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $usersFixt = $this->Users->find()->count();
         $groupsFixt = $this->Groups->find()->count();
         $personsFixt = $this->Persons->find()->count();
-
+        
         $this->post('/api/v1/upload_item.json', $data);
 
         $queue = $this->Downloadqueue->find()->count();
@@ -372,11 +379,11 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $users = $this->Users->find()->count();
         $groups = $this->Groups->find()->count();
         $persons = $this->Persons->find()->count();
-
+        
         // Add queue for Barcode, Group and Person. Users are not queued
         $this->assertEquals($queueFixt+(3*($countPhotographers-1)), $queue);
         $this->assertEquals($barcodesFixt + 1, $barcodes);
-        $this->assertEquals($usersFixt +1, $users);
+        $this->assertEquals($usersFixt +2, $users);
         $this->assertEquals($groupsFixt +1, $groups);
         $this->assertEquals($personsFixt +1, $persons);
 
@@ -435,7 +442,11 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
                 "prefix"=> "",
                 "zipcode"=> "3027 JM ROTTERDAM",
                 "city"=> "spijkenisse",
-                "address"=> "Multatulistraat 7 d",
+                "gender"=> "male",
+                "type"=> "student",
+                "street" => "Multatulistraat",
+                "number" => 7,
+                "extension" => "d",
                 "created"=> "\/Date(1391594379000)\/",
                 "modified"=> "\/Date(1393343552463)\/",
                 "deleted"=> false,

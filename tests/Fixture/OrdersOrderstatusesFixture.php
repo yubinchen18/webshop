@@ -54,5 +54,14 @@ class OrdersOrderstatusesFixture extends TestFixture
             'modified' => '2016-10-25 08:45:00',
             'deleted' => '2016-10-25 08:45:00'
         ],
+        [
+            'id' => 'c7404035-b4a4-452a-9494-ac480ca4267e',
+            'order_id' => '79ac1071-1940-4513-9faf-f57893ca3ade',
+            'orderstatus_id' => '962c1818-5ea6-4d23-93bf-1d4684598b76',
+            'user_id' => '7f04642a-34a2-4d3d-ae8a-c79e26f5bbfa',
+            'created' => '2016-10-25 08:45:00',
+            'modified' => '2016-10-25 08:45:00',
+            'deleted' => '2016-10-25 08:45:00'
+        ],
     ];
 }

@@ -22,6 +22,8 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     public $fixtures = [
         'app.photos',
         'app.barcodes',
+        'app.carts',
+        'app.cartlines',
         'app.groups',
         'app.projects',
         'app.schools',
@@ -278,5 +280,11 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         );
         $this->assertResponseContains('Cake\Network\Exception\NotFoundException');
         $this->assertResponseCode(404);
+    }
+    
+    public function testViewGroup() {
+        $this->get('/photos/groups/2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Vergroot');
     }
 }

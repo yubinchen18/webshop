@@ -315,7 +315,6 @@ class PhotosController extends AppController
         $product = $this->Products->find()
                 ->where(['article' => 'GAF 13x19'])
                 ->first();
-        
         if (!empty($photos)) {
             foreach($photos as $photo) {
                 if (in_array($person->user_id, $loggedInUsersIds)) {
