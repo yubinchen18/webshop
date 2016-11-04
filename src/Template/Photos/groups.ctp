@@ -15,19 +15,19 @@
                     'size' => 'med'
                 ]), [
                     'alt' => $photo->path,
-                    'class' => [$photo->orientationClass, 'img-responsive addToCartPopup-addButton'],
+                    'class' => [$photo->orientationClass, 'img-responsive addToCartPopup-addButton group-picture'],
                     'data-cartline' => json_encode([
                     'photo_id' => $photo->id,
                     'product_id' => $product->id,
                     'product_name' => $product->name,
                     'product_price' => $product->price_ex,
                     'product_options' => '',
-                    'redirect' => true])
+                    'redirect' => 'true'])
                 ]); ?>
                 </div>
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-<?= $photo->id ?>">
-                        <i class="ace-icon fa fa-plus"></i> <?= __('Vergroot') ?>
+                <div class="text-left">
+                    <button type="button" class="btn btn-success fullwidth" data-toggle="modal" data-target=".modal-<?= $photo->id ?>">
+                        <i class="ace-icon fa fa-search-plus"></i> <?= __('Vergroot') ?>
                     </button>
                  </div>
                 <div class="modal fade modal-<?= $photo->id ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">

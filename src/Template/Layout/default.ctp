@@ -13,6 +13,7 @@ $cakeDescription = 'Schoolfotografie by Hoogstraten ... de beste kwaliteit schoo
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('layout.css') ?>
+    <?= $this->Html->css('../admin/css/font-awesome.min.css') ?>
     <?= $this->Html->script('main.js') ?>
 
     <?= $this->fetch('meta') ?>

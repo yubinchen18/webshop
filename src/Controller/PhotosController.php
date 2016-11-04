@@ -274,8 +274,8 @@ class PhotosController extends AppController
                         //add the image data to product object
                         $product->image = $image[0];
                         
-                        $digitalProduct = ($product->product_group === 'digital') ? true : false;
-                        $digitalPack = ($product->article === 'DPack') ? true : false;       
+                        $digitalProduct = ($product->product_group === 'digital') ? $photo->barcode_id : false;
+                        $digitalPack = ($product->article === 'DPack') ? $photo->barcode_id : false;       
                     }
                 } else {
                     throw new NotFoundException('No products found.');

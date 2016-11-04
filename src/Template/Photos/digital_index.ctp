@@ -17,7 +17,7 @@
                                     <div class="flex-box price col-xs-5">
                                         <?= $this->Number->currency($product->price_ex, 'EUR'); ?>
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
-                                            'class' => 'plus-sign',
+                                            'class' => 'plus-sign-non-quantity addToCartPopup-addButton',
                                             'data-cartline' => json_encode([
                                                 'digital_product' => $digitalProduct,
                                                 'digital_pack' => $digitalPack,

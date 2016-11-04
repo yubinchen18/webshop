@@ -122,7 +122,11 @@ jQuery(function($) {
                 $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                 $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                 $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                $('div#'+divId).next('.navigation-groups-picture').remove();
                 $('div#'+divId).remove();
+                if(response.removeGroup !== "") {
+                    $('div#'+response.removeGroup).remove();
+                }     
             }
           });
        }

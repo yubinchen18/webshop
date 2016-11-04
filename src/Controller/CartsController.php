@@ -40,8 +40,12 @@ class CartsController extends AppController
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {
             $cartlineData = $this->request->data();
-            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen')];
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+            
+            $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
+            $redirect = (isset($cartlineData['redirect'])) ? true : false;
+            
+            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $redirect];
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
                         
             $hash = json_encode($productOptions);
@@ -49,6 +53,32 @@ class CartsController extends AppController
             $hash .= $cartlineData['photo_id'];
             $hash = md5($hash);
         
+            if(isset($cartlineData['digital_product']) && $cart) {
+                foreach($cart->cartlines as $line) {
+                    if($digitalPack === $line->photo->barcode_id) {
+                        if($line->product->article !== "D1") {
+                            $response = ['success' => false, 'message' => __('Het pakket is al toegevoegd aan de winkelwagen')];
+                            $this->set(compact('response'));
+                            $this->set('_serialize', 'response');
+                            return;
+                        }
+                        $this->Carts->Cartlines->delete($line);  
+                    }
+                    if($cartlineData['photo_id'] === $line->photo_id) {
+                        $response = ['success' => true, 'message' => __('Het pakket is toegevoegd aan de winkelwagen')];
+                        $this->set(compact('response'));
+                        $this->set('_serialize', 'response');
+                        
+                        $this->Persons = \Cake\ORM\TableRegistry::get('Persons');
+                        $groupBarcode = $this->Persons->find()
+                            ->select(['Groups.barcode_id'])
+                            ->contain(['Groups'])
+                            ->where(['Persons.barcode_id' => $cartline->photo->barcode_id])
+                            ->first();
+                    }
+                }
+            }
+            
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
        
             $data = [
@@ -85,11 +115,7 @@ class CartsController extends AppController
                     }
                 }
             }
-            
-            $digitalPack = (isset($cartlineData['digital_pack'])) ? true : false;
-            $redirect = (isset($cartlineData['redirect'])) ? true : false;
-            
-            $response = ['success' => true,'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $redirect];
+                        
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;
@@ -159,7 +185,7 @@ class CartsController extends AppController
                 if ($cartline->product->article === "GAF 13x19") {
                     for($i=0; $i<$cartline->quantity;$i++) {
                         $groupSelectedArr[] = true; 
-                    }    
+                    }
                 }
             }
         }
@@ -235,12 +261,21 @@ class CartsController extends AppController
     public function delete($id)
     {
         $line = $this->Carts->Cartlines->find()
+                ->contain(['Products'])
                 ->where(['Cartlines.id' => $id])
                 ->first();
 
         if(!empty($line->id)) {
             $this->Carts->Cartlines->delete($line);
-            
+            if($line->product->article === "DPack") {
+                $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+                foreach($cart->cartlines as $cartline) {
+                    if("GAF 13x19" === $cartline->product->article) {
+                        $this->Carts->Cartlines->delete($cartline);
+                        $removeGroup = $cartline->id;
+                    }
+                }
+            }
             $cartTotals = $this->Carts->getCartTotals($line->cart_id);
             $response = [
                 'success' => true,
@@ -249,6 +284,7 @@ class CartsController extends AppController
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
                 'shippingCost' => $cartTotals['shippingcosts']
             ];
+            $response['removeGroup'] = (isset($removeGroup)) ? $removeGroup : "";
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
         }

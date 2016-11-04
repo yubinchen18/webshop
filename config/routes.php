@@ -259,8 +259,6 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/orders/download/:id', 
         ['controller' => 'Orders', 'action' => 'download'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
-    $routes->connect('/orders/removeFile/**', 
-        ['controller' => 'Orders', 'action' => 'removeFile']);
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
     
