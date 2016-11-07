@@ -25,7 +25,6 @@
                     'person_barcode' => $personBarcode])
                 ]); ?>
                 </div>
-                 
                 <div class="text-left">
                     <button type="button" class="btn btn-success fullwidth" data-toggle="modal" data-target=".modal-<?= $photo->id ?>">
                         <i class="ace-icon fa fa-search-plus"></i> <?= __('Vergroot') ?>
