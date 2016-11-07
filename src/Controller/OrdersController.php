@@ -218,7 +218,7 @@ class OrdersController extends AppController
     }
     
     public function download($orderId = null) {
-        //check if orderstatus == payment_received //eb576876-a033-11e6-ad76-6002923e9933
+        //check if orderstatus == payment_received
         $idStatusPaid = $this->Orders->OrdersOrderstatuses
             ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
             ->first()
@@ -277,8 +277,7 @@ class OrdersController extends AppController
         header("Content-Disposition: attachment; filename= . $fileName");
         readfile($fileName);
 
-        unlink($fileName); 
-        //http://hswebshop2016.local.dev.xseeding.nl/orders/download/c3bf9f4a-2a98-443f-93b5-35faacf06a19
+        unlink($fileName);
     }
 }
  

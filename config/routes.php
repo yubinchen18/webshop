@@ -256,6 +256,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/photos/groups/:id', 
         ['controller' => 'Photos', 'action' => 'groups'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
+    $routes->connect('/photos/groups/:id/:orderlineid', 
+        ['controller' => 'Photos', 'action' => 'groups'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]);
     $routes->connect('/orders/download/:id', 
         ['controller' => 'Orders', 'action' => 'download'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]);

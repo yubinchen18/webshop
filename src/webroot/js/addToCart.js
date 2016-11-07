@@ -97,12 +97,12 @@ jQuery(function($) {
                 digital_pack: cartline.digital_pack,
                 discount: cartline.discount,
                 quantity: cartline.quantity,
-                redirect: cartline.redirect
+                person_barcode: cartline.person_barcode
             },
             method: 'POST',
 //            dataType:"json",
             success: function(response) {
-                if(response.redirect) {
+                if(response.redirect !== false) {
                     window.location.href = "/carts/display";
                 }
                 $('.addToCartPopup').parent().remove();

@@ -43,9 +43,9 @@ class CartsController extends AppController
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             
             $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
-            $redirect = (isset($cartlineData['redirect'])) ? true : false;
+            $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
             
-            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $redirect];
+            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $personBarcode];
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
                         
             $hash = json_encode($productOptions);
@@ -53,8 +53,11 @@ class CartsController extends AppController
             $hash .= $cartlineData['photo_id'];
             $hash = md5($hash);
         
-            if(isset($cartlineData['digital_product']) && $cart) {
+            if(isset($cartlineData['digital_product']) || $personBarcode && $cart) {
                 foreach($cart->cartlines as $line) {
+                    if($personBarcode) {
+                        $gift_for = ($line->product->article === "DPack") ? $personBarcode : null;
+                    }
                     if($digitalPack === $line->photo->barcode_id) {
                         if($line->product->article !== "D1") {
                             $response = ['success' => false, 'message' => __('Het pakket is al toegevoegd aan de winkelwagen')];
@@ -68,19 +71,13 @@ class CartsController extends AppController
                         $response = ['success' => true, 'message' => __('Het pakket is toegevoegd aan de winkelwagen')];
                         $this->set(compact('response'));
                         $this->set('_serialize', 'response');
-                        
-                        $this->Persons = \Cake\ORM\TableRegistry::get('Persons');
-                        $groupBarcode = $this->Persons->find()
-                            ->select(['Groups.barcode_id'])
-                            ->contain(['Groups'])
-                            ->where(['Persons.barcode_id' => $cartline->photo->barcode_id])
-                            ->first();
                     }
                 }
             }
             
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
-       
+            $cartline->gift_for = (isset($gift_for)) ? $gift_for : false;
+
             $data = [
                 'cart_id' => $cart->id,
                 'photo_id' => $cartlineData['photo_id'],
@@ -91,6 +88,7 @@ class CartsController extends AppController
             ];
             
             $this->Carts->Cartlines->patchEntity($cartline, $data);
+            
             if (!$this->Carts->Cartlines->save($cartline)) {
                 $response = ['success' => false, 'message' => __('Could not save new cartline')];
                 $this->set(compact('response'));
@@ -148,8 +146,9 @@ class CartsController extends AppController
     public function display()
     {
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+
         $orderSubtotal = 0;
-        $groupSelectedArr = array();
+        $groupSelectedArr = [];
         $totalDigitalPacks = 0;
         //add the orientation data to the photos array in cart
         if (!empty($cart->cartlines)) {
@@ -184,7 +183,7 @@ class CartsController extends AppController
                 if ($cartline->product->article === "DPack") { $totalDigitalPacks++; }
                 if ($cartline->product->article === "GAF 13x19") {
                     for($i=0; $i<$cartline->quantity;$i++) {
-                        $groupSelectedArr[] = true; 
+                        $groupSelectedArr[$cartline->gift_for] = true; 
                     }
                 }
             }
@@ -197,7 +196,7 @@ class CartsController extends AppController
         $discount = $totals['discount'];
         $groupSelected = (count($groupSelectedArr) >= $totalDigitalPacks) ? true : false;
         
-        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'groupSelected'));
+        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'groupSelected', 'groupSelectedArr'));
     }
     
     public function update()

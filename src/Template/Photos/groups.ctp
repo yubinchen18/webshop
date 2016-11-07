@@ -22,7 +22,7 @@
                     'product_name' => $product->name,
                     'product_price' => $product->price_ex,
                     'product_options' => '',
-                    'redirect' => 'true'])
+                    'person_barcode' => $personBarcode])
                 ]); ?>
                 </div>
                 <div class="text-left">

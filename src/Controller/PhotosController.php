@@ -294,27 +294,54 @@ class PhotosController extends AppController
         }
     }
     
-    public function groups($barcode = null) 
+    public function deleteCartLine($id) {
+        $this->Cartlines = TableRegistry::get('Cartlines');
+        $line = $this->Cartlines->find()
+                ->where(['id' => $id])
+                ->first();
+        $this->Cartlines->delete($line);
+    }
+    
+    public function groups($barcode = null, $cartlineId = null) 
     {
+        if($cartlineId) {
+            $this->deleteCartLine($cartlineId);
+        }
+        
         //check if user is auth to view this photo id
         $session = $this->request->session();
         $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
         
+        //check if barcode is a person
         $this->Persons = TableRegistry::get('Persons');
         $person = $this->Persons->find()
                 ->contain(['Groups'], true)
                 ->where(['Persons.barcode_id' => $barcode])
                 ->first();
-
-        $this->Photos = TableRegistry::get('Photos');
-        $photos = $this->Photos->find()
-                ->where(['barcode_id' => $person->group->barcode_id])
-                ->toArray();
         
+        $barcode = (sizeof($person) > 0) ? $person->group->barcode_id : $barcode;
+        
+        //still need to get the person for auth
+        if((sizeof($person) == 0)) {
+            $this->Groups = TableRegistry::get('Groups');
+            foreach($loggedInUsersIds as $user) {
+                $person = $this->Persons->find()
+                    ->contain(['Groups'])
+                    ->where(['Groups.barcode_id' => $barcode, 'Persons.user_id' => $user])
+                    ->first();
+            }
+        }
+        
+        $photos = $this->Photos->find()
+            ->contain('Barcodes')
+            ->where(['barcode_id' => $barcode])
+            ->toArray();
+           
         $this->Products = TableRegistry::get('Products');
         $product = $this->Products->find()
                 ->where(['article' => 'GAF 13x19'])
                 ->first();
+        
         if (!empty($photos)) {
             foreach($photos as $photo) {
                 if (in_array($person->user_id, $loggedInUsersIds)) {
@@ -336,7 +363,8 @@ class PhotosController extends AppController
                 }
             }
         }
-        $this->set(compact('groups','photos', 'product'));
+        $personBarcode = $person->barcode_id;
+        $this->set(compact('groups', 'photos', 'product', 'personBarcode'));
         $this->set('_serialize', ['photos']);
     }
 }
