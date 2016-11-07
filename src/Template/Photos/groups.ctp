@@ -15,7 +15,7 @@
                     'size' => 'med'
                 ]), [
                     'alt' => $photo->path,
-                    'class' => [$photo->orientationClass, 'img-responsive addToCartPopup-addButton group-picture'],
+                     'class' => [$photo->orientationClass, 'img-responsive addToCartPopup-addButton group-picture'],
                     'data-cartline' => json_encode([
                     'photo_id' => $photo->id,
                     'product_id' => $product->id,
