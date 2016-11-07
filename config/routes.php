@@ -214,7 +214,7 @@ Router::scope('/', function (RouteBuilder $routes) {
         
         $routes->connect(
             '/searches/showResults',
-            ['controller' => 'Searches', 'action' => 'showResults']
+             ['controller' => 'Searches', 'action' => 'showResults']
         );
         
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
