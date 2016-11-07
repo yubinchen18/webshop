@@ -222,7 +222,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     });
     
     $routes->extensions(['csv','json']);
-    
+     
     $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
    
