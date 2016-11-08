@@ -25,7 +25,7 @@
                                     <div class="panel-body text-center">
                                         <?= $this->Html->link(
                                                 __('< Kies gratis een groepsfoto naar keuze (niet digitaal). '),
-                                                'photos/groups/'.$cartline->photo->barcode_id
+                                                'photos/pickfreegroupspicture/'.$cartline->photo->barcode_id
                                         )?>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
                         </div>
                         <div class='order-place-order col-sm-3 col-sm-offset-6'>
                             <span class="input-group-btn">
-                                <button class="btn btn-success <?php if(!$groupSelected) { ?>disabled<?php } ?>" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
+                                <button class="btn btn-success <?php if(!$freeGroupPicturesSelected) { ?>disabled<?php } ?>" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
                             </span>
                         </div>
                     </div>

@@ -302,46 +302,41 @@ class PhotosController extends AppController
         $this->Cartlines->delete($line);
     }
     
-    public function groups($barcode = null, $cartlineId = null) 
+    public function changeFreeGroupsPicture($groupBarcode = null)
     {
-        if($cartlineId) {
-            $this->deleteCartLine($cartlineId);
+        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
+        $this->Persons = TableRegistry::get('Persons');
+        foreach($loggedInUsersIds as $user) {
+            $person = $this->Persons->find()
+                ->contain(['Groups'])
+                ->where(['Groups.barcode_id' => $groupBarcode, 'Persons.user_id' => $user])
+                ->first();
         }
         
-        //check if user is auth to view this photo id
-        $session = $this->request->session();
-        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
-        
+        $this->setFreeGroupsPictureSettings($groupBarcode, $person, "changeFreeGroupsPicture");
+    }
+    
+    public function pickFreeGroupsPicture($personBarcode = null) 
+    {   
         //check if barcode is a person
         $this->Persons = TableRegistry::get('Persons');
         $person = $this->Persons->find()
                 ->contain(['Groups'], true)
-                ->where(['Persons.barcode_id' => $barcode])
+                ->where(['Persons.barcode_id' => $personBarcode])
                 ->first();
         
-        $barcode = (sizeof($person) > 0) ? $person->group->barcode_id : $barcode;
-        
-        //still need to get the person for auth
-        if((sizeof($person) == 0)) {
-            $this->Groups = TableRegistry::get('Groups');
-            foreach($loggedInUsersIds as $user) {
-                $person = $this->Persons->find()
-                    ->contain(['Groups'])
-                    ->where(['Groups.barcode_id' => $barcode, 'Persons.user_id' => $user])
-                    ->first();
-            }
-        }
+        $this->setFreeGroupsPictureSettings($person->group->barcode_id, $person, "pickFreeGroupsPicture");
+    }
+    
+    private function setFreeGroupsPictureSettings($groupBarcode = null, $person = null, $layout = null)
+    {
+        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
         
         $photos = $this->Photos->find()
             ->contain('Barcodes')
-            ->where(['barcode_id' => $barcode])
+            ->where(['barcode_id' => $groupBarcode])
             ->toArray();
-           
-        $this->Products = TableRegistry::get('Products');
-        $product = $this->Products->find()
-                ->where(['article' => 'GAF 13x19'])
-                ->first();
-        
+
         if (!empty($photos)) {
             foreach($photos as $photo) {
                 if (in_array($person->user_id, $loggedInUsersIds)) {
@@ -363,8 +358,17 @@ class PhotosController extends AppController
                 }
             }
         }
+        
+        //get free product
+        $this->Products = TableRegistry::get('Products');
+        $product = $this->Products->find()
+            ->where(['article' => 'GAF 13x19'])
+            ->first();
+        
         $personBarcode = $person->barcode_id;
-        $this->set(compact('groups', 'photos', 'product', 'personBarcode'));
+        
+        $this->set(compact('photos', 'product', 'personBarcode'));
         $this->set('_serialize', ['photos']);
+        $this->render($layout);
     }
 }

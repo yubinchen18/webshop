@@ -22,7 +22,7 @@
             <p>
                 <?= $this->Html->link(
                         __('Wijzig keuze'),
-                        'photos/groups/'.$cartline->photo->barcode_id . '/' . $cartline->id
+                        'photos/changefreegroupspicture/'.$cartline->photo->barcode_id.'/'.$cartline->id
                 )?>
             </p>
         <?php endif; ?>

@@ -253,11 +253,11 @@ Router::scope('/', function (RouteBuilder $routes) {
         ],
         ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
     );
-    $routes->connect('/photos/groups/:id', 
-        ['controller' => 'Photos', 'action' => 'groups'],
+    $routes->connect('/photos/pickfreegroupspicture/:id', 
+        ['controller' => 'Photos', 'action' => 'pickFreeGroupsPicture'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
-    $routes->connect('/photos/groups/:id/:orderlineid', 
-        ['controller' => 'Photos', 'action' => 'groups'],
+    $routes->connect('/photos/changefreegroupspicture/:id/:orderlineid', 
+        ['controller' => 'Photos', 'action' => 'changeFreeGroupsPicture'],
         ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]);
     $routes->connect('/orders/download/:id', 
         ['controller' => 'Orders', 'action' => 'download'],
@@ -280,6 +280,10 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/carts/update', [
         'controller' => 'Carts',
         'action' => 'update'
+    ]);
+    $routes->connect('/carts/updateFreeProductInCartline', [
+        'controller' => 'Carts',
+        'action' => 'updateFreeProductInCartline'
     ]);
     $routes->connect('/carts/delete/:id',
         ['controller' => 'Carts','action' => 'delete'],

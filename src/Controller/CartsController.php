@@ -32,7 +32,7 @@ class CartsController extends AppController
     }
     
     /**
-     * Add method
+     * Add cartline into cart method
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
@@ -42,9 +42,8 @@ class CartsController extends AppController
             $cartlineData = $this->request->data();
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             
-            $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
             $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
-            
+            $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
             $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $personBarcode];
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
                         
@@ -52,13 +51,15 @@ class CartsController extends AppController
             $hash .= $cartlineData['product_id'];
             $hash .= $cartlineData['photo_id'];
             $hash = md5($hash);
-        
-            if(isset($cartlineData['digital_product']) || $personBarcode && $cart) {
+ 
+            $giftFor = false;
+            if( isset($cartlineData['digital_product']) || $personBarcode) {
                 foreach($cart->cartlines as $line) {
-                    if($personBarcode) {
-                        $gift_for = ($line->product->article === "DPack") ? $personBarcode : null;
+                    if($personBarcode && $line->product->article === "DPack") {
+                        $giftFor = $personBarcode;
+                        break;
                     }
-                    if($digitalPack === $line->photo->barcode_id) {
+                    if($digitalPack === $line->photo->barcode_id && $line->product->product_group === 'digital') {
                         if($line->product->article !== "D1") {
                             $response = ['success' => false, 'message' => __('Het pakket is al toegevoegd aan de winkelwagen')];
                             $this->set(compact('response'));
@@ -76,7 +77,7 @@ class CartsController extends AppController
             }
             
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
-            $cartline->gift_for = (isset($gift_for)) ? $gift_for : false;
+            $cartline->gift_for = $giftFor;
 
             $data = [
                 'cart_id' => $cart->id,
@@ -182,9 +183,7 @@ class CartsController extends AppController
                 
                 if ($cartline->product->article === "DPack") { $totalDigitalPacks++; }
                 if ($cartline->product->article === "GAF 13x19") {
-                    for($i=0; $i<$cartline->quantity;$i++) {
-                        $groupSelectedArr[$cartline->gift_for] = true; 
-                    }
+                    $groupSelectedArr[$cartline->gift_for] = true;
                 }
             }
         }
@@ -194,9 +193,9 @@ class CartsController extends AppController
         $shippingCost = $totals['shippingcosts'];
         $orderTotal = $orderSubtotal + $shippingCost;
         $discount = $totals['discount'];
-        $groupSelected = (count($groupSelectedArr) >= $totalDigitalPacks) ? true : false;
-        
-        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'groupSelected', 'groupSelectedArr'));
+        $freeGroupPicturesSelected = (count($groupSelectedArr) >= $totalDigitalPacks) ? true : false;
+
+        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'freeGroupPicturesSelected', 'groupSelectedArr'));
     }
     
     public function update()
@@ -255,6 +254,34 @@ class CartsController extends AppController
         $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
+    }
+    
+    public function updateFreeProductInCartline()
+    {
+        if ($this->request->is('ajax') && !empty($this->request->data)) {
+            $postData = $this->request->data();
+            $cartline = $this->Carts->Cartlines->find()
+                ->where(['Cartlines.id' => $postData['cartline_id']])
+                ->contain(['Products'])
+                ->first();
+            
+            if (empty($cartline)) {
+                $response = ['success' => false];
+                $this->set(compact('response'));
+                $this->set('_serialize', 'response');
+                return;
+            };
+            
+            $cartline->photo_id = $postData['cartline_photo_id'];
+            if (!$this->Carts->Cartlines->save($cartline)) {
+                $response = ['success' => false];
+                $this->set(compact('response'));
+                $this->set('_serialize', 'response');
+                return;
+            }
+            
+            $this->setAction('display');
+        }
     }
     
     public function delete($id)
