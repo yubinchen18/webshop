@@ -116,7 +116,6 @@ jQuery(function($) {
     $('.update-orderline').on('click', function(e){
         var cartline_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         var cartlineData = JSON.parse($(this).attr('data-cartline'));
-        console.log();
         $.ajax({
             url: '/carts/updateFreeProductInCartline',
             data: {

@@ -282,9 +282,21 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->assertResponseCode(404);
     }
     
-    public function testViewGroup() {
-        $this->get('/photos/groups/2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3');
+    public function testGetViewSelectionFreeGroupPicture() {
+        $this->get('/photos/pickfreegroupspicture/2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3');
         $this->assertResponseOk();
         $this->assertResponseContains('Vergroot');
+    }
+    
+    public function testGetViewSelectionFreeGroupPicturesEmpty() {
+        $this->get('/photos/pickfreegroupspicture/a34c9d93-b89f-4b6d-a10c-8a7e939df834');
+        $this->assertResponseOk();
+        $this->assertResponseNotContains('Vergroot');
+    }
+    
+    public function testGetViewChangeFreeGroupPicture() {
+        $this->get('/photos/changefreegroupspicture/2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3/752a97bc-ab5e-4197-a2da-71c86974b5e0');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Vergroot'); 
     }
 }

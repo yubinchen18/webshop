@@ -302,40 +302,38 @@ class PhotosController extends AppController
         $this->Cartlines->delete($line);
     }
     
-    public function changeFreeGroupsPicture($groupBarcode = null)
+    public function changeFreeGroupsPicture($personBarcode = null)
     {
-        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
-        $this->Persons = TableRegistry::get('Persons');
-        foreach($loggedInUsersIds as $user) {
-            $person = $this->Persons->find()
-                ->contain(['Groups'])
-                ->where(['Groups.barcode_id' => $groupBarcode, 'Persons.user_id' => $user])
-                ->first();
-        }
-        
-        $this->setFreeGroupsPictureSettings($groupBarcode, $person, "changeFreeGroupsPicture");
+        $this->setFreeGroupsPictureSettings($personBarcode, "changeFreeGroupsPicture");
     }
     
     public function pickFreeGroupsPicture($personBarcode = null) 
     {   
-        //check if barcode is a person
-        $this->Persons = TableRegistry::get('Persons');
-        $person = $this->Persons->find()
-                ->contain(['Groups'], true)
-                ->where(['Persons.barcode_id' => $personBarcode])
-                ->first();
-        
-        $this->setFreeGroupsPictureSettings($person->group->barcode_id, $person, "pickFreeGroupsPicture");
+        $this->setFreeGroupsPictureSettings($personBarcode, "pickFreeGroupsPicture");
     }
     
-    private function setFreeGroupsPictureSettings($groupBarcode = null, $person = null, $layout = null)
+    private function getGroupPictures($groupBarcodeId = null)
+    {
+        $photos = $this->Photos->find()
+            ->contain('Barcodes')
+            ->where(['barcode_id' => $groupBarcodeId])
+            ->toArray();
+        
+        return $photos;
+    }
+    
+    private function setFreeGroupsPictureSettings($personBarcode = null, $layout = null)
     {
         $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
         
-        $photos = $this->Photos->find()
-            ->contain('Barcodes')
-            ->where(['barcode_id' => $groupBarcode])
-            ->toArray();
+        //check if barcode is a person
+        $this->Persons = TableRegistry::get('Persons');
+        $person = $this->Persons->find()
+            ->contain(['Groups'], true)
+            ->where(['Persons.barcode_id' => $personBarcode])
+            ->first();
+        
+        $photos = $this->getGroupPictures($person->group->barcode_id);
 
         if (!empty($photos)) {
             foreach($photos as $photo) {
@@ -364,8 +362,6 @@ class PhotosController extends AppController
         $product = $this->Products->find()
             ->where(['article' => 'GAF 13x19'])
             ->first();
-        
-        $personBarcode = $person->barcode_id;
         
         $this->set(compact('photos', 'product', 'personBarcode'));
         $this->set('_serialize', ['photos']);

@@ -411,4 +411,66 @@ class CartsControllerTest extends BaseIntegrationTestCase
         $this->post('/carts/add.json', $data); //route
         $this->assertEquals(['success' => false, 'message' => 'Invalid method error'], $this->viewVariable('response'));
     }
+    
+    public function testAddDigitalProduct()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3373b17f-496d-4a57-bbc4-d39f5a2f644a',
+            'product_name' => 'Digitaal alles',
+            'product_price' => 35.00,
+            'quantity' => 1
+        ];
+        print_r($carts = $this->Carts->find()->all());
+        $this->post('/carts/add.json', $data);
+        print_r($this->_response->body());die;
+        $cartlines = $this->Carts->Cartlines->find()->toArray();
+        $this->assertEquals(3, count($cartlines));
+    }
+    
+    public function testUpdateCartlineWithNewPhotoId()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $cartline->photo_id);
+        
+        $data = [
+            'cartline_photo_id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
+            'cartline_id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals('aff61452-fe0d-4d54-83d9-69400f4e4b2f', $cartline->photo_id);
+    }
+    
+    public function testUpdateCartlineWithNewPhotoIdFailureEmptyCartline()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
+        $data = [
+            'cartline_photo_id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
+            'cartline_id' => ''
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+         $this->assertEquals(['success' => false], $this->viewVariable('response'));
+    }
+    
+    public function testUpdateCartlineWithNewPhotoIdFailureNotSaved()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
+        $data = [
+            'cartline_photo_id' => '',
+            'cartline_id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals(['success' => false], $this->viewVariable('response'));
+    }
 }

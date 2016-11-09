@@ -258,11 +258,10 @@ class CartsController extends AppController
     
     public function updateFreeProductInCartline()
     {
-        if ($this->request->is('ajax') && !empty($this->request->data)) {
+        if ( ($this->request->is('ajax') || $this->request->is('post')) && !empty($this->request->data)) {
             $postData = $this->request->data();
             $cartline = $this->Carts->Cartlines->find()
                 ->where(['Cartlines.id' => $postData['cartline_id']])
-                ->contain(['Products'])
                 ->first();
             
             if (empty($cartline)) {
