@@ -121,6 +121,20 @@ class PhotosTable extends BaseTable
         return $path->path;
     }
 
+    public function findGroupPhotos(Query $query, array $options = [])
+    {
+        if(empty($options['group_id'])) {
+            return $query;
+        }
+        
+        $group = $this->Barcodes->Groups->get($options['group_id']);
+        
+        return $query->where([
+                'Photos.barcode_id' => $group->barcode_id
+            ]);
+        
+    }
+    
     private function getPathObject()
     {
         return new Folder($this->baseDir);

@@ -61,7 +61,7 @@ class PhotosFixture extends TestFixture
         [
             'id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
             'path' => 'horizontal.jpeg',
-            'type' => 'image',
+            'type' => 'portrait',
             'barcode_id' => 'df99d62f-258c-424d-a1fe-af3213e70867',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
@@ -79,7 +79,7 @@ class PhotosFixture extends TestFixture
         [
             'id' => '59d395fa-e723-43f0-becb-0078425f9a99',
             'path' => 'vertical.jpg',
-            'type' => 'image',
+            'type' => 'portrait',
             'barcode_id' => '105ea78c-2e11-4b7f-b42c-05443169d43a',
             'created' => '2016-06-27 12:53:08',
             'modified' => '2016-06-27 12:53:08',
@@ -88,7 +88,7 @@ class PhotosFixture extends TestFixture
         [
             'id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
             'path' => 'vertical.jpg',
-            'type' => 'image',
+            'type' => 'group',
             'barcode_id' => '6844d1e7-d6b2-4e23-8bbe-d671b698d1c3',
             'created' => '2016-10-27 12:53:08',
             'modified' => '2016-10-27 12:53:08',

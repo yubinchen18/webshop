@@ -43,21 +43,21 @@ class ProductoptionsFixture extends TestFixture
             'name' => 'Kleurbewerking',
             'created' => '2016-10-04 12:04:24',
             'modified' => '2016-10-04 12:04:24',
-            'deleted' => '2016-10-04 12:04:24'
+            'deleted' => null
         ],
         [
             'id' => 'ebc439ea-c8f7-4259-8e30-4ad3dda56d1a',
             'name' => 'Uitvoering',
             'created' => '2016-10-04 12:04:24',
             'modified' => '2016-10-04 12:04:24',
-            'deleted' => '2016-10-04 12:04:24'
+            'deleted' => null
         ],
         [
             'id' => 'ebc439ea-c8f7-4259-8e30-4ad3dda56d1b',
             'name' => 'geen',
             'created' => '2016-10-04 12:04:24',
             'modified' => '2016-10-04 12:04:24',
-            'deleted' => '2016-10-04 12:04:24'
+            'deleted' => null
         ]
     ];
 }

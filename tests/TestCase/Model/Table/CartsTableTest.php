@@ -27,6 +27,9 @@ class CartsTableTest extends TestCase
         'app.carts',
         'app.users',
         'app.cartlines',
+        'app.cartline_productoptions',
+        'app.productoptions',
+        'app.productoption_choices',
         'app.photos',
         'app.products'
     ];

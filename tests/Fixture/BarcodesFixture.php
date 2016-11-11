@@ -42,7 +42,7 @@ class BarcodesFixture extends TestFixture
         [
             'id' => '0e46688d-02a9-4da4-9f91-ed61a3e7246e',
             'barcode' => '1111',
-            'type' => 'barcode',
+            'type' => 'group',
             'created' => '2016-06-06 13:58:07',
             'modified' => '2016-06-06 13:58:07',
             'deleted' => null

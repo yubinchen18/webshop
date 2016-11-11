@@ -22,6 +22,25 @@
                     </div>
                 </div>
             <?php endforeach; ?>
+            <!-- Group Photos -->
+            <?php foreach ($person->groupPhotos as $key => $photo): ?>
+                <div class="col-md-3 col-xs-4 photos-index-container">
+                    <div class="photos-index-icon">
+                        <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                    </div>
+                    <?= $this->Html->image($this->Url->build([
+                        'controller' => 'Photos',
+                        'action' => 'display',
+                        'id' => $photo->id,
+                        'size' => 'med'
+                    ]), [
+                        'alt' => $photo->path,
+                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
+                        'class' => [$photo->orientationClass, 'img-responsive']
+                    ]); ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         <?php endforeach; ?>
         </div>
     <?php endif ?>

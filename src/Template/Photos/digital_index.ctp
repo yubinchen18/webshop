@@ -42,6 +42,7 @@
                                         'suffix' => $product->image['suffix'],
                                     ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                             </div>
+                            <div class="col-md-12"><?= $product->name; ?></div>
                         </div>
                     <?php endforeach; ?>   
                 </div>

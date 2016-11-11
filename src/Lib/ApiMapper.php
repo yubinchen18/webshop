@@ -12,7 +12,7 @@ class ApiMapper
         return self::$fnName($entity);
     }
     
-    public function mapSchool($entity)
+    public static function mapSchool($entity)
     {
         $entity = $entity->school;
         return ['School' => [
@@ -25,7 +25,7 @@ class ApiMapper
         ]];
     }
     
-    public function mapUser($entity)
+    public static function mapUser($entity)
     {
         $entity = $entity->user;
         return ['User' => [
@@ -39,7 +39,7 @@ class ApiMapper
         ]];
     }
     
-    public function mapBarcode($entity)
+    public static function mapBarcode($entity)
     {
         $entity = $entity->barcode;
         return ['Barcode' => [
@@ -52,7 +52,7 @@ class ApiMapper
         ]];
     }
 
-    public function mapPerson($entity)
+    public static function mapPerson($entity)
     {
         $entity = $entity->person;
         return [ucfirst($entity->type) => [
@@ -78,7 +78,7 @@ class ApiMapper
         ];
     }
     
-    public function mapGroup($entity)
+    public static function mapGroup($entity)
     {
         $entity = $entity->group;
         return ['Group' => [
@@ -94,7 +94,7 @@ class ApiMapper
         ];
     }
     
-    public function mapProject($entity)
+    public static function mapProject($entity)
     {
         $entity = $entity->project;
         return ['Project' => [

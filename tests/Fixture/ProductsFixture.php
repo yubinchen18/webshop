@@ -63,7 +63,7 @@ class ProductsFixture extends TestFixture
             'active' => 1,
             'created' => '2016-08-22 08:54:02',
             'modified' => '2016-08-22 08:54:02',
-            'deleted' => '2016-08-22 08:54:02',
+            'deleted' => null,
             'layout' => 'CombinationLayout1',
             'product_group' => 'combination-sheets'
         ],
