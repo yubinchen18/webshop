@@ -5,34 +5,38 @@
         <div class="row photos-product-index">
         <?php foreach ($photos as $photo): ?>
              <div class="col-md-4 col-xs-6 photos-product-container">
-                <div class="photos-index-icon">
+                <div class="photos-index-icon" data-toggle="modal" data-target=".modal-<?= $photo->id; ?>">
                     <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
                 </div>
                 <?= $this->Html->image($this->Url->build([
-                    'controller' => 'Photos',
-                    'action' => 'display',
-                    'id' => $photo->id,
-                    'size' => 'med'
-                ]), [
-                    'alt' => $photo->path,
-                     'class' => [$photo->orientationClass, 'img-responsive addToCartPopup-addButton group-picture'],
-                    'data-cartline' => json_encode([
-                    'photo_id' => $photo->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->name,
-                    'product_price' => $product->price_ex,
-                    'product_options' => '',
-                    'person_barcode' => $personBarcode])
-                ]); ?>
+                        'controller' => 'Photos',
+                        'action' => 'display',
+                        'id' => $photo->id,
+                        'size' => 'med',
+                    ]),[
+                        'class' => [$photo->orientationClass, 'img-responsive group-picture'],
+                    ]); ?>
                 </div>
                 <div class="text-left">
-                    <button type="button" class="btn btn-success fullwidth" data-toggle="modal" data-target=".modal-<?= $photo->id ?>">
-                        <i class="ace-icon fa fa-search-plus"></i> <?= __('Vergroot') ?>
+                    <button type="button" class="btn btn-success fullwidth addToCartPopup-addButton" data-cartline='<?= json_encode([
+                        'photo_id' => $photo->id,
+                        'product_id' => $product->id,
+                        'product_name' => $product->name,
+                        'product_price' => $product->price_ex,
+                        'product_options' => '',
+                        'person_barcode' => $personBarcode]);
+                 ?>'>
+                        <i class="ace-icon fa fa-cart-plus"></i> <?= __('Kies') ?>
                     </button>
                  </div>
                 <div class="modal fade modal-<?= $photo->id ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-dialog" role="document">
                         <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title"><?= __('Groepsfoto'); ?></h4>
+                            </div>
+                            <div class="modal-body text-center">
                             <?= $this->Html->image($this->Url->build([
                                 'controller' => 'Photos',
                                 'action' => 'display',
@@ -40,6 +44,7 @@
                                 'size' => 'med']),
                                 ['class' => 'img-responsive']
                             ); ?>
+                            </div>
                         </div>
                     </div>
                 </div>

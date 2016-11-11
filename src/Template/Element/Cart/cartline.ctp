@@ -1,4 +1,4 @@
-<div class='row col-xs-12 cartline-row' id='<?= $cartline->id; ?>'>
+<div class='row col-xs-12 cartline-row <?= $cartline->subtotal == 0 ? "free-product" : ""; ?>' id='<?= $cartline->id; ?>'>
     <div class='cartline-photo-container col-xs-2'>
         <div class='cartline-photo'>
             <div class="<?= $cartline->photo->orientationClass.' '.$cartline->photo->orientationClass.'-background' ?>">
@@ -82,8 +82,9 @@
             ]); ?>
         </span></span>
     </div>
-
+    <?php if($cartline->subtotal > 0) : ?>
     <div class="cartline-close col-xs-1">
         <span class='close'>&times;</span>
     </div>
+    <?php endif; ?>
 </div>

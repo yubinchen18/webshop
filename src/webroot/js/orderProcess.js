@@ -142,7 +142,7 @@ jQuery(function($) {
                 $('div#'+divId).remove();
                 if(response.removeGroup !== "") {
                     $('div#'+response.removeGroup).remove();
-                }     
+                }
             }
           });
        }

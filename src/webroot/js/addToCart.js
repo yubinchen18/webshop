@@ -16,8 +16,9 @@ jQuery(function($) {
     
     // close popup
     $('.photos-product-index').on('click', '.addToCartPopup-layer', function(e){
-	e.preventDefault();
+	e.preventDefault();     
         $(this).parent().remove();
+        checkCartStatus();
     });
     
     // decrease amount
@@ -100,7 +101,6 @@ jQuery(function($) {
                 person_barcode: cartline.person_barcode
             },
             method: 'POST',
-//            dataType:"json",
             success: function(response) {
                 if(response.redirect !== false) {
                     window.location.href = "/carts/display";
@@ -124,8 +124,21 @@ jQuery(function($) {
                 }
             },
             failure: function(response) {
-                console.log(response.error);
             }
         });
     });
+    
+    function checkCartStatus() {
+        var disabled = false;
+        $('.navigation-groups-picture').each(function() {
+           if($(this).is(':visible')) {
+               disabled = true;
+           }
+           if(disabled == true) {
+               $('#submit-cart').prop('disabled',true);
+           }
+       });
+   }
+   
+   checkCartStatus();
 });

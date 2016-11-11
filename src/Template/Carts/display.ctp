@@ -12,6 +12,7 @@
             <div class='cartlines-header col-xs-1'><?= __('Wis'); ?></div>
             <?php if (!empty($cart->cartlines)): ?>        
                 <?php foreach($cart->cartlines as $cartline): ?>
+            
                     <?php if (!$cartline->gift_for): ?>
                         <?= $this->element('Cart/cartline', ['cartline' => $cartline]); ?>
                         <?php if($cartline->product->article === 'DPack') : ?>
@@ -32,6 +33,7 @@
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>
+            
                 <?php endforeach; ?>
                 <!-- Summary -->
                 <div class='order-summary col-sm-12'>
@@ -84,7 +86,7 @@
                         </div>
                         <div class='order-place-order col-sm-3 col-sm-offset-6'>
                             <span class="input-group-btn">
-                                <button class="btn btn-success <?php if(!$freeGroupPicturesSelected) { ?>disabled<?php } ?>" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
+                                <button class="btn btn-success" id="submit-cart" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
                             </span>
                         </div>
                     </div>
@@ -100,8 +102,6 @@
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
-        
-        
         
     </div>
 </div>
