@@ -85,6 +85,16 @@ class GroupsFixture extends TestFixture
             'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
             'barcode_id' => 'a34c9d93-b89f-4b6d-a10c-8a7e939df834'
         ],
+        [
+            'id' => 'c676d707-4844-4367-a55c-bd070d4e8978',
+            'name' => 'groep 8B',
+            'slug' => 'groep-8b',
+            'created' => '2016-06-06 11:47:13',
+            'modified' => '2016-06-06 11:47:13',
+            'deleted' => null,
+            'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603',
+            'barcode_id' => '6844d1e7-d6b2-4e23-8bbe-d671b698d1c3'
+        ],
 
     ];
 }

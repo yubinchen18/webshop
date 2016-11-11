@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller\Admin;
 use App\Controller\Admin\PersonsController;
 use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\IntegrationTestCase;
 use org\bovigo\vfs\vfsStream;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -31,6 +30,10 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         'app.projects',
         'app.photos',
         'app.schools',
+        'app.carts',
+        'app.cartlines',
+        'app.downloadqueues',
+        'app.products'
     ];
 
     public function setUp()
@@ -56,27 +59,19 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/persons');
         $this->assertResponseOk();
         $persons = $this->viewVariable('persons');
-        $this->assertEquals(3, $persons->count());
+        $this->assertEquals(5, $persons->count());
     }
 
     public function testView()
     {
-        $this->get('/admin/persons/view/1447e1dd-f3a5-4183-9508-725519b3107d');
+        $this->get('/admin/persons/view/084acf3a-e474-40a3-9589-41b7a46623ba');
         $this->assertResponseOk();
         $person = $this->viewVariable('person');
-        $this->assertEquals('1447e1dd-f3a5-4183-9508-725519b3107d', $person->id);
+        $this->assertEquals('084acf3a-e474-40a3-9589-41b7a46623ba', $person->id);
         $this->assertEquals('e5b778cd-68cd-469f-88b3-37846b984868', $person->group->id);
         $this->assertEquals('9e953dd7-fbac-4dc4-9fec-3ca9cd55397e', $person->address->id);
-        $this->assertEquals('df99d62f-258c-424d-a1fe-af3213e70867', $person->barcode->id);
-        $this->assertEquals('91017bf5-5b19-438b-bd44-b0c4e1eaf903', $person->user->id);
-    }
-
-    public function testAddGet()
-    {
-        $this->get('/admin/persons/add');
-        $this->assertResponseOk();
-
-        $this->assertInstanceOf('App\Model\Entity\Person', $this->viewVariable('person'));
+        $this->assertEquals('105ea78c-2e11-4b7f-b42c-05443169d43a', $person->barcode->id);
+        $this->assertEquals('61d2a03c-08f9-400b-9942-9d2f3a843aaa', $person->user->id);
     }
 
     public function testAdd()
@@ -159,18 +154,18 @@ class PersonsControllerTest extends BaseIntegrationTestCase
 
     public function testEditGet()
     {
-        $this->get('/admin/persons/edit/1447e1dd-f3a5-4183-9508-725519b3107d');
+        $this->get('/admin/persons/edit/1be6e63a-b0d1-4b39-b141-6228837c633e');
 
         $this->assertResponseOk();
 
         $person = $this->viewVariable('person');
 
-        $this->assertEquals('1447e1dd-f3a5-4183-9508-725519b3107d', $person->id);
+        $this->assertEquals('1be6e63a-b0d1-4b39-b141-6228837c633e', $person->id);
     }
 
     public function testEdit()
     {
-        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $id = '1be6e63a-b0d1-4b39-b141-6228837c633e';
         $data = [
             'studentnumber' => '00000000',
 
@@ -186,7 +181,7 @@ class PersonsControllerTest extends BaseIntegrationTestCase
         
     public function testEditGroup()
     {
-        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $id = '1be6e63a-b0d1-4b39-b141-6228837c633e';
         $data = [
             'group_id' => '8262ca6b-f23a-4154-afed-fc893c1516d3',
         ];
@@ -199,25 +194,24 @@ class PersonsControllerTest extends BaseIntegrationTestCase
     
     public function testEditFolder()
     {
-        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $id = '084acf3a-e474-40a3-9589-41b7a46623ba';
         $data = [
             'group_id' => '8262ca6b-f23a-4154-afed-fc893c1516d3',
         ];
         $this->put('/admin/persons/edit/'.$id, $data);
         $this->assertRedirect('/admin/persons');
         $person = $this->Persons->find()->where(['id' => $id])->first();
-        $oldPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos';
-        $newPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-blauw/pieter-vos';
+        $oldPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-2a/jan-de-boer';
+        $newPath = $this->vfsRoot. '/de-ring-van-putten/eindejaars-2016/klas-blauw/jan-de-boer';
         $oldFolder = new Folder($oldPath);
         $newFolder = new Folder($newPath);
-        
         $this->assertTrue(file_exists($newFolder->pwd()));
         $this->assertFalse(file_exists($oldFolder->pwd()));
     }
 
     public function testDelete()
     {
-        $id = '1447e1dd-f3a5-4183-9508-725519b3107d';
+        $id = 'b23c0370-0900-4f89-ba06-9ecfb48dd51f';
         $person = $this->Persons->find()->where(['id' => $id])->first();
         $this->assertNotEmpty($person);
         $this->delete('/admin/persons/delete/'.$id);

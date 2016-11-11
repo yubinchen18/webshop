@@ -1,12 +1,13 @@
-<?php namespace App\Test\Fixture;
+<?php
+namespace App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * CartsFixture
+ * PhotexDownloadsFixture
  *
  */
-class CartsFixture extends TestFixture
+class PhotexDownloadsFixture extends TestFixture
 {
 
     /**
@@ -17,8 +18,8 @@ class CartsFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'user_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'order_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'attempts' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => '1', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'order_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'deleted' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
@@ -39,21 +40,12 @@ class CartsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '1db1f83f-1b45-464b-b239-1e0651ba2710',
-            'user_id' => 'c4b06162-5bfa-4f1c-af86-694ddecd24a2',
-            'order_id' => null,
-            'created' => '2016-06-01 14:14:01',
-            'modified' => '2016-06-01 14:14:01',
-            'deleted' => null
+            'id' => '976933f1-75ef-41cc-9831-2a414671a2a1',
+            'attempts' => 1,
+            'order_id' => '01c42ac8-0c96-4f72-9be9-8b7e36f46706',
+            'created' => '2016-11-02 11:28:38',
+            'modified' => '2016-11-02 11:28:38',
+            'deleted' => '2016-11-02 11:28:38'
         ],
-        [
-            'id' => '08e8339d-fbf6-4078-b73d-af149b3b8141',
-            'user_id' => '61d2a03c-08f9-400b-9942-9d2f3a843aaa',
-            'order_id' => null,
-            'created' => '2016-06-01 14:14:01',
-            'modified' => '2016-06-01 14:14:01',
-            'deleted' => null
-        ],
-        
     ];
 }

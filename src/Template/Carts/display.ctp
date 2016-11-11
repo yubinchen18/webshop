@@ -2,7 +2,6 @@
     <!-- left panel -->
     <div class="cart-cartlines-index col-md-9">
         <h2><?= __('Winkelwagen');?></h2>
-        
         <?=$this->Form->create(null, ['class' => 'orderForm', 'url' => '/carts/orderInfo']); ?>
         <div class='row col-md-12 col-xs-12'>
             <div class='cartlines-header col-xs-3'><?= __('Foto'); ?></div>
@@ -11,90 +10,31 @@
             <div class='cartlines-header col-xs-2'><?= __('Stukprijs'); ?></div>
             <div class='cartlines-header col-xs-1'><?= __('Prijs'); ?></div>
             <div class='cartlines-header col-xs-1'><?= __('Wis'); ?></div>
-            
-            <?php if (!empty($cart->cartlines)): ?>
+            <?php if (!empty($cart->cartlines)): ?>        
                 <?php foreach($cart->cartlines as $cartline): ?>
-                    <div class='row col-xs-12 cartline-row' id='<?= $cartline->id; ?>'>
-                        <div class='cartline-photo-container col-xs-2'>
-                            <div class='cartline-photo'>
-                                <div class="<?= $cartline->photo->orientationClass.' '.$cartline->photo->orientationClass.'-background' ?>">
-                                </div>
-                                <?= $this->Html->image($this->Url->build([
-                                    'controller' => 'Photos',
-                                    'action' => 'displayProduct',
-                                    'layout' => $cartline->product->layout,
-                                    'id' => $cartline->photo_id,
-                                    'suffix' => $cartline->product->image['suffix'],
-                                ]), [
-                                    'alt' => $cartline->photo->path,
-                                    'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
-                                    'class' => [$cartline->photo->orientationClass, 'img-responsive']
-                                ]); ?>
-                            </div>
-                        </div>
-                        <div class='cartline-product-details col-xs-3'>
-                            <div class='cartline-product-name'><b><?= $cartline->product->name; ?></b></div>
-                            <?php if (!empty($cartline->cartline_productoptions)): ?>
-                                <div class='cartline-product-options'>
-                                    <span><?= __('Options:');?></span>
-                                    <ul>
-                                        <?php foreach ($cartline->cartline_productoptions as $option): ?>
-                                            <li><?= $option->productoption_choice->productoption->name; ?>: 
-                                            <?= $option->productoption_choice->value; ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class='cartline-product-quantity col-xs-2'>
-                            <div class="quantity-container">
-                                <div class="row">
-                                    <div class="col-xs-11">
-                                        <div class="input-group">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
-                                                  -
-                                                </button>
-                                            </span>
-                                            <input type="text" id="quantity-<?= $cartline->id; ?>" name="quantity-<?= $cartline->id; ?>" 
-                                                class="form-control input-number" value='<?= $cartline->quantity; ?>' min="1" max="100"
-                                                data-id='<?= $cartline->id; ?>' data-unitprice='<?= $cartline->product->price_ex;?>'>
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                                                    +
-                                                </button>
-                                            </span>
-                                        </div>
+            
+                    <?php if (!$cartline->gift_for): ?>
+                        <?= $this->element('Cart/cartline', ['cartline' => $cartline]); ?>
+                        <?php if($cartline->product->article === 'DPack') : ?>
+                            <?php foreach($cart->cartlines as $line) : ?>
+                                <?php if ($line->gift_for === $cartline->photo->barcode_id): ?>
+                                    <?= $this->element('Cart/cartline', ['cartline' => $line]); ?>
+                                <?php endif; ?>                              
+                            <?php endforeach; ?>
+                            <?php if(!array_key_exists($cartline->photo->barcode_id, $groupSelectedArr)) : ?>
+                                <div class="col-xs-12 panel panel-info navigation-groups-picture">
+                                    <div class="panel-body text-center">
+                                        <?= $this->Html->link(
+                                                __('< Kies gratis een groepsfoto naar keuze (niet digitaal). '),
+                                                'photos/pickfreegroupspicture/'.$cartline->photo->barcode_id
+                                        )?>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class='cartline-product-unitPrice col-xs-2'>
-                            <?php if($cartline->product->has_discount == 1 && $cartline->quantity > 1): ?>
-                            <span class='quantity-<?= $cartline->id; ?>'></span>
-                                <div class='normalprice'>1 x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
-                                <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->discountprice, 'EUR'); ?></div>
-                            <?php else: ?>
-                            <span class='quantity-<?= $cartline->id; ?>'><?= $cartline->quantity; ?></span>
-                            <span> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></span>
                             <?php endif; ?>
-                        </div>
-                        
-                        <div class='cartline-product-price col-xs-1'>
-                            <span><?= __('€ '); ?><span class='price-<?= $cartline->id; ?> cartline-subtotal'>
-                                <?= $this->Number->format($cartline->subtotal, [
-                                    'places' => 2
-                                ]); ?>
-                            </span></span>
-                        </div>
-                        
-                        <div class="cartline-close col-xs-1">
-                            <span class='close'>&times;</span>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
             
+                <?php endforeach; ?>
                 <!-- Summary -->
                 <div class='order-summary col-sm-12'>
                     <div class='row'>
@@ -146,7 +86,7 @@
                         </div>
                         <div class='order-place-order col-sm-3 col-sm-offset-6'>
                             <span class="input-group-btn">
-                                <button class="btn btn-success" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
+                                <button class="btn btn-success" id="submit-cart" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
                             </span>
                         </div>
                     </div>
@@ -162,8 +102,6 @@
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
-        
-        
         
     </div>
 </div>

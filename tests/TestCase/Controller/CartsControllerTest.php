@@ -75,7 +75,8 @@ class CartsControllerTest extends BaseIntegrationTestCase
                 . '"icon":"layout\/Hoogstraten_webshop-onderdelen-25.png"},'
                 . '{"name":"Kleurbewerking","value":"geen",'
                 . '"icon":"layout\/Hoogstraten_webshop-onderdelen-31.png"}],'
-                . '"product_price":9.99}';
+                . '"product_price":9.99,'
+                . '"discount_price":0}';
         $this->assertResponseContains($expected);
     }
     
@@ -148,7 +149,7 @@ class CartsControllerTest extends BaseIntegrationTestCase
         $this->post('/carts/add.json', $data); //route
 //        91017bf5-5b19-438b-bd44-b0c4e1eaf903
         $carts = $this->Carts->find()->all();
-        $this->assertEquals(1, count($carts));
+        $this->assertEquals(2, count($carts));
     }
     
     public function testAddNewCartline()
@@ -181,7 +182,7 @@ class CartsControllerTest extends BaseIntegrationTestCase
                 ->contain(['CartlineProductoptions.ProductoptionChoices'])
                 ->all();
         $newCartline = $this->Carts->Cartlines->find()
-                ->where(['cart_id' => $carts[1]->id])
+                ->where(['cart_id' => $carts[0]->id])
                 ->contain(['CartlineProductoptions.ProductoptionChoices'])
                 ->first();
         $newCartlineOption1 = $this->Carts->Cartlines->CartlineProductoptions->find()
@@ -196,15 +197,14 @@ class CartsControllerTest extends BaseIntegrationTestCase
                     return $q->where(['ProductoptionChoices.value' => 'geen']);
                 })
                 ->toArray();
-        
         $this->assertEquals(2, count($carts));
-        $this->assertEquals(2, count($cartlines));
-        $this->assertEquals('277d32ec-b56c-44fa-a10a-ddfcb86c19f8', $newCartline->photo_id);
+        $this->assertEquals(3, count($cartlines));
+        $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $newCartline->photo_id);
         $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
         $this->assertEquals(5, $newCartline->quantity);
         $this->assertEquals(2, count($newCartline->cartline_productoptions));
         $this->assertEquals(1, count($newCartlineOption1));
-        $this->assertEquals(1, count($newCartlineOption2));
+        $this->assertEquals(0, count($newCartlineOption2));
         //debug($this->_response->body());
     }
     
@@ -255,11 +255,11 @@ class CartsControllerTest extends BaseIntegrationTestCase
                 })
                 ->toArray();
         
-        $this->assertEquals(1, count($carts));
-        $this->assertEquals(1, count($cartlines));
+        $this->assertEquals(2, count($carts));
+        $this->assertEquals(3, count($cartlines));
         $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $newCartline->photo_id);
         $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
-        $this->assertEquals(6, $newCartline->quantity);
+        $this->assertEquals(5, $newCartline->quantity);
         $this->assertEquals(2, count($newCartline->cartline_productoptions));
         $this->assertEquals(1, count($newCartlineOption1));
         $this->assertEquals(1, count($newCartlineOption2));
@@ -313,14 +313,14 @@ class CartsControllerTest extends BaseIntegrationTestCase
                 })
                 ->toArray();
         
-        $this->assertEquals(1, count($carts));
-        $this->assertEquals(2, count($cartlines));
+        $this->assertEquals(2, count($carts));
+        $this->assertEquals(3, count($cartlines));
         $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $newCartline->photo_id);
         $this->assertEquals('3a1bef8f-f977-4a0e-8c29-041961247d2d', $newCartline->product_id);
-        $this->assertEquals(3, $newCartline->quantity);
+        $this->assertEquals(5, $newCartline->quantity);
         $this->assertEquals(2, count($newCartline->cartline_productoptions));
         $this->assertEquals(1, count($newCartlineOption1));
-        $this->assertEquals(1, count($newCartlineOption2));
+        $this->assertEquals(0, count($newCartlineOption2));
     }
     
     public function testAddFails()
@@ -410,5 +410,67 @@ class CartsControllerTest extends BaseIntegrationTestCase
         ];
         $this->post('/carts/add.json', $data); //route
         $this->assertEquals(['success' => false, 'message' => 'Invalid method error'], $this->viewVariable('response'));
+    }
+    
+    public function testAddDigitalProduct()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $data = [
+            'photo_id' => '277d32ec-b56c-44fa-a10a-ddfcb86c19f8',
+            'product_id' => '3373b17f-496d-4a57-bbc4-d39f5a2f644a',
+            'product_name' => 'Digitaal alles',
+            'product_price' => 35.00,
+            'quantity' => 1
+        ];
+        print_r($carts = $this->Carts->find()->all());
+        $this->post('/carts/add.json', $data);
+        print_r($this->_response->body());die;
+        $cartlines = $this->Carts->Cartlines->find()->toArray();
+        $this->assertEquals(3, count($cartlines));
+    }
+    
+    public function testUpdateCartlineWithNewPhotoId()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals('59d395fa-e723-43f0-becb-0078425f9a99', $cartline->photo_id);
+        
+        $data = [
+            'cartline_photo_id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
+            'cartline_id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals('aff61452-fe0d-4d54-83d9-69400f4e4b2f', $cartline->photo_id);
+    }
+    
+    public function testUpdateCartlineWithNewPhotoIdFailureEmptyCartline()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
+        $data = [
+            'cartline_photo_id' => 'aff61452-fe0d-4d54-83d9-69400f4e4b2f',
+            'cartline_id' => ''
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+         $this->assertEquals(['success' => false], $this->viewVariable('response'));
+    }
+    
+    public function testUpdateCartlineWithNewPhotoIdFailureNotSaved()
+    {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
+        $data = [
+            'cartline_photo_id' => '',
+            'cartline_id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'
+        ];
+
+        $this->post('/carts/updateFreeProductInCartline.json', $data);
+        $cartline = $this->Carts->Cartlines->find()->where(['id' => '752a97bc-ab5e-4197-a2da-71c86974b5e0'])->first();
+        $this->assertEquals(['success' => false], $this->viewVariable('response'));
     }
 }

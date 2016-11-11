@@ -34,7 +34,6 @@ class PersonsFixture extends TestFixture
         'user_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         '_indexes' => [
             'group_id' => ['type' => 'index', 'columns' => ['group_id'], 'length' => []],
-            'address_id' => ['type' => 'index', 'columns' => ['address_id'], 'length' => []],
             'user_id' => ['type' => 'index', 'columns' => ['user_id'], 'length' => []],
         ],
         '_constraints' => [
@@ -103,6 +102,40 @@ class PersonsFixture extends TestFixture
             'deleted' => null,
             'barcode_id' => '105ea78c-2e11-4b7f-b42c-05443169d43a',
             'user_id' => '61d2a03c-08f9-400b-9942-9d2f3a843aaa'
-        ]
+        ],
+        [
+            'id' => 'b23c0370-0900-4f89-ba06-9ecfb48dd51f',
+            'group_id' => 'c676d707-4844-4367-a55c-bd070d4e8978',
+            'address_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
+            'studentnumber' => '987654321',
+            'firstname' => 'Adinda',
+            'prefix' => 'de',
+            'lastname' => 'Fok',
+            'slug' => 'adinda-de-fok',
+            'email' => 'adinda@xseeding.nl',
+            'type' => 'student',
+            'created' => '2016-06-06 11:47:18',
+            'modified' => '2016-06-06 11:47:18',
+            'deleted' => null,
+            'barcode_id' => '2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3',
+            'user_id' => '91017bf5-5b19-438b-bd44-b0c4e1eaf903'
+        ],
+        [
+            'id' => '1be6e63a-b0d1-4b39-b141-6228837c633e',
+            'group_id' => 'c676d707-4844-4367-a55c-bd070d4e8978',
+            'address_id' => '9e953dd7-fbac-4dc4-9fec-3ca9cd55397e',
+            'studentnumber' => '987654321',
+            'firstname' => 'Adminda',
+            'prefix' => 'de',
+            'lastname' => 'Fok',
+            'slug' => 'adinda-de-fok',
+            'email' => 'adinda@xseeding.nl',
+            'type' => 'staff',
+            'created' => '2016-06-06 11:47:18',
+            'modified' => '2016-06-06 11:47:18',
+            'deleted' => null,
+            'barcode_id' => '2f7cce66-df0e-45ae-84f8-ba4c0ca7d4a3',
+            'user_id' => '7f04642a-34a2-4d3d-ae8a-c79e26f5bbfa'
+        ],
     ];
 }

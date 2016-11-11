@@ -22,6 +22,9 @@ class PhotosControllerTest extends BaseIntegrationTestCase
     public $fixtures = [
         'app.photos',
         'app.barcodes',
+        'app.carts',
+        'app.cartlines',
+        'app.cartline_productoptions',
         'app.groups',
         'app.projects',
         'app.schools',
@@ -278,5 +281,23 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         );
         $this->assertResponseContains('Cake\Network\Exception\NotFoundException');
         $this->assertResponseCode(404);
+    }
+    
+    public function testGetViewSelectionFreeGroupPicture() {
+        $this->get('/photos/pickfreegroupspicture/df99d62f-258c-424d-a1fe-af3213e70867');
+        $this->assertResponseOk();
+        $this->markTestIncomplete();
+    }
+    
+    public function testGetViewSelectionFreeGroupPicturesEmpty() {
+        $this->get('/photos/pickfreegroupspicture/a34c9d93-b89f-4b6d-a10c-8a7e939df834');
+        $this->assertResponseOk();
+        $this->markTestIncomplete();
+    }
+    
+    public function testGetViewChangeFreeGroupPicture() {
+        $this->get('/photos/changefreegroupspicture/a34c9d93-b89f-4b6d-a10c-8a7e939df834/752a97bc-ab5e-4197-a2da-71c86974b5e0');
+        $this->assertResponseOk();
+        $this->markTestIncomplete();
     }
 }

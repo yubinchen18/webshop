@@ -2,12 +2,13 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\OrdersController;
-use Cake\TestSuite\IntegrationTestCase;
+use App\Test\TestCase\BaseIntegrationTestCase;
+use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\OrdersController Test Case
  */
-class OrdersControllerTest extends IntegrationTestCase
+class OrdersControllerTest extends BaseIntegrationTestCase
 {
 
     /**
@@ -25,17 +26,10 @@ class OrdersControllerTest extends IntegrationTestCase
         'app.projects',
         'app.schools',
         'app.contacts',
-        'app.visitaddresses',
-        'app.deliveryorders',
-        'app.deliveryaddresses',
-        'app.invoiceorders',
-        'app.invoiceaddresses',
-        'app.trxes',
         'app.orderlines',
         'app.photex_downloads',
         'app.orderstatuses',
         'app.orders_orderstatuses',
-        'app.mailaddresses',
         'app.barcodes',
         'app.photos',
         'app.carts',
@@ -49,51 +43,39 @@ class OrdersControllerTest extends IntegrationTestCase
     ];
 
     /**
-     * Test index method
+     * setUp method
      *
      * @return void
      */
-    public function testIndex()
+    public function setUp()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        parent::setUp();
+        $this->loginPerson();
+        $this->Carts = TableRegistry::get('Carts');
+        $this->Photos = TableRegistry::get('Photos');
+        $this->Persons = TableRegistry::get('Persons');
+        $this->Photos->baseDir = APP . '..' . DS . 'tests' . DS . 'Fixture';
     }
-
+    
     /**
-     * Test view method
+     * tearDown method
      *
      * @return void
      */
-    public function testView()
+    public function tearDown()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+        unset($this->Persons);
+        unset($this->Photos);
 
+        parent::tearDown();
+    }
+    
     /**
-     * Test add method
+     * Test download method
      *
      * @return void
      */
-    public function testAdd()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test edit method
-     *
-     * @return void
-     */
-    public function testEdit()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
+    public function testDownload($orderId = '79ac1071-1940-4513-9faf-f57893ca3ade')
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

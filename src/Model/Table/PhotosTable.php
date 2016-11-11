@@ -92,21 +92,20 @@ class PhotosTable extends BaseTable
                 ->contain(['Groups.Projects.Schools', 'Persons.Groups.Projects.Schools'])
                 ->first();
 
-
         $path = $this->getPathObject();
+        
+        if ($barcode->type == "group") {
+            $pathToCreate = $barcode->group->project->school->slug . DS .
+                $barcode->group->project->slug . DS .
+                $barcode->group->slug;
+                $path->create($pathToCreate);
+                $path->cd($pathToCreate);
+            return $path->path;
+        }
         
         if (empty($barcode->person->group->project->school->slug)) {
             $path->create('unknown');
             $path->cd('unknown');
-
-            return $path->path;
-        }
-        if ($barcode->type == "group") {
-            $pathToCreate = $barcode->person->group->project->school->slug . DS .
-                $barcode->person->group->project->slug . DS .
-                $barcode->person->group->slug;
-                $path->create($pathToCreate);
-                $path->cd($pathToCreate);
 
             return $path->path;
         }
@@ -122,6 +121,20 @@ class PhotosTable extends BaseTable
         return $path->path;
     }
 
+    public function findGroupPhotos(Query $query, array $options = [])
+    {
+        if(empty($options['group_id'])) {
+            return $query;
+        }
+        
+        $group = $this->Barcodes->Groups->get($options['group_id']);
+        
+        return $query->where([
+                'Photos.barcode_id' => $group->barcode_id
+            ]);
+        
+    }
+    
     private function getPathObject()
     {
         return new Folder($this->baseDir);

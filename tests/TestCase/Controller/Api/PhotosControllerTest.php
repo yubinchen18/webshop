@@ -57,7 +57,7 @@ class PhotosControllerTest extends BaseIntegrationTestCase
         $this->get('/api/v1/get_photos/projects/4a7d8a96-08f6-441c-a8d5-eb40440e7603.json');
         $this->assertResponseSuccess();
         $data = $this->getDecodedResponse();
-        $this->assertCount(5, $data['Photos']);
+        $this->assertCount(6, $data['Photos']);
     }
 
     /**

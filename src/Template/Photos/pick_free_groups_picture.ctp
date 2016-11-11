@@ -1,46 +1,54 @@
 <div class="photos-index-label row">
-    <h2><?= __('Selecteer een foto') ?></h2>
+    <h2><?= __('Selecteer een groepsfoto') ?></h2>
     <div class="col-md-9 photos-index">
-    <?php if (!empty($persons)): ?>
-        <div class="row photos-index-row">
-        <?php foreach ($persons as $person): ?>
-            <?php foreach ($person->barcode->photos as $key => $photo): ?>
-                <div class="col-md-3 col-xs-4 photos-index-container">
-                    <div class="photos-index-icon">
-                        <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
-                    </div>
-                    <?= $this->Html->image($this->Url->build([
+    <?php if (!empty($photos)): ?>
+        <div class="row photos-product-index">
+        <?php foreach ($photos as $photo): ?>
+             <div class="col-md-4 col-xs-6 photos-product-container">
+                <div class="photos-index-icon" data-toggle="modal" data-target=".modal-<?= $photo->id; ?>">
+                    <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                </div>
+                <?= $this->Html->image($this->Url->build([
                         'controller' => 'Photos',
                         'action' => 'display',
                         'id' => $photo->id,
-                        'size' => 'med'
-                    ]), [
-                        'alt' => $photo->path,
-                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
-                        'class' => [$photo->orientationClass, 'img-responsive']
+                        'size' => 'med',
+                    ]),[
+                        'class' => [$photo->orientationClass, 'img-responsive group-picture'],
                     ]); ?>
+                </div>
+                <div class="text-left">
+                    <button type="button" class="btn btn-success fullwidth addToCartPopup-addButton" data-cartline='<?= json_encode([
+                        'photo_id' => $photo->id,
+                        'product_id' => $product->id,
+                        'product_name' => $product->name,
+                        'product_price' => $product->price_ex,
+                        'product_options' => '',
+                        'person_barcode' => $personBarcode]);
+                 ?>'>
+                        <i class="ace-icon fa fa-cart-plus"></i> <?= __('Kies') ?>
+                    </button>
+                 </div>
+                <div class="modal fade modal-<?= $photo->id ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title"><?= __('Groepsfoto'); ?></h4>
+                            </div>
+                            <div class="modal-body text-center">
+                            <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'display',
+                                'id' => $photo->id,
+                                'size' => 'med']),
+                                ['class' => 'img-responsive']
+                            ); ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
-            <!-- Group Photos -->
-            <?php foreach ($person->groupPhotos as $key => $photo): ?>
-                <div class="col-md-3 col-xs-4 photos-index-container">
-                    <div class="photos-index-icon">
-                        <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
-                    </div>
-                    <?= $this->Html->image($this->Url->build([
-                        'controller' => 'Photos',
-                        'action' => 'display',
-                        'id' => $photo->id,
-                        'size' => 'med'
-                    ]), [
-                        'alt' => $photo->path,
-                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
-                        'class' => [$photo->orientationClass, 'img-responsive']
-                    ]); ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+            </div>
         <?php endforeach; ?>
         </div>
     <?php endif ?>

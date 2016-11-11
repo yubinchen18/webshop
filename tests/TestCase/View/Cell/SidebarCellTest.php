@@ -4,7 +4,8 @@ namespace App\Test\TestCase\View\Cell;
 use App\View\Cell\SidebarCell;
 use Cake\TestSuite\TestCase;
 use Cake\Controller\Exception\AuthSecurityException;
-
+use Cake\Network\Request;
+use Cake\Network\Response;
 /**
  * App\View\Cell\SidebarCell Test Case
  */
@@ -40,8 +41,8 @@ class SidebarCellTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->request = $this->createMock('Cake\Network\Request');
-        $this->response = $this->createMock('Cake\Network\Response');
+        $this->request = $this->getMock('Cake\Network\Request');
+        $this->response = $this->getMock('Cake\Network\Response');
         $this->SidebarCell = new SidebarCell($this->request, $this->response);
     }
 
@@ -66,7 +67,7 @@ class SidebarCellTest extends TestCase
     {
         $user['type'] = 'admin';
         $this->SidebarCell->display($user);
-        $this->assertCount(7, $this->SidebarCell->viewVars['menu']);
+        $this->assertCount(8, $this->SidebarCell->viewVars['menu']);
     }
 
     public function testUser()

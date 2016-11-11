@@ -62,9 +62,24 @@ class OrderlinesFixture extends TestFixture
             'created' => '2016-10-25 06:59:29',
             'modified' => '2016-10-25 06:59:29',
             'deleted' => '2016-10-25 06:59:29',
-            'order_id' => '82cfa958-c913-43d8-ad4d-f4ca03133449',
+            'order_id' => '9861815c-edaa-4ce3-b914-09a13d9fc99e',
             'photo_id' => '9f8d29d0-5563-4b03-809b-0e92c4be8f5f',
-            'product_id' => 'cf2e3429-fab4-4fe7-b21d-f0f7e8b5ef17'
+            'product_id' => '3a1bef8f-f977-4a0e-8c29-041961247d2d'
+        ],
+        [
+            'id' => '9aa3b117-8430-45de-9d18-22c25722bc96',
+            'article' => 'DPack',
+            'productname' => 'DIGITAAL ALLES',
+            'quantity' => 1,
+            'price_ex' => 1,
+            'vat' => 1,
+            'exported' => 1,
+            'created' => '2016-10-25 06:59:29',
+            'modified' => '2016-10-25 06:59:29',
+            'deleted' => '2016-10-25 06:59:29',
+            'order_id' => '79ac1071-1940-4513-9faf-f57893ca3ade',
+            'photo_id' => '9f8d29d0-5563-4b03-809b-0e92c4be8f5f',
+            'product_id' => '3373b17f-496d-4a57-bbc4-d39f5a2f644a'
         ],
     ];
 }

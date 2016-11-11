@@ -113,6 +113,22 @@ jQuery(function($) {
         }
     });
     
+    $('.update-orderline').on('click', function(e){
+        var cartline_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        var cartlineData = JSON.parse($(this).attr('data-cartline'));
+        $.ajax({
+            url: '/carts/updateFreeProductInCartline',
+            data: {
+                cartline_id: cartline_id,
+                cartline_photo_id: cartlineData.photo_id
+            },
+            method: 'POST',
+            success: function() {
+                window.location.href = "/carts/display";
+            }
+        });
+    });
+    
     $('.cartline-close').on('click', function() {
        if(confirm('Weet u zeker dat u dit product wilt verwijderen?')) {
           var divId = $(this).parent().attr('id');
@@ -122,7 +138,11 @@ jQuery(function($) {
                 $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                 $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                 $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                $('div#'+divId).next('.navigation-groups-picture').remove();
                 $('div#'+divId).remove();
+                if(response.removeGroup !== "") {
+                    $('div#'+response.removeGroup).remove();
+                }
             }
           });
        }

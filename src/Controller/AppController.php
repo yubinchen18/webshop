@@ -96,13 +96,14 @@ class AppController extends Controller
         $cart = $this->Carts->find('byUserid',['user_id' => $this->Auth->user('id')]);
         if($cart) {
             $cart = $cart->first();
-            $cartcount = 0;
-            foreach($cart['cartlines'] as $line) {
-                $cartcount += $line['quantity'];
+            if(!empty($cart['cartlines'])) {
+                $cartcount = 0;
+                foreach($cart['cartlines'] as $line) {
+                    $cartcount += $line['quantity'];
+                }
+                $this->set(compact('cartcount'));
             }
-            $this->set(compact('cartcount'));
         }
-        
     }
 
     public function isAuthorized($user)

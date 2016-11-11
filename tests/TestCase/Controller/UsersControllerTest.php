@@ -2,13 +2,13 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Controller\UsersController;
-use Cake\TestSuite\IntegrationTestCase;
+use App\Test\TestCase\BaseIntegrationTestCase;
 use Cake\ORM\TableRegistry;
 
 /**
  * App\Controller\UsersController Test Case
  */
-class UsersControllerTest extends IntegrationTestCase
+class UsersControllerTest extends BaseIntegrationTestCase
 {
 
     /**
@@ -91,10 +91,10 @@ class UsersControllerTest extends IntegrationTestCase
         ];
        
         $this->post('/', $data);
-        $this->assertSession('91017bf5-5b19-438b-bd44-b0c4e1eaf903', 'Auth.User.id');
+        $this->assertSession('c4b06162-5bfa-4f1c-af86-694ddecd24a2', 'Auth.User.id');
         $this->assertSession('person', 'Auth.User.type');
-        $this->assertSession(['91017bf5-5b19-438b-bd44-b0c4e1eaf903'], 'LoggedInUsers.AllUsers');
-        $this->assertSession('91017bf5-5b19-438b-bd44-b0c4e1eaf903', 'LoggedInUsers.ActiveUser');
+        $this->assertSession(['c4b06162-5bfa-4f1c-af86-694ddecd24a2'], 'LoggedInUsers.AllUsers');
+        $this->assertSession('c4b06162-5bfa-4f1c-af86-694ddecd24a2', 'LoggedInUsers.ActiveUser');
     }
     
     public function testFirstLoginFail()

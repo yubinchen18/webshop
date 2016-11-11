@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Filesystem\Folder;
 use Cake\Network\Exception\NotFoundException;
 use App\Lib\ImageHandler;
@@ -15,7 +16,6 @@ use Imagick;
  */
 class PhotosController extends AppController
 {
-
     /**
      * Index method
      *
@@ -24,13 +24,11 @@ class PhotosController extends AppController
     public function index()
     {
         //load persons for allow auth check
-        $session = $this->request->session();
-        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
-        $personsTable = TableRegistry::get('Persons');
+        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
 
         $persons = [];
         foreach ($loggedInUsersIds as $userId) {
-            $person = $personsTable->find()
+            $person = $this->Photos->Barcodes->Groups->Persons->find()
                 ->where(['Persons.user_id' => $userId])
                 ->contain(['Barcodes.Photos'])
                 ->first();
@@ -44,14 +42,15 @@ class PhotosController extends AppController
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
                     $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
-                    
                     list($width, $height) = getimagesize($filePath);
-                    if ($width > $height) {
-                        $orientationClass = 'photos-horizontal';
-                    } else {
-                        $orientationClass = 'photos-vertical';
+                    $photo->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
+                    
+                    $person->groupPhotos = $this->Photos->find('groupPhotos', ['group_id' => $person->group_id]);
+                    foreach($person->groupPhotos as $groupphoto) {
+                        $filePath = $this->Photos->getPath($groupphoto->barcode_id) . DS . $groupphoto->path;
+                        list($width, $height) = getimagesize($filePath);
+                        $groupphoto->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
                     }
-                    $photo->orientationClass = $orientationClass;
                 }
             }
         } else {
@@ -70,18 +69,14 @@ class PhotosController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
-    {
-        //check if user is auth to view this photo id
-        $session = $this->request->session();
-        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
-        
+    {                        
         $photo = $this->Photos->find()
                 ->where(['Photos.id' => $id])
                 ->contain(['Barcodes.Persons'])
                 ->first();
         
         if (!empty($photo)) {
-            if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
+            if ($this->isAuthForPhoto($photo)) {
                 //add the orientation data to the photos array
                 $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
                 
@@ -103,6 +98,28 @@ class PhotosController extends AppController
         }
     }
 
+    private function isAuthForPhoto($photo) {
+        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
+        
+        if($photo->type === 'group') {
+            $enabledGroups = [];
+            foreach($loggedInUsersIds as $user_id) {
+                $enabledGroups[] = $this->Photos->Barcodes->Persons
+                        ->find()
+                        ->select(['Groups.id'])
+                        ->contain(['Groups'])
+                        ->where(['Persons.user_id' => $user_id])
+                        ->hydrate(false)
+                        ->first();
+            }
+            $enabledGroups = Hash::extract($enabledGroups, "{n}.Groups.id");
+            $photo = $this->Photos->get($photo->id, ['contain' => 'Barcodes.Groups']);
+            return in_array($photo->barcode->group->id, $enabledGroups);
+        }
+        
+        return in_array($photo->barcode->person->user_id, $loggedInUsersIds);
+    }
+    
     /**
      * Add method
      *
@@ -233,18 +250,19 @@ class PhotosController extends AppController
     public function productGroupIndex($productGroup, $photoId)
     {
         $this->autoRender = false;
-        //check if user is auth to view this photo id
-        $session = $this->request->session();
-        $loggedInUsersIds = $session->read('LoggedInUsers.AllUsers');
-        
         //load the photo
         $photo = $this->Photos->find()
             ->where(['Photos.id' => $photoId])
             ->contain(['Barcodes.Persons'])
-            ->first();
-
+            ->firstOrFail();
+        
+        if($photo->type == 'group' && $productGroup == 'digital') {
+            $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
+            return $this->redirect($this->referer());
+        }
+        
         if (!empty($photo)) {
-            if (in_array($photo->barcode->person->user_id, $loggedInUsersIds)) {
+            if ($this->isAuthForPhoto($photo)) {
                 //load products
                 $productTable = TableRegistry::get('Products');
                 $products = $productTable->find()
@@ -273,6 +291,9 @@ class PhotosController extends AppController
                         ]);
                         //add the image data to product object
                         $product->image = $image[0];
+                        
+                        $digitalProduct = ($product->product_group === 'digital') ? $photo->barcode_id : false;
+                        $digitalPack = ($product->article === 'DPack') ? $photo->barcode_id : false;       
                     }
                 } else {
                     throw new NotFoundException('No products found.');
@@ -280,7 +301,7 @@ class PhotosController extends AppController
                 
                 //pass results to views
                 $templateName = $productGroup.'-index';
-                $this->set(compact('photo', 'products'));
+                $this->set(compact('photo', 'products', 'digitalProduct', 'digitalPack'));
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);
             } else {
@@ -289,5 +310,76 @@ class PhotosController extends AppController
         } else {
             throw new NotFoundException('Photo not found');
         }
+    }
+    
+    public function deleteCartLine($id) {
+        $this->Cartlines = TableRegistry::get('Cartlines');
+        $line = $this->Cartlines->find()
+                ->where(['id' => $id])
+                ->first();
+        $this->Cartlines->delete($line);
+    }
+    
+    public function changeFreeGroupsPicture($personBarcode = null)
+    {
+        $this->setFreeGroupsPictureSettings($personBarcode, "changeFreeGroupsPicture");
+    }
+    
+    public function pickFreeGroupsPicture($personBarcode = null) 
+    {   
+        $this->setFreeGroupsPictureSettings($personBarcode, "pickFreeGroupsPicture");
+    }
+    
+    private function getGroupPictures($groupBarcodeId = null)
+    {
+        $photos = $this->Photos->find()
+            ->contain('Barcodes')
+            ->where(['barcode_id' => $groupBarcodeId])
+            ->toArray();
+        
+        return $photos;
+    }
+    
+    private function setFreeGroupsPictureSettings($personBarcode = null, $layout = null)
+    {
+        //check if barcode is a person
+        $this->Persons = TableRegistry::get('Persons');
+        $person = $this->Persons->find()
+            ->contain(['Groups'])
+            ->where(['Persons.barcode_id' => $personBarcode])
+            ->first();
+        
+        $photos = $this->getGroupPictures($person->group->barcode_id);
+        if (!empty($photos)) {
+            foreach($photos as $photo) {
+                if ($this->isAuthForPhoto($photo)) {
+                    //add the orientation data to the photos array
+                    $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+
+                    list($width, $height) = getimagesize($filePath);
+                    if ($width > $height) {
+                        $orientationClass = 'photos-horizontal';
+                    } else {
+                        $orientationClass = 'photos-vertical';
+                    }
+                    $photo->orientationClass = $orientationClass;
+
+                    $this->set(compact('photo'));
+                    $this->set('_serialize', ['photo']);
+                } else {
+                    throw new NotFoundException('Not authorized to view this photo');
+                }
+            }
+        }
+        
+        //get free product
+        $this->Products = TableRegistry::get('Products');
+        $product = $this->Products->find()
+            ->where(['article' => 'GAF 13x19'])
+            ->first();
+        
+        $this->set(compact('photos', 'product', 'personBarcode'));
+        $this->set('_serialize', ['photos']);
+        $this->render($layout);
     }
 }

@@ -118,7 +118,6 @@ class CartsTable extends Table
     public function checkExistingCart($userId)
     {
         $cart = $this->find('byUserid', ['user_id' => $userId])->first();
-            
         if (empty($cart)) {
             $cart = $this->newEntity(['user_id' => $userId]);
             

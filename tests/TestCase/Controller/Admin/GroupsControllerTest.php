@@ -19,9 +19,13 @@ class GroupsControllerTest extends BaseIntegrationTestCase
     public $fixtures = [
         'app.groups',
         'app.addresses',
+        'app.carts',
+        'app.cartlines',
         'app.contacts',
         'app.schools',
         'app.projects',
+        'app.photos',
+        'app.products',
         'app.barcodes',
         'app.users',
         'app.downloadqueues',
@@ -42,7 +46,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $this->get('/admin/groups');
         $this->assertResponseOk();
         $groups = $this->viewVariable('groups');
-        $this->assertEquals(4, $groups->count());
+        $this->assertEquals(5, $groups->count());
     }
 
     public function testView()
@@ -171,6 +175,6 @@ class GroupsControllerTest extends BaseIntegrationTestCase
          
         $this->assertResponseContains('Klas blauw');
         $response = json_decode($this->_response->body(), true);
-        $this->assertEquals(4, count($response['groups']));
+        $this->assertEquals(5, count($response['groups']));
     }
 }

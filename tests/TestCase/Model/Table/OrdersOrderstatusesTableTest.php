@@ -34,12 +34,6 @@ class OrdersOrderstatusesTableTest extends TestCase
         'app.projects',
         'app.schools',
         'app.contacts',
-        'app.visitaddresses',
-        'app.deliveryorders',
-        'app.deliveryaddresses',
-        'app.invoiceorders',
-        'app.invoiceaddresses',
-        'app.trxes',
         'app.orderlines',
         'app.photos',
         'app.barcodes',
@@ -53,7 +47,6 @@ class OrdersOrderstatusesTableTest extends TestCase
         'app.orderline_productoptions',
         'app.photex_downloads',
         'app.orderstatuses',
-        'app.mailaddresses'
     ];
 
     /**

@@ -54,7 +54,7 @@ class ProductoptionChoicesFixture extends TestFixture
             'price_ex' => 1,
             'created' => '2016-10-12 09:55:30',
             'modified' => '2016-10-12 09:55:30',
-            'deleted' => '2016-10-12 09:55:30'
+            'deleted' => null
         ],
         [
             'id' => '6b0fd44a-85a7-4288-8960-9a0f5c981458',
@@ -65,7 +65,7 @@ class ProductoptionChoicesFixture extends TestFixture
             'price_ex' => 1,
             'created' => '2016-10-12 09:55:30',
             'modified' => '2016-10-12 09:55:30',
-            'deleted' => '2016-10-12 09:55:30'
+            'deleted' => null
         ],
         [
             'id' => '7c9cf742-9758-4493-9ee6-5015139b814e',
@@ -76,7 +76,7 @@ class ProductoptionChoicesFixture extends TestFixture
             'price_ex' => 1,
             'created' => '2016-10-12 09:55:30',
             'modified' => '2016-10-12 09:55:30',
-            'deleted' => '2016-10-12 09:55:30'
+            'deleted' => null
         ],
         [
             'id' => '9f426c8c-8e72-4b9a-b8aa-75b2174ebab5',
@@ -87,7 +87,7 @@ class ProductoptionChoicesFixture extends TestFixture
             'price_ex' => 1,
             'created' => '2016-10-12 09:55:30',
             'modified' => '2016-10-12 09:55:30',
-            'deleted' => '2016-10-12 09:55:30'
+            'deleted' => null
         ],
     ];
 }
