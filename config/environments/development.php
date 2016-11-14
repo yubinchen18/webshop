@@ -2,6 +2,8 @@
 use Cake\Core\Configure;
 use Cake\Network\Request;
 
+Configure::write('DiscountPrice', 3.98);
+
 $config = [
     'debug' => true,
     'environment' => 'dev',

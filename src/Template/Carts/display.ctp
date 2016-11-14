@@ -2,10 +2,9 @@
     <!-- left panel -->
     <div class="cart-cartlines-index col-md-9">
         <h2><?= __('Winkelwagen');?></h2>
-        <?=$this->Form->create(null, ['class' => 'orderForm', 'url' => '/carts/orderInfo']); ?>
         <div class='row col-md-12 col-xs-12'>
-            <div class='cartlines-header col-xs-3'><?= __('Foto'); ?></div>
-            <div class='cartlines-header col-xs-3'><?= __('Product detail'); ?></div>
+            <div class='cartlines-header col-xs-2'><?= __('Foto'); ?></div>
+            <div class='cartlines-header col-xs-4'><?= __('Product'); ?></div>
             <div class='cartlines-header col-xs-2'><?= __('Aantal'); ?></div>
             <div class='cartlines-header col-xs-2'><?= __('Stukprijs'); ?></div>
             <div class='cartlines-header col-xs-1'><?= __('Prijs'); ?></div>
@@ -82,12 +81,16 @@
                         </div>
 
                         <div class='col-sm-3 '>
-                            <a href="/photos" class="btn btn-default" type="button"><?=__('Naar foto-overzicht'); ?></a>
+                            <?= $this->Html->link(__('Naar foto-overzicht'),
+                                         ['controller' => 'Photos', 'action' => 'index'],
+                                         ['class' => 'btn btn-default']
+                                    ); ?>
                         </div>
                         <div class='order-place-order col-sm-3 col-sm-offset-6'>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" id="submit-cart" type="submit"><?=__('Gegevens invullen en betalen'); ?></button>
-                            </span>
+                                <?= $this->Html->link(__('Gegevens invullen en betalen'),
+                                         ['action' => 'orderInfo'],
+                                         ['class' => 'btn btn-success']
+                                    ); ?>
                         </div>
                     </div>
                 </div>
@@ -98,7 +101,6 @@
                 </div>
             <?php endif; ?>
         </div>
-        <?=$this->Form->end();?>
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">

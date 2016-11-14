@@ -238,5 +238,18 @@
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
+                 <h2><?= __('Uw bestelling');?></h2>
+         <div class="row">
+             <div class="col-md-2"><?= __('Aantal'); ?></div>
+             <div class="col-md-8"><?= __('Product'); ?></div>
+             <div class="col-md-2"><?= __('Subtotaal'); ?></div>
+         </div>
+         <?php foreach($cart->cartlines as $line): ?>
+         <div class="row">
+             <div class="col-md-2"><?= $line->quantity ?></div>
+             <div class="col-md-8"><?= $line->product->name; ?></div>
+             <div class="col-md-2"><?= $line->quantity * $line->product->price_ex; ?></div>
+         </div>
+        <?php endforeach; ?>
     </div>
 </div>

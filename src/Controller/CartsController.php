@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Network\Exception\BadRequestException;
 use App\Lib\ImageHandler;
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * Carts Controller
@@ -23,7 +25,7 @@ class CartsController extends AppController
             $this->loadModel('Products');
             $product = $this->Products->get($this->request->data['cartline']['product_id']);
             $cartlineData = $this->request->data('cartline');
-            $cartlineData['discount_price'] = ($product->has_discount == 1) ? 3.78 : 0;
+            $cartlineData['discount_price'] = ($product->has_discount == 1) ? Configure::read('DiscountPrice') : 0;
             $this->set(compact('cartlineData'));
             $this->viewBuilder()->layout('ajax');
             return;
@@ -140,13 +142,16 @@ class CartsController extends AppController
             'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
         ]);
         
+        $cart = $this->Carts->find('byUserid',['user_id' => $this->Auth->user('id')])->first();
+                
         $issuers = $this->CakeIdeal->sendDirectoryRequest();
-        $this->set(compact('issuers'));
+        $this->set(compact('issuers', 'cart'));
     }
     
     public function display()
     {
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+        $cart = $this->Carts->updatePrices($cart->id);
 
         $orderSubtotal = 0;
         $groupSelectedArr = [];
@@ -171,15 +176,14 @@ class CartsController extends AppController
                 ]);
                 //add the image data to product object and calc subtotal price
                 $cartline->product->image = $image[0];
-          
-                $cartline->subtotal = $cartline->product->price_ex * $cartline->quantity;
+                $cartline->discountPrice = Configure::read('DiscountPrice');
+                if(!empty($userDiscounts[$cartline->photo->barcode->person->user_id]) && $cartline->product->has_discount === 1) {
+                    $cartline->product->price_ex = Configure::read('DiscountPrice');
+                }
+                
                 if($cartline->product->has_discount === 1) {
-                    $cartline->discountprice = 3.78;
-                    $cartline->subtotal = $cartline->product->price_ex;
-                    for($n=2;$n<=$cartline->quantity;$n++) {
-                        $cartline->subtotal += 3.78;
-                    }
-                }  
+                    $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
+                }
                 
                 if ($cartline->product->article === "DPack") { $totalDigitalPacks++; }
                 if ($cartline->product->article === "GAF 13x19") {
@@ -222,26 +226,16 @@ class CartsController extends AppController
                 return;
             }
             
-            $newCartline = $this->Carts->Cartlines->find()
-                ->where(['Cartlines.id' => $postData['cartline_id']])
-                ->contain(['Products'])
-                ->first();
+            $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
+            $cart = $this->Carts->updatePrices($cartline->cart_id);
             
-            $newCartline->subtotal = $newCartline->product->price_ex * $newCartline->quantity;
-            if($newCartline->product->has_discount === 1) {
-                $newCartline->discountprice = 3.78;
-                $newCartline->subtotal = $newCartline->product->price_ex;
-                for($n=2;$n<=$cartline->quantity;$n++) {
-                    $newCartline->subtotal += 3.78;
-                }
-            }
-
-            $cartTotals = $this->Carts->getCartTotals($newCartline->cart_id);
+            $cartTotals = $this->Carts->getCartTotals($cart->id);
             
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
-                'cartline' => $newCartline,
+                'cart' => $cart,
+                'discountPrice' => Configure::read('DiscountPrice'),
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
                 'shippingCost' => $cartTotals['shippingcosts']

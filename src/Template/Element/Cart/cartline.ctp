@@ -16,7 +16,7 @@
             ]); ?>
         </div>
     </div>
-    <div class='cartline-product-details col-xs-3'>
+    <div class='cartline-product-details col-xs-4'>
         <div class='cartline-product-name'><b><?= $cartline->product->name; ?></b></div>
         <?php if ($cartline->product->article === 'GAF 13x19') : ?>
             <p>
@@ -28,7 +28,7 @@
         <?php endif; ?>
         <?php if (!empty($cartline->cartline_productoptions)): ?>
             <div class='cartline-product-options'>
-                <span><?= __('Options:');?></span>
+                <span><?= __('Opties:');?></span>
                 <ul>
                     <?php foreach ($cartline->cartline_productoptions as $option): ?>
                         <li><?= $option->productoption_choice->productoption->name; ?>: 
@@ -65,10 +65,13 @@
     </div>
 
     <div class='cartline-product-unitPrice col-xs-2'>
-        <?php if($cartline->product->has_discount == 1 && $cartline->quantity > 1): ?>
+        <?php if($cartline->product->has_discount == 1 && 
+                 $cartline->quantity > 1 &&
+                 $cartline->product->price_ex != $cartline->discountPrice
+                ): ?>
         <span class='quantity-<?= $cartline->id; ?>'></span>
             <div class='normalprice'>1 x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
-            <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->discountprice, 'EUR'); ?></div>
+            <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->discountPrice, 'EUR'); ?></div>
         <?php else: ?>
         <span class='quantity-<?= $cartline->id; ?>'><?= $cartline->quantity; ?></span>
         <span> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></span>

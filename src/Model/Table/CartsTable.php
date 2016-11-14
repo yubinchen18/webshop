@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
 
 /**
  * Carts Model
@@ -128,6 +130,64 @@ class CartsTable extends Table
         return $cart;
     }
     
+        public function updatePrices($cart_id)
+     {
+         $cart = $this->get($cart_id,[
+             'contain' => [
+                 'Cartlines.Products',
+                 'Cartlines.Photos.Barcodes.Persons'
+             ]
+         ]);
+         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
+         
+         $userDiscounts = array_map(function() {}, array_flip($users));
+         $total_lines = 0;
+         $discount = 0;
+         $high_shipping = false;
+         
+         foreach($cart->cartlines as $cartline) {
+             $total_lines++;
+             $user = $cartline->photo->barcode->person->user_id;
+             $subtotal = $cartline->quantity * $cartline->product->price_ex;
+             
+             if($cartline->product->has_discount == 1 && !empty($userDiscounts[$user])) {
+                 $cartline->product->price_ex = (Configure::read('DiscountPrice'));
+                 $subtotal = $cartline->quantity * (Configure::read('DiscountPrice'));
+             }
+             
+             if($cartline->product->has_discount == 1 && empty($userDiscounts[$user])) {
+                 $subtotal = 1 * $cartline->product->price_ex;
+                 $subtotal += ($cartline->quantity-1) * (Configure::read('DiscountPrice'));
+                 $userDiscounts[$user] = true;
+             }
+             $cartline->subtotal = $subtotal;
+             $this->Cartlines->save($cartline);
+         }
+         
+         $cart = $this->get($cart_id,[
+             'contain' => [
+                 'Cartlines.Products',
+                 'Cartlines.Photos.Barcodes.Persons'
+             ]
+         ]);
+         
+         $users = Hash::extract($cart, 'cartlines.{n}.photo.barcode.person.user_id');
+         $userDiscounts = array_map(function() {}, array_flip($users));
+         if (!empty($cart->cartlines)) {
+             foreach ($cart->cartlines as $cartline) {
+                 $cartline->discountPrice = Configure::read('DiscountPrice');
+                 if(!empty($userDiscounts[$cartline->photo->barcode->person->user_id]) && $cartline->product->has_discount === 1) {
+                     $cartline->product->price_ex = Configure::read('DiscountPrice');
+                 }
+                 
+                 if($cartline->product->has_discount === 1) {
+                     $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
+                 }
+             }
+         }
+         return $cart;
+    }
+    
     public function getCartTotals($cart_id)
     {
         $cart = $this->get($cart_id,[
@@ -146,21 +206,10 @@ class CartsTable extends Table
         $total_lines = 0;
         $high_shipping = false;
         foreach($cart->cartlines as $line) {
-            $total_lines++;
+            $total_lines+=$line->quantity;
             
-            // Calculate line price
-            $subtotal = $line->product->price_ex * $line->quantity;
-            $discount = 0;
-            if($line->product->has_discount === 1) {
-                $subtotal = $line->product->price_ex;
-                for($n=2;$n<=$line->quantity;$n++) {
-                    $subtotal += 3.78;
-                    $discount += ($line->product->price_ex - 3.78);
-                }
-            }
-            
-            $totals['products'] += $subtotal;
-            $totals['discount'] += $discount;
+            $totals['products'] += $line->subtotal;
+            $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
             
             if(!empty($line->product->high_shipping)) {
                 $high_shipping = true;
