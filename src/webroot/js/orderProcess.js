@@ -1,13 +1,10 @@
 jQuery(function($) {
     $('.quantity-right-plus').click(function(e){
         var localQuantity = $(this).parent().parent().find('.input-number');
-        // Stop acting like a button
         e.preventDefault();
-        // Get the field name
         var quantity = parseInt(localQuantity.val());
-        // If is not undefined
             localQuantity.val(quantity + 1);
-            // Increment
+
         $.ajax({
             url: '/carts/update.json',
             data: {
@@ -18,23 +15,24 @@ jQuery(function($) {
             dataType:"json",
             success: function(response) {
                 if (response.success == true) {
-                    $('.'+localQuantity.attr('id')).html(localQuantity.val());
-                    $('.price-'+localQuantity.data('id')).html(response.cartline.subtotal.toFixed(2).toString().replace(".", ","));
-
-                    if(response.cartline.product.has_discount == 1 && parseInt(localQuantity.val()) > 1) {
+                    var cartlines = response.cart.cartlines;
+                    for(line in cartlines) {
+                        qtyRow = $('#'+ cartlines[line]['id']);
                         subTotals = $('<div/>');
-                        price = parseFloat(response.cartline.product.price_ex).toFixed(2);
-                        discountprice = parseFloat(response.cartline.discountprice).toFixed(2);
-                        subTotals.append('<span class="quantity-'+localQuantity.data('id')+'"></span>');
-                        subTotals.append('<div class="normalprice">1 x &euro; '+ price.replace('.',',') + '</div>');
-                        subTotals.append('<div class="discountprice">'+ (parseInt(localQuantity.val())-1) +' x &euro; '+ discountprice.replace('.',',') + '</div>');
-                        
-                        $('.quantity-'+localQuantity.data('id')).parent().html(subTotals);
-                    }
-                    if(parseInt(localQuantity.val()) == 1) {
-                        $('.quantity-'+localQuantity.data('id')).parent().html('<div class="quantity-'+localQuantity.data('id')+'">1 x &euro; '+ price.replace('.',',') + '</div>');
+                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
+                        if(cartlines[line]['product']['has_discount'] == 1 && 
+                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
+                           cartlines[line]['quantity'] > 1) {
+                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
+                        } else {
+                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                        }
+                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
+                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
                     }
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
+                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
                 }
             },
@@ -43,14 +41,13 @@ jQuery(function($) {
         });
      });
 
-     $('.quantity-left-minus').click(function(e){
+          $('.quantity-left-minus').click(function(e){
          var localQuantity = $(this).parent().parent().find('.input-number');
         e.preventDefault();
         var quantity = parseInt(localQuantity.val());
         if(quantity>1){
             localQuantity.val(quantity - 1);
         }
-        $('.'+localQuantity.attr('id')).html(localQuantity.val());
         
         $.ajax({
             url: '/carts/update.json',
@@ -62,22 +59,23 @@ jQuery(function($) {
             dataType:"json",
             success: function(response) {
                 if (response.success == true) {
-                    $('.'+localQuantity.attr('id')).html(localQuantity.val());
-                    $('.price-'+localQuantity.data('id')).html(response.cartline.subtotal.toFixed(2).toString().replace(".", ","));
-
-                    if(response.cartline.product.has_discount == 1 && parseInt(localQuantity.val()) > 1) {
+                    var cartlines = response.cart.cartlines;
+                    for(line in cartlines) {
+                        qtyRow = $('#'+ cartlines[line]['id']);
                         subTotals = $('<div/>');
-                        price = parseFloat(response.cartline.product.price_ex).toFixed(2);
-                        discountprice = parseFloat(response.cartline.discountprice).toFixed(2);
-                        subTotals.append('<span class="quantity-'+localQuantity.data('id')+'"></span>');
-                        subTotals.append('<div class="normalprice">1 x &euro; '+ price.replace('.',',') + '</div>');
-                        subTotals.append('<div class="discountprice">'+ (parseInt(localQuantity.val())-1) +' x &euro; '+ discountprice.replace('.',',') + '</div>');
-                        
-                        $('.quantity-'+localQuantity.data('id')).parent().html(subTotals);
+                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
+                        if(cartlines[line]['product']['has_discount'] == 1 && 
+                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
+                           cartlines[line]['quantity'] > 1) {
+                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
+                        } else {
+                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                        }
+                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
+                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
                     }
-                    if(parseInt(localQuantity.val()) == 1) {
-                        $('.quantity-'+localQuantity.data('id')).parent().html('<div class="quantity-'+localQuantity.data('id')+'">1 x &euro; '+ price.replace('.',',') + '</div>');
-                    }
+                    
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
