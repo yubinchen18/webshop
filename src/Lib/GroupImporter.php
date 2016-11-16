@@ -112,7 +112,7 @@ class GroupImporter
                 $entity = $this->Persons->newEntity($data, [
                     'associated' => ['Users', 'Groups.Barcodes', 'Barcodes', 'Addresses']
                 ]);
-                
+
                 $this->Persons->save($entity);
             }
         }
@@ -166,6 +166,19 @@ class GroupImporter
             'barcode' => $this->Barcodes->generateBarcode(),
             'type' => 'group'
         ];
+        
+        //check if group exists
+        $existingGroup = $this->Groups->find()
+            ->where([
+                'name' => $data['group_name'],
+                'slug' =>  Text::slug($data['group_name']), 
+                'project_id' => $project_id, 
+            ])    
+            ->first();
+        if($existingGroup) {
+            $data['group_id'] = $existingGroup->id;
+            unset($data['group']);
+        }
         unset($data['group_name']);
         return $data;
     }
