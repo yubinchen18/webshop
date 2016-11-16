@@ -168,7 +168,7 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
         $groupsPrecount = $this->Groups->find()->count();
         $personsPrecount = $this->Persons->find()->count();
 
-        $this->put('/admin/projects/edit/', $data);
+        $this->put('/admin/projects/edit/4a7d8a96-08f6-441c-a8d5-eb40440e7603', $data);
 
         $addressesCount = $this->Addresses->find()->count();
         $barcodesCount = $this->Barcodes->find()->count();
@@ -176,11 +176,12 @@ class ProjectsControllerTest extends BaseIntegrationTestCase
         $groupsCount = $this->Groups->find()->count();
         $personsCount = $this->Persons->find()->count();
 
-        $this->assertEquals(1, ($addressesCount - $addressesPrecount)); //2
-        $this->assertEquals(3, ($barcodesCount - $barcodesPrecount)); //3
-        $this->assertEquals(2, ($usersCount - $usersPrecount)); //2
-        $this->assertEquals(1, ($groupsCount - $groupsPrecount)); //1
-        $this->assertEquals(2, ($personsCount - $personsPrecount)); //2
+
+        $this->assertEquals(2, ($addressesCount - $addressesPrecount)); //2
+        $this->assertEquals(8, ($barcodesCount - $barcodesPrecount)); //4 students, 2 docents, 2 groups
+        $this->assertEquals(6, ($usersCount - $usersPrecount)); //2
+        $this->assertEquals(2, ($groupsCount - $groupsPrecount)); //1
+        $this->assertEquals(6, ($personsCount - $personsPrecount)); //2
     }
     
     public function testSchoolProjects()
