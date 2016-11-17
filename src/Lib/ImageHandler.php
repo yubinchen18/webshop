@@ -219,6 +219,7 @@ class ImageHandler
                         break;
                     case 'filter':
                         $filter = isset($value) ? $value : null;
+                        $filter = ($filter === 'geen') ? null : $filter;
                         $suffix = $suffix . (string)$filter;
                         break;
                     case 'layout':
@@ -353,7 +354,7 @@ class ImageHandler
                     case 'sepia':
                             $this->convertToSepia();
                         break;
-                    case 'zwart/wit':
+                    case 'zwartwit':
                             $this->convertToBlackWhite();
                         break;
                 }

@@ -1,6 +1,6 @@
 jQuery(function($) {
     // beforeAdd popup
-    $('.plus-sign').click(function(){
+    $('.photos-product-index').on('click', '.plus-sign', function(){
         var data = $(this).data();
         var selfContainer = $(this).parent().parent().parent().parent();
         var optionsData = [];
@@ -44,7 +44,7 @@ jQuery(function($) {
             totalPrice += parseFloat(discountPrice);
         }
         var priceLabel = selfContainer.find('.addToCartPopup-header span');
-        priceLabel.html(totalPrice);
+        priceLabel.html(parseFloat(totalPrice).toFixed(2).replace('.',','));
         quantityLabel.html(parseInt(quantity));
     });
     

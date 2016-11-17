@@ -247,7 +247,7 @@ class PhotosController extends AppController
      * @param type $photoId
      * @throws NotFoundException
      */
-    public function productGroupIndex($productGroup, $photoId)
+    public function productGroupIndex($productGroup, $photoId, $filter = null)
     {
         $this->autoRender = false;
         //load the photo
@@ -287,7 +287,8 @@ class PhotosController extends AppController
                         $imageHandler = new ImageHandler();
                         $image = $imageHandler->createProductPreview($photo, $product->product_group, [
                             'resize' => ['width' => 200, 'height' => 180],
-                            'layout' => !empty($product->layout) ? $product->layout : 'all'
+                            'layout' => !empty($product->layout) ? $product->layout : 'all',
+                            'filter' => $filter
                         ]);
                         //add the image data to product object
                         $product->image = $image[0];
@@ -301,6 +302,9 @@ class PhotosController extends AppController
                 
                 //pass results to views
                 $templateName = $productGroup.'-index';
+                if ($this->request->is('ajax')) {
+                    $templateName = 'product_group_index';
+                }
                 $this->set(compact('photo', 'products', 'digitalProduct', 'digitalPack'));
                 $this->set('_serialize', ['images']);
                 $this->render($templateName);

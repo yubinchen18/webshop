@@ -241,9 +241,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]
     );
     $routes->connect(
-        '/photos/product-group/:productGroup/:id',
+        '/photos/product-group/:productGroup/:id/**',
         ['controller' => 'Photos', 'action' => 'productGroupIndex'],
-        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id']]
+        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id', 'filter']]
     );
     $routes->connect(
         '/photos/product/:layout/:id/:suffix',
@@ -252,6 +252,10 @@ Router::scope('/', function (RouteBuilder $routes) {
             'action' => 'displayProduct',
         ],
         ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
+    );
+    $routes->connect(
+        '/photos/filter',
+        ['controller' => 'Photos', 'action' => 'filterProductGroupIndex']
     );
     $routes->connect('/photos/pickfreegroupspicture/:id', 
         ['controller' => 'Photos', 'action' => 'pickFreeGroupsPicture'],
