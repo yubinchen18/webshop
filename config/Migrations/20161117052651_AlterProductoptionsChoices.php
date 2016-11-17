@@ -17,5 +17,9 @@ class AlterProductoptionsChoices extends AbstractMigration
             SET value="zwartwit"
             WHERE value="zwart/wit"'
         );
+        $this->query(
+            'DELETE FROM productoption_choices
+            WHERE value="speciaal"'
+        );
     }
 }
