@@ -66,8 +66,7 @@ class AddressesTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('street', 'create')
-            ->notEmpty('street');
+            ->allowEmpty('street');
 
         $validator
             ->allowEmpty('number');
@@ -76,12 +75,10 @@ class AddressesTable extends Table
             ->allowEmpty('extension');
 
         $validator
-            ->requirePresence('zipcode', 'create')
-            ->notEmpty('zipcode');
+            ->allowEmpty('zipcode');
 
         $validator
-            ->requirePresence('city', 'create')
-            ->notEmpty('city');
+            ->allowEmpty('city');
 
         $validator
             ->allowEmpty('gender');
