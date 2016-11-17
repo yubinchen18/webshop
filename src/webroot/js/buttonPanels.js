@@ -14,4 +14,21 @@ jQuery(function($) {
             //
         }
     });
+    
+    $('.photos-view-buttons-box2').children('.photos-view-buttons-button').click(function(){
+        var productGroup = $(this).parent().parent().data('product-group');
+        var photoId = $(this).parent().parent().data('photo-id');
+        var filter = $(this).data('option-value')['value'];
+        $.ajax({
+            url: '/photos/product-group/'+productGroup+'/'+photoId +'/'+filter,
+            method: 'POST',
+            success: function(response) {
+                var container = $('.photos-product-left-panel');
+                container.children('.photos-product-container').remove();
+                container.append(response);
+            },
+            failure: function(response) {
+            }
+        });
+    })
 });
