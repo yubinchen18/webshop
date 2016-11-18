@@ -201,7 +201,7 @@ class PhotosController extends AppController
         $photo = $this->Photos->find()
               ->where(['id' => $id])
               ->first();
-        
+         
         if (!empty($photo)) {
             $rawPath = $this->Photos->getPath($photo->barcode_id);
             if (in_array($size, ['thumbs','med'])) {
