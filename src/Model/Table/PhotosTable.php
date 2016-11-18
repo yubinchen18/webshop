@@ -205,11 +205,11 @@ class PhotosTable extends BaseTable
 
         $image->scaleImage(0, 400);
         $imageMed = $this->addWaterMark($image);
-        new Folder($medPath, true, 0777);
+        new Folder($rawPath."med", true, 0777);
         $imageMed->writeImage($medPath);
 
         $image->scaleImage(0, 100);
-        new Folder($thumbPath, true, 0777);
+        new Folder($rawPath."thumbs", true, 0777);
         $image->writeImage($thumbPath);
 
         switch ($return) {
