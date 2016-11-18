@@ -578,8 +578,7 @@ class DownloadqueuesControllerTest extends BaseIntegrationTestCase
         $barcodesFixt = $this->Barcodes->find()->count();
 
         $this->post('/api/v1/upload_item.json', $data);
-        $file = new File($this->vfsRoot . '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/HA088268.jpg');
-        $this->assertTrue($file->exists());
+        $this->assertTrue(is_file($this->vfsRoot . '/de-ring-van-putten/eindejaars-2016/klas-2a/pieter-vos/HA088268.jpg'));
         
         $queue = $this->Downloadqueue->find()->count();
         $photos = $this->Photos->find()->count();

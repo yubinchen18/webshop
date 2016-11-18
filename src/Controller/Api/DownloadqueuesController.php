@@ -121,9 +121,16 @@ class DownloadqueuesController extends AppController
             if ($model == "Photos") {
                 $path = $this->Photos->getPath($data['barcode_id']);
                 $photoFile = base64_decode($data['data']);
-                $filename = basename($data['path']);
-
-                file_put_contents($path . DS . $filename, $photoFile);
+                unset($data['data']);
+                
+                $photoPath = $path . DS . basename($data['path']);
+                file_put_contents($photoPath, $photoFile);
+                
+                if(!strstr($this->Photos->baseDir, 'vfs')){
+                    $pic = new \Imagick($photoPath);
+                    $this->Photos->autoRotateImage($pic);
+                }
+                
             }
             
             if ($model == "Persons") {
@@ -149,7 +156,6 @@ class DownloadqueuesController extends AppController
             }
             
             $savedEntity = $this->{$model}->save($entity, ['api_user' => $this->getUser()]);
-            
             if (!$savedEntity) {
                 var_dump($entity->errors());
 		die();

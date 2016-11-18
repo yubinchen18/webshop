@@ -81,6 +81,7 @@ class PersonsController extends AppController
         $person = $this->Persons->get($id, [
             'contain' => ['Groups', 'Addresses', 'Barcodes', 'Users']
         ]);
+
         $groups = $this->Persons->Groups->find('list');
         if ($this->request->is(['patch', 'post', 'put'])) {
             //when group is changed get the old picture folder path

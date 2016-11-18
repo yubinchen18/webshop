@@ -19,6 +19,8 @@ use Cake\Filesystem\File;
 class PhotosTable extends BaseTable
 {
     public $baseDir = APP . 'userphotos';
+    
+    
     /**
      * Initialize method
      *
@@ -175,7 +177,6 @@ class PhotosTable extends BaseTable
     public function autoRotateImage($image, $return = 'original')
     {
         $orientation = $image->getImageOrientation();
-        
         switch ($orientation) {
             case 3:
                 $image->rotateimage("#000", 180);
@@ -196,18 +197,19 @@ class PhotosTable extends BaseTable
         $imgPath = $image->getImageFilename();
         $path = substr(strrchr($imgPath, DS), 1);
         $rawPath = str_replace($path, "", $imgPath);
-        
+
         $thumbPath = $rawPath.DS."thumbs".DS.$path;
         $medPath = $rawPath.DS."med".DS.$path;
         
         $image->writeImage($imgPath);
-        
+
         $image->scaleImage(0, 400);
+        $image = $this->addWaterMark($image);
         $image->writeImage($medPath);
-        
+
         $image->scaleImage(0, 100);
         $image->writeImage($thumbPath);
-        
+
         switch ($return) {
             case "med":
                 return $medPath;
@@ -221,5 +223,32 @@ class PhotosTable extends BaseTable
                 return $imgPath;
                 break;
         }
+    }
+    
+    private function addWaterMark($image)
+    {
+        $watermark = new \Imagick();
+        $watermark->readImage($this->baseDir . DS .'watermark.png');
+        
+        $imageWidth = $image->getImageWidth();
+        $imageHeight = $image->getImageHeight();
+        $watermarkWidth = $watermark->getImageWidth();
+        $watermarkHeight = $watermark->getImageHeight();
+        
+        if ($imageHeight < $watermarkHeight || $imageWidth < $watermarkWidth) {
+            // resize the watermark
+            $watermark->scaleImage($imageWidth, $imageHeight);
+
+            // get new size
+            $watermarkWidth = $watermark->getImageWidth();
+            $watermarkHeight = $watermark->getImageHeight();
+        }
+
+        // calculate the position of the watermark
+        $x = ($imageWidth - $watermarkWidth) / 2;
+        $y = ($imageHeight - $watermarkHeight) / 2;
+//        $watermark->setImageOpacity(0.2);
+        $image->compositeImage($watermark, \imagick::COMPOSITE_OVER, $x, $y);
+        return $image;
     }
 }
