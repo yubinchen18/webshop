@@ -62,8 +62,10 @@
                         <?= $this->Form->label('type', __('Type'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
                             <?= $this->Form->select(
-                                    'type',
-                                    ['Student' => __('leerling'), 'Staff' => __('docent')],
+                                    'type', [
+                                        'student' => __('leerling'), 
+                                        'staff' => __('docent')
+                                    ],
                                     ['empty' => __('(Kies een type)')]
                                 );
                             ?>

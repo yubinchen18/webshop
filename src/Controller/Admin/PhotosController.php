@@ -96,21 +96,15 @@ class PhotosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
-    public function display($size, $id, $rotate = false)
+    public function display($size, $id)
     {
         $photo = $this->Photos->find()
               ->where(['id' => $id])
               ->first();
         
-        $file =     $this->Photos->getPath($photo->barcode_id) . DS . $size . DS .
-                    $photo->path;
+        $file = $this->Photos
+                ->getPath($photo->barcode_id) . DS . $size . DS . $photo->path;
         
-        if ($rotate) {
-            $orig_file = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-            $pic = new \Imagick($orig_file);
-            $file = $this->Photos->autoRotateImage($pic, $size);
-        }
-
         $this->response->type(['jpg' => 'image/jpeg']);
         $this->response->file($file, ['name' => 'path']);
         return $this->response;
