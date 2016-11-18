@@ -34,4 +34,10 @@ class Group extends Entity
         '*' => true,
         'id' => false,
     ];
+    
+    protected function _setName($name)
+    {
+        $this->set('slug', Text::slug($name));
+        return $name;
+    }
 }
