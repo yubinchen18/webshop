@@ -200,14 +200,18 @@ class PhotosTable extends BaseTable
 
         $thumbPath = $rawPath."thumbs".DS.$path;
         $medPath = $rawPath."med".DS.$path;
-
+        
+        //original
         $image->writeImage($imgPath);
-
-        $image->scaleImage(0, 400);
-        $imageMed = $this->addWaterMark($image);
+        
+        //medium
+        $imageMed = clone $image;
+        $imageMed->scaleImage(0, 400);
+        $imageMed = $this->addWaterMark($imageMed);
         new Folder($rawPath."med", true, 0777);
         $imageMed->writeImage($medPath);
 
+        //small
         $image->scaleImage(0, 100);
         new Folder($rawPath."thumbs", true, 0777);
         $image->writeImage($thumbPath);
