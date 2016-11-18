@@ -81,6 +81,10 @@ class AppController extends Controller
         $entity->url = $this->request->host() . $this->request->here;
         $entity->method = $this->request->method();
         
+        if(isset($this->request->data['Photo']['data'])) {
+            unset($this->request->data['Photo']['data']);
+        }
+        
         $request = json_encode($this->request->data());
         if ($this->request->method() == 'GET' &&
                 isset($this->request->params['model']) &&
