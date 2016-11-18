@@ -121,7 +121,6 @@ class DownloadqueuesController extends AppController
             if ($model == "Photos") {
                 $path = $this->Photos->getPath($data['barcode_id']);
                 $photoFile = base64_decode($data['data']);
-                unset($data['data']);
                 
                 $photoPath = $path . DS . basename($data['path']);
                 file_put_contents($photoPath, $photoFile);

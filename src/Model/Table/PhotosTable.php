@@ -198,8 +198,8 @@ class PhotosTable extends BaseTable
         $path = substr(strrchr($imgPath, DS), 1);
         $rawPath = str_replace($path, "", $imgPath);
 
-        $thumbPath = $rawPath.DS."thumbs".DS.$path;
-        $medPath = $rawPath.DS."med".DS.$path;
+        $thumbPath = $rawPath."thumbs".DS.$path;
+        $medPath = $rawPath."med".DS.$path;
         
         $image->writeImage($imgPath);
 
