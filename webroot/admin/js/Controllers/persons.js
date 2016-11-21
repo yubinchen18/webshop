@@ -1,14 +1,14 @@
 jQuery(function($) {
 
-    $( "#firstname" ).keydown(function() {
+    $( "#firstname" ).keyup(function() {
         setfullname();
     });
 
-    $( "#prefix" ).keydown(function() {
+    $( "#prefix" ).keyup(function() {
         setfullname();
     });
 
-    $( "#lastname" ).keydown(function() {
+    $( "#lastname" ).keyup(function() {
         setfullname();
     });
 
@@ -21,8 +21,8 @@ jQuery(function($) {
             hide: false,
             direct:true
         });
-
     };
+    
     $(".showstudents").show(function() {
         _this = this;
         var personsId = $('.persons-id', $(_this)).val();
