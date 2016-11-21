@@ -46,10 +46,16 @@
                             <ul class="breadcrumb">
                                 <li>
                                     <i class="ace-icon fa fa-home home-icon"></i>
-                                    <a href="#"> <?= __($this->request->params['controller']) ?></a>
+                                    <?php
+                                    if ($this->request->params['controller'] === 'Pages') {
+                                        echo $this->Html->link($this->request->params['controller'], array('controller' => 'pages', 'action' => 'display'));
+                                    } else {
+                                        echo $this->Html->link($this->request->params['controller'], array('controller' => $this->request->params['controller'], 'action' => 'index'));
+                                    }
+                                    ?>
                                 </li>
                                 <li>
-                                    <a href="#"><?= __($this->request->params['action']) ?></a>
+                                    <?= __($this->request->params['action']); ?>
                                 </li>
                             </ul>
                             
