@@ -42,29 +42,31 @@ class PhotosController extends AppController
         
         if ($this->request->is('post')) {
             if (!empty($data['school_id']) && empty($data['project_id']) && empty($data['group_id'])) {
-                $barcodes = $this->Photos->getBarcodesList('Persons.Groups.Projects.Schools', 'Schools.id', $data['school_id']);
-                $barcodes += $this->Photos->getBarcodesList('Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups.Projects.Schools', 'Schools.id', $data['school_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }            
             if (!empty($data['project_id']) && empty($data['group_id'])) {
-                $barcodes = $this->Photos->getBarcodesList('Persons.Groups.Projects', 'Projects.id', $data['project_id']);
-                $barcodes += $this->Photos->getBarcodesList('Groups.Projects', 'Projects.id', $data['project_id']);
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups.Projects', 'Projects.id', $data['project_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups.Projects', 'Projects.id', $data['project_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }
             if (!empty($data['group_id'])) {
-                $barcodes = $this->Photos->getBarcodesList('Persons.Groups', 'Groups.id', $data['group_id']);
-                $barcodes += $this->Photos->getBarcodesList('Groups', 'Groups.id', $data['group_id']);
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups', 'Groups.id', $data['group_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups', 'Groups.id', $data['group_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }
             
             if(!empty($data['school_id']))
             {
-                $projects = $this->Photos->getProjectsBySchoolId($data['school_id']);
+                $projects = $this->Photos->Barcodes->Persons->Groups->Projects->find('list')
+                    ->where(['Projects.school_id' => $data['school_id']]);
                 $projects = (count($projects->toArray()) == 0) ? [__('Geen projecten voor deze school')] : $projects;
             }
             if(!empty($data['project_id']))
             {
-                $groups = $this->Photos->getGroupsByProjectId($data['project_id']);
+                $groups = $this->Photos->Barcodes->Persons->Groups->find('list')
+                    ->where(['Groups.project_id' => $data['project_id']]);
                 $groups = (count($groups->toArray()) == 0) ? [__('Geen klassen voor dit project')] : $groups;
             }
         }
