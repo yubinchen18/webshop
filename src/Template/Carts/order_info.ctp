@@ -46,7 +46,7 @@
             </div>
         
             <div class="form-group row">
-                <div class='col-md-3'>
+                <div class='col-md-4'>
                     <?= $this->Form->input('zipcode', [
                         'label' => false,
                         'placeholder' => __('Postcode'),
@@ -58,12 +58,14 @@
                         'oninvalid' => 'setCustomValidity("'. __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'). '")',
                     ]); ?>
                 </div>
-                <div class='col-md-3'>
+                <div class='col-md-2'>
                     <?= $this->Form->input('number', [
                         'label' => false,
                         'placeholder' => __('Huisnummer'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'). '")',
                     ]); ?>
                 </div>
             </div>
@@ -71,12 +73,12 @@
                 <div class='col-md-10'>
                     <?= $this->Form->input('street', [
                         'label' => false,
-                        'placeholder' => __('Straatnaam, huisnummer en toevoeging'),
+                        'placeholder' => __('Straatnaam'),
                         'required' => true,
                         'class' => 'form-control',
                         'id' => 'order-info-street',
-                        'title' => __('Vul hier uw straatnaam en huisnummer met eventueel toevoeging in. Bijvoorbeeld: 1a'),
-                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam en huisnummer met eventueel toevoeging in. Bijvoorbeeld: 1a'). '")',
+                        'title' => __('Vul hier uw straatnaam.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam in.'). '")',
                     ]); ?>
                 </div>
             </div>
@@ -115,7 +117,7 @@
                         'required' => true,
                         'class' => 'form-control',
                         'title' => __('Vul hier uw telefoonnummer in.'),
-//                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw telefoonnummer in.'). '")',
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw telefoonnummer in.'). '")',
                     ]); ?>
                 </div>
             </div>
@@ -175,7 +177,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class='col-md-10'>
+                    <div class='col-md-4'>
                         <?= $this->Form->input('alternative.zipcode', [
                             'label' => false,
                             'placeholder' => __('Postcode'),
@@ -185,6 +187,16 @@
                             'pattern' => "[1-9][0-9]{3}\s?[a-zA-Z]{2}",
                             'title' => __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'),
                             'oninvalid' => 'setCustomValidity("'. __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'). '")',
+                        ]); ?>
+                    </div>
+                    <div class='col-md-2'>
+                        <?= $this->Form->input('alternative.number', [
+                            'label' => false,
+                            'placeholder' => __('Huisnummer'),
+                            'required' => false,
+                            'class' => 'form-control',
+                            'title' => __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'). '")',
                         ]); ?>
                     </div>
                 </div>
@@ -197,7 +209,7 @@
                             'class' => 'form-control',
                             'id' => 'order-info-alternative-street',
                             'title' => __('Vul hier uw straatnaam en huisnummer met eventueel toevoeging in. Bijvoorbeeld: 1a'),
-                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam en huisnummer met eventueel toevoeging in. Bijvoorbeeld: 1a'). '")',
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam in.'). '")',
                         ]); ?>
                     </div>
                 </div>
