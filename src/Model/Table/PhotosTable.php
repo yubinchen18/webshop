@@ -258,4 +258,25 @@ class PhotosTable extends BaseTable
         $image->compositeImage($watermark, \imagick::COMPOSITE_OVER, $x, $y);
         return $image;
     }
+    
+    public function getProjectsBySchoolId($schoolId)
+    {
+        if ($schoolId == null) {
+            return array();
+        }
+        
+        return $this->Barcodes->Persons->Groups->Projects->find('list')
+                    ->where(['Projects.school_id' => $schoolId]);
+            
+    }
+    
+    public function getGroupsByProjectId($projectId)
+    {
+        if ($projectId == null) {
+            return array();
+        }
+        
+        return $this->Barcodes->Persons->Groups->find('list')
+                    ->where(['Groups.project_id' => $projectId]);
+    }
 }

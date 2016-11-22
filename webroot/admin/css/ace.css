@@ -3340,10 +3340,6 @@ body.mob-safari .sidebar.sidebar-fixed {
     left: 190px;
     margin-left: -190px;
   }
-  
-  .navbar-toggle.menu-toggler {
-    display: block;
-  }
 }
 @media (min-width: 992px) and (max-width: 991px) {
   .sidebar.responsive.compact {

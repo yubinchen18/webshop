@@ -65,31 +65,9 @@
                     'rotate' => true
                 ])); ?></td>
                 <td class="col-lg-1"><?= h($photo->type) ?></td>
-                <td class="col-lg-3">
-                    <?php
-                    if (isset($photo->barcode->person)) {
-                        echo h($photo->barcode->person->full_name_sorted);
-                    }
-                    ?>
-                </td>
-                <td class="col-lg-2">
-                    <?php
-                    if (isset($photo->barcode->person)) {
-                        echo h($photo->barcode->person->group->project->name);
-                    } else {
-                        echo h($photo->barcode->group->project->name);
-                    }
-                    ?>                    
-                </td>
-                <td class="col-lg-2">
-                    <?php
-                    if (isset($photo->barcode->person)) {
-                        echo h($photo->barcode->person->group->name);
-                    } else {
-                        echo h($photo->barcode->group->name);
-                    }
-                    ?>
-                </td>
+                <td class="col-lg-3"><?php echo (isset($photo->barcode->person)) ? h($photo->barcode->person->full_name_sorted) : ''; ?></td>
+                <td class="col-lg-2"><?php echo (isset($photo->barcode->person)) ? h($photo->barcode->person->group->project->name) : h($photo->barcode->group->project->name); ?></td>
+                <td class="col-lg-2"><?php echo (isset($photo->barcode->person)) ? h($photo->barcode->person->group->name) : h($photo->barcode->group->name); ?></td>
                 <td class="col-lg-2 actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $photo->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $photo->id], ['confirm' => __('Are you sure you want to delete # {0}?', $photo->id)]) ?>

@@ -59,18 +59,16 @@ class PhotosController extends AppController
             
             if(!empty($data['school_id']))
             {
-                $projects = $this->Photos->Barcodes->Persons->Groups->Projects->find('list')
-                    ->where(['Projects.school_id' => $data['school_id']]);
+                $projects = $this->Photos->getProjectsBySchoolId($data['school_id']);
+                $projects = (count($projects->toArray()) == 0) ? [__('Geen projecten voor deze school')] : $projects;
             }
             if(!empty($data['project_id']))
             {
-                $groups = $this->Photos->Barcodes->Persons->Groups->find('list')
-                    ->where(['Groups.project_id' => $data['project_id']]);
+                $groups = $this->Photos->getGroupsByProjectId($data['project_id']);
+                $groups = (count($groups->toArray()) == 0) ? [__('Geen klassen voor dit project')] : $groups;
             }
         }
         
-        $projects = (count($projects) == 0) ? [__('Selecteer een school')] : $projects;
-        $groups = (count($groups) == 0) ? [__('Selecteer een project')] : $groups;        
         $photos = $this->paginate($query);
         
         $this->set(compact('photos', 'schools', 'projects', 'groups'));
