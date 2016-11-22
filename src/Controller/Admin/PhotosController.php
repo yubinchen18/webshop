@@ -42,18 +42,18 @@ class PhotosController extends AppController
         
         if ($this->request->is('post')) {
             if (!empty($data['school_id']) && empty($data['project_id']) && empty($data['group_id'])) {
-                $barcodes = $this->getBarcodesList('Persons.Groups.Projects.Schools', 'Schools.id', $data['school_id']);
-                $barcodes += $this->getBarcodesList('Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $barcodes = $this->Photos->getBarcodesList('Persons.Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $barcodes += $this->Photos->getBarcodesList('Groups.Projects.Schools', 'Schools.id', $data['school_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }            
             if (!empty($data['project_id']) && empty($data['group_id'])) {
-                $barcodes = $this->getBarcodesList('Persons.Groups.Projects', 'Projects.id', $data['project_id']);
-                $barcodes += $this->getBarcodesList('Groups.Projects', 'Projects.id', $data['project_id']);
+                $barcodes = $this->Photos->getBarcodesList('Persons.Groups.Projects', 'Projects.id', $data['project_id']);
+                $barcodes += $this->Photos->getBarcodesList('Groups.Projects', 'Projects.id', $data['project_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }
             if (!empty($data['group_id'])) {
-                $barcodes = $this->getBarcodesList('Persons.Groups', 'Groups.id', $data['group_id']);
-                $barcodes += $this->getBarcodesList('Groups', 'Groups.id', $data['group_id']);
+                $barcodes = $this->Photos->getBarcodesList('Persons.Groups', 'Groups.id', $data['group_id']);
+                $barcodes += $this->Photos->getBarcodesList('Groups', 'Groups.id', $data['group_id']);
                 $query->where(['Barcodes.id IN' => $barcodes]);
             }
             
@@ -73,23 +73,6 @@ class PhotosController extends AppController
         
         $this->set(compact('photos', 'schools', 'projects', 'groups'));
         $this->set('_serialize', ['photos']);
-    }
-    
-    private function getBarcodesList($matching, $field, $id)
-    {
-        $barcodes = $this->Photos->Barcodes->find('list', [
-                'keyField' => 'id', 
-                'valueField' => 'id'
-            ])
-            ->matching($matching, function($q) use ($field, $id) {
-                return $q->where([$field => $id]);
-            })
-            ->toArray();
-        
-        if ($barcodes) {
-            return $barcodes;
-        }
-        return ['empty' => 'empty'];
     }
 
     /**
