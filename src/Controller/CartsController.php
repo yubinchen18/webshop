@@ -148,6 +148,94 @@ class CartsController extends AppController
         $this->set(compact('issuers', 'cart'));
     }
     
+    public function confirm() {
+        $data = $this->request->data;
+        $dataJson = json_encode($data);
+        $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
+        $cart = $this->Carts->updatePrices($cart->id);
+        $this->loadComponent('CakeIdeal.CakeIdeal',[
+            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+        ]);
+        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+
+        $orderSubtotal = 0;
+        $groupSelectedArr = [];
+        $totalDigitalPacks = 0;
+        //add the orientation data to the photos array in cart
+        if (!empty($cart->cartlines)) {
+            foreach ($cart->cartlines as $cartline) {
+                //add the orientation data to the photos array
+                $filePath = $this->Carts->Cartlines->Photos->getPath($cartline->photo->barcode_id) . DS . $cartline->photo->path;
+                $dimensions = getimagesize($filePath);
+                if ($dimensions[0] > $dimensions[1]) {
+                    $orientationClass = 'photos-horizontal';
+                } else {
+                    $orientationClass = 'photos-vertical';
+                }
+                $cartline->photo->orientationClass = $orientationClass;
+                //create tmp product preview images
+                $imageHandler = new ImageHandler();
+                $filter = $this->Carts->Cartlines->getFilter($cartline->id);
+                $image = $imageHandler->createProductPreview($cartline->photo, $cartline->product->product_group, [
+                    'resize' => ['width' => 200, 'height' => 180],
+                    'layout' => !empty($cartline->product->layout) ? $cartline->product->layout : 'all',
+                    'filter' => $filter
+                ]);
+                //add the image data to product object and calc subtotal price
+                $cartline->product->image = $image[0];
+                $cartline->discountPrice = Configure::read('DiscountPrice');
+                if(!empty($userDiscounts[$cartline->photo->barcode->person->user_id]) && $cartline->product->has_discount === 1) {
+                    $cartline->product->price_ex = Configure::read('DiscountPrice');
+                }
+                
+                if($cartline->product->has_discount === 1) {
+                    $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
+                }
+                
+                if ($cartline->product->article === "DPack") { $totalDigitalPacks++; }
+                if ($cartline->product->article === "GAF 13x19") {
+                    $groupSelectedArr[$cartline->gift_for] = true;
+                }
+            }
+        }
+        
+        $totals = $this->Carts->getCartTotals($cart->id);
+        $orderSubtotal = $totals['products'];
+        $shippingCost = $totals['shippingcosts'];
+        $orderTotal = $orderSubtotal + $shippingCost;
+        $discount = $totals['discount'];
+        $freeGroupPicturesSelected = (count($groupSelectedArr) >= $totalDigitalPacks) ? true : false;
+
+        $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'freeGroupPicturesSelected', 'groupSelectedArr', 'data', 'dataJson', 'issuers'));
+    }
+    
+    public function zipcode($zipcode = null) {
+        $uri = 'https://postcode-api.apiwise.nl/v2/addresses?postcode='.$zipcode;
+        $apiKey = 'ab5paH09Er69bseA1fJnF6G94r0pV1Kg9G4Gv9p8';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $uri);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Api-Key: ' . $apiKey));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response, true);
+        if (empty($response)) {
+            die;
+        }
+        $firstAddress = isset($response['_embedded']['addresses'][0]) ? $response['_embedded']['addresses'][0] : false;
+        $return = array(
+                'success' => (bool) $firstAddress,
+            'street' => !empty($firstAddress['street']) ? $firstAddress['street'] : '',
+            'town' => !empty($firstAddress['city']['label']) ? $firstAddress['city']['label'] : ''
+        );
+
+        echo json_encode($return);
+        die;
+    }
+    
     public function display()
     {
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
@@ -170,9 +258,11 @@ class CartsController extends AppController
                 $cartline->photo->orientationClass = $orientationClass;
                 //create tmp product preview images
                 $imageHandler = new ImageHandler();
+                $filter = $this->Carts->Cartlines->getFilter($cartline->id);
                 $image = $imageHandler->createProductPreview($cartline->photo, $cartline->product->product_group, [
                     'resize' => ['width' => 200, 'height' => 180],
-                    'layout' => $cartline->product->layout
+                    'layout' => !empty($cartline->product->layout) ? $cartline->product->layout : 'all',
+                    'filter' => $filter
                 ]);
                 //add the image data to product object and calc subtotal price
                 $cartline->product->image = $image[0];
@@ -201,7 +291,7 @@ class CartsController extends AppController
 
         $this->set(compact('cart', 'discount','orderSubtotal', 'orderTotal', 'shippingCost', 'freeGroupPicturesSelected', 'groupSelectedArr'));
     }
-    
+        
     public function update()
     {
         if ($this->request->is('ajax') && !empty($this->request->data)) {

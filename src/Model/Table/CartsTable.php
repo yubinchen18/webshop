@@ -166,6 +166,13 @@ class CartsTable extends Table
          
          $cart = $this->get($cart_id,[
              'contain' => [
+                'Cartlines' => function($q) {
+                    return $q
+                        ->order(['Cartlines.created'])
+                        ->contain([
+                            'CartlineProductoptions.ProductoptionChoices.Productoptions'
+                        ]);
+                },
                  'Cartlines.Products',
                  'Cartlines.Photos.Barcodes.Persons'
              ]

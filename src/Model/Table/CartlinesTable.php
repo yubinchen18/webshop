@@ -119,4 +119,17 @@ class CartlinesTable extends Table
         }
         return $cartline;
     }
+    
+    public function getFilter($cartlineId) {
+        $filter = $this->find()
+            ->where(['Cartlines.id' => $cartlineId])
+            ->matching('CartlineProductoptions.ProductoptionChoices.Productoptions', function ($q) {
+                return $q->where(['Productoptions.name' => 'kleurbewerking']);
+            })
+            ->first();
+        if (!empty($filter)) {
+            return $filter->_matchingData['ProductoptionChoices']->value;
+        }
+        return $filter;
+    }
 }

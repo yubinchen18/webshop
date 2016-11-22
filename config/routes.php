@@ -297,6 +297,14 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'orderInfo'
     ]);
+    $routes->connect('/carts/confirm', [
+        'controller' => 'Carts',
+        'action' => 'confirm'
+    ]);
+    $routes->connect('/carts/zipcode/:zipcode', 
+        ['controller' => 'Carts', 'action' => 'zipcode'],
+        ['zipcode', 'pass' => ['zipcode']]
+    );
     $routes->connect('/orders/:action',
             ['controller' => 'Orders'],
             []);

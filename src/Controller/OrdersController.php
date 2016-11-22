@@ -38,8 +38,7 @@ class OrdersController extends AppController
         $this->Carts = TableRegistry::get('Carts');
         $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
         $totals = $this->Carts->getCartTotals($cart->id);
-        $data = $this->request->data;
-     
+        $data = json_decode($this->request->data['orderData'], true);
         $invAddress = $this->Orders->Invoiceaddresses->getAddressId($data);
         if($data['different-address'] == 1) {
             $deliveryAddress = $this->Orders->Deliveryaddresses->getAddressId($data['alternative']);
