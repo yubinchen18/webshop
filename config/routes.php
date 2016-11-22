@@ -219,6 +219,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
         $routes->connect('/', ['controller' => 'Pages', 'action' => 'display']);
+        
+        $routes->fallbacks('InflectedRoute');
     });
     
     $routes->extensions(['csv','json']);

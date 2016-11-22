@@ -28,3 +28,9 @@ th{
 .right-fix {
     margin-right:15px;
 }
+
+@media only screen and (max-width: 991px) {
+    .navbar-toggle.menu-toggler {
+        display: block;
+    }
+}

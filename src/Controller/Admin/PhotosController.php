@@ -19,37 +19,55 @@ class PhotosController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Barcodes.Persons.Groups.Projects'],
+        $this->paginate = array(
+            'contain' => array(
+                'Barcodes.Persons.Groups.Projects',
+                'Barcodes.Groups.Projects'
+            ),
             'limit' => 24,
-            'order' => [
+            'order' => array(
                 'Photos.created'
-            ]
-        ];
+            )
+        );
         
-        $schools = $this->Photos->Barcodes->Persons->Groups->Projects->Schools
-                ->find('list');
-        
+        $schools = $this->Photos->Barcodes->Persons->Groups->Projects->Schools->find('list');        
         $projects = [__('Selecteer een school')];
         $groups = [__('Selecteer een project')];
+        $data = $this->request->data;
+        $query = $this->Photos->find()
+            ->contain([
+                'Barcodes.Persons.Groups.Projects',
+                'Barcodes.Groups.Projects'
+            ]);
         
-        $query = $this->Photos->find();
         if ($this->request->is('post')) {
-            if (!empty($this->request->data['school_id'])) {
-                $query->where(['Projects.school_id' => $this->request->data['school_id']]);
-                $projects = $this->Photos->Barcodes->Persons->Groups->Projects
-                        ->find('list')
-                        ->where(['Projects.school_id' => $this->request->data['school_id']]);
+            if (!empty($data['school_id']) && empty($data['project_id']) && empty($data['group_id'])) {
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups.Projects.Schools', 'Schools.id', $data['school_id']);
+                $query->where(['Barcodes.id IN' => $barcodes]);
+            }            
+            if (!empty($data['project_id']) && empty($data['group_id'])) {
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups.Projects', 'Projects.id', $data['project_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups.Projects', 'Projects.id', $data['project_id']);
+                $query->where(['Barcodes.id IN' => $barcodes]);
+            }
+            if (!empty($data['group_id'])) {
+                $barcodes = $this->Photos->Barcodes->getBarcodesList('Persons.Groups', 'Groups.id', $data['group_id']);
+                $barcodes += $this->Photos->Barcodes->getBarcodesList('Groups', 'Groups.id', $data['group_id']);
+                $query->where(['Barcodes.id IN' => $barcodes]);
             }
             
-            if (!empty($this->request->data['project_id'])) {
-                $query->andWhere(['Projects.id' => $this->request->data['project_id']]);
-                $groups = $this->Photos->Barcodes->Persons->Groups
-                        ->find('list')
-                        ->where(['Groups.project_id' => $this->request->data['project_id']]);
+            if(!empty($data['school_id']))
+            {
+                $projects = $this->Photos->Barcodes->Persons->Groups->Projects->find('list')
+                    ->where(['Projects.school_id' => $data['school_id']]);
+                $projects = (count($projects->toArray()) == 0) ? [__('Geen projecten voor deze school')] : $projects;
             }
-            if (!empty($this->request->data['group_id'])) {
-                $query->andWhere(['Groups.id' => $this->request->data['group_id']]);
+            if(!empty($data['project_id']))
+            {
+                $groups = $this->Photos->Barcodes->Persons->Groups->find('list')
+                    ->where(['Groups.project_id' => $data['project_id']]);
+                $groups = (count($groups->toArray()) == 0) ? [__('Geen klassen voor dit project')] : $groups;
             }
         }
         
