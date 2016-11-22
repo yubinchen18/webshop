@@ -51,8 +51,11 @@ class PersonsController extends AppController
      */
     public function add()
     {
-        $person = $this->Persons->newEntity();
-        $groups = $this->Persons->Groups->find('list');
+        $schools = $this->Persons->Groups->Projects->Schools->find('list');
+        $projects = [__('Selecteer een school')];
+        $groups = [__('Selecteer een project')];
+        
+        $person = $this->Persons->newEntity();        
         if ($this->request->is('post')) {
             if (!empty($this->request->data['user']['password'])) {
                 $this->request->data['user']['genuine'] = $this->request->data['user']['password'];
@@ -66,7 +69,7 @@ class PersonsController extends AppController
                 $this->Flash->error(__('De persoon kon niet opgeslagen worden. Probeer het nogmaals.'));
             }
         }
-        $this->set(compact('person', 'groups', 'barcodes'));
+        $this->set(compact('person', 'groups', 'barcodes', 'schools', 'projects', 'groups'));
     }
 
     /**
