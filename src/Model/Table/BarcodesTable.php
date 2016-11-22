@@ -131,4 +131,21 @@ class BarcodesTable extends BaseTable
 
         return [$object, $barcodeId];
     }
+    
+    public function getBarcodesList($matching, $field, $id)
+    {
+        $barcodes = $this->find('list', [
+                'keyField' => 'id', 
+                'valueField' => 'id'
+            ])
+            ->matching($matching, function($q) use ($field, $id) {
+                return $q->where([$field => $id]);
+            })
+            ->toArray();
+        
+        if ($barcodes) {
+            return $barcodes;
+        }
+        return ['empty' => 'empty'];
+    }
 }

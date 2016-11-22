@@ -69,16 +69,25 @@
                             ?>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                       <?= $this->Form->label('school_id', __('School'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                        <div class="col-sm-9">
+                            <?= $this->Form->input('school_id', ['label' => false, 'options' => $schools, 'empty' => __('Kies een school')]); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                       <?= $this->Form->label('project_id', __('Project'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                        <div class="col-sm-9">
+                            <?= $this->Form->input('project_id', ['label' => false, 'options' => $projects]); ?>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <?= $this->Form->label('group_id', __('Klas'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'group_id',
-                                    $groups,
-                                    ['empty' => __('(Kies een klas)')]
-                                );
-                            ?>
+                            <?= $this->Form->input('group_id', ['label' => false, 'options' => $groups]); ?>
                         </div>
                     </div>
 

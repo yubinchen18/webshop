@@ -542,7 +542,7 @@ cancelled
             ->addColumn('deleted', 'datetime', [
                 'default' => null,
                 'limit' => null,
-                'null' => false,
+                'null' => true,
             ])
             ->create();
 
