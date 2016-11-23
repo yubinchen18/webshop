@@ -41,13 +41,13 @@ class UsersController extends AppController
                 $extraUser = $this->Auth->identify();
                 if ($extraUser) {
                     //check for duplicate users
-                    if (in_array($extraUser['id'], $loggedInUsers)) {
-                        $this->Flash->set(__('Kind al ingelogd.'), [
-                            'element' => 'default',
-                            'params' => ['class' => 'error']
-                        ], 'auth');
-                        return $this->redirect($this->Auth->config('loginAction'));
-                    }
+//                    if (in_array($extraUser['id'], $loggedInUsers)) {
+//                        $this->Flash->set(__('Kind al ingelogd.'), [
+//                            'element' => 'default',
+//                            'params' => ['class' => 'error']
+//                        ], 'auth');
+//                        return $this->redirect($this->Auth->config('loginAction'));
+//                    }
                     //write all users to session key
                     $loggedInUsers[] = $extraUser['id'];
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
