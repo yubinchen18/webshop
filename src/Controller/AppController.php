@@ -93,12 +93,12 @@ class AppController extends Controller
         }
         
         $this->Carts = TableRegistry::get('Carts');
-        $cart = $this->Carts->find('byUserid',['user_id' => $this->Auth->user('id')]);
-        if($cart) {
+        $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')]);
+        if ($cart) {
             $cart = $cart->first();
-            if(!empty($cart['cartlines'])) {
+            if (!empty($cart['cartlines'])) {
                 $cartcount = 0;
-                foreach($cart['cartlines'] as $line) {
+                foreach ($cart['cartlines'] as $line) {
                     $cartcount += $line['quantity'];
                 }
                 $this->set(compact('cartcount'));

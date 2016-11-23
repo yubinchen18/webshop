@@ -31,9 +31,9 @@ class DownloadqueuesController extends AppController
         $DownloadQueueItems = [];
         foreach ($downloadqueueitems as $queueitem) {
             $model = Inflector::singularize($queueitem->model);
-            if(!isset($queueitem->{strtolower($model)})) {
+            if (!isset($queueitem->{strtolower($model)})) {
                 continue;
-            } 
+            }
             $item = [
                 'Id' => $queueitem->id,
                 'Model' => $model,
@@ -132,7 +132,7 @@ class DownloadqueuesController extends AppController
            
             if (empty($data['online_id'])) { //new
                 unset($data['id']);
-                if($model == "Persons") {
+                if ($model == "Persons") {
                     $data['user_id'] = $this->Users->newUser($data);
                     $this->result['user_id'] = $data['user_id'];
                 }
@@ -144,7 +144,7 @@ class DownloadqueuesController extends AppController
                     $this->Persons->processPersons($data);
                 }
                 $entity = $this->{$model}->get($data['id']);
-		unset($data['id']);
+                unset($data['id']);
                 $entity = $this->{$model}->patchEntity($entity, $data);
             }
             
@@ -152,7 +152,7 @@ class DownloadqueuesController extends AppController
             
             if (!$savedEntity) {
                 var_dump($entity->errors());
-		die();
+                die();
             }
             $objectId = $savedEntity->id;
             $this->result['id'] = $objectId;

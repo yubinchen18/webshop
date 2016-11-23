@@ -6,6 +6,7 @@ use Cake\TestSuite\TestCase;
 use Cake\Controller\Exception\AuthSecurityException;
 use Cake\Network\Request;
 use Cake\Network\Response;
+
 /**
  * App\View\Cell\SidebarCell Test Case
  */

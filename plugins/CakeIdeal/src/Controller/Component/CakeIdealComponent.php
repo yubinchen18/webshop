@@ -3,20 +3,21 @@ namespace CakeIdeal\Controller\Component;
 
 use Cake\Controller\Component;
 
-class CakeIdealComponent extends Component {
+class CakeIdealComponent extends Component
+{
 
     /**
      * The socket connection we use to connect
      * to the iDeal server.
-     * 
+     *
      * @access private
-     * @var resource 
+     * @var resource
      */
     private $connection = null;
 
     /**
      * An array with error messages
-     * 
+     *
      * @access public
      * @var array
      */
@@ -28,9 +29,9 @@ class CakeIdealComponent extends Component {
 
     /**
      * The default settings.
-     * 
+     *
      * @access public
-     * @var array 
+     * @var array
      */
     public $defaults = array(
         'authenticationType' => 'SHA1_RSA', // Authentication type to use
@@ -53,18 +54,20 @@ class CakeIdealComponent extends Component {
 
     /**
      * Initialize the component.
-     * 
+     *
      * @access public
      * @param AppController $controller
      * @param array $settings
      * @return void
      */
-    public function __construct($collection, $settings = array()) {
+    public function __construct($collection, $settings = array())
+    {
         if (empty($settings['certificatesFolder'])) {
-            $settings['certificatesFolder'] = dirname(dirname(dirname(__FILE__))) . DS . 'Config' . DS . 'certificates' . DS;
+            $settings['certificatesFolder'] =
+            dirname(dirname(dirname(__FILE__))) . DS . 'Config' . DS . 'certificates' . DS;
         }
 
-        // Merge the given settings with the default.        
+        // Merge the given settings with the default.
         $settings = array_merge($this->defaults, $settings);
 
         // Call the parent constructor if this is a CakePHP component
@@ -78,11 +81,12 @@ class CakeIdealComponent extends Component {
 
     /**
      * Close the connection with the iDeal server.
-     * 
+     *
      * @access private
      * @return void
      */
-    private function closeConnection() {
+    private function closeConnection()
+    {
         if ($this->connection != null) {
             fclose($this->connection);
             $this->connection = null;
@@ -91,13 +95,15 @@ class CakeIdealComponent extends Component {
 
     /**
      * Create a fingerprint based on the certificate.
-     * 
+     *
      * @access private
      * @param boolean $isPublicCertificate Private or Public certificate
      * @return string
      */
-    private function createCertFingerprint($isPublicCertificate = false) {
-        $certificateFile = ($isPublicCertificate) ? $this->settings['acquirersCertificate'] : $this->settings['privateCert'];
+    private function createCertFingerprint($isPublicCertificate = false)
+    {
+        $certificateFile = ($isPublicCertificate) ?
+            $this->settings['acquirersCertificate'] : $this->settings['privateCert'];
         $fullPath = $this->settings['certificatesFolder'] . $certificateFile;
 
         if ($isPublicCertificate == false && !file_exists($fullPath)) {
@@ -121,12 +127,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * This method creates that base for the XML document.
-     * 
+     *
      * @access public
      * @param string $rootName The name for the root node.
      * @return DOMDocument
      */
-    private function createDocument($rootName) {
+    private function createDocument($rootName)
+    {
         $doc = new \DOMDocument('1.0', 'UTF-8');
 
         // Create the the root element.
@@ -144,32 +151,35 @@ class CakeIdealComponent extends Component {
 
     /**
      * Alias for sendDirectoryRequest.
-     * 
+     *
      * @access public
      * @return array List of available issuers
      */
-    public function getIssuers() {
+    public function getIssuers()
+    {
         return $this->sendDirectoryRequest();
     }
 
     /**
      * Generates a message digest.
-     * 
+     *
      * @access private
      * @param DOMDocument $doc
      * @return string
      */
-    private function getMessageDigest($doc) {
+    private function getMessageDigest($doc)
+    {
         return base64_encode(hash('sha256', $doc->C14N(false), true));
     }
 
     /**
      * Open a new connection.
-     * 
+     *
      * @access private
      * @return void
      */
-    private function openConnection() {
+    private function openConnection()
+    {
         if ($this->connection != null) {
             $this->closeConnection();
         }
@@ -192,11 +202,12 @@ class CakeIdealComponent extends Component {
 
     /**
      * Method that converts an XML document to an array.
-     * 
+     *
      * @param DOMElement $root
      * @return array The XML as an array
      */
-    private function xmlToArray($root) {
+    private function xmlToArray($root)
+    {
         $result = array();
 
         if ($root->hasAttributes()) {
@@ -234,11 +245,12 @@ class CakeIdealComponent extends Component {
 
     /**
      * Send a directory request.
-     * 
+     *
      * @access public
      * @return array
      */
-    public function sendDirectoryRequest() {
+    public function sendDirectoryRequest()
+    {
         // Create a new document for the message.
         $doc = $this->createDocument('DirectoryReq');
         $rootElement = $doc->firstChild;
@@ -262,7 +274,7 @@ class CakeIdealComponent extends Component {
         $issuers = array();
         foreach ($countries as $country) {
             $issuers[$country['countryNames']] = array();
-            foreach($country['Issuer'] as $issuerData) {
+            foreach ($country['Issuer'] as $issuerData) {
                 $issuers[$country['countryNames']][$issuerData['issuerID']] = $issuerData['issuerName'];
             }
         }
@@ -272,12 +284,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Send a request to the acquirer's server.
-     * 
+     *
      * @access private
      * @param string $request
      * @return array
      */
-    private function sendRequest($doc) {
+    private function sendRequest($doc)
+    {
         if (!$this->openConnection()) {
             return false;
         }
@@ -321,7 +334,12 @@ class CakeIdealComponent extends Component {
 
         // Throw an exception if the acquirer return an error.
         if (empty($resultAsArray) || !empty($resultAsArray['AcquirerErrorRes'])) {
-            throw new \Exception(sprintf('%s: %s. %s', $resultAsArray['AcquirerErrorRes']['Error']['errorCode'], $resultAsArray['AcquirerErrorRes']['Error']['errorMessage'], $resultAsArray['AcquirerErrorRes']['Error']['errorDetail']));
+            throw new \Exception(sprintf(
+                '%s: %s. %s',
+                $resultAsArray['AcquirerErrorRes']['Error']['errorCode'],
+                $resultAsArray['AcquirerErrorRes']['Error']['errorMessage'],
+                $resultAsArray['AcquirerErrorRes']['Error']['errorDetail']
+            ));
         }
         
         
@@ -336,12 +354,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Send a status request.
-     * 
+     *
      * @access public
      * @param $data
      * @return array
      */
-    public function sendStatusRequest($data) {
+    public function sendStatusRequest($data)
+    {
         // Create a new document for the message.
         $doc = $this->createDocument('AcquirerStatusReq');
         $rootElement = $doc->firstChild;
@@ -373,12 +392,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Send a transaction request.
-     * 
+     *
      * @access public
      * @param array $data
      * @return array
      */
-    public function sendTransactionRequest($data) {
+    public function sendTransactionRequest($data)
+    {
         // Check some items and set the defaults if an item is not set
         foreach (array('currency', 'expirationPeriod', 'language') as $item) {
             if (empty($data['Transaction'][$item])) {
@@ -410,7 +430,9 @@ class CakeIdealComponent extends Component {
         $transactionElement->appendChild($doc->createElement('purchaseID', $data['Transaction']['purchaseId']));
         $transactionElement->appendChild($doc->createElement('amount', $data['Transaction']['amount']));
         $transactionElement->appendChild($doc->createElement('currency', $data['Transaction']['currency']));
-        $transactionElement->appendChild($doc->createElement('expirationPeriod', $data['Transaction']['expirationPeriod']));
+        $transactionElement->appendChild(
+            $doc->createElement('expirationPeriod', $data['Transaction']['expirationPeriod'])
+        );
         $transactionElement->appendChild($doc->createElement('language', $data['Transaction']['language']));
         $transactionElement->appendChild($doc->createElement('description', $data['Transaction']['description']));
         $transactionElement->appendChild($doc->createElement('entranceCode', $data['Transaction']['entranceCode']));
@@ -430,12 +452,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Signes the XML request and creates the signature block that is suposed to be included in to the request.
-     * 
+     *
      * @access private
      * @param DOMDocument $doc
      * @return string
      */
-    private function signRequest($doc = null) {
+    private function signRequest($doc = null)
+    {
         $signatureElement = $doc->createElement('Signature');
         $signatureElement->setAttribute('xmlns', 'http://www.w3.org/2000/09/xmldsig#');
 
@@ -488,12 +511,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Sign a message with the private certificate data.
-     * 
+     *
      * @access private
      * @param DOMDocument $data
      * @return string
      */
-    private function getMessageSignature($signedInfoElement) {
+    private function getMessageSignature($signedInfoElement)
+    {
         $privateKeyFile = $this->settings['certificatesFolder'] . $this->settings['privateKey'];
         if (!file_exists($privateKeyFile)) {
             throw new \Exception(sprintf($this->errorMessages['CERTIFICATE_NOT_FOUND'], $privateKeyFile));
@@ -519,12 +543,13 @@ class CakeIdealComponent extends Component {
 
     /**
      * Validates the xml signature against the ideal certificate and checks the message digest
-     * 
+     *
      * @access private
      * @param string $response
      * @return true on valid false on invalid
      */
-    private function verifyResponse($doc) {
+    private function verifyResponse($doc)
+    {
         $xpath = new \DOMXpath($doc);
         $xpath->registerNamespace("ns1", "http://www.idealdesk.com/ideal/messages/mer-acq/3.3.1");
         $xpath->registerNamespace("ns2", "http://www.w3.org/2000/09/xmldsig#");
@@ -560,11 +585,12 @@ class CakeIdealComponent extends Component {
 
         // If not the same
         if (openssl_verify($signedInfo, $signature, $publicKey, 'SHA256') !== 1) {
-            
             return false;
         }
 
-        $digestValue = (string) $xpath->query('//ns2:Signature/ns2:SignedInfo/ns2:Reference/ns2:DigestValue')->item(0)->nodeValue;
+        $digestValue = (string) $xpath->query(
+            '//ns2:Signature/ns2:SignedInfo/ns2:Reference/ns2:DigestValue'
+        )->item(0)->nodeValue;
 
         // Remove signature from message
         $doc->firstChild->removeChild($xpath->query('//ns2:Signature')->item(0));
@@ -575,6 +601,4 @@ class CakeIdealComponent extends Component {
 
         return true;
     }
-
 }
-?>

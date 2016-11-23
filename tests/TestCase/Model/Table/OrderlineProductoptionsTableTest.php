@@ -57,7 +57,8 @@ class OrderlineProductoptionsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('OrderlineProductoptions') ? [] : ['className' => 'App\Model\Table\OrderlineProductoptionsTable'];
+        $config = TableRegistry::exists('OrderlineProductoptions') ?
+            [] : ['className' => 'App\Model\Table\OrderlineProductoptionsTable'];
         $this->OrderlineProductoptions = TableRegistry::get('OrderlineProductoptions', $config);
     }
 

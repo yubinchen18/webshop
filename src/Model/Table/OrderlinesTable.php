@@ -86,5 +86,4 @@ class OrderlinesTable extends Table
 
         return $rules;
     }
-    
 }

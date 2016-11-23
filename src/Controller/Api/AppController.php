@@ -72,9 +72,9 @@ class AppController extends Controller
 
     private function saveRequest()
     {
-	if(empty($this->getUser())) {
-		return true;
-	}
+        if (empty($this->getUser())) {
+            return true;
+        }
         $this->Logs = TableRegistry::get('Logs');
         $entity = $this->Logs->newEntity();
         $entity->username = $this->getUser();

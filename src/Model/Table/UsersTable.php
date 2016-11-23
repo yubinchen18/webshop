@@ -148,11 +148,11 @@ class UsersTable extends Table
         return [$object, $userId];
     }
 
-    public function newUser($data) 
+    public function newUser($data)
     {
         $user = $this->newEntity();
         
-        $username = substr($data['firstname'],0,4) . substr($data['zipcode'],0,2). substr($data['type'],1,3);
+        $username = substr($data['firstname'], 0, 4) . substr($data['zipcode'], 0, 2). substr($data['type'], 1, 3);
         $password = $this->generateRandom();
         $data = [
             'username' => $this->checkUsername($username),
@@ -164,7 +164,6 @@ class UsersTable extends Table
         $user = $this->save($user);
         
         return $user->id;
-        
     }
     
     public function checkUsername($username)

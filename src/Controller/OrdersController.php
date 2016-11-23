@@ -9,6 +9,7 @@ use App\Lib\ImageHandler;
 use ZipArchive;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+
 /**
  * Orders Controller
  *
@@ -20,7 +21,7 @@ class OrdersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('CakeIdeal.CakeIdeal',[
+        $this->loadComponent('CakeIdeal.CakeIdeal', [
             'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
         ]);
     }
@@ -32,7 +33,7 @@ class OrdersController extends AppController
      */
     public function add()
     {
-        if(!$this->request->is('post')) {
+        if (!$this->request->is('post')) {
             throw new BadRequestException();
         }
         $this->Carts = TableRegistry::get('Carts');
@@ -40,7 +41,7 @@ class OrdersController extends AppController
         $totals = $this->Carts->getCartTotals($cart->id);
         $data = json_decode($this->request->data['orderData'], true);
         $invAddress = $this->Orders->Invoiceaddresses->getAddressId($data);
-        if($data['different-address'] == 1) {
+        if ($data['different-address'] == 1) {
             $deliveryAddress = $this->Orders->Deliveryaddresses->getAddressId($data['alternative']);
         }
         $orderData = [
@@ -53,30 +54,30 @@ class OrdersController extends AppController
             'orders_orderstatuses' => [
                 [
                     'orderstatus_id' => $this->Orders->OrdersOrderstatuses
-                                            ->Orderstatuses->find('byAlias',['alias' => 'new'])
+                                            ->Orderstatuses->find('byAlias', ['alias' => 'new'])
                                             ->first()->id,
                     'user_id' => $this->Auth->user('id')
                 ]
             ]
         ];
         
-        $order = $this->Orders->newEntity($orderData);    
-        if(!($order = $this->Orders->save($order, ['associated' => 'OrdersOrderstatuses']))) {
+        $order = $this->Orders->newEntity($orderData);
+        if (!($order = $this->Orders->save($order, ['associated' => 'OrdersOrderstatuses']))) {
             $this->Flash->error(__("Uw bestelling kon niet worden opgeslagen"));
             return $this->redirect(['controller' => 'carts', 'action' => 'orderInfo']);
         }
       
-        foreach($cart->cartlines as $line) {
+        foreach ($cart->cartlines as $line) {
             $productoptions = [];
-            foreach($line->cartline_productoptions as $option) {
+            foreach ($line->cartline_productoptions as $option) {
                 $productoptions[] = ['productoption_choice_id' => $option->productoption_choice_id];
             }
             
             $lineprice = 0;
-            if($line->product->has_discount === 1) {
+            if ($line->product->has_discount === 1) {
                 $line->discountprice = 3.78;
                 $lineprice = $line->product->price_ex;
-                for($n=2;$n<=$line->quantity;$n++) {
+                for ($n=2; $n<=$line->quantity; $n++) {
                     $lineprice += 3.78;
                 }
             }
@@ -92,16 +93,16 @@ class OrdersController extends AppController
                 'photo_id' => $line->photo_id,
                 'product_id' => $line->product_id,
             ];
-            if(!empty($productoptions)) {
+            if (!empty($productoptions)) {
                 $orderline['orderline_productoptions'] = $productoptions;
             }
             
             $line = $this->Orders->Orderlines->newEntity($orderline, ['associated' => ['OrderlineProductoptions']]);
-            if(!$this->Orders->Orderlines->save($line)) {
+            if (!$this->Orders->Orderlines->save($line)) {
                 $this->Orders->delete($order);
                 $this->Flash->error(__("Uw bestelling kon niet worden opgeslagen"));
                 return $this->redirect(['controller' => 'carts', 'action' => 'orderInfo']);
-            }      
+            }
         }
         switch ($order->payment_method) {
             default:
@@ -110,7 +111,7 @@ class OrdersController extends AppController
                 
             case "ideal":
                 $this->request->session()->write('order', $order);
-                $this->request->session()->write('ideal-issuer', $this->request->data['issuerId']);
+                $this->request->session()->write('ideal-issuer', $data['issuerId']);
                 return $this->redirect(['controller' => 'orders', 'action' => 'payment']);
                 break;
         }
@@ -122,7 +123,7 @@ class OrdersController extends AppController
         $order = $this->request->session()->read('order');
         $ordertotal = ($order->totalprice + $order->shippingcosts);
         
-        if(empty($issuer) || empty($order)) {
+        if (empty($issuer) || empty($order)) {
             $this->Flash->error(__("Niet alle benodigde gegevens zijn ingevuld"));
             return $this->redirect(['controller' => 'Carts', 'action' => 'orderInfo']);
         }
@@ -161,24 +162,27 @@ class OrdersController extends AppController
         
         $result = $this->CakeIdeal->sendStatusRequest($data);
         
-        if($result['Transaction']['status'] == 'Success') {
+        if ($result['Transaction']['status'] == 'Success') {
             $trx['ideal_status'] = 'Success';
             $trx['orders_orderstatuses'] = [
                 [
                     'orderstatus_id' => $this->Orders->OrdersOrderstatuses
-                                            ->Orderstatuses->find('byAlias',['alias' => 'payment_received'])
+                                            ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
                                             ->first()->id,
                     'user_id' => $this->Auth->user('id')
                 ]
             ];
             $this->Orders->patchEntity($order, $trx);
-            if($this->Orders->save($order, ['associated' => 'OrdersOrderstatuses'])) {
+            if ($this->Orders->save($order, ['associated' => 'OrdersOrderstatuses'])) {
                 $this->Flash->success(__('Uw betaling is succesvol verwerkt'));
                 return $this->redirect(['controller' => 'orders', 'action' => 'success']);
             }
             
-            @mail('support@xseeding.nl','iDeal betaling niet opgeslagen',
-                    'Een ideal betaling kon niet verwerkt worden.<br/> Hoogstraten ' . __FILE__);
+            @mail(
+                'support@xseeding.nl',
+                'iDeal betaling niet opgeslagen',
+                'Een ideal betaling kon niet verwerkt worden.<br/> Hoogstraten ' . __FILE__
+            );
             $this->Flash->success(__('Uw betaling is verwerkt, maar kon niet worden doorgevoerd in het systeem\n'
                     . 'Er is een servicebericht verzonden naar de systeembeheerder'));
             return $this->redirect(['controller' => 'orders', 'action' => 'success']);
@@ -188,7 +192,7 @@ class OrdersController extends AppController
         $trx['orders_orderstatuses'] = [
             [
                 'orderstatus_id' => $this->Orders->OrdersOrderstatuses
-                                        ->Orderstatuses->find('byAlias',['alias' => 'payment_failed'])
+                                        ->Orderstatuses->find('byAlias', ['alias' => 'payment_failed'])
                                         ->first()->id,
                 'user_id' => $this->Auth->user('id')
             ]
@@ -203,9 +207,9 @@ class OrdersController extends AppController
     public function success()
     {
         $order = $this->request->session()->read('order');
-        $this->request->session()->write('order',null);
-        $cart = $this->Orders->Carts->find('byUserid',['user_id' => $this->Auth->user('id')])->first();
-        $newcart = $this->Orders->Carts->patchEntity($cart,['order_id' => $order->id]);
+        $this->request->session()->write('order', null);
+        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
+        $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
         $this->Orders->Carts->save($newcart);
         $this->set(compact('order'));
     }
@@ -216,7 +220,8 @@ class OrdersController extends AppController
         $this->set(compact('order'));
     }
     
-    public function download($orderId = null) {
+    public function download($orderId = null)
+    {
         //check if orderstatus == payment_received
         $idStatusPaid = $this->Orders->OrdersOrderstatuses
             ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
@@ -228,7 +233,9 @@ class OrdersController extends AppController
                 ->where(['Orders.id' => $orderId, 'orderstatus_id' => $idStatusPaid])
                 ->first();
         
-        if(!$paidOrder) { return $this->redirect(['controller' => 'Photos', 'action' => 'index']); }
+        if (!$paidOrder) {
+            return $this->redirect(['controller' => 'Photos', 'action' => 'index']);
+        }
         
         //open zip file
         $zipFile = new ZipArchive();
@@ -237,24 +244,24 @@ class OrdersController extends AppController
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
-        if ($zipFile->open($fileName, ZipArchive::CREATE)!==TRUE) {
+        if ($zipFile->open($fileName, ZipArchive::CREATE)!==true) {
             exit("cannot open <$filename>\n");
         }
         
         //add files to zip
         $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->toArray();
-        foreach ($orderlines as $line) {  
-            if($line->article === 'GAF 13x19') {
+        foreach ($orderlines as $line) {
+            if ($line->article === 'GAF 13x19') {
                 continue;
             }
-            $photoId = $line['photo_id']; 
+            $photoId = $line['photo_id'];
             $this->Photos = TableRegistry::get('Photos');
             $photo = $this->Photos->find()
                   ->where(['id' => $photoId])
                   ->first();
             $rawPath = $this->Photos->getPath($photo->barcode_id);
 
-            if($line->article === 'DPack') {
+            if ($line->article === 'DPack') {
                 $dir = new Folder($rawPath);
                 $files = $dir->find('.*\.jpg|.gif|.png');
                 foreach ($files as $file) {
@@ -262,7 +269,7 @@ class OrdersController extends AppController
                     $zipFile->addFile($photoPath, $file);
                 }
             }
-            if($line->article != 'DPack') {
+            if ($line->article != 'DPack') {
                 $photoPath = $rawPath . DS . $photo->path;
                 //add to the zip file
                 $zipFile->addFile($photoPath, $photo->path);
@@ -279,4 +286,3 @@ class OrdersController extends AppController
         unlink($fileName);
     }
 }
- 

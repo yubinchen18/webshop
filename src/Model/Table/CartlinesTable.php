@@ -120,7 +120,8 @@ class CartlinesTable extends Table
         return $cartline;
     }
     
-    public function getFilter($cartlineId) {
+    public function getFilter($cartlineId)
+    {
         $filter = $this->find()
             ->where(['Cartlines.id' => $cartlineId])
             ->matching('CartlineProductoptions.ProductoptionChoices.Productoptions', function ($q) {

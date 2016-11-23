@@ -142,15 +142,15 @@ class OrdersTable extends Table
     {
         $ident = $this->find()->select(['ident' => 'MAX(`ident`)'])->first();
         
-        if(empty($ident)) {
+        if (empty($ident)) {
             return 100000;
         }
         return $ident->ident+1;
     }
     
-    public function beforeSave($event, $entity, $options) 
+    public function beforeSave($event, $entity, $options)
     {
-        if($entity->isNew()) {
+        if ($entity->isNew()) {
             $entity->ident = $this->createIdent();
         }
         return $entity;

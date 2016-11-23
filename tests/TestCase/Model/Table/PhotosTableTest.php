@@ -43,7 +43,7 @@ class PhotosTableTest extends TestCase
         $this->Photos = TableRegistry::get('Photos', $config);
     }
 
-    public function testGetPathGroupType() 
+    public function testGetPathGroupType()
     {
         $path = $this->Photos->getPath('6844d1e7-d6b2-4e23-8bbe-d671b698d1c3');
         $this->assertTextEndsWith('de-ring-van-putten/eindejaars-2016/groep-8b', $path);

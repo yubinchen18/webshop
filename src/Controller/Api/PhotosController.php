@@ -85,6 +85,7 @@ class PhotosController extends AppController
         header('Cache-Control: public');
         header('Pragma: public');
         header('Content-Length: ' . $size);
-        readfile($file);exit;
+        readfile($file);
+        exit;
     }
 }

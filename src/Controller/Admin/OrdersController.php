@@ -21,7 +21,7 @@ class OrdersController extends AppController
     {
         $this->paginate = [
             'contain' => [
-                'OrdersOrderstatuses' => function($q) {
+                'OrdersOrderstatuses' => function ($q) {
                     return $q
                         ->order(['OrdersOrderstatuses.created' => 'DESC'])
                         ->contain(['Orderstatuses'])
@@ -50,15 +50,15 @@ class OrdersController extends AppController
     {
         $order = $this->Orders->get($id, [
             'contain' => [
-                'Users', 
-                'Deliveryaddresses', 
-                'Invoiceaddresses', 
-                'OrdersOrderstatuses' => function($q) {
+                'Users',
+                'Deliveryaddresses',
+                'Invoiceaddresses',
+                'OrdersOrderstatuses' => function ($q) {
                     return $q
                         ->order(['OrdersOrderstatuses.created' => 'DESC'])
                         ->contain(['Orderstatuses']);
                 },
-                'Invoices', 
+                'Invoices',
                 'Orderlines.OrderlineProductoptions.ProductoptionChoices.Productoptions',
                 'Orderlines.Photos',
                 'Orderlines.Products',
@@ -69,7 +69,7 @@ class OrdersController extends AppController
             throw new NotFoundException('Can\'t find order');
         }
         foreach ($order->orderlines as $orderline) {
-            if($orderline->product->has_discount === 1) {
+            if ($orderline->product->has_discount === 1) {
                 $orderline->discountprice = 3.78;
             }
         }

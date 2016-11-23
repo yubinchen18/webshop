@@ -171,11 +171,11 @@ class GroupImporter
         $existingGroup = $this->Groups->find()
             ->where([
                 'name' => $data['group_name'],
-                'slug' =>  Text::slug($data['group_name']), 
-                'project_id' => $project_id, 
-            ])    
+                'slug' =>  Text::slug($data['group_name']),
+                'project_id' => $project_id,
+            ])
             ->first();
-        if($existingGroup) {
+        if ($existingGroup) {
             $data['group_id'] = $existingGroup->id;
             unset($data['group']);
         }
