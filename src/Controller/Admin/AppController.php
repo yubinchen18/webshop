@@ -57,7 +57,4 @@ class AppController extends BaseController
         $this->set(compact('authuser'));
     }
     
-    public function beforeFilter(Event $event)
-    {
-    }
 }

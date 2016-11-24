@@ -13,7 +13,7 @@
                         'controller' => 'Photos',
                         'action' => 'display',
                         'id' => $photo->id,
-                        'size' => 'med'
+                        'size' => 'thumbs'
                     ]), [
                         'alt' => $photo->path,
                         'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
@@ -32,7 +32,7 @@
                         'controller' => 'Photos',
                         'action' => 'display',
                         'id' => $photo->id,
-                        'size' => 'med'
+                        'size' => 'thumbs'
                     ]), [
                         'alt' => $photo->path,
                         'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],

@@ -41,7 +41,7 @@
                                 'controller' => 'Photos',
                                 'action' => 'display',
                                 'id' => $photo->id,
-                                'size' => 'med']),
+                                'size' => 'thumbs']),
                                 ['class' => 'img-responsive']
                             ); ?>
                             </div>

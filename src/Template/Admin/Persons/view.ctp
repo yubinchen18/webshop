@@ -73,34 +73,6 @@
                         </tr>
                     </table>
                     <hr></hr>
-                    <h3><?=__('Adres'); ?></h3>
-                    <table class="vertical-table">
-                        <tr>
-                            <th><?= __('Straat') ?></th>
-                            <td><?= h($person->address->street) . ' ' . h($person->address->number)?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Toevoeging') ?></th>
-                            <td><?= h($person->address->extension) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Postcode') ?></th>
-                            <td><?= h($person->address->zipcode) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Plaats') ?></th>
-                            <td><?= h($person->address->city) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Naam') ?></th>
-                            <td><?= h($person->address->full_name) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= __('Geslacht') ?></th>
-                            <td><?= ($person->address->gender == 'm') ? __('Man') : __('Vrouw'); ?></td>
-                        </tr>
-                    </table>
-                    <hr></hr>
                     <h3><?=__('Account gegevens'); ?></h3>
                      <table class="vertical-table">
                         <tr>
