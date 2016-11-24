@@ -2,7 +2,7 @@
     <!-- left panel -->
     <div class="order-info-details col-md-9">
         <h2><?= __('Uw contactgegevens');?></h2>
-        <?= $this->Form->create(null, ['url' => ['controller' => 'Carts', 'action' => 'confirm']]); ?>
+        <?= $this->Form->create(null, ['url' => ['controller' => 'Carts', 'action' => 'confirm'],'formnovalidate' => true]); ?>
             <div class="form-group row gender">
                 <div class="col-md-10">
                     <?= $this->Form->select('gender', 
