@@ -34,6 +34,12 @@ jQuery(function($) {
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //animate cart count
+                    $('div.small-cart div.label').html(response.cartCount).css({
+                        'font-size': '3em', 'right': '58px', 'top': '23px'
+                    }).animate({
+                        right: '74px', top: '34px', fontSize: '1.8em'
+                    }, 350, 'swing');
                 }
             },
             failure: function(response) {
@@ -41,8 +47,8 @@ jQuery(function($) {
         });
      });
 
-          $('.quantity-left-minus').click(function(e){
-         var localQuantity = $(this).parent().parent().find('.input-number');
+    $('.quantity-left-minus').click(function(e){
+        var localQuantity = $(this).parent().parent().find('.input-number');
         e.preventDefault();
         var quantity = parseInt(localQuantity.val());
         if(quantity>1){
@@ -79,6 +85,12 @@ jQuery(function($) {
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //animate cart count
+                    $('div.small-cart div.label').html(response.cartCount).css({
+                        'font-size': '3em', 'right': '58px', 'top': '23px'
+                    }).animate({
+                        right: '74px', top: '34px', fontSize: '1.8em'
+                    }, 350, 'swing');
                 }
             },
             failure: function(response) {

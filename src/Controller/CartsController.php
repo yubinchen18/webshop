@@ -46,7 +46,12 @@ class CartsController extends AppController
             
             $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
             $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
-            $response = ['success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'), 'digital' => $digitalPack, 'redirect' => $personBarcode];
+            $response = [
+                'success' => true,
+                'message' => __('De foto is toegevoegd aan de winkelwagen'),
+                'digital' => $digitalPack,
+                'redirect' => $personBarcode,
+            ];
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
                         
             $hash = json_encode($productOptions);
@@ -116,7 +121,9 @@ class CartsController extends AppController
                     }
                 }
             }
-                        
+            
+            $cartCount = $this->Carts->getCartCount($cart->id);
+            $response['cartCount'] = $cartCount;
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;
@@ -228,13 +235,14 @@ class CartsController extends AppController
             
             $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
             $cart = $this->Carts->updatePrices($cartline->cart_id);
-            
+            $cartCount = $this->Carts->getCartCount($cart->id);
             $cartTotals = $this->Carts->getCartTotals($cart->id);
             
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
                 'cart' => $cart,
+                'cartCount' => $cartCount,
                 'discountPrice' => Configure::read('DiscountPrice'),
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],

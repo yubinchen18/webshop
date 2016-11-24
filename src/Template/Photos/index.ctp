@@ -57,7 +57,7 @@
                 <li><h5><?= __('Razendsnelle levering foto\'s') ?></h5></li>
                 <li><h5><?= __('Gratis verzending bij 4 afdrukken') ?></h5></li>
                 <li class="li-no-background">
-                    <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
+                    <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-42-41.png', [
                         'class' => [
                             'photos-index-banner-img',
                             'img-responsive',
@@ -76,7 +76,7 @@
             <div class="banner-flex-item small-font long"><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></div>
             <div class="banner-flex-item small-font last"><?= __('Razendsnelle levering foto\'s') ?></div>
             <div class="banner-flex-item small-font long"><?= __('Gratis verzending bij 4 afdrukken') ?></div>
-                <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
+                <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-42-41.png', [
                     'class' => [
                         'photos-index-banner-img'
                     ]

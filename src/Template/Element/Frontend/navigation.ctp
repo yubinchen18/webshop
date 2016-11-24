@@ -34,13 +34,13 @@
                         </ul>
                     </div>
                     <div class="small-cart">
-                    <?= $this->Html->image('/img/layout/cart.png',
-                            ['alt' => 'logo', 
-                             'class' => 'img-responsive',
-                             'url' => ['controller' => 'Carts', 'action' => 'display']]);  ?>
-                    <?php if(!empty($cartcount)): ?>
-                        <div class="cartlabel label label-info"><?= $cartcount; ?></div>
-                    <?php endif;?>
+                        <?php if(!empty($cartcount)): ?>
+                            <div class="cartlabel label label-info"><?= $cartcount; ?></div>
+                        <?php endif;?>
+                        <?= $this->Html->image('/img/layout/cart.png',
+                                ['alt' => 'logo', 
+                                 'class' => 'img-responsive',
+                                 'url' => ['controller' => 'Carts', 'action' => 'display']]);  ?>
                     </div>
                 </div>
             </div>

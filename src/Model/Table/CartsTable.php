@@ -225,4 +225,22 @@ class CartsTable extends Table
         return $totals;
         
     }
+    
+    public function getCartCount($cart_id) {
+        
+        $cart = $this->get($cart_id,[
+             'contain' => [
+                 'Cartlines',
+             ]
+        ]);
+        $cartcount = 0;
+        if($cart) {
+            if(!empty($cart['cartlines'])) {
+                foreach($cart['cartlines'] as $line) {
+                    $cartcount += $line['quantity'];
+                }
+            }
+        }
+        return $cartcount;
+    }
 }

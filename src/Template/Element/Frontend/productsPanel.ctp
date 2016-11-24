@@ -85,7 +85,7 @@
                             'id' => $photo->id,
                             'size' => 'thumbs'
                         ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
-                        <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03.png', [
+                        <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03-03.png', [
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
                                 'action' => 'productGroupIndex',
