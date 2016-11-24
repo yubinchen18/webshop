@@ -15,7 +15,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Orderstatus newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Orderstatus[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Orderstatus|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Orderstatus patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Orderstatus patchEntity
+ * (\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Orderstatus[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Orderstatus findOrCreate($search, callable $callback = null)
  *
@@ -73,12 +74,11 @@ class OrderstatusesTable extends Table
     
     public function findByAlias($query, $options = [])
     {
-        if(empty($options['alias'])) {
+        if (empty($options['alias'])) {
             return false;
         }
         
         return $this->find()
                 ->where(['alias' => $options['alias']]);
-        
     }
 }

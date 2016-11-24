@@ -214,7 +214,7 @@ Router::scope('/', function (RouteBuilder $routes) {
         
         $routes->connect(
             '/searches/showResults',
-             ['controller' => 'Searches', 'action' => 'showResults']
+            ['controller' => 'Searches', 'action' => 'showResults']
         );
         
         $routes->connect('/dashboard', ['controller' => 'Pages', 'action' => 'display']);
@@ -259,15 +259,21 @@ Router::scope('/', function (RouteBuilder $routes) {
         '/photos/filter',
         ['controller' => 'Photos', 'action' => 'filterProductGroupIndex']
     );
-    $routes->connect('/photos/pickfreegroupspicture/:id', 
+    $routes->connect(
+        '/photos/pickfreegroupspicture/:id',
         ['controller' => 'Photos', 'action' => 'pickFreeGroupsPicture'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
-    $routes->connect('/photos/changefreegroupspicture/:id/:orderlineid', 
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/changefreegroupspicture/:id/:orderlineid',
         ['controller' => 'Photos', 'action' => 'changeFreeGroupsPicture'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]);
-    $routes->connect('/orders/download/:id', 
+        ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]
+    );
+    $routes->connect(
+        '/orders/download/:id',
         ['controller' => 'Orders', 'action' => 'download'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
     $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
     
@@ -291,7 +297,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'updateFreeProductInCartline'
     ]);
-    $routes->connect('/carts/delete/:id',
+    $routes->connect(
+        '/carts/delete/:id',
         ['controller' => 'Carts','action' => 'delete'],
         ['pass' => ['model','id']]
     );
@@ -299,9 +306,20 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'orderInfo'
     ]);
-    $routes->connect('/orders/:action',
-            ['controller' => 'Orders'],
-            []);
+    $routes->connect('/carts/confirm', [
+        'controller' => 'Carts',
+        'action' => 'confirm'
+    ]);
+    $routes->connect(
+        '/carts/zipcode/:zipcode',
+        ['controller' => 'Carts', 'action' => 'zipcode'],
+        ['zipcode', 'pass' => ['zipcode']]
+    );
+    $routes->connect(
+        '/orders/:action',
+        ['controller' => 'Orders'],
+        []
+    );
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);
 

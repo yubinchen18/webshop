@@ -1,8 +1,8 @@
 <div class='order-info row'>
     <!-- left panel -->
     <div class="order-info-details col-md-9">
-        <h2><?= __('Uw gegevens');?></h2>
-        <?= $this->Form->create(null, ['url' => ['controller' => 'Orders', 'action' => 'add']]); ?>
+        <h2><?= __('Uw contactgegevens');?></h2>
+        <?= $this->Form->create(null, ['url' => ['controller' => 'Carts', 'action' => 'confirm']]); ?>
             <div class="form-group row gender">
                 <div class="col-md-10">
                     <?= $this->Form->select('gender', 
@@ -18,7 +18,9 @@
                         'label' => false,
                         'placeholder' => __('Naam'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier uw voornaam in.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul  hier uw voornaam in.'). '")',
                     ]); ?>
                 </div>
                 <div class='col-md-2'>
@@ -26,7 +28,8 @@
                         'type' => 'text',
                         'label' => false,
                         'placeholder' => __('Tussenvoegsel'),
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier een eventueel tussenvoegsel in uw naam in.')
                     ]); ?>
                 </div>
                 <div class='col-md-4'>
@@ -35,17 +38,24 @@
                         'label' => false,
                         'placeholder' => __('Achternaam'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier uw achternaam in.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw achternaam in.'). '")',
                     ]); ?>
                 </div>
             </div>
+        
             <div class="form-group row">
-                <div class='col-md-6'>
-                    <?= $this->Form->input('street', [
+                <div class='col-md-4'>
+                    <?= $this->Form->input('zipcode', [
                         'label' => false,
-                        'placeholder' => __('Straatnaam'),
+                        'placeholder' => __('Postcode'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control auto-zipcode',
+                        'id' => 'order-info-zipcode',
+                        'pattern' => "[1-9][0-9]{3}\s?[a-zA-Z]{2}",
+                        'title' => __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'). '")',
                     ]); ?>
                 </div>
                 <div class='col-md-2'>
@@ -53,45 +63,49 @@
                         'label' => false,
                         'placeholder' => __('Huisnummer'),
                         'required' => true,
-                        'class' => 'form-control'
-                    ]); ?>
-                </div>
-                <div class='col-md-2'>
-                    <?= $this->Form->input('extension', [
-                        'label' => false,
-                        'placeholder' => __('Toevoeging'),
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'). '")',
                     ]); ?>
                 </div>
             </div>
             <div class="form-group row">
                 <div class='col-md-10'>
-                    <?= $this->Form->input('zipcode', [
+                    <?= $this->Form->input('street', [
                         'label' => false,
-                        'placeholder' => __('Postcode'),
+                        'placeholder' => __('Straatnaam'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'id' => 'order-info-street',
+                        'title' => __('Vul hier uw straatnaam.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam in.'). '")',
                     ]); ?>
                 </div>
             </div>
+            
             <div class="form-group row">
                 <div class='col-md-10'>
                     <?= $this->Form->input('city', [
                         'label' => false,
                         'placeholder' => __('Plaatsnaam'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'id' => 'order-info-city',
+                        'title' => __('Vul hier uw plaatsnaam in.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw plaatsnaam in'). '")',
                     ]); ?>
                 </div>
             </div>
             <div class='form-group row'>
                 <div class='col-md-10'>
                     <?= $this->Form->input('email', [
-                        'type' => 'email',
+//                        'type' => 'email',
                         'label' => false,
                         'placeholder' => __('Email'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier een geldig e-mailadres in. Bijvoorbeeld: naam@example.nl'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier een geldig e-mailadres in. Bijvoorbeeld: naam@example.nl'). '")',
                     ]); ?>
                 </div>
             </div>
@@ -101,14 +115,16 @@
                         'label' => false,
                         'placeholder' => __('Telefoonnummer'),
                         'required' => true,
-                        'class' => 'form-control'
+                        'class' => 'form-control',
+                        'title' => __('Vul hier uw telefoonnummer in.'),
+                        'oninvalid' => 'setCustomValidity("'. __('Vul hier uw telefoonnummer in.'). '")',
                     ]); ?>
                 </div>
             </div>
             <div class='form-group row'>
                 <div class='col-md-10'>
                     <?= $this->Form->input('different-address', [
-                        'label' => __('Verstuur naar ander adres'),
+                        'label' => __('Wilt u de bestelling naar een ander adres versturen?'),
                         'type' => 'checkbox',
                         'templates' => [
                             'formGroup' => '{{input}}{{label}}'
@@ -134,7 +150,9 @@
                             'label' => false,
                             'placeholder' => __('Naam'),
                             'required' => false,
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'title' => __('Vul hier uw voornaam in.'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw voornaam in.'). '")',
                         ]); ?>
                     </div>
                     <div class='col-md-2'>
@@ -142,7 +160,8 @@
                             'type' => 'text',
                             'label' => false,
                             'placeholder' => __('Tussenvoegsel'),
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'title' => __('Vul hier een eventueel tussenvoegsel in uw naam in.'),
                         ]); ?>
                     </div>
                     <div class='col-md-4'>
@@ -151,17 +170,23 @@
                             'label' => false,
                             'placeholder' => __('Achternaam'),
                             'required' => false,
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'title' => __('Vul hier uw achternaam in.'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw achternaam in.'). '")',
                         ]); ?>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class='col-md-6'>
-                        <?= $this->Form->input('alternative.street', [
+                    <div class='col-md-4'>
+                        <?= $this->Form->input('alternative.zipcode', [
                             'label' => false,
-                            'placeholder' => __('Straatnaam'),
+                            'placeholder' => __('Postcode'),
                             'required' => false,
-                            'class' => 'form-control'
+                            'class' => 'form-control auto-zipcode',
+                            'id' => 'order-info-alternative-zipcode',
+                            'pattern' => "[1-9][0-9]{3}\s?[a-zA-Z]{2}",
+                            'title' => __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw postcode in. Bijvoorbeeld: 1234AA'). '")',
                         ]); ?>
                     </div>
                     <div class='col-md-2'>
@@ -169,24 +194,22 @@
                             'label' => false,
                             'placeholder' => __('Huisnummer'),
                             'required' => false,
-                            'class' => 'form-control'
-                        ]); ?>
-                    </div>
-                    <div class='col-md-2'>
-                        <?= $this->Form->input('alternative.extension', [
-                            'label' => false,
-                            'placeholder' => __('Toevoeging'),
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'title' => __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw huisnummer in. Bijvoorbeeld: 1a'). '")',
                         ]); ?>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class='col-md-10'>
-                        <?= $this->Form->input('alternative.zipcode', [
+                        <?= $this->Form->input('alternative.street', [
                             'label' => false,
-                            'placeholder' => __('Postcode'),
+                            'placeholder' => __('Straatnaam, huisnummer en toevoeging'),
                             'required' => false,
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'id' => 'order-info-alternative-street',
+                            'title' => __('Vul hier uw straatnaam en huisnummer met eventueel toevoeging in. Bijvoorbeeld: 1a'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw straatnaam in.'). '")',
                         ]); ?>
                     </div>
                 </div>
@@ -196,7 +219,10 @@
                             'label' => false,
                             'placeholder' => __('Plaatsnaam'),
                             'required' => false,
-                            'class' => 'form-control'
+                            'class' => 'form-control',
+                            'id' => 'order-info-alternative-city',
+                            'title' => __('Vul hier uw plaatsnaam in.'),
+                            'oninvalid' => 'setCustomValidity("'. __('Vul hier uw plaatsnaam in.'). '")',
                         ]); ?>
                     </div>
                 </div>

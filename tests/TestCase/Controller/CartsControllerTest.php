@@ -425,7 +425,8 @@ class CartsControllerTest extends BaseIntegrationTestCase
         ];
         print_r($carts = $this->Carts->find()->all());
         $this->post('/carts/add.json', $data);
-        print_r($this->_response->body());die;
+        print_r($this->_response->body());
+        die;
         $cartlines = $this->Carts->Cartlines->find()->toArray();
         $this->assertEquals(3, count($cartlines));
     }

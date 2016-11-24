@@ -134,8 +134,8 @@ class AddressesTable extends Table
     }
     
     /**
-     * Method to create a new address 
-     * 
+     * Method to create a new address
+     *
      * @param array $data
      * @return string $address_id
      */
@@ -163,12 +163,13 @@ class AddressesTable extends Table
     /**
      * Method to get or add an address based on raw data
      * @param array $data
-     * 
+     *
      * @return string $address_id
      */
-    public function getAddressId($data) {
+    public function getAddressId($data)
+    {
         
-        if(!isset($data['street']) ||
+        if (!isset($data['street']) ||
            !isset($data['number']) ||
            !isset($data['zipcode']) ||
            !isset($data['city'])
@@ -184,11 +185,10 @@ class AddressesTable extends Table
                  'city' => $data['city'],
              ]);
         
-        if($address->count() > 0) {
+        if ($address->count() > 0) {
             return $address->first()->id;
         }
         
         return $this->createNewAddress($data);
     }
-    
 }

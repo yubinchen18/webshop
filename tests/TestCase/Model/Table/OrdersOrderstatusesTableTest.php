@@ -57,7 +57,8 @@ class OrdersOrderstatusesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('OrdersOrderstatuses') ? [] : ['className' => 'App\Model\Table\OrdersOrderstatusesTable'];
+        $config = TableRegistry::exists('OrdersOrderstatuses') ?
+            [] : ['className' => 'App\Model\Table\OrdersOrderstatusesTable'];
         $this->OrdersOrderstatuses = TableRegistry::get('OrdersOrderstatuses', $config);
     }
 

@@ -168,4 +168,27 @@ jQuery(function($) {
             $('#ideal-issuers').show();
         }
     });
+    
+    $('.auto-zipcode').change(function() {
+        var zipcode = $(this).val().replace(" ", "");
+        var id = $(this).attr('id');
+        var url = '/carts/zipcode/'+zipcode;
+        console.log(id);
+        $.ajax({
+            type: 'GET',
+            url: url
+        })
+        .success($.proxy(function(response) {
+            var data = JSON.parse(response);
+            if(data.success == 1){
+                if(id == 'order-info-zipcode') {
+                    $('#order-info-street').val(data.street);
+                    $('#order-info-city').val(data.town);
+                }else if (id == 'order-info-alternative-zipcode') {
+                    $('#order-info-alternative-street').val(data.street);
+                    $('#order-info-alternative-city').val(data.town);
+                }
+            }
+        }, this));
+    });
 });

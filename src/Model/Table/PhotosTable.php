@@ -125,7 +125,7 @@ class PhotosTable extends BaseTable
 
     public function findGroupPhotos(Query $query, array $options = [])
     {
-        if(empty($options['group_id'])) {
+        if (empty($options['group_id'])) {
             return $query;
         }
         
@@ -134,7 +134,6 @@ class PhotosTable extends BaseTable
         return $query->where([
                 'Photos.barcode_id' => $group->barcode_id
             ]);
-        
     }
     
     private function getPathObject()

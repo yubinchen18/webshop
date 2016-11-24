@@ -91,7 +91,7 @@ class CartsTable extends Table
     
     public function findByUserid($query, $options = [])
     {
-        if(empty($options['user_id'])) {
+        if (empty($options['user_id'])) {
             return false;
         }
         
@@ -100,7 +100,7 @@ class CartsTable extends Table
                'Carts.order_id IS NULL'
             ])
            ->contain([
-               'Cartlines' => function($q) {
+               'Cartlines' => function ($q) {
                    return $q->order(['Cartlines.created'])
                            ->contain([
                                'CartlineProductoptions.ProductoptionChoices.Productoptions'
@@ -130,67 +130,77 @@ class CartsTable extends Table
         return $cart;
     }
     
-        public function updatePrices($cart_id)
-     {
-         $cart = $this->get($cart_id,[
-             'contain' => [
-                 'Cartlines.Products',
-                 'Cartlines.Photos.Barcodes.Persons'
-             ]
-         ]);
-         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
+    public function updatePrices($cart_id)
+    {
+        $cart = $this->get($cart_id, [
+        'contain' => [
+         'Cartlines.Products',
+         'Cartlines.Photos.Barcodes.Persons'
+        ]
+        ]);
+        $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
          
-         $userDiscounts = array_map(function() {}, array_flip($users));
-         $total_lines = 0;
-         $discount = 0;
-         $high_shipping = false;
+        $userDiscounts = array_map(function () {
+        }, array_flip($users));
+        $total_lines = 0;
+        $discount = 0;
+        $high_shipping = false;
          
-         foreach($cart->cartlines as $cartline) {
-             $total_lines++;
-             $user = $cartline->photo->barcode->person->user_id;
-             $subtotal = $cartline->quantity * $cartline->product->price_ex;
+        foreach ($cart->cartlines as $cartline) {
+            $total_lines++;
+            $user = $cartline->photo->barcode->person->user_id;
+            $subtotal = $cartline->quantity * $cartline->product->price_ex;
              
-             if($cartline->product->has_discount == 1 && !empty($userDiscounts[$user])) {
-                 $cartline->product->price_ex = (Configure::read('DiscountPrice'));
-                 $subtotal = $cartline->quantity * (Configure::read('DiscountPrice'));
-             }
+            if ($cartline->product->has_discount == 1 && !empty($userDiscounts[$user])) {
+                $cartline->product->price_ex = (Configure::read('DiscountPrice'));
+                $subtotal = $cartline->quantity * (Configure::read('DiscountPrice'));
+            }
              
-             if($cartline->product->has_discount == 1 && empty($userDiscounts[$user])) {
-                 $subtotal = 1 * $cartline->product->price_ex;
-                 $subtotal += ($cartline->quantity-1) * (Configure::read('DiscountPrice'));
-                 $userDiscounts[$user] = true;
-             }
-             $cartline->subtotal = $subtotal;
-             $this->Cartlines->save($cartline);
-         }
+            if ($cartline->product->has_discount == 1 && empty($userDiscounts[$user])) {
+                $subtotal = 1 * $cartline->product->price_ex;
+                $subtotal += ($cartline->quantity-1) * (Configure::read('DiscountPrice'));
+                $userDiscounts[$user] = true;
+            }
+            $cartline->subtotal = $subtotal;
+            $this->Cartlines->save($cartline);
+        }
          
-         $cart = $this->get($cart_id,[
-             'contain' => [
-                 'Cartlines.Products',
-                 'Cartlines.Photos.Barcodes.Persons'
-             ]
-         ]);
+        $cart = $this->get($cart_id, [
+        'contain' => [
+        'Cartlines' => function ($q) {
+            return $q
+                ->order(['Cartlines.created'])
+                ->contain([
+                    'CartlineProductoptions.ProductoptionChoices.Productoptions'
+                ]);
+        },
+         'Cartlines.Products',
+         'Cartlines.Photos.Barcodes.Persons'
+        ]
+        ]);
          
-         $users = Hash::extract($cart, 'cartlines.{n}.photo.barcode.person.user_id');
-         $userDiscounts = array_map(function() {}, array_flip($users));
-         if (!empty($cart->cartlines)) {
-             foreach ($cart->cartlines as $cartline) {
-                 $cartline->discountPrice = Configure::read('DiscountPrice');
-                 if(!empty($userDiscounts[$cartline->photo->barcode->person->user_id]) && $cartline->product->has_discount === 1) {
-                     $cartline->product->price_ex = Configure::read('DiscountPrice');
-                 }
+        $users = Hash::extract($cart, 'cartlines.{n}.photo.barcode.person.user_id');
+        $userDiscounts = array_map(function () {
+        }, array_flip($users));
+        if (!empty($cart->cartlines)) {
+            foreach ($cart->cartlines as $cartline) {
+                $cartline->discountPrice = Configure::read('DiscountPrice');
+                if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
+                        && $cartline->product->has_discount === 1) {
+                    $cartline->product->price_ex = Configure::read('DiscountPrice');
+                }
                  
-                 if($cartline->product->has_discount === 1) {
-                     $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
-                 }
-             }
-         }
-         return $cart;
+                if ($cartline->product->has_discount === 1) {
+                    $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
+                }
+            }
+        }
+        return $cart;
     }
     
     public function getCartTotals($cart_id)
     {
-        $cart = $this->get($cart_id,[
+        $cart = $this->get($cart_id, [
             'contain' => [
                 'Cartlines.Products'
             ]
@@ -205,24 +215,23 @@ class CartsTable extends Table
         
         $total_lines = 0;
         $high_shipping = false;
-        foreach($cart->cartlines as $line) {
+        foreach ($cart->cartlines as $line) {
             $total_lines+=$line->quantity;
             
             $totals['products'] += $line->subtotal;
             $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
             
-            if(!empty($line->product->high_shipping)) {
+            if (!empty($line->product->high_shipping)) {
                 $high_shipping = true;
             }
         }
         
-        if($total_lines > 2) {
+        if ($total_lines > 2) {
             $totals['shippingcosts'] = 0;
         }
-        if($high_shipping) {
+        if ($high_shipping) {
             $totals['shippingcosts'] = 12.50;
         }
         return $totals;
-        
     }
 }
