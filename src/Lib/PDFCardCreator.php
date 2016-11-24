@@ -80,11 +80,11 @@ class PDFCardCreator
             ) . ($person->prefix != "" ?
                     " ".iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->prefix) : "" ).
                     " " . iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->lastname).PHP_EOL.
-                ($person->address->street != "" ?
+                (!empty($person->address->street) ?
                     iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->address->street).PHP_EOL : "").
-                ($person->address->zipcode != "" ?
+                (!empty($person->address->zipcode) ?
                     iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->address->zipcode) . " ": "").
-                ($person->address->city != "" ?
+                (!empty($person->address->city) ?
                     iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->address->city) : "").PHP_EOL.
                 "KLAS ".iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->group->name) . " ".
                     iconv("UTF-8", "ISO-8859-1//TRANSLIT", $person->group->project->school->name).PHP_EOL
