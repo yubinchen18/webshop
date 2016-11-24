@@ -206,13 +206,13 @@ class PhotosTable extends BaseTable
         
         //medium
         $imageMed = clone $image;
-        $imageMed->scaleImage(0, 400);
+        $imageMed->scaleImage(0, 500);
         $imageMed = $this->addWaterMark($imageMed);
         new Folder($rawPath."med", true, 0777);
         $imageMed->writeImage($medPath);
 
         //small
-        $image->scaleImage(0, 100);
+        $image->scaleImage(0, 200);
         new Folder($rawPath."thumbs", true, 0777);
         $image->writeImage($thumbPath);
 

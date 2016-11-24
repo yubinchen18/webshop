@@ -30,16 +30,40 @@
                     <table class="vertical-table">
                         <tr>
                             <th><?= __('Naam') ?></th>
-                            <td><?= h($project->school->name) ?></td>
+                            <td colspan="2"><?= h($project->school->name) ?></td>
                         </tr>
                         <tr>
                             <th><?= __('Slug') ?></th>
-                            <td><?= h($project->school->slug) ?></td>
+                            <td colspan="2"><?= h($project->school->slug) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= __('Wachtrij') ?></th>
+                            <td><?= $this->Form->create(null,['url' => ['action' => 'enableSync']]); ?>
+                            <?= $this->Form->input('project_id', ['type' => 'hidden','value' => $project->id]); ?>
+                            <?= $this->Form->input('photographer',[
+                                'type' => 'select', 
+                                'options' => $photographers, 
+                                'empty' => __('Kies een profiel'),
+                                'label' =>false]); 
+                            ?>
+                            </td>
+                            <td>
+                            <?= $this->Form->button(__('Opnieuw synchroniseren'),
+                                [
+                                    'id' => 'sync-button',
+                                    'disabled' => true,
+                                    'class' => 'btn btn-sm btn-success',
+                                    'style' => 'margin-left: 12px'
+                                ]); ?>
+                            <?= $this->Form->end(); ?>
+                            </td>
                         </tr>
                     </table>
                     
                     <?php if (!empty($project->groups)): ?>
-                        <div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-4 pull-right">
                             <?= $this->Html->link(__('Leerlingkaarten maken'),
                                 [
                                     'action' => 'createProjectCards',
@@ -51,10 +75,8 @@
                                     'target' => '_blank',
                                 ]) ?>
                         </div>
-                        <div class="clearfix"></div>
+                    </div>
                     <?php endif; ?>
-                        
-                        
                 </div>
             </div>
         </div>
@@ -102,8 +124,6 @@
         </div>
     </div>
 </div>
-   
-
 <?= $this->Html->script('/admin/js/jquery.slug'); ?>
 <?= $this->Html->script('/admin/js/Controllers/projects'); ?>
 

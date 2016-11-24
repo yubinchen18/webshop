@@ -5,6 +5,7 @@ use App\Controller\AppController\Admin;
 use Cake\Event\Event;
 use App\Lib\PDFCardCreator;
 use App\Lib\GroupImporter;
+use Cake\ORM\TableRegistry;
 
 /**
  * Projects Controller
@@ -53,7 +54,77 @@ class ProjectsController extends AppController
             'contain' => ['Schools', 'Groups']
         ]);
 
-        $this->set('project', $project);
+        $this->Users = TableRegistry::get('Users');
+        $profiles = $this->Users->find()->select(['username','type'])->where(['type IN ' => ['photographer','admin']]);
+        foreach ($profiles as $profile) {
+            $photographers[$profile->username] = $profile->username;
+        }
+        $this->set(compact('photographers','project'));
+    }
+    
+    public function enableSync()
+    {
+        if(empty($this->request->data['project_id']) || empty($this->request->data['photographer'])) {
+            return $this->redirect(['action' => 'index']); 
+        }
+        
+        $project = $this->Projects->get($this->request->data['project_id'], [
+            'contain' => ['Schools','Groups.Persons']
+        ]);
+
+        // First add school to queue
+        $queues[] = [
+                'profile_name' => $this->request->data['photographer'],
+                'model' => 'Schools',
+                'foreign_key' => $project->school_id
+            ];
+        
+        // Add the project to queue
+        $queues[] = [
+                'profile_name' => $this->request->data['photographer'],
+                'model' => 'Projects',
+                'foreign_key' => $project->id
+            ];
+        
+        // Add the groups to queue
+        foreach($project->groups as $group) {
+            $queues[] = [
+                    'profile_name' => $this->request->data['photographer'],
+                    'model' => 'Groups',
+                    'foreign_key' => $group->id
+                ];
+            
+            $queues[] = [
+                    'profile_name' => $this->request->data['photographer'],
+                    'model' => 'Barcodes',
+                    'foreign_key' => $group->barcode_id
+                ];
+            
+            // Add the persons to queue
+            foreach($group->persons as $person) {
+                $queues[] = [
+                    'profile_name' => $this->request->data['photographer'],
+                    'model' => 'Groups',
+                    'foreign_key' => $person->id
+                ];
+            
+            $queues[] = [
+                    'profile_name' => $this->request->data['photographer'],
+                    'model' => 'Barcodes',
+                    'foreign_key' => $person->barcode_id
+                ];
+            }
+        }
+        
+        $downloadQueue = TableRegistry::get('Downloadqueues');
+        $entities = $downloadQueue->newEntities($queues);
+        if($downloadQueue->saveMany($entities)) {
+            $this->Flash->success(__("Het project is in de wachtrij geplaatst, u kunt nu synchroniseren"));
+            return $this->redirect(['action' => 'view', $project->id]);
+        }
+        
+        $this->Flash->error(__("Het project kon niet in de wachtrij worden geplaatst"));
+        return $this->redirect(['action' => 'view', $project->id]);
     }
 
     /**

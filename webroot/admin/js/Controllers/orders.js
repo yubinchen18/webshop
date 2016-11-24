@@ -2,7 +2,6 @@ jQuery(function($) {
     $("#orderstatus").change(function() {
         var orderId = $(this).data('id');
         var orderstatusId = $('option:selected', this).val();
-        console.log(orderId);
         $.ajax({
             url: '/admin/orders/edit/'+ orderId +'.json',
             data: {
