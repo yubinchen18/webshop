@@ -153,6 +153,11 @@ jQuery(function($) {
                 if(response.removeGroup !== "") {
                     $('div#'+response.removeGroup).remove();
                 }
+                $('div.small-cart div.label').html(response.cartCount).css({
+                    'font-size': '3em', 'right': '58px', 'top': '23px'
+                }).animate({
+                    right: '74px', top: '34px', fontSize: '1.8em'
+                }, 350, 'swing');
             }
           });
        }

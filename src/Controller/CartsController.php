@@ -309,7 +309,8 @@ class CartsController extends AppController
                 'message' => 'Cartline deleted',
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
-                'shippingCost' => $cartTotals['shippingcosts']
+                'shippingCost' => $cartTotals['shippingcosts'],
+                'cartCount' => $cartTotals['cartCount']
             ];
             $response['removeGroup'] = (isset($removeGroup)) ? $removeGroup : "";
             $this->set(compact('response'));

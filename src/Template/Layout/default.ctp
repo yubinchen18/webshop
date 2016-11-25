@@ -22,7 +22,7 @@ $cakeDescription = 'Schoolfotografie by Hoogstraten ... de beste kwaliteit schoo
     <?php if(!($this->request->params['controller'] == 'Users' && $this->request->params['action'] == 'login')): ?>   
         <?= $this->element('Frontend/navigation'); ?>
     <?php endif; ?>
-    <div id="content" class="clearfix">
+    <div id="content" class="container clearfix">
         <?= $this->Flash->render(); ?>
         <?= $this->fetch('content') ?>
     </div>

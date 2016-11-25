@@ -34,9 +34,7 @@
                         </ul>
                     </div>
                     <div class="small-cart">
-                        <?php if(!empty($cartcount)): ?>
-                            <div class="cartlabel label label-info"><?= $cartcount; ?></div>
-                        <?php endif;?>
+                        <div class="cartlabel label label-info"><?= !empty($cartcount)? $cartcount : 0; ?></div>
                         <?= $this->Html->image('/img/layout/cart.png',
                                 ['alt' => 'logo', 
                                  'class' => 'img-responsive',
