@@ -122,7 +122,8 @@ class CartsController extends AppController
                 }
             }
             
-            $cartCount = $this->Carts->getCartCount($cart->id);
+            //add cart count
+            $cartCount = $this->Carts->getCartTotals($cart->id)['cartCount'];
             $response['cartCount'] = $cartCount;
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
@@ -235,14 +236,13 @@ class CartsController extends AppController
             
             $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
             $cart = $this->Carts->updatePrices($cartline->cart_id);
-            $cartCount = $this->Carts->getCartCount($cart->id);
             $cartTotals = $this->Carts->getCartTotals($cart->id);
             
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
                 'cart' => $cart,
-                'cartCount' => $cartCount,
+                'cartCount' => $cartTotals['cartCount'],
                 'discountPrice' => Configure::read('DiscountPrice'),
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
