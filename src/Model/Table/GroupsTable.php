@@ -63,7 +63,22 @@ class GroupsTable extends BaseTable
             ->notEmpty('name')
             ->add('name', 'custom', [
                 'rule' => function ($value, $context) {
-                    if ($this->exists(['name' => $value, 'project_id' => $context['data']['project_id']])) {
+                    $exists = $this->exists(['name' => $value, 'project_id' => $context['data']['project_id']]);
+                    
+                    if ($exists && isset($context['data']['id'])) {
+                        $result = $this->find('all', [
+                            'conditions' => [
+                                'name' => $value,
+                                'project_id' => $context['data']['project_id']
+                            ]
+                        ])->first();
+                        
+                        if ($result->id == $context['data']['id']) {
+                            return true;
+                        }
+                        
+                        return false;                        
+                    } else if ($exists) {
                         return false;
                     }
                     
@@ -76,7 +91,7 @@ class GroupsTable extends BaseTable
             ->allowEmpty('slug');
         
         $validator
-            ->allowEmpty('project_id');
+            ->notEmpty('project_id');
 
         $validator
             ->dateTime('deleted')
