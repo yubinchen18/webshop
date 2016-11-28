@@ -1,18 +1,18 @@
-<div class="row">
+<div class="row full-width">
     <!-- left panel -->
     <div class="photos-product-index col-md-8 col-xs-9">
         <!-- left pics panel -->
         <div class='row'>
-            <div class='col-sm-11 col-xs-12'>
+            <div class='index-left col-sm-11 col-xs-12'>
                 <div class="row photos-product-left-panel">
                     <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
                     <!-- top buttons panel xs only -->
                     <?= $this->element('Frontend/topButtonsPanel'); ?>
-                    <div class='addToCartPopup-confirmation col-md-4 col-xs-5 alert'>
+                    <div class='addToCartPopup-confirmation col-xl-3 col-md-4 col-xs-5 alert'>
                         <span id='msg'></span>
                     </div>
                     <?php foreach ($products as $product): ?>
-                        <div class="col-md-4 col-xs-6 photos-product-container">
+                        <div class="col-xxl-2 col-xl-3 col-md-4 col-xs-6 photos-product-container">
                             <div class="photos-product-label">
                                 <div class="row">
                                     <div class="flex-box price col-xs-5">

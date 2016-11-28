@@ -10,7 +10,7 @@
                         <span id='msg'></span>
                     </div>
                     <?php foreach ($products as $product): ?>
-                        <div class="col-md-4 col-xs-6 photos-product-container">
+                        <div class="col-xxl-2 col-xl-3 col-md-4 col-xs-6 photos-product-container">
                             <div class="photos-product-label">
                                 <div class="row">
                                     <div class="flex-box price col-xs-5">

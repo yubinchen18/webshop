@@ -1,22 +1,24 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="row">
-            <?= $this->Html->link(
+            <div class='col-md-4 col-sm-5 col-xs-6' id='logo-top'>
+                <?= $this->Html->link(
                     $this->Html->image('/img/layout/logo-hoogstraten-fotografie.png',
                         ['alt' => 'logo', 'class' => 'img-responsive']),
                     ['controller' => 'Photos', 'action' => 'index'],
-                    ['escape' => false, 'class' => 'col-xs-6 col-sm-3', 'id' => 'logo-top']
-            );  ?>
+                    ['escape' => false]
+                );  ?>
+            </div>
             <!-- user portraits -->
             <?php if (isset($userPortraits)): ?>
-                <div class='col-xs-6 col-md-7 col-xs-offset-3 hidden-sm hidden-xs portraits-container'>
+                <div class='col-md-6 col-xs-6 hidden-sm hidden-xs portraits-container'>
                     <?php foreach($userPortraits as $userPortrait): ?>
                         <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
             <!-- Desktop screen -->
-            <div class="col-sm-9 col-md-2 col-xs-offset-5 col-sm-offset-3 col-md-offset-0">
+            <div class="col-sm-7 col-md-2">
                 <div class="cart-btn desktopmenu">
                     <div class="dropdown">
                         <?= $this->Html->link(
@@ -34,11 +36,11 @@
                         </ul>
                     </div>
                     <div class="small-cart">
-                        <div class="cartlabel label label-info"><?= !empty($cartcount)? $cartcount : 0; ?></div>
                         <?= $this->Html->image('/img/layout/cart.png',
                                 ['alt' => 'logo', 
                                  'class' => 'img-responsive',
                                  'url' => ['controller' => 'Carts', 'action' => 'display']]);  ?>
+                        <div class="cartlabel label label-info"><?= !empty($cartcount)? $cartcount : 0; ?></div>
                     </div>
                 </div>
             </div>

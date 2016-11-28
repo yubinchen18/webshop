@@ -115,11 +115,7 @@ jQuery(function($) {
                         $('.addToCartPopup-confirmation').hide();
                     },2000);
                     //add cartCount animation
-                    $('div.small-cart div.label').html(response.cartCount).css({
-                        'font-size': '3em', 'right': '58px', 'top': '23px'
-                    }).animate({
-                        right: '74px', top: '34px', fontSize: '1.8em'
-                    }, 350, 'swing');
+                    updateCartCount(response.cartCount)
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);
@@ -145,6 +141,17 @@ jQuery(function($) {
            }
        });
    }
+   
+   function updateCartCount(count) {
+        var cartLabel = $('div.small-cart div.label');
+        if (cartLabel.hasClass('label-animate')) {
+            cartLabel.removeClass('label-animate');
+        }
+        cartLabel.html(count).addClass('label-animate');
+        setTimeout(function () {      
+            cartLabel.removeClass("label-animate");         
+       }, 340);
+    }
    
    checkCartStatus();
 });

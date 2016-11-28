@@ -1,5 +1,5 @@
-<div class="photos-view-products col-md-4 col-xs-3">
-    <div class='row photos-view-products-row'>
+<div class="photos-view-products col-xl-3 col-md-4 col-xs-3">
+    <div class='row photos-view-products-row photos-view-products-fixed'>
         <div class='photos-view-products-panel col-sm-12'>
             <div class="row">
                 <div class="photos-view-products-container col-md-6">
