@@ -128,7 +128,7 @@ class GroupsControllerTest extends BaseIntegrationTestCase
         $id = '8262ca6b-f23a-4154-afed-fc893c1516d3';
         $data = [
             'name' => 'changedgroup',
-
+            'project_id' => '4a7d8a96-08f6-441c-a8d5-eb40440e7603'
         ];
         // Check number of queued items before edit
         $countQueueItems = $this->Downloadqueues->find()->count();

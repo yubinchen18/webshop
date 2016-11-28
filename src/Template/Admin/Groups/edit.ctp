@@ -44,6 +44,7 @@
                     </div>
 
                     <hr>
+                    <?=$this->Form->hidden('project_id'); ?>
                     <?=$this->Html->link(__('Annuleer'),['action' => 'index'], ['class' => 'btn btn-sm']); ?>
                     <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
                 </div>
