@@ -32,10 +32,8 @@
                     <div class="form-group">
                         <?= $this->Form->label('project_id', __('Project'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
-                            <?= $this->Form->select(
-                                    'project_id',
-                                    $projects,
-                                    ['empty' => __('(Kies een project)')]
+                            <?= $this->Form->input('project_id', ['empty' => __('(Kies een project)'), 'type' => 'select',
+                                'options' => $projects, 'label' => false]
                                 );
                             ?>
                         </div>

@@ -60,10 +60,38 @@ class GroupsTable extends BaseTable
             ->allowEmpty('id', 'create');
 
         $validator
-            ->notEmpty('name');
+            ->notEmpty('name')
+            ->add('name', 'custom', [
+                'rule' => function ($value, $context) {
+                    $exists = $this->exists(['name' => $value, 'project_id' => $context['data']['project_id']]);
+                    
+                    if ($exists && isset($context['data']['id'])) {
+                        $result = $this->find('all', [
+                            'conditions' => [
+                                'name' => $value,
+                                'project_id' => $context['data']['project_id']
+                            ]
+                        ])->first();
+                        
+                        if ($result->id == $context['data']['id']) {
+                            return true;
+                        }
+                        
+                        return false;                        
+                    } else if ($exists) {
+                        return false;
+                    }
+                    
+                    return true;
+                },
+                'message' => 'Er bestaat al een klas met deze naam voor het gekozen project'
+            ]);
 
         $validator
             ->allowEmpty('slug');
+        
+        $validator
+            ->notEmpty('project_id');
 
         $validator
             ->dateTime('deleted')
