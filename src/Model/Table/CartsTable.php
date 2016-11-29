@@ -210,7 +210,8 @@ class CartsTable extends Table
             'products' => 0,
             'discount' => 0,
             'tax' => 0,
-            'shippingcosts' => 3.95
+            'shippingcosts' => 3.95,
+            'cartCount' => 0,
         ];
         
         $total_lines = 0;
@@ -220,8 +221,8 @@ class CartsTable extends Table
             
             $totals['products'] += $line->subtotal;
             $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
-            
-            if (!empty($line->product->high_shipping)) {
+            $totals['cartCount'] += $line->quantity;
+            if(!empty($line->product->high_shipping)) {
                 $high_shipping = true;
             }
         }

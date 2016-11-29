@@ -115,13 +115,25 @@
                 <?php endif; ?>
                 <div class="flash-message"><?= $this->Flash->render(); ?></div>
                 <?= $this->Form->end() ?>
+                <!-- action logo -->
+                <div class='login-action-star'>
+                    <div class='login-action-star-message'>
+                        <?= __('Gratis verzending vanaf 3 afdrukken'); ?>
+                    </div>
+                    <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-37.png', [
+                        'class' => ['login-action-start-logo']
+                    ]); ?>
+                </div>
             </div>
-            <div class='col-sm-8'>
+            
+            
+            <div class='login-logo-container col-sm-5 col-sm-offset-3'>
             <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-36.png', [
                 'class' => ['login-main-logo']
             ]); ?>
             </div>
         </div>
+        
     </div>
 </div>
 

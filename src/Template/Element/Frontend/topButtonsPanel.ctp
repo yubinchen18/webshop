@@ -1,4 +1,4 @@
-<div class='col-xs-12 hidden-lg hidden-md hidden-sm photos-view-buttons-panel-top'
+<div class='col-xs-12 hidden-lg hidden-md hidden-sm photos-view-buttons-panel-top' data-spy="affix" data-offset-top="0"
     data-product-group= '<?= $this->request->params['pass'][0]; ?>' data-photo-id="<?= $this->request->params['pass'][1]; ?>">
     <div class='photos-view-buttons-box1' id="photos-view-buttons-box1-top">
         <div class='button-glans photos-view-buttons-button photos-view-buttons-selected' 

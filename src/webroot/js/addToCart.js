@@ -114,6 +114,8 @@ jQuery(function($) {
                     setTimeout(function() {
                         $('.addToCartPopup-confirmation').hide();
                     },2000);
+                    //add cartCount animation
+                    updateCartCount(response.cartCount)
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);
@@ -139,6 +141,17 @@ jQuery(function($) {
            }
        });
    }
+   
+   function updateCartCount(count) {
+        var cartLabel = $('div.small-cart div.label');
+        if (cartLabel.hasClass('label-animate')) {
+            cartLabel.removeClass('label-animate');
+        }
+        cartLabel.html(count).addClass('label-animate');
+        setTimeout(function () {      
+            cartLabel.removeClass("label-animate");         
+       }, 340);
+    }
    
    checkCartStatus();
 });

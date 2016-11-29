@@ -46,8 +46,10 @@ class CartsController extends AppController
             $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
             $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
             $response = [
-                'success' => true, 'message' => __('De foto is toegevoegd aan de winkelwagen'),
-                'digital' => $digitalPack, 'redirect' => $personBarcode
+                'success' => true,
+                'message' => __('De foto is toegevoegd aan de winkelwagen'),
+                'digital' => $digitalPack,
+                'redirect' => $personBarcode,
             ];
             $productOptions = (!empty($cartlineData['product_options'])) ? $cartlineData['product_options'] : [];
                         
@@ -121,7 +123,10 @@ class CartsController extends AppController
                     }
                 }
             }
-                        
+            
+            //add cart count
+            $cartCount = $this->Carts->getCartTotals($cart->id)['cartCount'];
+            $response['cartCount'] = $cartCount;
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;
@@ -353,13 +358,13 @@ class CartsController extends AppController
             
             $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
             $cart = $this->Carts->updatePrices($cartline->cart_id);
-            
             $cartTotals = $this->Carts->getCartTotals($cart->id);
             
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
                 'cart' => $cart,
+                'cartCount' => $cartTotals['cartCount'],
                 'discountPrice' => Configure::read('DiscountPrice'),
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
@@ -426,7 +431,8 @@ class CartsController extends AppController
                 'message' => 'Cartline deleted',
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
-                'shippingCost' => $cartTotals['shippingcosts']
+                'shippingCost' => $cartTotals['shippingcosts'],
+                'cartCount' => $cartTotals['cartCount']
             ];
             $response['removeGroup'] = (isset($removeGroup)) ? $removeGroup : "";
             $this->set(compact('response'));

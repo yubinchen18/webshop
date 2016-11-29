@@ -40,6 +40,8 @@
     }
     .photos-index-container {
         margin-bottom: 2%;
+        padding-left: 5px;
+        padding-right: 5px;
     }
     .photos-index-icon {
         border: 1px solid #b5b5b5;
@@ -101,6 +103,7 @@
     .photos-index-banner-ul li.li-no-background {
         background: none;
         padding: 5%;
+        padding-top: 15%;
         border: none;
     }
 }
@@ -241,13 +244,15 @@
     }
 }
 
+
+
 .photos-view-products {
     border-left: 2px solid #b5b5b5;
     .photos-view-products-row {
         height: 100%;
     }
 
-    .photos-view-products-panel{
+    .photos-view-products-panel {
         margin-top: 9%;
         padding-left: 5%;
     }
@@ -362,7 +367,7 @@
         width: 100%;
     }
     
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 425px) {
         .photos-product-container {
             width: 100%;
         }
@@ -383,6 +388,44 @@
         border-bottom: 2px solid #b5b5b5;
     }
     
+    .photos-view-buttons-panel .fixed {
+        position: fixed;
+        top: 97px;
+        width: 64.95px;
+        margin-left: -2px;
+        border-left: 2px solid #b5b5b5;
+        background: white;
+        border-bottom: 2px solid #b5b5b5;
+    }
+
+    @media only screen and (max-width: 991px) and (min-width : 768px) {
+        .photos-view-buttons-panel .fixed {
+            width: 46.88px;
+            margin-left: -2px;
+        }
+    }
+    
+    @media only screen and (max-width: 1199px) and (min-width : 992px) {
+        .photos-view-buttons-panel .fixed {
+            width: 53.88px;
+            margin-left: -2px;
+        }
+    }
+    
+    @media only screen and (max-width: 1899px) and (min-width: 1600px) {
+        .photos-view-buttons-panel .fixed {
+            width: 58.61px;
+            margin-left: -2px;
+        }
+    }
+    
+    @media only screen and (min-width: 1900px) {
+        .photos-view-buttons-panel .fixed {
+            width: 65.7px;
+            margin-left: -2px;
+        }
+    }
+    
     #photos-view-buttons-box1 {
         display: -webkit-flex;
         display: flex;
@@ -392,7 +435,7 @@
         border-bottom: 2px solid #b5b5b5;
         padding: 10%;
         padding-left: 15%;
-        padding-right: 5%;
+        padding-right: 15%;
         overflow: hidden;
     }
     
@@ -400,12 +443,17 @@
         display: -webkit-flex;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        height: 225px;
+        justify-content: flex-start;
+        height: 1000px;
         padding: 10%;
         padding-left: 15%;
-        padding-right: 5%;
+        padding-right: 15%;
         overflow: hidden;
+        
+        .photos-view-buttons-button {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
     }
     
     .photos-view-buttons-button {
@@ -416,7 +464,7 @@
 
         .photos-view-buttons-select {
             position: absolute;
-            left: -20%;
+            left: -23%;
             top: 50%;
             transform: translate(0%,-50%);
             width: 0;
@@ -435,7 +483,7 @@
         }
     }
     
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 767px) {        
         .photos-view-buttons-panel-top {
             display: -webkit-flex;
             display: flex;
@@ -450,7 +498,18 @@
             padding: 0;
             align-items: center;
             flex-wrap: nowrap;
+            background: white;
+            
         }
+        .photos-view-buttons-panel-top.affix {
+            top: 97px;
+            width: 75%;
+            padding-bottom: 0%;
+            height: auto;
+            z-index: 200;
+            border-top: none;
+        }
+        
         #photos-view-buttons-box1-top {
             display: -webkit-flex;
             display: flex;
@@ -485,3 +544,142 @@
     }
 }
 
+
+// fixed product panel media queries, to-do: better organize the code in the future
+
+@media only screen and (max-width: 469px) and (min-width: 320px){
+    .photos-view-products {
+        width: 75px;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        margin-right: -15px;
+        max-width: 75px;
+        border-left: 2px solid #b5b5b5;
+    }
+    .photos-view-buttons-panel-top.affix {
+        top: 97px;
+        height: 70px;
+        width: 73%;
+        z-index: 200;
+    }
+}
+
+@media only screen and (max-width: 629px) and (min-width : 470px) {
+    .photos-view-products {
+        width: 110px;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        margin-right: -15px;
+        max-width: 110px;
+        border-left: 2px solid #b5b5b5;
+    }
+    .photos-view-buttons-panel-top.affix {
+        top: 97px;
+        height: 70px;
+        width: 73%;
+        z-index: 200;
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width : 630px) {
+    .photos-view-products {
+        width: 150px;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        margin-right: -15px;
+        max-width: 150px;
+        border-left: 2px solid #b5b5b5;
+    }
+}
+
+@media only screen and (max-width: 991px) and (min-width : 768px) {
+    .photos-view-products {
+        width: 150px;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        height: 100%;
+        margin-left: -17px;
+        margin-right: -15px;
+        width: 150px;
+        border-left: 2px solid #b5b5b5;
+    }
+}
+
+@media only screen and (max-width: 1199px) and (min-width : 992px) {
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        margin-right: -15px;
+        width: 323.33px;
+        border-left: 2px solid #b5b5b5;
+    }
+}
+
+@media only screen and (max-width: 1599px) and (min-width : 1200px) {
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        width: 390px;
+        border-left: 2px solid #b5b5b5;
+    }
+}
+
+@media only screen and (max-width: 1899px) and (min-width: 1600px) {
+    .index-left {
+        width: 94.4%
+    }
+    .index-right {
+        width: 5.6%;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        width: 392.5px;
+        border-left: 2px solid #b5b5b5;
+    }
+    .photos-index-container {
+        width: 14.2%;
+    }
+}
+
+@media only screen and (min-width: 1900px) {
+    .index-left {
+        width: 95.58%
+    }
+    .index-right {
+        width: 4.42%;
+    }
+    .photos-product-index {
+        width: 79.5%;
+    }
+    .photos-view-products {
+        width: 20.5%;
+    }
+    .col-xxl-2 {
+        width: 20%;
+    }
+    .photos-view-products-fixed {
+        position: fixed;
+        top: 97px;
+        margin-left: -17px;
+        width: 383.34px;
+        border-left: 2px solid #b5b5b5;
+    }
+    .photos-index-container {
+        width: 14.2%;
+    }
+}

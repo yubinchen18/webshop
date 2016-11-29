@@ -34,6 +34,8 @@ jQuery(function($) {
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //animate cart count
+                    updateCartCount(response.cartCount);
                 }
             },
             failure: function(response) {
@@ -41,8 +43,8 @@ jQuery(function($) {
         });
      });
 
-          $('.quantity-left-minus').click(function(e){
-         var localQuantity = $(this).parent().parent().find('.input-number');
+    $('.quantity-left-minus').click(function(e){
+        var localQuantity = $(this).parent().parent().find('.input-number');
         e.preventDefault();
         var quantity = parseInt(localQuantity.val());
         if(quantity>1){
@@ -79,6 +81,8 @@ jQuery(function($) {
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //animate cart count
+                    updateCartCount(response.cartCount);
                 }
             },
             failure: function(response) {
@@ -99,11 +103,28 @@ jQuery(function($) {
                 method: 'POST',
                 dataType:"json",
                 success: function(response) {
-                    $('.'+localQuantity.attr('id')).html(localQuantity.val());
-                    $('.price-'+localQuantity.data('id')).html(response.cartline.subtotal.toString().replace(".", ","));
+                    var cartlines = response.cart.cartlines;
+                    for(line in cartlines) {
+                        qtyRow = $('#'+ cartlines[line]['id']);
+                        subTotals = $('<div/>');
+                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
+                        if(cartlines[line]['product']['has_discount'] == 1 && 
+                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
+                           cartlines[line]['quantity'] > 1) {
+                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
+                        } else {
+                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                        }
+                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
+                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
+                    }
+                    
                     $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                     $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                     $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //animate cart count
+                    updateCartCount(response.cartCount);
                 },
                 failure: function(response) {
                 }
@@ -141,6 +162,8 @@ jQuery(function($) {
                 if(response.removeGroup !== "") {
                     $('div#'+response.removeGroup).remove();
                 }
+                //animate cartCount
+                updateCartCount(response.cartCount);
             }
           });
        }
@@ -191,4 +214,14 @@ jQuery(function($) {
             }
         }, this));
     });
+    function updateCartCount(count) {
+        var cartLabel = $('div.small-cart div.label');
+        if (cartLabel.hasClass('label-animate')) {
+            cartLabel.removeClass('label-animate');
+        }
+        cartLabel.html(count).addClass('label-animate');
+        setTimeout(function () {      
+            cartLabel.removeClass("label-animate");         
+       }, 340);
+    }
 });

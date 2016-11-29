@@ -1,5 +1,5 @@
-<div class="photos-view-products col-md-4 col-xs-3">
-    <div class='row photos-view-products-row'>
+<div class="photos-view-products col-xl-3 col-md-4 col-xs-3">
+    <div class='row photos-view-products-row photos-view-products-fixed'>
         <div class='photos-view-products-panel col-sm-12'>
             <div class="row">
                 <div class="photos-view-products-container col-md-6">
@@ -85,7 +85,7 @@
                             'id' => $photo->id,
                             'size' => 'thumbs'
                         ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
-                        <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03.png', [
+                        <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03-03.png', [
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
                                 'action' => 'productGroupIndex',

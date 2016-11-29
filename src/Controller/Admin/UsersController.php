@@ -43,7 +43,7 @@ class UsersController extends AppController
     public function index()
     {
         $this->paginate = ['conditions' => [
-            'Users.type NOT IN' => ['person', 'basic']
+            'Users.type NOT IN' => ['person', 'basic', 'student']
         ]];
         $users = $this->paginate($this->Users);
 
