@@ -118,7 +118,7 @@
                 <!-- action logo -->
                 <div class='login-action-star'>
                     <div class='login-action-star-message'>
-                        <?= __('Actie! Binnen &#233&#233n week bestellen, 4e foto GRATIS (15x23 cm)'); ?>
+                        <?= __('Gratis verzending vanaf 3 afdrukken'); ?>
                     </div>
                     <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-37.png', [
                         'class' => ['login-action-start-logo']

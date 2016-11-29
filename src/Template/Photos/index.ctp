@@ -45,7 +45,7 @@
         </div>
     <?php endif ?>
     </div>
-    <div class="photos-index col-md-3 col-sm-12">
+    <div class="photos-index col-xl-2 col-md-3 col-sm-12">
         <!-- Medium screen -->
         <div class="photos-index-banner col-md-11 col-md-offset-1 hidden-sm hidden-xs">
             <ul class="photos-index-banner-ul  list-group">
@@ -62,7 +62,13 @@
                             'photos-index-banner-img',
                             'img-responsive',
                             'center-block'
-                        ]
+                        ],
+                        'url' => $this->Url->build([
+                            'controller' => 'Photos', 
+                            'action' => 'productGroupIndex',
+                            'digital',
+                            $photo->id
+                        ]),
                     ]) ?>
                 </li>
             </ul>
@@ -79,7 +85,13 @@
                 <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-42-41.png', [
                     'class' => [
                         'photos-index-banner-img'
-                    ]
+                    ],
+                    'url' => $this->Url->build([
+                        'controller' => 'Photos', 
+                        'action' => 'productGroupIndex',
+                        'digital',
+                        $photo->id
+                    ]),
                 ]) ?>
         </div>
     </div>
