@@ -15,6 +15,7 @@
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\Plugin;
+use Cake\Cache\Cache;
 
 /**
  * Additional bootstrapping and configuration for CLI environments should
@@ -29,8 +30,39 @@ use Cake\Core\Plugin;
 Configure::write('Log.debug.file', 'cli-debug');
 Configure::write('Log.error.file', 'cli-error');
 
+$environment = null;
+
+if (isset($argv)) {
+    foreach ($argv as $key => $var) {
+        if (strpos($var, 'env-') !== false) {
+            switch ($var) {
+                case 'env-prod':
+                case 'env-production':
+                    $environment = 'production';
+                    break;
+                case 'env-stag':
+                case 'env-staging':
+                    $environment = 'staging';
+                    break;
+                case 'env-dev':
+                case 'env-development':
+                    $environment = 'development';
+                    break;
+            }
+            unset($argv[$key]);
+        }
+    }
+    if (empty($environment)) {
+        throw new \Cake\Database\Exception\MissingConnectionException('Environment variable is missing');
+    }
+    Configure::load('environments/'.$environment);
+}
+if (empty($argv)) {
+    Configure::load('environments/test');
+}
 try {
     Plugin::load('Bake');
 } catch (MissingPluginException $e) {
     // Do not halt if the plugin is missing
 }
+Cache::disable();

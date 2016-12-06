@@ -42,9 +42,15 @@ class Address extends Entity
 
     protected function _getFullName()
     {
-        return $this->_properties['firstname'] . '  ' .
+        $firstname = (isset($this->_properties['firstname']) ? $this->_properties['firstname'] : '');
+        $lastname = (isset($this->_properties['lastname']) ? $this->_properties['lastname'] : '');
+
+        if (isset($this->_properties['prefix'])) {
+            return $this->_properties['firstname'] . '  ' .
                 $this->_properties['prefix'] . '  ' .
-            $this->_properties['lastname'];
+                $this->_properties['lastname'];
+        }
+        return $firstname . " " . $lastname;
     }
     
     protected function _getFullAddress()
