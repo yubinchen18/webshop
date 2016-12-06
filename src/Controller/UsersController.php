@@ -24,7 +24,7 @@ class UsersController extends AppController
                     $data[] = $user['id'];
                     $session->write('LoggedInUsers.AllUsers', $data);
                     $session->write('LoggedInUsers.ActiveUser', $user['id']);
-                    return $this->redirect($this->Auth->config('loginAction'));
+                    $this->redirectAfterLogin();
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                        'element' => 'default',
@@ -51,7 +51,7 @@ class UsersController extends AppController
                     //write all users to session key
                     $loggedInUsers[] = $extraUser['id'];
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
-                    return $this->redirect($this->Auth->config('loginAction'));
+                    $this->redirectAfterLogin();
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                        'element' => 'default',
@@ -70,6 +70,15 @@ class UsersController extends AppController
             $this->set(compact('photos', 'allUsers'));
             $this->set('_serialize', ['photo']);
         }
+    }
+    
+    private function redirectAfterLogin()
+    {
+        if ($this->request->data === 'login-extra-child') {
+            return $this->redirect($this->Auth->config('loginAction'));
+        }
+        
+        return $this->redirect(array('controller' => 'Photos', 'action' => 'index'));
     }
 
     public function logout()
