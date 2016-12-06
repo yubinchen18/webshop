@@ -4,7 +4,6 @@ namespace App\Shell\Task;
 use Cake\Console\Shell;
 use App\Lib\PDFCardCreator;
 use App\Lib\ImageHandler;
-use phpseclib\Net\SFTP;
 
 /**
  * ExportPhotexTask shell task.
@@ -43,7 +42,6 @@ class ExportPhotexTask extends Shell
         $openOrders = $this->Orders->findOpenOrdersForPhotex();
         $this->data['cronjobs.photex.openorders'] = count($openOrders);
         $this->data['cronjobs.photex.queue.added'] = 0;
-//        debug($openOrders);die();
         foreach ($openOrders as $order) {
             //see if order is already in download queue
             $queue = $this->Orders->PhotexDownloads->find()->where(['order_id' => $order->id])->toArray();
@@ -79,6 +77,7 @@ class ExportPhotexTask extends Shell
         
         //Process each orders in the queue
         foreach ($queue as $key => $queuedOrder) {
+            //UPLOAD PACKINGSLAP BLOCK
             $orderData = $this->Orders->getOrderDataForPhotex($queuedOrder->order_id);
             $orderIdent = str_pad($orderData->ident, 6, "0", STR_PAD_LEFT);
             //create packslip
@@ -124,6 +123,7 @@ class ExportPhotexTask extends Shell
             ftp_chdir($ftp, $orderIdent);
             $this->out("-- Zit nu in map: " . ftp_pwd($ftp));
             $this->out("-- Foto's aan het uploaden.");
+            
             foreach ($orderData->orderlines as $orderline) {
                 // If it's a combination sheet, create combination sheet
                 if ($orderline->product->layout != 'LoosePrintLayout1') {
@@ -159,7 +159,7 @@ class ExportPhotexTask extends Shell
                 }
             }
             
-            // Check and update status
+            // Rename packingslip
             ftp_chdir($ftp, $this->ftpPackingslipsFolder);
             if (ftp_rename($ftp, $packingslipName, $orderIdent.".pdf")) {
                 $this->out("-- Pakbon hernoemd: " . $orderIdent.".pdf");
@@ -167,33 +167,8 @@ class ExportPhotexTask extends Shell
                 $this->out("Rename mislukt: " . $orderIdent.".pdf");
             }
             $packingslipName = $orderIdent.".pdf";
+            
             if ( $this->debug === false ) {
-                // delete from Photex Downloadqueue
-                if ($this->Orders->PhotexDownloads->delete($queuedOrder)) {
-                    $this->out('-- Order uit Photex Download queue verwijderd.');
-                } else {
-                    $this->out('Kon Photex Download queue niet verwijderen.');
-                };
-                //Change orderstatus to sent to photex and exportstatus success
-                $systemUser = $this->Orders->Users->getSystemUser();
-                $newOrderstatus = $this->Orders->OrdersOrderstatuses->newEntity([
-                    'order_id' => $queuedOrder->order_id,
-                    'orderstatus_id' => 
-                        $this->Orders->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_photex'])->first()->id,
-                    'user_id' => $systemUser->id
-                ]);
-                if ($this->Orders->OrdersOrderstatuses->save($newOrderstatus)) {
-                    $this->out('-- Orderstatus gewijzigd naar: Sent to Photex.');
-                } else {
-                    $this->out('Kon order status niet wijzigen.');
-                };
-                $order = $this->Orders->get($queuedOrder->order_id);
-                $order->exportstatus = 'success';
-                if ($this->Orders->save($order)) {
-                    $this->out('-- Order exportstatus gewijzigd naar: success.');
-                } else {
-                    $this->out('Kon order exportstatus niet wijzigen.');
-                };
                 // Delete cache
                 if ($this->deleteCache) {
                     unlink($this->pdfLocation);
@@ -213,43 +188,38 @@ class ExportPhotexTask extends Shell
     public function final_check() {
         $this->out('Final Check');
         if ($ftp = $this->connectFtp()) {
-            $this->out("FTP verbinding gemaakt");
             ftp_chdir($ftp, $this->ftpPhotosFolder);
             $orders = ftp_nlist($ftp, ".");
             ftp_chdir($ftp, $this->ftpPackingslipsFolder);
-            $aPackingSlips = ftp_nlist($ftp, ".");
-
-            foreach( $orders as $iOrderNr ) {
-                if( !is_numeric($iOrderNr)) {
+            $packingSlips = ftp_nlist($ftp, ".");
+            foreach( $orders as $orderNr ) {
+                if( !is_numeric($orderNr)) {
                     continue;
                 }
-                $sStatus = 'order not found';
-                $aOrder = $this->Order->find(
-                    'first', 
-                    array(
-                        'conditions' => array(
-                            'Order.id' => $iOrderNr
-                        ),
-                        'contain' => array(
-                            'Orderline',
-                            'Orderstatus' => array(
-                                'order' => array(
-                                    'Orderstatus.created' => 'DESC'
-                                ),
-                                'limit' => 1
-                            )
-                        )
-                    )
-                );
-
+                //remove leading zeros from ident
+                $orderNr = ltrim($orderNr, '0');
+                $status = 'order not found';
+                $order = $this->Orders->find()
+                    ->where(['Orders.ident' => $orderNr])
+                    ->contain([
+                        'Orderlines', 
+                        'OrdersOrderstatuses' => function ($q) {
+                            return $q
+                                ->order(['OrdersOrderstatuses.created' => 'DESC'])
+                                ->contain(['Orderstatuses'])
+                                ->limit(1);
+                        },
+                    ])
+                    ->first();
+                $status = $this->Orders->getLastOrderstatus($order->id);
                 $allExported = true;
-                $isPaid = ($aOrder['Order']['paid'] == 'Y');
+                $isPaid = ($status->alias === 'payment_received');
                 $hasPackingSlip = false;
-                if( $aOrder['Order']['exported'] == 'Y') {
-                    $hasPackingSlip = in_array($aOrder['Order']['id'] . '.pdf', $aPackingSlips);
-
-                    foreach( $aOrder['Orderline'] as $aOrderline ) {
-                        if( $aOrderline['exported'] != 'Y') {
+                $orderIdent = str_pad($order->ident, 6, "0", STR_PAD_LEFT);
+                if( $order->exportstatus == 'queued') {
+                    $hasPackingSlip = in_array($orderIdent . '.pdf', $packingSlips);
+                    foreach( $order->orderlines as $orderline ) {
+                        if($orderline['exported'] != true) {
                             $allExported = false;
                             break;
                         }
@@ -258,46 +228,57 @@ class ExportPhotexTask extends Shell
                     $allExported = false;
                 }
 
-                if( !empty( $aOrder ) ) {
-                    if( $isPaid ) {
-                        if( !$hasPackingSlip ) {
-                            $sStatus = 'missing packing slip';
-                            
+                if(!empty($order)) {
+                    if($isPaid) {
+                        if(!$hasPackingSlip) {
+                            $status = 'missing packing slip';
                             if( $this->debug === false ) {
-                                $aOrder = $this->getOrderData($iOrderNr, false);
-                                $this->uploadPackingSlip($aOrder, false);
+                                $this->uploadPackingSlip($order->id);
                             }
                         }
                         if( !$allExported ) {
-                            $sStatus = 'export failed';
+                            $status = 'export failed';
                         }
                         if( $isPaid && $allExported && $hasPackingSlip ) {
-                            $sStatus = 'all ok';
+                            $status = 'all ok';
+                            //UPDATE STATUSES BLOCK
                             if ( $this->debug === false ) {
-                                $this->Order->query("DELETE FROM photex_downloadqueue WHERE order_id = " . $aOrder['Order']['id']);
-                                
-                                $aExistingStatus = $this->Order->Orderstatus->find(
-                                    'first', 
-                                    array(
-                                        'conditions' => array(
-                                            'status_id' => 9, 
-                                            'order_id' => $aOrder['Order']['id']
-                                        ),
-                                        'contain' => false
-                                    )
-                                );
-                                if($aExistingStatus === false ) {
-                                    $this->Order->Orderstatus->create();
-                                    $this->Order->Orderstatus->save(array('status_id' => 9, 'order_id' => $aOrder['Order']['id']));
+                                // delete from Photex Downloadqueue
+                                $photexQueue = $this->Orders->PhotexDownloads->findByOrder_id($order->id)->first();
+                                if (!empty($photexQueue)) {
+                                    if ($this->Orders->PhotexDownloads->delete($photexQueue)) {
+                                        $this->out('-- Order uit Photex Download queue verwijderd: '. $orderIdent);
+                                    } else {
+                                        $this->out('Kon Photex Download queue niet verwijderen.');
+                                    };
                                 }
+                                //Change orderstatus to sent to photex and exportstatus success
+                                $systemUser = $this->Orders->Users->getSystemUser();
+                                $newOrderstatus = $this->Orders->OrdersOrderstatuses->newEntity([
+                                    'order_id' => $order->id,
+                                    'orderstatus_id' => 
+                                        $this->Orders->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_photex'])->first()->id,
+                                    'user_id' => $systemUser->id
+                                ]);
+                                if ($this->Orders->OrdersOrderstatuses->save($newOrderstatus)) {
+                                    $this->out('-- Orderstatus gewijzigd naar: Sent to Photex: '. $orderIdent);
+                                } else {
+                                    $this->out('Kon order status niet wijzigen.');
+                                };
+                                //Change order exportstatus to success
+                                $order->exportstatus = 'success';
+                                if ($this->Orders->save($order)) {
+                                    $this->out('-- Order exportstatus gewijzigd naar: success: ' . $orderIdent);
+                                } else {
+                                    $this->out('Kon order exportstatus niet wijzigen.');
+                                };
                             }
                         }
-                    } else {
-                        $sStatus = 'not paid';
                     }
                 }
-                $this->out($iOrderNr . ': ' . $sStatus);
+                $this->out($orderNr . ': ' . $this->Orders->getLastOrderstatus($order->id)->alias);
             }
+            $this->disconnectFtp($ftp);
         }
     }
     
@@ -329,6 +310,45 @@ class ExportPhotexTask extends Shell
         ftp_set_option($connection, FTP_TIMEOUT_SEC, 3600);
         $this->out("Verbinding met FTP server gemaakt.");
         return $connection;
+    }
+    
+    private function uploadPackingSlip($orderId) {
+        $this->out('uploading packingslip');
+        $ftp = $this->connectFtp();
+        //UPLOAD PACKINGSLAP BLOCK
+        $orderData = $this->Orders->getOrderDataForPhotex($orderId);
+        $orderIdent = str_pad($orderData->ident, 6, "0", STR_PAD_LEFT);
+        //create packslip
+        $this->pdfLocation = (new PDFCardCreator($orderData))->path;
+        $this->out('Order: ' . $orderIdent);
+        ftp_chdir($ftp, $this->ftpPackingslipsFolder);
+        $this->out("-- Zit nu in map: " . ftp_pwd($ftp));
+        $fileList = ftp_nlist($ftp, ".");
+        //Upload pakbon and change temp name
+        $packingslipName = $orderIdent;
+//        if( $this->useTempName == true ) {
+//            $packingslipName .= '-bezig';
+//        }
+        $packingslipName .= '.pdf';
+        if (!$fileList) {
+            $fileList = [];
+        }
+        if (!in_array($packingslipName, $fileList)) {
+            //Pakbon upload:
+            if (ftp_put($ftp, $packingslipName, $this->pdfLocation, FTP_BINARY)) {
+                $this->out("-- Pakbon geupload: $packingslipName");
+            } else {
+                print_r(error_get_last());
+                $this->out("! Pakbon upload mislukt: " . $this->ftpPackingslipsFolder . $packingslipName);
+            }
+        } else {
+            if ( $this->debug === false ) {
+                $photexQueue = $this->Orders->PhotexDownloads->find()->where(['order_id' => $orderData->id])->first();
+                $photexQueue->attempts = $photexQueue->attempts + 1;
+                $this->Orders->PhotexDownloads->save($photexQueue);
+            }
+        }
+        $this->disconnectFtp($ftp);
     }
     
     private function disconnectFtp($connection) {

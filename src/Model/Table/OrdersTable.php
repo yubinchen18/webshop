@@ -203,6 +203,21 @@ class OrdersTable extends Table
             ->all();
     }
     
+    public function getLastOrderstatus($orderId)
+    {
+        $order = $this->get($orderId, [
+            'contain' => [
+                'OrdersOrderstatuses' => function ($q) {
+                    return $q
+                        ->order(['OrdersOrderstatuses.created' => 'DESC'])
+                        ->contain(['Orderstatuses']);
+                }
+            ]
+        ]);
+        
+        return $order->orders_orderstatuses[0]->orderstatus;
+    }
+    
     public function getOrderDataForPhotex($orderId, $notExportedOnly = true)
     {
         $orderlineConditions = [];
