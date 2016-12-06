@@ -74,7 +74,7 @@ class UsersController extends AppController
     
     private function redirectAfterLogin()
     {
-        if ($this->request->data === 'login-extra-child') {
+        if ($this->request->data['login-type'] === 'login-extra-child') {
             return $this->redirect($this->Auth->config('loginAction'));
         }
         
