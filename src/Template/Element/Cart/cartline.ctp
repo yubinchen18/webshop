@@ -3,17 +3,31 @@
         <div class='cartline-photo'>
             <div class="<?= $cartline->photo->orientationClass.' '.$cartline->photo->orientationClass.'-background' ?>">
             </div>
-            <?= $this->Html->image($this->Url->build([
-                'controller' => 'Photos',
-                'action' => 'displayProduct',
-                'layout' => $cartline->product->layout,
-                'id' => $cartline->photo_id,
-                'suffix' => $cartline->product->image['suffix'],
-            ]), [
-                'alt' => $cartline->photo->path,
-                'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
-                'class' => [$cartline->photo->orientationClass, 'img-responsive']
-            ]); ?>
+            <?php
+            if ($cartline->product->product_group === 'funproducts') {
+                echo $this->Html->image('layout/funartikelen/'.$cartline->product->image, [
+                    'alt' => $cartline->product->name,
+                    'url' => $this->Url->build([
+                        'controller' => 'Photos',
+                        'action' => 'productGroupIndex',
+                        'productGroup' => 'funproducts',
+                        'id' => $cartline->photo_id]),
+                    'class' => [$cartline->photo->orientationClass, 'img-responsive']
+                ]);
+            } else {
+                echo $this->Html->image($this->Url->build([
+                    'controller' => 'Photos',
+                    'action' => 'displayProduct',
+                    'layout' => $cartline->product->layout,
+                    'id' => $cartline->photo_id,
+                    'suffix' => $cartline->product->image['suffix'],
+                ]), [
+                    'alt' => $cartline->photo->path,
+                    'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
+                    'class' => [$cartline->photo->orientationClass, 'img-responsive']
+                ]);
+            }
+            ?>
         </div>
     </div>
     <div class='cartline-product-details col-xs-4'>
