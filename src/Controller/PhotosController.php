@@ -295,7 +295,6 @@ class PhotosController extends AppController
                             'layout' => !empty($product->layout) ? $product->layout : 'all',
                             'filter' => $filter
                         ]);
-                        $product->selected = 
                         //add the image data to product object
                         $product->image = $image[0];
                         
