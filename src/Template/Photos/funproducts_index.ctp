@@ -2,10 +2,15 @@
     <!-- left panel -->
     <div class="photos-product-index col-md-8 col-xs-9">
         <!-- left pics panel -->
+        <div class="row">
+             <div class='col-sm-11 col-xs-12'>
+                <h2 class='col-xs-12'><?= __('Fotocadeaus') ?></h2>
+            </div>
+        </div>
+        
         <div class='row'>
             <div class='col-sm-11 col-xs-12'>
                 <div class="row">
-                    <h2 class='col-xs-12'><?= __('Fotocadeaus') ?></h2>
                     <div class='addToCartPopup-confirmation col-md-4 col-xs-5 alert'>
                         <span id='msg'></span>
                     </div>
