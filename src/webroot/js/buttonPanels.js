@@ -30,5 +30,5 @@ jQuery(function($) {
             failure: function(response) {
             }
         });
-    })
+    });
 });

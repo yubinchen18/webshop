@@ -31,6 +31,7 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
+                        <?php if ($photo->selectedProduct === 'loose-prints') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
                 </div>
                 <div class="photos-view-products-container  col-md-6">
@@ -53,6 +54,7 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
+                        <?php if ($photo->selectedProduct === 'funproducts') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
                 </div>
             </div>
@@ -72,6 +74,7 @@
                             ]),
                             'class' => [$photo->orientationClass, 'img-responsive']
                         ]); ?>
+                        <?php if ($photo->selectedProduct === 'combination-sheets') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
                 </div>
                 <div class="photos-view-products-container  col-md-6">
@@ -94,6 +97,7 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
+                        <?php if ($photo->selectedProduct === 'digital') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
                 </div>
             </div>
@@ -118,6 +122,7 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
+                        <?php if ($photo->selectedProduct === 'canvas') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
                 </div>
             </div>

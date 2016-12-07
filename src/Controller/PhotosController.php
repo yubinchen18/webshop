@@ -24,18 +24,7 @@ class PhotosController extends AppController
     public function index()
     {
         //load persons for allow auth check
-        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
-
-        $persons = [];
-        foreach ($loggedInUsersIds as $userId) {
-            $person = $this->Photos->Barcodes->Groups->Persons->find()
-                ->where(['Persons.user_id' => $userId])
-                ->contain(['Barcodes.Photos'])
-                ->first();
-            if ($person) {
-                $persons[] = $person;
-            }
-        }
+        $persons = $this->getAllLoggedInUsers();
 
         //add the orientation data to the photos array
         if (!empty($persons)) {
@@ -59,6 +48,24 @@ class PhotosController extends AppController
         
         $this->set(compact('persons'));
         $this->set('_serialize', ['photos']);
+    }
+    
+    private function getAllLoggedInUsers()
+    {
+        $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
+
+        $persons = [];
+        foreach ($loggedInUsersIds as $userId) {
+            $person = $this->Photos->Barcodes->Groups->Persons->find()
+                ->where(['Persons.user_id' => $userId])
+                ->contain(['Barcodes.Photos'])
+                ->first();
+            if ($person) {
+                $persons[] = $person;
+            }
+        }
+        
+        return $persons;
     }
     
     /**
@@ -257,12 +264,16 @@ class PhotosController extends AppController
             ->contain(['Barcodes.Persons'])
             ->firstOrFail();
         
-        if ($photo->type == 'group' && $productGroup == 'digital') {
-            $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
-            return $this->redirect($this->referer());
+        if ($productGroup == 'digital') {
+            if($photo->type == 'group') {
+                $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
+                return $this->redirect($this->referer());
+            }
+            $allDigitalPhotos = $this->getDigitalPhotos();
+            $this->set('photos', $allDigitalPhotos);
         }
         
-        if (!empty($photo)) {
+        if (!empty($photo) || !empty($allDigitalPhotos)) {
             if ($this->isAuthForPhoto($photo)) {
                 //load products
                 $productTable = TableRegistry::get('Products');
@@ -272,16 +283,9 @@ class PhotosController extends AppController
                         ->orderAsc('article')
                         ->toArray();
                 
+                $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                $photo->selectedProduct = $this->request->params['productGroup'];
                 
-                //add the orientation data to the photos array
-                $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-                $dimensions = getimagesize($filePath);
-                if ($dimensions[0] > $dimensions[1]) {
-                    $orientationClass = 'photos-horizontal';
-                } else {
-                    $orientationClass = 'photos-vertical';
-                }
-                $photo->orientationClass = $orientationClass;
                 if (!empty($products)) {
                     foreach ($products as $product) {
                         //create tmp product preview images
@@ -291,6 +295,7 @@ class PhotosController extends AppController
                             'layout' => !empty($product->layout) ? $product->layout : 'all',
                             'filter' => $filter
                         ]);
+                        $product->selected = 
                         //add the image data to product object
                         $product->image = $image[0];
                         
@@ -360,15 +365,7 @@ class PhotosController extends AppController
             foreach ($photos as $photo) {
                 if ($this->isAuthForPhoto($photo)) {
                     //add the orientation data to the photos array
-                    $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-
-                    list($width, $height) = getimagesize($filePath);
-                    if ($width > $height) {
-                        $orientationClass = 'photos-horizontal';
-                    } else {
-                        $orientationClass = 'photos-vertical';
-                    }
-                    $photo->orientationClass = $orientationClass;
+                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
 
                     $this->set(compact('photo'));
                     $this->set('_serialize', ['photo']);
@@ -387,5 +384,37 @@ class PhotosController extends AppController
         $this->set(compact('photos', 'product', 'personBarcode'));
         $this->set('_serialize', ['photos']);
         $this->render($layout);
+    }
+    
+    private function returnPhotoOrientation($photo)
+    {
+        $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+
+        list($width, $height) = getimagesize($filePath);
+        if ($width > $height) {
+            $orientationClass = 'photos-horizontal';
+        } else {
+            $orientationClass = 'photos-vertical';
+        }
+        
+        return $orientationClass;
+    }
+    
+    private function getDigitalPhotos()
+    {
+        $persons = $this->getAllLoggedInUsers();
+        if (!empty($persons)) {
+            $photos = [];
+            foreach ($persons as $person) {
+                foreach ($person->barcode->photos as $key => $photo) {
+                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                    $photo->portrait = TableRegistry::get('Users')->getUserPortrait($person->user_id);
+                    $photos[] = $photo;
+                }
+            }   
+            return $photos;
+        } else {
+            $this->Flash->error(__('Person not found.'));
+        }
     }
 }
