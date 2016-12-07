@@ -31,24 +31,24 @@ class AppController extends BaseController
         parent::initialize();
         
         $this->Auth->config('loginAction', [
-            'prefix' => 'admin',
+            'prefix' => 'supplier',
             'controller' => 'Users',
             'action' => 'login',
         ]);
         $this->Auth->config('loginRedirect', [
-            'prefix' => 'admin',
-            'controller' => 'Users',
+            'prefix' => 'supplier',
+            'controller' => 'Orders',
             'action' => 'index'
         ]);
         $this->Auth->config('logoutRedirect', [
-            'prefix' => 'admin',
+            'prefix' => 'supplier',
             'controller' => 'Users',
             'action' => 'login',
         ]);
         $this->Auth->config(
             'unauthorizedRedirect',
             [
-                'prefix' => 'admin',
+                'prefix' => 'supplier',
                 'controller' => 'Users',
                 'action' => 'login'
             ]

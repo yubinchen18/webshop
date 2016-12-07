@@ -64,7 +64,8 @@
                                 <?= $this->Form->create(null, [
                                     'url' => [
                                         'controller' => 'searches',
-                                        'action' => 'showResults'
+                                        'action' => 'showResults',
+                                        'prefix' => 'admin'
                                     ],
                                     'class'=> [
                                         'form-search'

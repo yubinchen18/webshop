@@ -113,19 +113,8 @@ class AppController extends Controller
             return true;
         }
 
-        //photex is only allowed to the whielist: Controller [ allowedactions ]
-        if ($user['type'] == 'photex') {
-            $allowed = [
-                'Users' => [
-                    'index'
-                ]
-            ];
-
-            if (isset($allowed[$this->request->params['controller']]) &&
-                   in_array($this->request->params['action'], $allowed[$this->request->params['controller']]) ) {
-                return true;
-            }
-            return false;
+        if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'supplier') {
+            return (bool)($user['type'] === 'photex');
         }
         
         //persons not allowed to admin

@@ -164,6 +164,9 @@ class UsersController extends AppController
                 $data[] = $user['id'];
                 $session->write('LoggedInUsers.AllUsers', $data);
                 $session->write('LoggedInUsers.ActiveUser', $user['id']);
+                if ($user['type'] === 'photex') {
+                    return $this->redirect(['controller' => 'Orders', 'action' => 'index']);
+                }
                 return $this->redirect($this->Auth->redirectUrl());
             } else {
                 $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
