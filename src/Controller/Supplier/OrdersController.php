@@ -19,6 +19,11 @@ class OrdersController extends AppController
      */
     public function index()
     {
+        $lastCreated = 'SELECT MAX(created) FROM orders_orderstatuses as OOST WHERE OOST.order_id = Orders.id';
+        $sentToPhotex = $this->Orders->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_photex'])->first()->id;
+        $sentToCustomer = $this->Orders->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_customer'])->first()->id;
+        $inTreatmentByPhotex = $this->Orders->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'in_treatment_by_photex'])->first()->id;
+
         $this->paginate = [
             'contain' => [
                 'OrdersOrderstatuses' => function ($q) {
@@ -32,8 +37,19 @@ class OrdersController extends AppController
                 'Deliveryaddresses',
                 'Invoiceaddresses'
             ],
+            'join' => [
+                'table' => 'orders_orderstatuses',
+                'alias' => 'OrdersOrderstatuses',
+                'conditions' => [
+                    'OrdersOrderstatuses.order_id = `Orders`.`id`',
+                    'OrdersOrderstatuses.orderstatus_id IN' => [$sentToPhotex, $inTreatmentByPhotex],
+                    sprintf('OrdersOrderstatuses.created = (%s)', $lastCreated)
+                ],
+                'type' => 'INNER'
+            ],
             'order' => ['Orders.created' => 'DESC']
         ];
+                    
         $orders = $this->paginate($this->Orders);
         $this->set(compact('orders'));
         $this->set('_serialize', ['orders']);

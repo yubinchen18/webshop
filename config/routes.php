@@ -352,6 +352,22 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
     });
+    
+    Router::prefix('supplier', function ($routes) {
+        $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+        $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+        $routes->connect('/orders', ['controller' => 'Orders', 'action' => 'index']);
+        $routes->connect(
+            '/orders/view/:id',
+            ['controller' => 'Orders', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/orders/edit/:id',
+            ['controller' => 'Orders', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+    });
 });
 
 Plugin::routes();
