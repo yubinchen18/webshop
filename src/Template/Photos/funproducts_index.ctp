@@ -36,11 +36,11 @@
                             
                             <div class="row">
                                 <div class="photos-product-details">
-                                    <div class="flex-box product-image col-xs-5">
+                                    <div class="flex-box product-image col-xs-3">
                                         <?= $this->Html->image('layout/funartikelen/'.$product['article'].'.jpg',
                                             array('class' => 'img-responsive')); ?>
                                     </div>
-                                    <div class="flex-box product-description col-xs-7">
+                                    <div class="flex-box product-description col-xs-7 col-xs-offset-2">
                                         <?= $product->description; ?>
                                     </div>
                                 </div>
