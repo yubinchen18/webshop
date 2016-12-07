@@ -24,7 +24,7 @@ class UsersController extends AppController
                     $data[] = $user['id'];
                     $session->write('LoggedInUsers.AllUsers', $data);
                     $session->write('LoggedInUsers.ActiveUser', $user['id']);
-                    $this->redirectAfterLogin();
+                    return $this->redirectAfterLogin();
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                        'element' => 'default',
@@ -36,22 +36,26 @@ class UsersController extends AppController
         } else {
             // Already logged in with valid user
             // identify extra user
-            if ($this->request->is('post')) {
+            if ($this->request->is('post')) {                
                 $loggedInUsers = $session->read('LoggedInUsers.AllUsers');
+                
                 $extraUser = $this->Auth->identify();
                 if ($extraUser) {
+                    //pr($this->Auth->user()); die;
                     //check for duplicate users
                     if (in_array($extraUser['id'], $loggedInUsers)) {
-                        $this->Flash->set(__('Kind al ingelogd.'), [
-                            'element' => 'default',
-                            'params' => ['class' => 'error']
-                        ], 'auth');
-                        return $this->redirect($this->Auth->config('loginAction'));
+                        if ($this->request->data['login-type'] === 'login-extra-child') {
+                            $this->Flash->set(__('Kind al ingelogd.'), [
+                                'element' => 'default',
+                                'params' => ['class' => 'error']
+                            ], 'auth');
+                        }
+                        return $this->redirectAfterLogin();
                     }
                     //write all users to session key
                     $loggedInUsers[] = $extraUser['id'];
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
-                    $this->redirectAfterLogin();
+                    return $this->redirectAfterLogin();
                 } else {
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                        'element' => 'default',
@@ -78,6 +82,7 @@ class UsersController extends AppController
             return $this->redirect($this->Auth->config('loginAction'));
         }
         
+        $this->request->session()->write('loginSuccessful', true);        
         return $this->redirect(array('controller' => 'Photos', 'action' => 'index'));
     }
 
@@ -87,6 +92,10 @@ class UsersController extends AppController
             'element' => 'default',
             'params' => ['class' => 'success']
         ]);
+        
+        if ($this->request->session()->check('loginSuccessful')) {
+            $this->request->session()->delete('loginSuccessful');
+        }
         
         //clear extra users data from session
         if ($this->request->session()->read('LoggedInUsers')) {

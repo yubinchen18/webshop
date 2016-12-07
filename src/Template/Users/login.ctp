@@ -2,6 +2,17 @@
     <div class='login-main-container'>
         <div class='row'>
             <div class='login-main-container-panel col-sm-4'>
+                <?php if($this->request->session()->check('loginSuccessful')) : ?>
+                <a href="<?= $this->Url->build(['controller' => 'Photos', 'action' => 'index']); ?>" class="navbar-back-to-index">
+                    <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-11.png', [
+                        'class' => ['img-responsive', 'navbar-back-to-index-img']
+                    ]); ?>
+                    <div class="text-center navbar-back-to-index-text">
+                        <?= __("TERUG NAAR OVERZICHT"); ?>
+                    </div>
+                </a>
+                <?php endif; ?>
+                
                 <?= $this->Form->create(null, [
                     'url' => [
                         'controller' => 'Users',
