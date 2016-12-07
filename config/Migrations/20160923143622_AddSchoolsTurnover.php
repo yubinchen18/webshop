@@ -14,7 +14,7 @@ class AddSchoolsTurnover extends AbstractMigration
     {
         $table = $this->table('projects');
         $table->addColumn('turnover', 'decimal', [
-            'null' => false,
+            'null' => true,
             'limit' => 10,
             'default' => null,
             'after' => 'grouptext'
