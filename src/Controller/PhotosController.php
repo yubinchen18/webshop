@@ -292,7 +292,9 @@ class PhotosController extends AppController
                             'filter' => $filter
                         ]);
                         //add the image data to product object
-                        $product->image = $image[0];
+                        if ($product->product_group !== 'funproducts') {
+                            $product->image = $image[0];
+                        }
                         
                         $digitalProduct = ($product->product_group === 'digital') ? $photo->barcode_id : false;
                         $digitalPack = ($product->article === 'DPack') ? $photo->barcode_id : false;

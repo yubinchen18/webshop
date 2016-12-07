@@ -42,7 +42,7 @@
                             <div class="row">
                                 <div class="photos-product-details">
                                     <div class="flex-box product-image col-xs-3">
-                                        <?= $this->Html->image('layout/funartikelen/'.$product['article'].'.jpg',
+                                        <?= $this->Html->image('layout/funartikelen/'.$product->image,
                                             array('class' => 'img-responsive')); ?>
                                     </div>
                                     <div class="flex-box product-description col-xs-7 col-xs-offset-2">
