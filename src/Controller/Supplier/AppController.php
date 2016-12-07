@@ -56,5 +56,4 @@ class AppController extends BaseController
         $authuser = $this->Auth->user();
         $this->set(compact('authuser'));
     }
-    
 }

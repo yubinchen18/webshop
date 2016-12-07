@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller\Supplier;
 
-use App\Controller\AppController\Admin;
+use App\Controller\AppController\Supplier;
 use Cake\Network\Exception\NotFoundException;
 
 /**
@@ -92,39 +92,14 @@ class OrdersController extends AppController
         
         $orderstatuses = $this->Orders->OrdersOrderstatuses->Orderstatuses
                 ->find()
+                ->where(['alias IN' => ['sent_to_photex', 'sent_to_customer', 'in_treatment_by_photex']])
                 ->all();
+        
         foreach ($orderstatuses as $orderstatus) {
             $statusOptions[$orderstatus->id] = $orderstatus->name;
         }
         
         $this->set(compact('order', 'statusOptions'));
-        $this->set('_serialize', ['order']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $order = $this->Orders->newEntity();
-        if ($this->request->is('post')) {
-            $order = $this->Orders->patchEntity($order, $this->request->data);
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The order could not be saved. Please, try again.'));
-            }
-        }
-        $users = $this->Orders->Users->find('list', ['limit' => 200]);
-        $deliveryaddresses = $this->Orders->Deliveryaddresses->find('list', ['limit' => 200]);
-        $invoiceaddresses = $this->Orders->Invoiceaddresses->find('list', ['limit' => 200]);
-        $trxes = $this->Orders->Trxes->find('list', ['limit' => 200]);
-        $orderstatuses = $this->Orders->Orderstatuses->find('list', ['limit' => 200]);
-        $this->set(compact('order', 'users', 'deliveryaddresses', 'invoiceaddresses', 'trxes', 'orderstatuses'));
         $this->set('_serialize', ['order']);
     }
 
@@ -179,25 +154,5 @@ class OrdersController extends AppController
         $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Order id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $order = $this->Orders->get($id);
-        if ($this->Orders->delete($order)) {
-            $this->Flash->success(__('The order has been deleted.'));
-        } else {
-            $this->Flash->error(__('The order could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 }

@@ -50,7 +50,7 @@
                                     if ($this->request->params['controller'] === 'Pages') {
                                         echo $this->Html->link($this->request->params['controller'], array('controller' => 'pages', 'action' => 'display'));
                                     } else {
-                                        echo $this->Html->link($this->request->params['controller'], array('controller' => $this->request->params['controller'], 'action' => 'index'));
+//                                        echo $this->Html->link($this->request->params['controller'], array('controller' => $this->request->params['controller'], 'action' => 'index'));
                                     }
                                     ?>
                                 </li>
@@ -65,7 +65,6 @@
                                     'url' => [
                                         'controller' => 'searches',
                                         'action' => 'showResults',
-                                        'prefix' => 'admin'
                                     ],
                                     'class'=> [
                                         'form-search'

@@ -29,7 +29,7 @@
                             <td>
                                 <?= $this->Form->select('orderstatus', $statusOptions, [
                                     'default' => $order->orders_orderstatuses[0]->orderstatus->id,
-                                    'id' => 'orderstatus',
+                                    'id' => 'orderstatus-supplier',
                                     'class' => 'form-control',
                                     'data-id' => $order->id
                                 ]); ?>
