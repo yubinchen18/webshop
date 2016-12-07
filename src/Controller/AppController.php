@@ -112,9 +112,31 @@ class AppController extends Controller
         if ($user['type'] == 'admin') {
             return true;
         }
-
-        if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'supplier') {
-            return (bool)($user['type'] === 'photex');
+        
+        //photex is only allowed to the whielist: Controller [ allowedactions ]
+        if ($user['type'] == 'photex') {
+            $allowed = [
+                'admin' => [
+                    'Orders' => [
+                        'edit'
+                    ],
+                    'Photos' => [
+                        'display'
+                    ]
+                ]
+            ];
+            
+            if (isset($allowed[$this->request->params['prefix']]) &&
+                array_key_exists($this->request->params['controller'], $allowed[$this->request->params['prefix']]) &&
+                in_array($this->request->params['action'], $allowed[$this->request->params['prefix']][$this->request->params['controller']])
+            ) {
+                return true;
+            }
+            
+            if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'supplier') {
+                return (bool)($user['type'] === 'photex');
+            }
+            return false;
         }
         
         //persons not allowed to admin
