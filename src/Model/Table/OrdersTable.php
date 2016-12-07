@@ -240,4 +240,43 @@ class OrdersTable extends Table
             ]
         ]);
     }
+    
+    public function findSearchForPhotex(Query $query, array $options)
+    {
+        if (empty($options['searchTerm'])) {
+            throw new \InvalidArgumentException('Missing search term');
+        }
+//        debug($options['searchTerm']);die();
+        $lastCreated = 'SELECT MAX(created) FROM orders_orderstatuses as OOST WHERE OOST.order_id = Orders.id';
+        $sentToPhotex = $this->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_photex'])->first()->id;
+        $sentToCustomer = $this->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'sent_to_customer'])->first()->id;
+        $inTreatmentByPhotex = $this->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'in_treatment_by_photex'])->first()->id;
+
+        return $query
+            ->contain([
+                'OrdersOrderstatuses' => function ($q) {
+                    return $q
+                        ->order(['OrdersOrderstatuses.created' => 'DESC'])
+                        ->contain(['Orderstatuses'])
+                        ->limit(1);
+                },
+                'Orderlines.OrderlineProductoptions',
+                'Users.Persons.Groups.Projects.Schools',
+                'Deliveryaddresses',
+                'Invoiceaddresses'
+            ])
+            ->join([
+                'table' => 'orders_orderstatuses',
+                'alias' => 'OrdersOrderstatuses',
+                'conditions' => [
+                    'OrdersOrderstatuses.order_id = `Orders`.`id`',
+                    'OrdersOrderstatuses.orderstatus_id IN' => [$sentToPhotex, $inTreatmentByPhotex],
+                    sprintf('OrdersOrderstatuses.created = (%s)', $lastCreated)
+                ],
+                'type' => 'INNER'
+            ])
+            ->where(['Orders.ident LIKE' => "%".$options['searchTerm']."%"])
+            ->limit(6)
+            ->order(['ident' => 'asc']);
+    }
 }

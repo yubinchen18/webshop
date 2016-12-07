@@ -352,6 +352,44 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
     });
+    
+    Router::prefix('supplier', function ($routes) {
+        $routes->extensions(['json']);
+        
+        $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+        $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+        $routes->connect(
+            '/photos/:size/:path/:rotate',
+            [
+                    'controller' => 'Photos',
+                    'action' => 'display',
+                ],
+            ['size','path','rotate', 'pass' => ['size','path','rotate']]
+        );
+        $routes->connect(
+            '/photos/:size/:path',
+            [
+                    'controller' => 'Photos',
+                    'action' => 'display',
+                ],
+            ['size','path', 'pass' => ['size','path']]
+        );
+        $routes->connect('/orders', ['controller' => 'Orders', 'action' => 'index']);
+        $routes->connect(
+            '/orders/view/:id',
+            ['controller' => 'Orders', 'action' => 'view'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/orders/edit/:id',
+            ['controller' => 'Orders', 'action' => 'edit'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+        );
+        $routes->connect(
+            '/searches/showResults',
+            ['controller' => 'Searches', 'action' => 'showResults']
+        );
+    });
 });
 
 Plugin::routes();

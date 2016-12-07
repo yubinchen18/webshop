@@ -147,6 +147,20 @@ class SidebarCell extends Cell
                         'icon' => 'fa fa-tachometer'
                     ],
                 ];
+            case 'photex':
+                return [
+                    [
+                        'name' => __('Orders'),
+                        'url' => ['controller' => 'Orders', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-credit-card',
+                        'children' => [
+                            [
+                                'name' => __('Overzicht'),
+                                'url' => ['controller' => 'Orders', 'action' => 'index', 'prefix' => 'supplier']
+                            ]
+                        ]
+                    ]
+                ];
         }
         throw new AuthSecurityException('Userrole not found');
     }
