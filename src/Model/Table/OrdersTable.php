@@ -174,4 +174,70 @@ class OrdersTable extends Table
                 ->limit(6)
                 ->order(['ident' => 'asc']);
     }
+    
+    public function findOpenOrdersForPhotex()
+    {
+        $lastCreated = 'SELECT MAX(created) FROM orders_orderstatuses as OOST WHERE OOST.order_id = Orders.id';
+        $orderstatusId = $this->OrdersOrderstatuses->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])->first()->id;
+        return $this->find()
+            ->contain([
+                'OrdersOrderstatuses' => function ($q) {
+                    return $q
+                        ->order(['OrdersOrderstatuses.created' => 'DESC'])
+                        ->contain(['Orderstatuses']);
+                },
+            ])
+            ->join([
+                'table' => 'orders_orderstatuses',
+                'alias' => 'OrdersOrderstatuses',
+                'conditions' => [
+                    'OrdersOrderstatuses.order_id = `Orders`.`id`',
+                    'OrdersOrderstatuses.orderstatus_id' => $orderstatusId,
+                    'Orders.exportstatus' => 'new',
+                    'Orders.modified >' => date("Y-m-d", mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"))),
+                    sprintf('OrdersOrderstatuses.created = (%s)', $lastCreated)
+                ],
+                'type' => 'INNER'
+            ])
+            ->orderDesc('ident')
+            ->all();
+    }
+    
+    public function getLastOrderstatus($orderId)
+    {
+        $order = $this->get($orderId, [
+            'contain' => [
+                'OrdersOrderstatuses' => function ($q) {
+                    return $q
+                        ->order(['OrdersOrderstatuses.created' => 'DESC'])
+                        ->contain(['Orderstatuses']);
+                }
+            ]
+        ]);
+        
+        return $order->orders_orderstatuses[0]->orderstatus;
+    }
+    
+    public function getOrderDataForPhotex($orderId, $notExportedOnly = true)
+    {
+        $orderlineConditions = [];
+        if( $notExportedOnly == true ) {
+            $orderlineConditions = ['exported' => 0];
+        }
+        return $this->get($orderId, [
+            'contain' => [
+                'Orderlines' => function ($q) use ($orderlineConditions) {
+                    return $q
+                        ->where($orderlineConditions)
+                        ->contain([
+                            'Photos', 
+                            'Products',
+                            'OrderlineProductoptions.ProductoptionChoices',
+                        ]);
+                },
+                'Deliveryaddresses',
+                'Invoiceaddresses',
+            ]
+        ]);
+    }
 }

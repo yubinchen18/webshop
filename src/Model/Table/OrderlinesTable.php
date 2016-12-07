@@ -86,4 +86,32 @@ class OrderlinesTable extends Table
 
         return $rules;
     }
+    
+    public function getFilter($orderlineId)
+    {
+        $filter = $this->find()
+            ->where(['Orderlines.id' => $orderlineId])
+            ->matching('OrderlineProductoptions.ProductoptionChoices.Productoptions', function ($q) {
+                return $q->where(['Productoptions.name' => 'kleurbewerking']);
+            })
+            ->first();
+        if (!empty($filter)) {
+            return $filter->_matchingData['ProductoptionChoices']->value;
+        }
+        return $filter;
+    }
+    
+    public function getFinishing($orderlineId)
+    {
+        $finishing = $this->find()
+            ->where(['Orderlines.id' => $orderlineId])
+            ->matching('OrderlineProductoptions.ProductoptionChoices.Productoptions', function ($q) {
+                return $q->where(['Productoptions.name' => 'uitvoering']);
+            })
+            ->first();
+        if (!empty($finishing)) {
+            return $finishing->_matchingData['ProductoptionChoices']->value;
+        }
+        return $finishing;
+    }
 }

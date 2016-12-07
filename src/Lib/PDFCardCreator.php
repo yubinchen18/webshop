@@ -10,15 +10,22 @@ class PDFCardCreator
 {
     private $pdf;
     private $key;
+    private $cacheFolder;
+    public $path;
     
-    public function __construct($data)
+    public function __construct($data, array $options = null)
     {
         $fontPath = APP . 'Lib/font';
-        define('FPDF_FONTPATH', $fontPath);
-        
+        if (!defined('FPDF_FONTPATH')) {
+            define('FPDF_FONTPATH', $fontPath);
+        }
+        //Set and create cache path
+        $this->cacheFolder = TMP . 'pdf-cache' . DS;
+        $this->tmpPackingslipFolder = $this->cacheFolder . 'tmp-packingslips' . DS ;
+        $this->createDir($this->cacheFolder);
+        $this->createDir($this->tmpPackingslipFolder);
         //Set salt key
         $this->key = Configure::read('EncryptionSalt');
-
         //Open new PDF file
         $this->pdf = new FPDF("L", "mm", "A5");
         $this->pdf->AddFont("Code39", "", 'code39.php');
@@ -49,10 +56,16 @@ class PDFCardCreator
             case 'App\Model\Entity\Person':
                 $this->addCard($data);
                 break;
+            case 'App\Model\Entity\Order':
+                $this->pdf = new FPDF();
+                $this->pdf->AddFont("Code39", "", 'code39.php');
+                $this->path = $this->tmpPackingslipFolder.str_pad($data->ident, 6, "0", STR_PAD_LEFT).'.pdf';
+                $this->addPhotexPakbon($data, $this->path, $options['special']);
+                return $this;
         }
         
         // Return output
-        return $this->pdf->Output();
+        return $this->pdf->Output($options['mode'], $options['path']);
         die();
     }
     
@@ -153,5 +166,116 @@ class PDFCardCreator
             5,
             ""
         );
+    }
+    
+    private function addPhotexPakbon($order, $path, $special = false)
+    {
+        $this->pdf->AddPage();
+        $this->pdf->SetFont('Arial', 'B', 9);
+        $this->pdf->setXY(25, 50);
+        
+        //Header
+        if(!empty($order->deliveryaddress)) {
+            $this->pdf->MultiCell(	
+                100,
+                5, 
+                $order->deliveryaddress->fullName . PHP_EOL .
+                $order->deliveryaddress->fullAddress . PHP_EOL .
+                "{$order->deliveryaddress->zipcode} {$order->deliveryaddress->city}" . PHP_EOL
+            );
+        }
+        $this->pdf->Image(WWW_ROOT.DS."img".DS."layout".DS."logo_pakbon.jpg", 140, 10);
+        $this->pdf->Line(10, 85, 190, 85);
+
+        //Order summary
+        $this->pdf->SetFont('Arial', 'B', 10);
+        $this->pdf->setXY(10, 100);
+        $this->pdf->Cell(150, 0, "Pakbon", 0, 0, "L");
+        $this->pdf->SetFont('Arial', '', 8);
+        $this->pdf->setXY(10, 105);
+        $this->pdf->Cell(50, 0,	"Ordernummer: " . str_pad($order->ident, 6, "0", STR_PAD_LEFT));
+        $this->pdf->SetFont("Code39", "", 8);
+        $this->pdf->Cell(70, 0, "*" . str_pad($order->ident, 6, "0", STR_PAD_LEFT) . "*");
+        $this->pdf->SetFont('Arial', '', 8);
+        $this->pdf->Cell(60, 0,	"Datum: " . $order->created->format('d-m-Y'), 0, 0, "R");
+        $this->pdf->Line(10, 115, 190, 115);
+
+        //Order bodylines
+        $this->pdf->SetFont('Arial', 'B', 8);
+        $this->pdf->setXY(10, 125);
+        $this->pdf->Cell(20, 0,	"Code");
+        $this->pdf->Cell(20, 0,	"Aantal");
+        $this->pdf->Cell(120, 0, "Product");
+
+        $row = 130;
+        $this->pdf->SetFont( 'Arial', '', 8);
+        if( $special == true) : 
+                $this->pdf->setXY(10, $row);
+                $this->pdf->Cell(20, 0,	'');
+                $this->pdf->Cell(20, 0,	1);
+                $this->pdf->Cell(120, 0, 'Gratis design foto');
+                $row += 10;
+        endif;
+        
+        foreach ($order->orderlines as $orderline) : 
+            $optionVals = "";
+            foreach($orderline->orderline_productoptions as $option) : 
+                $optionVals .= " " . $option->productoption_choice->value;
+            endforeach;
+            $this->pdf->setXY(10, $row);
+            $this->pdf->Cell(20, 0, !empty($orderline->product) ? $orderline->product->article : '');
+            $this->pdf->Cell(20, 0, $orderline->quantity);
+            $this->pdf->Cell(120, 0, !empty($orderline->product) ? $orderline->product->name . $optionVals : '');
+            $row += 10;
+        endforeach;
+        
+        $this->pdf->Line(10, 245, 190, 245);
+
+        //Footer
+        $this->pdf->SetFont('Arial', '', 8);
+        $this->pdf->setXY(10, 255);
+        $this->pdf->MultiCell(
+            60,
+            5, 
+            "Hoogstraten fotografie B.V." . PHP_EOL .
+            "Lange Haven 133-135" . PHP_EOL .
+            "3111 CD Schiedam" . PHP_EOL .
+            "www.hoogstratenfotografie.nl" . PHP_EOL
+        );
+        $this->pdf->setXY(85, 255);
+        $this->pdf->MultiCell(	
+            60,
+            5, 
+            "tel: 010 - 4271672" . PHP_EOL .
+            "fax: 010 - 2731590" . PHP_EOL .
+            "info@hoogstratenfotografie.nl" . PHP_EOL .
+            "ING nummer: NL82INGB0000863978" . PHP_EOL
+        );
+        $this->pdf->setXY(155, 255);
+        $this->pdf->MultiCell(	
+            60,
+            5, 
+            "BTW-nr: NL8188818877" . PHP_EOL .
+            "KvKnr: 244875300000" . PHP_EOL .
+            "IBAN: NL87783666" . PHP_EOL
+        );
+        $pdf = $this->pdf->Output("F", $path);
+    }
+    
+    private function createDir($path)
+    {
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+            $tmpPath = $path;
+            $i = 0;
+            while (TMP !== $tmpPath) {
+                chmod($tmpPath, 0777);
+                $tmpPath = dirname($tmpPath) . DS;
+                $i++;
+                if ($i > 10) {
+                    break;
+                }
+            }
+        }
     }
 }

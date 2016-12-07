@@ -227,4 +227,25 @@ class UsersTable extends Table
         }
         return $photo;
     }
+    
+    public function getSystemUser()
+    {
+        $systemUser = $this->findByTypeAndEmail('system', 'support@xseeding.nl')->first();
+        if (empty($systemUser)) {
+            $user = $this->newEntity();
+            $password = $this->generateRandom();
+            $data = [
+                'username' => 'system',
+                'email' => 'support@xseeding.nl',
+                'password' => (new DefaultPasswordHasher)->hash($password),
+                'genuine' => $password,
+                'type' => 'system',
+                'active' => '1'
+            ];
+            $user = $this->patchEntity($user, $data);
+            $user = $this->save($user);
+            return $user;
+        }
+        return $systemUser;
+    }
 }
