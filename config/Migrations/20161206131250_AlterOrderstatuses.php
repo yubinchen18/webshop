@@ -24,7 +24,8 @@ class AlterOrderstatuses extends AbstractMigration
             (UUID(), 'Nieuw', 'new', 'Betaald maar nog niet verwerkt', NOW(), NOW(), NULL),
             (UUID(), 'Betaald', 'payment_received', 'Betaald maar nog niet verwerkt', NOW(), NOW(), NULL),
             (UUID(), 'Betaling mislukt', 'payment_failed', 'Betaling mislukt', NOW(), NOW(), NULL),
-            (UUID(), 'Geannuleerd', 'cancelled', 'Order geannuleerd', NOW(), NOW(), NULL);"
+            (UUID(), 'Geannuleerd', 'cancelled', 'Order geannuleerd', NOW(), NOW(), NULL),
+            (UUID(), 'In behandeling door Photex', 'in_treatment_by_photex', 'In behandeling door Photex', NOW(), NOW(), NULL);"
         );
     }
 }
