@@ -273,7 +273,7 @@ class PhotosController extends AppController
             $this->set('photos', $allDigitalPhotos);
         }
         
-        if (!empty($photo) || !empty($allDigitalPhotos)) {
+        if (!empty($photo)) {
             if ($this->isAuthForPhoto($photo)) {
                 //load products
                 $productTable = TableRegistry::get('Products');
