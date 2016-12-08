@@ -24,10 +24,7 @@ class UsersController extends AppController
                     $session->write('LoggedInUsers.ActiveUser', $user['id']);
                     return $this->redirectAfterLogin();
                 } else {
-                    $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
-                       'element' => 'default',
-                       'params' => ['class' => 'error']
-                    ], 'auth');
+                    $this->emptyFieldsMessage();
                     return $this->redirect($this->Auth->config('loginAction'));
                 }
             }
@@ -55,14 +52,11 @@ class UsersController extends AppController
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
                     return $this->redirectAfterLogin();
                 } else {
-                    if (empty($this->request->data['username']) && empty($this->request->data['paaword'])) {
+                    if (empty($this->request->data['username']) && empty($this->request->data['password'])) {
                         return $this->redirectAfterLogin();
                     }
-                        
-                    $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
-                       'element' => 'default',
-                       'params' => ['class' => 'error']
-                    ], 'auth');
+                    
+                    $this->emptyFieldsMessage();
                     return $this->redirect($this->Auth->config('loginAction'));
                 }
             }
@@ -86,6 +80,21 @@ class UsersController extends AppController
         
         $this->request->session()->write('loginSuccessful', true);        
         return $this->redirect(array('controller' => 'Photos', 'action' => 'index'));
+    }
+    
+    private function emptyFieldsMessage()
+    {
+        if (empty($this->request->data['username']) || empty($this->request->data['password'])) {
+            $this->Flash->set(__('De gebruikersnaam of inlogcode is niet ingevuld'), [
+                'element' => 'default',
+                'params' => ['class' => 'error']
+            ], 'auth');
+        } else {
+            $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
+               'element' => 'default',
+               'params' => ['class' => 'error']
+            ], 'auth');
+        }
     }
 
     public function logout()
