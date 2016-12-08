@@ -294,9 +294,14 @@ class CartsController extends AppController
                     'filter' => $filter
                 ]);
                 //add the image data to product object and calc subtotal price
-                if ($cartline->product->product_group !== 'funproducts') {
+                if ($cartline->product->product_group === 'funproducts') {
+                    $productImage = $cartline->product->image;
+                    $cartline->product->image = $image[0];
+                    $cartline->product->image['product_image'] = $productImage;
+                } else {
                     $cartline->product->image = $image[0];
                 }
+                        
                 $cartline->discountPrice = Configure::read('DiscountPrice');
                 if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
                     && $cartline->product->has_discount === 1) {
