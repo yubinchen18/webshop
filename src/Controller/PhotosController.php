@@ -265,12 +265,12 @@ class PhotosController extends AppController
             ->firstOrFail();
         
         if ($productGroup == 'digital') {
+            $persons = $this->getDigitalPhotos();
+            $this->set('persons', $persons);
+            
             if($photo->type == 'group') {
                 $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
-                return $this->redirect($this->referer());
             }
-            $allDigitalPhotos = $this->getDigitalPhotos();
-            $this->set('photos', $allDigitalPhotos);
         }
         
         if (!empty($photo)) {
@@ -403,15 +403,14 @@ class PhotosController extends AppController
     {
         $persons = $this->getAllLoggedInUsers();
         if (!empty($persons)) {
-            $photos = [];
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
                     $photo->orientationClass = $this->returnPhotoOrientation($photo);
                     $photo->portrait = TableRegistry::get('Users')->getUserPortrait($person->user_id);
-                    $photos[] = $photo;
+                    $person->photo = $photo;
                 }
-            }   
-            return $photos;
+            }
+            return $persons;
         } else {
             $this->Flash->error(__('Person not found.'));
         }

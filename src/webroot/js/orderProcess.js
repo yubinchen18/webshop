@@ -224,4 +224,8 @@ jQuery(function($) {
             cartLabel.removeClass("label-animate");         
        }, 340);
     }
+
+    if($('.navigation-groups-picture').size() > 0) {
+        $('.order-place-order .btn-success').addClass('disabled');
+    }
 });

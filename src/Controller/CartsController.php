@@ -296,7 +296,7 @@ class CartsController extends AppController
                 //add the image data to product object and calc subtotal price
                 $cartline->product->image = $image[0];
                 $cartline->discountPrice = Configure::read('DiscountPrice');
-                if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
+                if (isset($userDiscounts) && !empty($userDiscounts[$cartline->photo->barcode->person->user_id])
                     && $cartline->product->has_discount === 1) {
                     $cartline->product->price_ex = Configure::read('DiscountPrice');
                 }

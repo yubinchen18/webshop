@@ -329,6 +329,11 @@
     }
     .photos-product-container {
         margin-bottom: 5%;
+        .modal-dialog {
+                width: auto;
+                margin: 20px;
+            }
+        }
         .photos-product-label {
             .row {
                 height: 30px;
@@ -377,15 +382,22 @@
         .photos-product-img-wrapper {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: auto;
+            .photos-digital-pack-title {
+               color: #fff;
+               position: absolute;
+               top: 0;
+               padding: 10px;
+               text-align: center;
+               font-weight: bold;
+            }
             .photos-portrait-container {
                 position: absolute;
                 width: 100px;
                 height: 100px;
                 top: 50%;
                 left: 50%;
-                margin-left: -50px;
-                margin-top: 115px;
+                margin: -50px;
                 overflow: hidden;
                 border-radius: 55px;
                 border: 3px solid #00ffff;
@@ -393,6 +405,28 @@
                 .photos-horizontal, .photos-vertical {
                     height: 150%;
                     max-width: 100%;
+                }
+            }
+            .photos-digital-pack-subtitle {
+                color: #00fbfb;
+                position: absolute;
+                bottom: 0;
+                text-transform: uppercase;
+                font-weight: bold;
+                text-align: center;
+                padding-bottom: 10px;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            @media only screen and (max-width: 605px) and (min-width: 426px){
+                .photos-digital-pack-title {
+                    display: none;
+                }
+                .photos-portrait-container {
+                    width: 75px;
+                    height: 75px;
+                    top: 42%;
+                    left: 58%;
                 }
             }
         }
@@ -576,7 +610,6 @@
                 border-right: 2.5vw solid transparent;
             }
         }
-    }
 }
 
 
@@ -600,13 +633,6 @@
         width: 73%;
         z-index: 200;
     }
-    
-    .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 40%;
-        width: 60px;
-        height: 60px;
-        margin-left: -30px;
-    }
 }
 
 @media only screen and (max-width: 629px) and (min-width : 470px) {
@@ -627,13 +653,6 @@
         width: 73%;
         z-index: 200;
     }
-    
-    .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 60px;
-        width: 60px;
-        height: 60px;
-        margin-left: -30px;
-    }
 }
 
 @media only screen and (max-width: 767px) and (min-width : 630px) {
@@ -647,9 +666,6 @@
         margin-right: -15px;
         max-width: 150px;
         border-left: 2px solid #b5b5b5;
-    }
-    .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 80px;
     }
 }
 
@@ -666,10 +682,6 @@
         width: 150px;
         border-left: 2px solid #b5b5b5;
     }
-    
-    .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 80px;
-    }
 }
 
 @media only screen and (max-width: 1199px) and (min-width : 992px) {
@@ -683,10 +695,10 @@
     }
     
     .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 70px;
-        width: 60px;
-        height: 60px;
-        margin-left: -30px;
+        width: 50px;
+        height: 50px;
+        top: 66%;
+        left: 66%;
     }
 }
 
@@ -697,10 +709,6 @@
         margin-left: -17px;
         width: 390px;
         border-left: 2px solid #b5b5b5;
-    }
-    
-    .photos-product-index .photos-product-container .photos-product-img-wrapper .photos-portrait-container {
-        margin-top: 70px;
     }
 }
 

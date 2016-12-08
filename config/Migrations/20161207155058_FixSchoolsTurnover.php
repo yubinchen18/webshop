@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class AddSchoolsTurnover extends AbstractMigration
+class FixSchoolsTurnover extends AbstractMigration
 {
     /**
      * Change Method.
@@ -11,10 +11,9 @@ class AddSchoolsTurnover extends AbstractMigration
      * @return void
      */
     public function change()
-    {
-        $table = $this->table('projects');
-        $table->addColumn('turnover', 'decimal', [
-            'null' => false,
+    {   
+        $this->changeColumn('turnover', 'decimal', [
+            'null' => true,
             'limit' => 10,
             'default' => null,
             'after' => 'grouptext'
