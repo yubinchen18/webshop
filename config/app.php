@@ -256,7 +256,7 @@ return [
             'persistent' => false,
             'host' => 'localhost',
             'username' => 'hoogstraten_webs',
-            'password' => 'z7ZhrvvG9Nhmenf2',
+            'password' => 'S2Nwz3v0GGFfFzcrQ',
             'database' => 'hoogstraten_webshop',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
