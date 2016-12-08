@@ -2,8 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
-use App\Controller\PhotosController;
 
 /**
  * Users Controller
@@ -57,6 +55,10 @@ class UsersController extends AppController
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
                     return $this->redirectAfterLogin();
                 } else {
+                    if (empty($this->request->data['username']) && empty($this->request->data['paaword'])) {
+                        return $this->redirectAfterLogin();
+                    }
+                        
                     $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
                        'element' => 'default',
                        'params' => ['class' => 'error']

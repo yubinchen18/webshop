@@ -36,7 +36,7 @@
                             'type' => 'text',
                             'class' => ['form-control', 'login-container-input'],
                             'placeholder' => __('GEBRUIKERSNAAM'),
-                            'required' => 'required',
+                            'required' => 'false',
                             'label' => false,
                         ]);
                       ?>
@@ -46,7 +46,7 @@
                             'type' => 'password',
                             'class' => ['form-control', 'login-container-input'],
                             'placeholder' => __('INLOGCODE'),
-                            'required' => 'required',
+                            'required' => 'false',
                             'label' => false
                         ]);
                         ?>
