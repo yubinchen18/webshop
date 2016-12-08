@@ -8,7 +8,7 @@
                     <h2 class='col-xs-12'><?= __('Digitaal') ?></h2>
                     <div class='addToCartPopup-confirmation col-md-4 col-xs-5 alert'>
                         <span id='msg'></span>
-                    </div>         
+                    </div>
                     <?php foreach ($persons as $person): ?>
                         <?php foreach ($person->barcode->photos as $key => $digitalphoto): ?>
                             <div class="col-xxl-2 col-xl-3 col-md-4 col-xs-6 photos-product-container">

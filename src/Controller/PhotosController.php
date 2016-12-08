@@ -28,6 +28,7 @@ class PhotosController extends AppController
 
         //add the orientation data to the photos array
         if (!empty($persons)) {
+            $group_ids = [];
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
                     $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
@@ -35,19 +36,31 @@ class PhotosController extends AppController
                     $photo->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
                     
                     $person->groupPhotos = $this->Photos->find('groupPhotos', ['group_id' => $person->group_id]);
+                    
                     foreach ($person->groupPhotos as $groupphoto) {
                         $filePath = $this->Photos->getPath($groupphoto->barcode_id) . DS . $groupphoto->path;
                         list($width, $height) = getimagesize($filePath);
                         $groupphoto->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
                     }
                 }
+                $person->showGroupPhoto = $this->addGroupPicturesToView($group_ids, $person->group_id);
+                $group_ids[] = $person->group_id;
             }
         } else {
             $this->Flash->error(__('Person not found.'));
         }
-        
         $this->set(compact('persons'));
         $this->set('_serialize', ['photos']);
+    }
+    
+    private function addGroupPicturesToView($group_ids, $group_id)
+    {
+        foreach($group_ids as $id) {
+            if ($id == $group_id) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private function getAllLoggedInUsers()
@@ -346,7 +359,6 @@ class PhotosController extends AppController
             ->contain('Barcodes')
             ->where(['barcode_id' => $groupBarcodeId])
             ->toArray();
-        
         return $photos;
     }
     

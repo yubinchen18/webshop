@@ -42,7 +42,7 @@
                                 'controller' => 'Photos',
                                 'action' => 'display',
                                 'id' => $photo->id,
-                                'size' => 'med']),
+                                'size' => 'full']),
                                 ['class' => 'img-responsive']
                             ); ?>
                             </div>

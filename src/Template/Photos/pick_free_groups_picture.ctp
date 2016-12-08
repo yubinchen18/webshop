@@ -30,7 +30,7 @@
                         <i class="ace-icon fa fa-cart-plus"></i> <?= __('Kies') ?>
                     </button>
                  </div>
-                <div class="modal fade modal-<?= $photo->id ?> col-lg-12" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                <div class="modal fade modal-<?= $photo->id ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

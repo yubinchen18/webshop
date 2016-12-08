@@ -23,24 +23,26 @@
                 </div>
             <?php endforeach; ?>
             <!-- Group Photos -->
-            <?php foreach ($person->groupPhotos as $key => $photo): ?>
-                <div class="col-lg-2 col-md-3 col-xs-4 photos-index-container">
-                    <div class="photos-index-icon">
-                        <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+            <?php if ($person->showGroupPhoto): ?>
+                <?php foreach ($person->groupPhotos as $key => $photo): ?>
+                    <div class="col-lg-2 col-md-3 col-xs-4 photos-index-container">
+                        <div class="photos-index-icon">
+                            <div class="<?= $photo->orientationClass.' '.$photo->orientationClass.'-background' ?>">
+                        </div>
+                        <?= $this->Html->image($this->Url->build([
+                            'controller' => 'Photos',
+                            'action' => 'display',
+                            'id' => $photo->id,
+                            'size' => 'thumbs'
+                        ]), [
+                            'alt' => $photo->path,
+                            'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
+                            'class' => [$photo->orientationClass, 'img-responsive']
+                        ]); ?>
+                        </div>
                     </div>
-                    <?= $this->Html->image($this->Url->build([
-                        'controller' => 'Photos',
-                        'action' => 'display',
-                        'id' => $photo->id,
-                        'size' => 'thumbs'
-                    ]), [
-                        'alt' => $photo->path,
-                        'url' => ['controller' => 'Photos', 'action' => 'view', $photo->id],
-                        'class' => [$photo->orientationClass, 'img-responsive']
-                    ]); ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         <?php endforeach; ?>
         </div>
     <?php endif ?>
