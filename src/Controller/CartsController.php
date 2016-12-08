@@ -303,7 +303,7 @@ class CartsController extends AppController
                 }
                         
                 $cartline->discountPrice = Configure::read('DiscountPrice');
-                if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
+                if (isset($userDiscounts) && !empty($userDiscounts[$cartline->photo->barcode->person->user_id])
                     && $cartline->product->has_discount === 1) {
                     $cartline->product->price_ex = Configure::read('DiscountPrice');
                 }

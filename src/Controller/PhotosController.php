@@ -24,6 +24,47 @@ class PhotosController extends AppController
     public function index()
     {
         //load persons for allow auth check
+        $persons = $this->getAllLoggedInUsers();
+
+        //add the orientation data to the photos array
+        if (!empty($persons)) {
+            $group_ids = [];
+            foreach ($persons as $person) {
+                foreach ($person->barcode->photos as $key => $photo) {
+                    $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
+                    list($width, $height) = getimagesize($filePath);
+                    $photo->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
+                    
+                    $person->groupPhotos = $this->Photos->find('groupPhotos', ['group_id' => $person->group_id]);
+                    
+                    foreach ($person->groupPhotos as $groupphoto) {
+                        $filePath = $this->Photos->getPath($groupphoto->barcode_id) . DS . $groupphoto->path;
+                        list($width, $height) = getimagesize($filePath);
+                        $groupphoto->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
+                    }
+                }
+                $person->showGroupPhoto = $this->addGroupPicturesToView($group_ids, $person->group_id);
+                $group_ids[] = $person->group_id;
+            }
+        } else {
+            $this->Flash->error(__('Person not found.'));
+        }
+        $this->set(compact('persons'));
+        $this->set('_serialize', ['photos']);
+    }
+    
+    private function addGroupPicturesToView($group_ids, $group_id)
+    {
+        foreach($group_ids as $id) {
+            if ($id == $group_id) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private function getAllLoggedInUsers()
+    {
         $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
 
         $persons = [];
@@ -36,29 +77,8 @@ class PhotosController extends AppController
                 $persons[] = $person;
             }
         }
-
-        //add the orientation data to the photos array
-        if (!empty($persons)) {
-            foreach ($persons as $person) {
-                foreach ($person->barcode->photos as $key => $photo) {
-                    $filePath = $this->Photos->getPath($person->barcode_id) . DS . $photo->path;
-                    list($width, $height) = getimagesize($filePath);
-                    $photo->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
-                    
-                    $person->groupPhotos = $this->Photos->find('groupPhotos', ['group_id' => $person->group_id]);
-                    foreach ($person->groupPhotos as $groupphoto) {
-                        $filePath = $this->Photos->getPath($groupphoto->barcode_id) . DS . $groupphoto->path;
-                        list($width, $height) = getimagesize($filePath);
-                        $groupphoto->orientationClass = ($width > $height) ? 'photos-horizontal' : 'photos-vertical';
-                    }
-                }
-            }
-        } else {
-            $this->Flash->error(__('Person not found.'));
-        }
         
-        $this->set(compact('persons'));
-        $this->set('_serialize', ['photos']);
+        return $persons;
     }
     
     /**
@@ -257,9 +277,13 @@ class PhotosController extends AppController
             ->contain(['Barcodes.Persons'])
             ->firstOrFail();
         
-        if ($photo->type == 'group' && $productGroup == 'digital') {
-            $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
-            return $this->redirect($this->referer());
+        if ($productGroup == 'digital') {
+            $persons = $this->getDigitalPhotos();
+            $this->set('persons', $persons);
+            
+            if($photo->type == 'group') {
+                $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
+            }
         }
         
         if (!empty($photo)) {
@@ -272,16 +296,9 @@ class PhotosController extends AppController
                         ->orderAsc('article')
                         ->toArray();
                 
+                $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                $photo->selectedProduct = $this->request->params['productGroup'];
                 
-                //add the orientation data to the photos array
-                $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-                $dimensions = getimagesize($filePath);
-                if ($dimensions[0] > $dimensions[1]) {
-                    $orientationClass = 'photos-horizontal';
-                } else {
-                    $orientationClass = 'photos-vertical';
-                }
-                $photo->orientationClass = $orientationClass;
                 if (!empty($products)) {
                     foreach ($products as $product) {
                         //create tmp product preview images
@@ -344,7 +361,6 @@ class PhotosController extends AppController
             ->contain('Barcodes')
             ->where(['barcode_id' => $groupBarcodeId])
             ->toArray();
-        
         return $photos;
     }
     
@@ -362,15 +378,7 @@ class PhotosController extends AppController
             foreach ($photos as $photo) {
                 if ($this->isAuthForPhoto($photo)) {
                     //add the orientation data to the photos array
-                    $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-
-                    list($width, $height) = getimagesize($filePath);
-                    if ($width > $height) {
-                        $orientationClass = 'photos-horizontal';
-                    } else {
-                        $orientationClass = 'photos-vertical';
-                    }
-                    $photo->orientationClass = $orientationClass;
+                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
 
                     $this->set(compact('photo'));
                     $this->set('_serialize', ['photo']);
@@ -389,5 +397,36 @@ class PhotosController extends AppController
         $this->set(compact('photos', 'product', 'personBarcode'));
         $this->set('_serialize', ['photos']);
         $this->render($layout);
+    }
+    
+    private function returnPhotoOrientation($photo)
+    {
+        $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
+
+        list($width, $height) = getimagesize($filePath);
+        if ($width > $height) {
+            $orientationClass = 'photos-horizontal';
+        } else {
+            $orientationClass = 'photos-vertical';
+        }
+        
+        return $orientationClass;
+    }
+    
+    private function getDigitalPhotos()
+    {
+        $persons = $this->getAllLoggedInUsers();
+        if (!empty($persons)) {
+            foreach ($persons as $person) {
+                foreach ($person->barcode->photos as $key => $photo) {
+                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                    $photo->portrait = TableRegistry::get('Users')->getUserPortrait($person->user_id);
+                    $person->photo = $photo;
+                }
+            }
+            return $persons;
+        } else {
+            $this->Flash->error(__('Person not found.'));
+        }
     }
 }

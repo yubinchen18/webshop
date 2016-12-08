@@ -4,6 +4,7 @@
         <!-- left pics panel -->
         <div class='row'>
             <div class='index-left col-sm-11 col-xs-12'>
+                <?= $this->Flash->render(); ?>
                 <div class="row photos-product-left-panel">
                     <h2 class='col-xs-12'><?= __('Losse afdrukken') ?></h2>
                     <!-- top buttons panel xs only -->

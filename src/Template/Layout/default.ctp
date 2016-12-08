@@ -23,7 +23,6 @@ $cakeDescription = 'Schoolfotografie by Hoogstraten ... de beste kwaliteit schoo
         <?= $this->element('Frontend/navigation'); ?>
     <?php endif; ?>
     <div id="content" class="container clearfix">
-        <?= $this->Flash->render(); ?>
         <?= $this->fetch('content') ?>
     </div>
     <footer>

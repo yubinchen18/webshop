@@ -4,6 +4,7 @@
         <!-- left pics panel -->
         <div class='row'>
             <div class='col-sm-11 col-xs-12'>
+                <?= $this->Flash->render(); ?>
                 <div class="row">
                     <h2 class='col-xs-12'><?= __('Combinatievellen') ?></h2>
                     

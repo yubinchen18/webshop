@@ -164,6 +164,7 @@ jQuery(function($) {
                 }
                 //animate cartCount
                 updateCartCount(response.cartCount);
+                disableCheckoutButton();
             }
           });
        }
@@ -196,7 +197,6 @@ jQuery(function($) {
         var zipcode = $(this).val().replace(" ", "");
         var id = $(this).attr('id');
         var url = '/carts/zipcode/'+zipcode;
-        console.log(id);
         $.ajax({
             type: 'GET',
             url: url
@@ -224,4 +224,17 @@ jQuery(function($) {
             cartLabel.removeClass("label-animate");         
        }, 340);
     }
+
+    if($('.navigation-groups-picture').size() > 0) {
+        $('.order-place-order .btn-success').addClass('disabled');
+    }
+    disableCheckoutButton();
 });
+
+function disableCheckoutButton()
+{
+    $('.order-place-order .btn-success').removeClass('disabled');
+    if($('.navigation-groups-picture').size() > 0) {
+        $('.order-place-order .btn-success').addClass('disabled');
+    }
+}

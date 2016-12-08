@@ -3,6 +3,7 @@
     <div class="col-md-9 photos-index">
     <?php if (!empty($photos)): ?>
         <div class="row photos-product-index">
+        <?= $this->Flash->render(); ?>
         <?php foreach ($photos as $photo): ?>
              <div class="col-md-4 col-xs-6 photos-product-container">
                 <div class="photos-index-icon" data-toggle="modal" data-target=".modal-<?= $photo->id; ?>">
@@ -41,7 +42,7 @@
                                 'controller' => 'Photos',
                                 'action' => 'display',
                                 'id' => $photo->id,
-                                'size' => 'med']),
+                                'size' => 'full']),
                                 ['class' => 'img-responsive']
                             ); ?>
                             </div>
@@ -55,7 +56,7 @@
     </div>
     <div class="photos-index col-md-3 col-sm-12">
         <!-- Medium screen -->
-        <div class="photos-index-banner container col-md-11 col-md-offset-1 hidden-sm hidden-xs">
+        <div class="photos-index-banner col-md-11 col-md-offset-1 hidden-sm hidden-xs">
             <ul class="photos-index-banner-ul  list-group">
                 <li><h5><?= __('Betrouwbaar en veilig bestellen') ?></h5></li>
                 <li><h5><?= __('Unieke inlog-barcode') ?></h5></li>
@@ -63,13 +64,20 @@
                 <li><h5><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></h5></li>
                 <li><h5><?= __('Veilig betalen via iDeal') ?></h5></li>
                 <li><h5><?= __('Razendsnelle levering foto\'s') ?></h5></li>
+                <li><h5><?= __('Gratis verzending bij 4 afdrukken') ?></h5></li>
                 <li class="li-no-background">
-                    <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
+                    <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-42-41.png', [
                         'class' => [
                             'photos-index-banner-img',
                             'img-responsive',
                             'center-block'
-                        ]
+                        ],
+                        'url' => $this->Url->build([
+                            'controller' => 'Photos', 
+                            'action' => 'productGroupIndex',
+                            'digital',
+                            $photo->id
+                        ]),
                     ]) ?>
                 </li>
             </ul>
@@ -82,10 +90,17 @@
             <div class="banner-flex-item small-font"><?= __('Unieke inlog-barcode') ?></div>
             <div class="banner-flex-item small-font long"><?= __('U bestelt foto\'s van al uw kinderen in 1 keer') ?></div>
             <div class="banner-flex-item small-font last"><?= __('Razendsnelle levering foto\'s') ?></div>
-                <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-06.png', [
+            <div class="banner-flex-item small-font"><?= __('Gratis verzending bij 4 afdrukken') ?></div>
+                <?= $this->Html->image('../img/layout/med/Hoogstraten_webshop-onderdelen-42-41.png', [
                     'class' => [
                         'photos-index-banner-img'
-                    ]
+                    ],
+                    'url' => $this->Url->build([
+                        'controller' => 'Photos', 
+                        'action' => 'productGroupIndex',
+                        'digital',
+                        $photo->id
+                    ]),
                 ]) ?>
         </div>
     </div>
