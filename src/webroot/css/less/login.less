@@ -25,7 +25,7 @@
             min-height: 350px;
             background-image: url('../img/layout/Hoogstraten_webshop-onderdelen-12.png');
             background-size: 100% 100%;
-            margin-top: 8%;
+            margin: 100px auto auto auto;
             padding:0px;
             padding-top: 2%;
             padding-bottom: 2%;
@@ -121,6 +121,7 @@
                     filter: brightness(0.9);
                     width: 100%;
                     cursor: pointer;
+                    height:51px;
                     
                     .input-image {
                         width: 100%;
@@ -133,11 +134,13 @@
                         width: 100%;
                         text-align: center;
                         color: white;
-                        font-family: Alegreya Sans;
                         font-weight: bold;
-                        font-size: 1em;
+                        font-size: 14px;
                         pointer-events: none;
                     }
+                }
+                .login-container-button.large {
+                    height:69px;
                 }
                 .order-button {
                     position: relative;
@@ -183,6 +186,36 @@
                 }
             }
             
+            .navbar-back-to-index {
+                margin-left:-110px;
+                overflow: hidden;
+                position: absolute;
+                left: 50%;
+                top: -70px;
+                width: 220px;
+                height: 70px;
+                display: block;
+                background: #e89e11;
+                padding: 10px;
+                border-radius: 7px 7px 0px 0px;
+                color: white;
+                font-size: medium;
+                font-weight: bold;
+                
+                .navbar-back-to-index-img {
+                    position: absolute;
+                    height: 40px;
+                    top: 15px;
+                    left: 15px;
+                }
+                .navbar-back-to-index-text {
+                    position:absolute;
+                    width: 70%;
+                    right: 10px;
+                    top: 15px;
+                }
+            }
+            
             .login-action-star {
                 position: absolute;
                 left: 77%;
@@ -214,14 +247,12 @@
         @media only screen and (max-width: 767px) and (min-width: 426px) {
             .login-main-container-panel {
                 width: 350px;
-                margin: auto;
             }
         }
         
         @media only screen and (max-width: 425px) {
             .login-main-container-panel {
                 width: 250px;
-                margin: auto;
             }
             .login-action-star-message {
                 font-size: 0.8em;

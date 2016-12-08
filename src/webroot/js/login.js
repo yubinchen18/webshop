@@ -1,18 +1,9 @@
 jQuery(function($) {
-    function calcSubmitHeight() {
-        var submitButton = $('.submit-button');
-        var submitWidth = submitButton.width()/4.57;
-        submitButton.css('height', submitWidth);
-    }
-    
-    calcSubmitHeight();
-    
-    $('.login-add-child').click(function(){
-        $('.login-inputs-panel-after-hidden').slideToggle();
-        calcSubmitHeight();
+    $('.inlog-form #login-extra-child').click(function(event) {
+        $('.inlog-form #login-type').val('login-extra-child');
     });
     
-    $(window).resize(function() {
-        calcSubmitHeight();
+    $('.inlog-form #login').click(function(event) {
+        $('.inlog-form #login-type').val('login');
     });
 });

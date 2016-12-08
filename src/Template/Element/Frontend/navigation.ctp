@@ -12,6 +12,10 @@
             <!-- user portraits -->
             <?php if (isset($userPortraits)): ?>
                 <div class='col-md-6 col-xs-6 hidden-sm hidden-xs portraits-container'>
+                    <div class="portrait-container login-extra-child-icon">
+                        <?= $this->Html->link($this->Html->image('layout/Hoogstraten_webshop-onderdelen-48.png', ['alt' => 'add-child']),
+                            '/', ['escapeTitle' => false, 'title' => 'Kind toevoegen']); ?>
+                    </div>
                     <?php foreach($userPortraits as $userPortrait): ?>
                         <?= $this->element('Frontend/portrait', ['userPortrait' => $userPortrait]); ?>
                     <?php endforeach; ?>

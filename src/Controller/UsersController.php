@@ -2,8 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
-use App\Controller\PhotosController;
 
 /**
  * Users Controller
@@ -24,39 +22,41 @@ class UsersController extends AppController
                     $data[] = $user['id'];
                     $session->write('LoggedInUsers.AllUsers', $data);
                     $session->write('LoggedInUsers.ActiveUser', $user['id']);
-                    return $this->redirect($this->Auth->config('loginAction'));
+                    return $this->redirectAfterLogin();
                 } else {
-                    $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
-                       'element' => 'default',
-                       'params' => ['class' => 'error']
-                    ], 'auth');
+                    $this->emptyFieldsMessage();
                     return $this->redirect($this->Auth->config('loginAction'));
                 }
             }
         } else {
             // Already logged in with valid user
             // identify extra user
-            if ($this->request->is('post')) {
+            if ($this->request->is('post')) {                
                 $loggedInUsers = $session->read('LoggedInUsers.AllUsers');
+                
                 $extraUser = $this->Auth->identify();
                 if ($extraUser) {
+                    //pr($this->Auth->user()); die;
                     //check for duplicate users
                     if (in_array($extraUser['id'], $loggedInUsers)) {
-                        $this->Flash->set(__('Kind al ingelogd.'), [
-                            'element' => 'default',
-                            'params' => ['class' => 'error']
-                        ], 'auth');
-                        return $this->redirect($this->Auth->config('loginAction'));
+                        if ($this->request->data['login-type'] === 'login-extra-child') {
+                            $this->Flash->set(__('Kind al ingelogd.'), [
+                                'element' => 'default',
+                                'params' => ['class' => 'error']
+                            ], 'auth');
+                        }
+                        return $this->redirectAfterLogin();
                     }
                     //write all users to session key
                     $loggedInUsers[] = $extraUser['id'];
                     $session->write('LoggedInUsers.AllUsers', $loggedInUsers);
-                    return $this->redirect($this->Auth->config('loginAction'));
+                    return $this->redirectAfterLogin();
                 } else {
-                    $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
-                       'element' => 'default',
-                       'params' => ['class' => 'error']
-                    ], 'auth');
+                    if (empty($this->request->data['username']) && empty($this->request->data['password'])) {
+                        return $this->redirectAfterLogin();
+                    }
+                    
+                    $this->emptyFieldsMessage();
                     return $this->redirect($this->Auth->config('loginAction'));
                 }
             }
@@ -71,6 +71,31 @@ class UsersController extends AppController
             $this->set('_serialize', ['photo']);
         }
     }
+    
+    private function redirectAfterLogin()
+    {
+        if ($this->request->data['login-type'] === 'login-extra-child') {
+            return $this->redirect($this->Auth->config('loginAction'));
+        }
+        
+        $this->request->session()->write('loginSuccessful', true);        
+        return $this->redirect(array('controller' => 'Photos', 'action' => 'index'));
+    }
+    
+    private function emptyFieldsMessage()
+    {
+        if (empty($this->request->data['username']) || empty($this->request->data['password'])) {
+            $this->Flash->set(__('De gebruikersnaam of inlogcode is niet ingevuld'), [
+                'element' => 'default',
+                'params' => ['class' => 'error']
+            ], 'auth');
+        } else {
+            $this->Flash->set(__('Het inloggen is mislukt. Probeer het nogmaals.'), [
+               'element' => 'default',
+               'params' => ['class' => 'error']
+            ], 'auth');
+        }
+    }
 
     public function logout()
     {
@@ -78,6 +103,10 @@ class UsersController extends AppController
             'element' => 'default',
             'params' => ['class' => 'success']
         ]);
+        
+        if ($this->request->session()->check('loginSuccessful')) {
+            $this->request->session()->delete('loginSuccessful');
+        }
         
         //clear extra users data from session
         if ($this->request->session()->read('LoggedInUsers')) {
