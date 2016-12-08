@@ -12,7 +12,9 @@ class FixSchoolsTurnover extends AbstractMigration
      */
     public function change()
     {   
-        $this->changeColumn('turnover', 'decimal', [
+        $table = $this->table('projects');
+        
+        $table->changeColumn('turnover', 'decimal', [
             'null' => true,
             'limit' => 10,
             'default' => null,
