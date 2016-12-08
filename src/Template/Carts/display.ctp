@@ -1,5 +1,7 @@
 <div class="row">
     <!-- left panel -->
+    <?= $this->Flash->render(); ?>
+    
     <div class="cart-cartlines-index col-md-9">
         <h2><?= __('Winkelwagen');?></h2>
         <div class='row col-md-12 col-xs-12'>
