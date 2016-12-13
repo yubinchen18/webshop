@@ -59,35 +59,19 @@ class CartsController extends AppController
             $hash = md5($hash);
  
             $giftFor = false;
-            if (isset($cartlineData['digital_product']) || $personBarcode) {
-                foreach ($cart->cartlines as $line) {
-                    if ($personBarcode && $line->product->article === "DPack") {
-                        $giftFor = $personBarcode;
-                        break;
-                    }
-                    if ($digitalPack === $line->photo->barcode_id && $line->product->product_group === 'digital') {
-                        if ($line->product->article !== "D1") {
-                            $response = [
-                                'success' => false,
-                                'message' => __('Het pakket is al toegevoegd aan de winkelwagen')
-                            ];
-                            $this->set(compact('response'));
-                            $this->set('_serialize', 'response');
-                            return;
-                        }
-                        $this->Carts->Cartlines->delete($line);
-                    }
-                    if ($cartlineData['photo_id'] === $line->photo_id) {
-                        $response = ['success' => true, 'message' => __('Het pakket is toegevoegd aan de winkelwagen')];
-                        $this->set(compact('response'));
-                        $this->set('_serialize', 'response');
-                    }
-                }
-            }
-            
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
+            
+            //if it's digital lose product, check if exist and replace
+            if ($cartlineData['digital_product'] === 'DPack' || $personBarcode) {
+                $giftFor = $personBarcode;
+            }
             $cartline->gift_for = $giftFor;
 
+            //if its digital, reset quantity when already exist so that it's always 1
+            if (isset($cartlineData['digital_product']) || $personBarcode) {
+                $cartline->quantity = null;
+            }
+            
             $data = [
                 'cart_id' => $cart->id,
                 'photo_id' => $cartlineData['photo_id'],
@@ -131,6 +115,7 @@ class CartsController extends AppController
             $this->set('_serialize', 'response');
             return;
         }
+        //Failure response
         $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
@@ -417,18 +402,21 @@ class CartsController extends AppController
     public function delete($id)
     {
         $line = $this->Carts->Cartlines->find()
-                ->contain(['Products'])
+                ->contain(['Products', 'CartlineProductoptions'])
                 ->where(['Cartlines.id' => $id])
                 ->first();
 
         if (!empty($line->id)) {
             $this->Carts->Cartlines->delete($line);
+            foreach($line->cartline_productoptions as $productoption) {
+                $this->Carts->Cartlines->CartlineProductoptions->delete($productoption);
+            }
             if ($line->product->article === "DPack") {
                 $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
                 foreach ($cart->cartlines as $cartline) {
                     if ("GAF 13x19" === $cartline->product->article) {
-                        $this->Carts->Cartlines->delete($cartline);
                         $removeGroup = $cartline->id;
+                        $this->Carts->Cartlines->delete($cartline);
                     }
                 }
             }

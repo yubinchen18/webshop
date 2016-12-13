@@ -31,8 +31,8 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
-                        <?php if ($photo->selectedProduct === 'loose-prints') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
+                    <?php if ($photo->selectedProduct === 'loose-prints') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                 </div>
                 <div class="photos-view-products-container  col-md-6">
                     <div class="photos-view-products-labels label2 text-center">
@@ -54,8 +54,8 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
-                        <?php if ($photo->selectedProduct === 'funproducts') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
+                    <?php if ($photo->selectedProduct === 'funproducts') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                 </div>
             </div>
             <div class="row">
@@ -74,8 +74,8 @@
                             ]),
                             'class' => [$photo->orientationClass, 'img-responsive']
                         ]); ?>
-                        <?php if ($photo->selectedProduct === 'combination-sheets') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
+                    <?php if ($photo->selectedProduct === 'combination-sheets') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                 </div>
                 <div class="photos-view-products-container  col-md-6">
                     <div class="photos-view-products-labels label4 text-center">
@@ -91,14 +91,14 @@
                         <?= $this->Html->image('layout/Hoogstraten_navigatie rechts-03-03.png', [
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
-                                'action' => 'productGroupIndex',
-                                'digital',
-                                $photo->id
+                                'action' => 'digitalIndex',
+//                                'digital',
+//                                $photo->id
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
-                        <?php if ($photo->selectedProduct === 'digital') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
+                    <?php if ($photo->selectedProduct === 'digital') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                 </div>
             </div>
             <div class="row">
@@ -122,8 +122,8 @@
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
-                        <?php if ($photo->selectedProduct === 'canvas') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                     </div>
+                    <?php if ($photo->selectedProduct === 'canvas') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
                 </div>
             </div>
         </div>

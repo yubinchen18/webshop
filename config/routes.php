@@ -243,6 +243,10 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['id' => RouteBuilder::UUID, 'pass' => ['id']]
     );
     $routes->connect(
+        '/photos/product-group/digital',
+        ['controller' => 'Photos', 'action' => 'digitalIndex']
+    );
+    $routes->connect(
         '/photos/product-group/:productGroup/:id/**',
         ['controller' => 'Photos', 'action' => 'productGroupIndex'],
         ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id', 'filter']]

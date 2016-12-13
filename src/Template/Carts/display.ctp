@@ -106,6 +106,13 @@
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
-        
+        <div class="photos-view-products-fixed">
+            <div class="cart-order-details-action alert alert-success">
+                <?= __('Gratis verzending vanaf 4 afdrukken!'); ?>
+            </div>
+            <div class="cart-order-details-message">
+                <?= __('Let op! Gratis verzending alleen bij afdrukken tot en met formaat 20x30 en eronder'); ?>
+            </div>
+        </div>
     </div>
 </div>

@@ -67,9 +67,7 @@
                         ],
                         'url' => $this->Url->build([
                             'controller' => 'Photos', 
-                            'action' => 'productGroupIndex',
-                            'digital',
-                            $photo->id
+                            'action' => 'digitalIndex'
                         ]),
                     ]) ?>
                 </li>
@@ -90,9 +88,7 @@
                     ],
                     'url' => $this->Url->build([
                         'controller' => 'Photos', 
-                        'action' => 'productGroupIndex',
-                        'digital',
-                        $photo->id
+                        'action' => 'digitalIndex'
                     ]),
                 ]) ?>
         </div>

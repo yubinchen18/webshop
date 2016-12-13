@@ -90,10 +90,10 @@
                 <!-- action logo -->
                 <div class='login-action-star'>
                     <div class='login-action-star-message'>
-                        <?= __('Gratis verzending vanaf 3 afdrukken'); ?>
+                        <?= __('Gratis verzending vanaf 4 afdrukken'); ?>
                     </div>
                     <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-37.png', [
-                        'class' => ['login-action-start-logo']
+                        'class' => ['login-action-star-logo']
                     ]); ?>
                 </div>
             </div>

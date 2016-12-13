@@ -272,10 +272,10 @@ class PhotosController extends AppController
     {
         $this->autoRender = false;
         //load the photo
-        $photo = $this->Photos->find()
-            ->where(['Photos.id' => $photoId])
-            ->contain(['Barcodes.Persons'])
-            ->firstOrFail();
+            $photo = $this->Photos->find()
+                ->where(['Photos.id' => $photoId])
+                ->contain(['Barcodes.Persons'])
+                ->firstOrFail();
         
         if ($productGroup == 'digital') {
             $persons = $this->getDigitalPhotos();
@@ -295,8 +295,7 @@ class PhotosController extends AppController
                         ->contain(['Productoptions.ProductoptionChoices'])
                         ->orderAsc('article')
                         ->toArray();
-                
-                $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                $photo->orientationClass = $this->Photos->returnPhotoOrientation($photo);
                 $photo->selectedProduct = $this->request->params['productGroup'];
                 
                 if (!empty($products)) {
@@ -312,9 +311,6 @@ class PhotosController extends AppController
                         if ($product->product_group !== 'funproducts') {
                             $product->image = $image[0];
                         }
-                        
-                        $digitalProduct = ($product->product_group === 'digital') ? $photo->barcode_id : false;
-                        $digitalPack = ($product->article === 'DPack') ? $photo->barcode_id : false;
                     }
                 } else {
                     throw new NotFoundException('No products found.');
@@ -336,6 +332,40 @@ class PhotosController extends AppController
         }
     }
     
+    public function digitalIndex()
+    {
+        $persons = $this->getDigitalPhotos();
+        
+        foreach ($persons as $person) {
+            foreach ($person->barcode->photos as $photo) {
+                //create tmp product preview images for each photo in cache
+                $productsTable = TableRegistry::get('Products');
+                $products = $productsTable->find()
+                    ->where(['product_group' => 'digital'])
+                    ->contain(['Productoptions.ProductoptionChoices'])
+                    ->orderAsc('article')
+                    ->toArray();
+                
+                if (!empty($products)) {
+                    foreach ($products as $product) {
+                        //create tmp product preview images
+                        $imageHandler = new ImageHandler();
+                        $image = $imageHandler->createProductPreview($photo, $product->product_group, [
+                            'resize' => ['width' => 200, 'height' => 180],
+                            'layout' => !empty($product->layout) ? $product->layout : 'all',
+                        ]);
+                        $product->image = $image[0];
+                    }
+                } else {
+                    throw new NotFoundException('No products found.');
+                }
+            }
+        }
+        
+        $firstPhoto = $persons[0]->barcode->photos[0];
+        $this->set(compact('persons', 'products', 'firstPhoto'));
+    }
+    
     public function deleteCartLine($id)
     {
         $this->Cartlines = TableRegistry::get('Cartlines');
@@ -355,15 +385,6 @@ class PhotosController extends AppController
         $this->setFreeGroupsPictureSettings($personBarcode, "pickFreeGroupsPicture");
     }
     
-    private function getGroupPictures($groupBarcodeId = null)
-    {
-        $photos = $this->Photos->find()
-            ->contain('Barcodes')
-            ->where(['barcode_id' => $groupBarcodeId])
-            ->toArray();
-        return $photos;
-    }
-    
     private function setFreeGroupsPictureSettings($personBarcode = null, $layout = null)
     {
         //check if barcode is a person
@@ -373,15 +394,12 @@ class PhotosController extends AppController
             ->where(['Persons.barcode_id' => $personBarcode])
             ->first();
         
-        $photos = $this->getGroupPictures($person->group->barcode_id);
+        $photos = $this->Photos->getGroupPictures($person->group->barcode_id);
         if (!empty($photos)) {
             foreach ($photos as $photo) {
                 if ($this->isAuthForPhoto($photo)) {
                     //add the orientation data to the photos array
-                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
-
-                    $this->set(compact('photo'));
-                    $this->set('_serialize', ['photo']);
+                    $photo->orientationClass = $this->Photos->returnPhotoOrientation($photo);
                 } else {
                     throw new NotFoundException('Not authorized to view this photo');
                 }
@@ -399,29 +417,15 @@ class PhotosController extends AppController
         $this->render($layout);
     }
     
-    private function returnPhotoOrientation($photo)
-    {
-        $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-
-        list($width, $height) = getimagesize($filePath);
-        if ($width > $height) {
-            $orientationClass = 'photos-horizontal';
-        } else {
-            $orientationClass = 'photos-vertical';
-        }
-        
-        return $orientationClass;
-    }
-    
     private function getDigitalPhotos()
     {
         $persons = $this->getAllLoggedInUsers();
         if (!empty($persons)) {
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $key => $photo) {
-                    $photo->orientationClass = $this->returnPhotoOrientation($photo);
+                    $photo->orientationClass = $this->Photos->returnPhotoOrientation($photo);
                     $photo->portrait = TableRegistry::get('Users')->getUserPortrait($person->user_id);
-                    $person->photo = $photo;
+//                    $person->photo = $photo;
                 }
             }
             return $persons;

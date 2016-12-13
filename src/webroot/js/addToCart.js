@@ -110,18 +110,18 @@ jQuery(function($) {
                 if(response.success == true) {
                     $('.addToCartPopup-confirmation').addClass('alert-success');
                     $('#msg').html(response.message);
-                    $('.addToCartPopup-confirmation').show();
+                    $('.addToCartPopup-confirmation').css('zIndex', '210').show();
                     setTimeout(function() {
-                        $('.addToCartPopup-confirmation').hide();
+                        $('.addToCartPopup-confirmation').css('zIndex', '-100').hide();
                     },2000);
                     //add cartCount animation
                     updateCartCount(response.cartCount)
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);
-                    $('.addToCartPopup-confirmation').show();
+                    $('.addToCartPopup-confirmation').css('zIndex', '210').show();
                     setTimeout(function() {
-                        $('.addToCartPopup-confirmation').hide();
+                        $('.addToCartPopup-confirmation').css('zIndex', '-100').hide();
                     },2000);
                 }
             },
