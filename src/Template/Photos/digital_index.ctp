@@ -38,8 +38,7 @@
                                     </div>
                                         <?= $this->Html->image($this->Url->build([
                                             'controller' => 'Photos',
-                                            'action' => 'display',
-                                            'size' => 'thumbs',
+                                            'action' => 'displayProduct',
                                             'layout' => $products[0]->layout,
                                             'id' => $digitalphoto->id,
                                             'suffix' => $products[0]->image['suffix'],
