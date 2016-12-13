@@ -46,6 +46,11 @@ class CartsController extends AppController
             $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
             $digitalProduct = (isset($cartlineData['digital_product'])) ? $cartlineData['digital_product'] : false;
             $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
+            $giftFor = null;
+            //if it's digital pack product, assign giftFor value
+            if ($digitalProduct === 'DPack' || $personBarcode) {
+                $giftFor = $personBarcode;
+            }
             $response = [
                 'success' => true,
                 'message' => __('De foto is toegevoegd aan de winkelwagen'),
@@ -57,15 +62,11 @@ class CartsController extends AppController
             $hash = json_encode($productOptions);
             $hash .= $cartlineData['product_id'];
             $hash .= $cartlineData['photo_id'];
+            $hash .= $giftFor;
             $hash = md5($hash);
  
-            $giftFor = false;
-            $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
             
-            //if it's digital pack product, assign giftFor value
-            if ($digitalProduct === 'DPack' || $personBarcode) {
-                $giftFor = $personBarcode;
-            }
+            $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
             $cartline->gift_for = $giftFor;
 
             //if its digital, reset quantity when already exist so that it's always 1
@@ -79,7 +80,8 @@ class CartsController extends AppController
                 'product_id' => $cartlineData['product_id'],
                 'quantity' => ($cartline->quantity) ? $cartline->quantity + (int)$cartlineData['quantity']
                     : (int)$cartlineData['quantity'],
-                'options_hash' => $hash
+                'options_hash' => $hash,
+                'gift_for' => $giftFor
             ];
             
             $this->Carts->Cartlines->patchEntity($cartline, $data);
@@ -352,7 +354,6 @@ class CartsController extends AppController
             $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
             $cart = $this->Carts->updatePrices($cartline->cart_id);
             $cartTotals = $this->Carts->getCartTotals($cart->id);
-            die('wtf');
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',
@@ -403,7 +404,7 @@ class CartsController extends AppController
     public function delete($id)
     {
         $line = $this->Carts->Cartlines->find()
-                ->contain(['Products', 'CartlineProductoptions'])
+                ->contain(['Products', 'CartlineProductoptions', 'Photos.Barcodes'])
                 ->where(['Cartlines.id' => $id])
                 ->first();
 
@@ -413,12 +414,15 @@ class CartsController extends AppController
                 $this->Carts->Cartlines->CartlineProductoptions->delete($productoption);
             }
             if ($line->product->article === "DPack") {
-                $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
-                foreach ($cart->cartlines as $cartline) {
-                    if ("GAF 13x19" === $cartline->product->article) {
-                        $removeGroup = $cartline->id;
-                        $this->Carts->Cartlines->delete($cartline);
-                    }
+                $giftLine = $this->Carts->Cartlines->find()
+                    ->where(['Cartlines.gift_for' => $line->photo->barcode->id])
+                    ->matching('Products', function($q) {
+                        return $q->where(['Products.article' => "GAF 13x19"]);
+                    })
+                    ->first();
+                if (!empty($giftLine)) {
+                    $this->Carts->Cartlines->delete($giftLine);
+                    $removeGroup = $giftLine->id;
                 }
             }
             $cartTotals = $this->Carts->getCartTotals($line->cart_id);

@@ -139,7 +139,6 @@ class CartsTable extends Table
         ]
         ]);
         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
-         
         $userDiscounts = array_map(function () {
         }, array_flip($users));
         $total_lines = 0;
@@ -148,15 +147,14 @@ class CartsTable extends Table
          
         foreach ($cart->cartlines as $cartline) {
             $total_lines++;
-            debug($cartline->photo->barcode->person->user_id);
-            $user = $cartline->photo->barcode->person->user_id;
+            $user = isset($cartline->photo->barcode->person->user_id) ? $cartline->photo->barcode->person->user_id : '';
             $subtotal = $cartline->quantity * $cartline->product->price_ex;
              
             if ($cartline->product->has_discount == 1 && !empty($userDiscounts[$user])) {
                 $cartline->product->price_ex = (Configure::read('DiscountPrice'));
                 $subtotal = $cartline->quantity * (Configure::read('DiscountPrice'));
             }
-             
+            
             if ($cartline->product->has_discount == 1 && empty($userDiscounts[$user])) {
                 $subtotal = 1 * $cartline->product->price_ex;
                 $subtotal += ($cartline->quantity-1) * (Configure::read('DiscountPrice'));
@@ -186,13 +184,13 @@ class CartsTable extends Table
         if (!empty($cart->cartlines)) {
             foreach ($cart->cartlines as $cartline) {
                 $cartline->discountPrice = Configure::read('DiscountPrice');
-                if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
+                if (!empty($userDiscounts[$user])
                         && $cartline->product->has_discount === 1) {
                     $cartline->product->price_ex = Configure::read('DiscountPrice');
                 }
                  
                 if ($cartline->product->has_discount === 1) {
-                    $userDiscounts[$cartline->photo->barcode->person->user_id] = true;
+                    $userDiscounts[$user] = true;
                 }
             }
         }

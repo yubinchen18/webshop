@@ -23,10 +23,10 @@ jQuery(function($) {
                         if(cartlines[line]['product']['has_discount'] == 1 && 
                            cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
                            cartlines[line]['quantity'] > 1) {
-                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
-                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toFixed(2).toString().replace('.',',') + '</div>');
                         } else {
-                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
                         }
                         qtyRow.find('.cartline-product-unitPrice').html(subTotals);
                         qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
@@ -69,10 +69,10 @@ jQuery(function($) {
                         if(cartlines[line]['product']['has_discount'] == 1 && 
                            cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
                            cartlines[line]['quantity'] > 1) {
-                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
-                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toFixed(2).toString().replace('.',',') + '</div>');
                         } else {
-                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
+                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
                         }
                         qtyRow.find('.cartline-product-unitPrice').html(subTotals);
                         qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
@@ -154,6 +154,7 @@ jQuery(function($) {
           $.ajax({
             url: '/carts/delete/'+ divId +'.json',
             success: function(response) {
+                console.log(response);
                 $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
                 $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
                 $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
