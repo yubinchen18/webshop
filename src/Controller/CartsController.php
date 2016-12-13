@@ -44,6 +44,7 @@ class CartsController extends AppController
             $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
             
             $personBarcode = (isset($cartlineData['person_barcode'])) ? $cartlineData['person_barcode'] : false;
+            $digitalProduct = (isset($cartlineData['digital_product'])) ? $cartlineData['digital_product'] : false;
             $digitalPack = (isset($cartlineData['digital_pack'])) ? $cartlineData['digital_pack'] : false;
             $response = [
                 'success' => true,
@@ -61,8 +62,8 @@ class CartsController extends AppController
             $giftFor = false;
             $cartline = $this->Carts->Cartlines->checkExistingCartline($cart->id, $hash);
             
-            //if it's digital lose product, check if exist and replace
-            if ($cartlineData['digital_product'] === 'DPack' || $personBarcode) {
+            //if it's digital pack product, assign giftFor value
+            if ($digitalProduct === 'DPack' || $personBarcode) {
                 $giftFor = $personBarcode;
             }
             $cartline->gift_for = $giftFor;
@@ -351,7 +352,7 @@ class CartsController extends AppController
             $this->Carts->Cartlines->save($cartline, ['quantity' => $postData['cartline_quantity']]);
             $cart = $this->Carts->updatePrices($cartline->cart_id);
             $cartTotals = $this->Carts->getCartTotals($cart->id);
-            
+            die('wtf');
             $response = [
                 'success' => true,
                 'message' => 'Cartline successfully updated',

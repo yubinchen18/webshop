@@ -148,6 +148,7 @@ class CartsTable extends Table
          
         foreach ($cart->cartlines as $cartline) {
             $total_lines++;
+            debug($cartline->photo->barcode->person->user_id);
             $user = $cartline->photo->barcode->person->user_id;
             $subtotal = $cartline->quantity * $cartline->product->price_ex;
              
