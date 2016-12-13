@@ -34,7 +34,8 @@ class GroupsController extends AppController
     public function projectgroups($project_id)
     {
         $groups = $this->Groups->find('list')
-                ->where(['Groups.project_id' => $project_id]);
+                ->where(['Groups.project_id' => $project_id])
+                ->orderAsc('Groups.name');
         
         $this->set(compact('groups'));
     }
@@ -63,7 +64,7 @@ class GroupsController extends AppController
     public function add()
     {
         $group = $this->Groups->newEntity();
-        $projects = $this->Groups->Projects->find('list');
+        $projects = $this->Groups->Projects->find('list')->orderAsc('name');
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {

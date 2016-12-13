@@ -30,7 +30,7 @@ class PhotosController extends AppController
             )
         );
         
-        $schools = $this->Photos->Barcodes->Persons->Groups->Projects->Schools->find('list');        
+        $schools = $this->Photos->Barcodes->Persons->Groups->Projects->Schools->find('list')->orderAsc('name');        
         $projects = [__('Selecteer een school')];
         $groups = [__('Selecteer een project')];
         $data = $this->request->data;

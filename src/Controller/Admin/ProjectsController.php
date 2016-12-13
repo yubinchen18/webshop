@@ -36,7 +36,8 @@ class ProjectsController extends AppController
     public function schoolprojects($school_id)
     {
         $projects = $this->Projects->find('list')
-                ->where(['Projects.school_id' => $school_id]);
+                ->where(['Projects.school_id' => $school_id])
+                ->orderAsc('Projects.name');
         
         $this->set(compact('projects'));
     }
@@ -135,7 +136,7 @@ class ProjectsController extends AppController
     public function add()
     {
         $project = $this->Projects->newEntity();
-        $schools = $this->Projects->Schools->find('list');
+        $schools = $this->Projects->Schools->find('list')->orderAsc('name');
         if ($this->request->is('post')) {
             $project = $this->Projects->patchEntity($project, $this->request->data);
             if ($this->Projects->save($project)) {

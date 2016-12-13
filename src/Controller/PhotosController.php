@@ -335,32 +335,36 @@ class PhotosController extends AppController
     public function digitalIndex()
     {
         $persons = $this->getDigitalPhotos();
-        
-        foreach ($persons as $person) {
-            foreach ($person->barcode->photos as $photo) {
-                //create tmp product preview images for each photo in cache
-                $productsTable = TableRegistry::get('Products');
-                $products = $productsTable->find()
-                    ->where(['product_group' => 'digital'])
-                    ->contain(['Productoptions.ProductoptionChoices'])
-                    ->orderAsc('article')
-                    ->toArray();
-                
-                if (!empty($products)) {
-                    foreach ($products as $product) {
-                        //create tmp product preview images
-                        $imageHandler = new ImageHandler();
-                        $image = $imageHandler->createProductPreview($photo, $product->product_group, [
-                            'resize' => ['width' => 200, 'height' => 180],
-                            'layout' => !empty($product->layout) ? $product->layout : 'all',
-                        ]);
-                        $product->image = $image[0];
+        if (!empty($persons)) {
+            foreach ($persons as $person) {
+                foreach ($person->barcode->photos as $photo) {
+                    //create tmp product preview images for each photo in cache
+                    $productsTable = TableRegistry::get('Products');
+                    $products = $productsTable->find()
+                        ->where(['product_group' => 'digital'])
+                        ->contain(['Productoptions.ProductoptionChoices'])
+                        ->orderAsc('article')
+                        ->toArray();
+
+                    if (!empty($products)) {
+                        foreach ($products as $product) {
+                            //create tmp product preview images
+                            $imageHandler = new ImageHandler();
+                            $image = $imageHandler->createProductPreview($photo, $product->product_group, [
+                                'resize' => ['width' => 200, 'height' => 180],
+                                'layout' => !empty($product->layout) ? $product->layout : 'all',
+                            ]);
+                            $product->image = $image[0];
+                        }
+                    } else {
+                        throw new NotFoundException('No products found.');
                     }
-                } else {
-                    throw new NotFoundException('No products found.');
                 }
             }
+        } else {
+            $this->Flash->error(__('Person not found.'));
         }
+        
         
         $firstPhoto = $persons[0]->barcode->photos[0];
         $this->set(compact('persons', 'products', 'firstPhoto'));

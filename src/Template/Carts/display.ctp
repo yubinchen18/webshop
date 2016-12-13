@@ -100,6 +100,12 @@
             <?php else: ?>
                 <div>
                     <h3><?= __('Uw winkelwagen is leeg'); ?></h3>
+                    <div class='col-sm-3 '>
+                        <?= $this->Html->link(__('Naar foto-overzicht'),
+                            ['controller' => 'Photos', 'action' => 'index'],
+                            ['class' => 'btn btn-default']
+                        ); ?>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>

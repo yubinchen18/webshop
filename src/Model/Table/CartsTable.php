@@ -210,7 +210,7 @@ class CartsTable extends Table
             'products' => 0,
             'discount' => 0,
             'tax' => 0,
-            'shippingcosts' => 3.95,
+            'shippingcosts' => 8.95,
             'cartCount' => 0,
         ];
         
