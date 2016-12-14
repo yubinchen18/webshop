@@ -156,7 +156,7 @@ class UsersTable extends Table
         $password = $this->generateRandom();
         $data = [
             'username' => $this->checkUsername($username),
-            'password' => (new DefaultPasswordHasher)->hash($password),
+            'password' => $password,
             'genuine' => $password
         ];
         

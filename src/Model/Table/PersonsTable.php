@@ -117,10 +117,10 @@ class PersonsTable extends BaseTable
         return $rules;
     }
     
-    public function beforeSave($event, $entity, $options)
+    public function beforeRules($event, $entity, $options)
     {
         if (empty($entity->barcode) && empty($entity->barcode_id)) {
-            $entity->barcode = $this->Barcodes->createNewBarcode();
+            $entity->barcode_id = $this->Barcodes->createNewBarcode()->id;
         }
         
         return $entity;
