@@ -242,7 +242,7 @@ class CartsTable extends Table
             }
         }
         
-        if ($total_lines > 2) {
+        if ($total_lines >= 4) {
             $totals['shippingcosts'] = 0;
         }
         if ($high_shipping) {

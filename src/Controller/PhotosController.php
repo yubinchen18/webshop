@@ -429,7 +429,6 @@ class PhotosController extends AppController
                 foreach ($person->barcode->photos as $key => $photo) {
                     $photo->orientationClass = $this->Photos->returnPhotoOrientation($photo);
                     $photo->portrait = TableRegistry::get('Users')->getUserPortrait($person->user_id);
-//                    $person->photo = $photo;
                 }
             }
             return $persons;
