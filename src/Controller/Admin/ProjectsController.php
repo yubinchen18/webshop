@@ -105,7 +105,7 @@ class ProjectsController extends AppController
             foreach($group->persons as $person) {
                 $queues[] = [
                     'profile_name' => $this->request->data['photographer'],
-                    'model' => 'Groups',
+                    'model' => 'Persons',
                     'foreign_key' => $person->id
                 ];
             
