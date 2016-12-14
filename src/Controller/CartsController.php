@@ -434,7 +434,8 @@ class CartsController extends AppController
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
                 'shippingCost' => $cartTotals['shippingcosts'],
-                'cartCount' => $cartTotals['cartCount']
+                'cartCount' => $cartTotals['cartCount'],
+                'cartDiscount' => $cartTotals['discount'],
             ];
             $response['removeGroup'] = (isset($removeGroup)) ? $removeGroup : "";
             $this->set(compact('response'));
