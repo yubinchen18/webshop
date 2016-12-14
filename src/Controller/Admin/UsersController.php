@@ -159,6 +159,10 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
+                if ($this->request->session()->read('LoggedInUsers')) {
+                    $this->request->session()->delete('LoggedInUsers');
+                }
+                $this->Auth->logout();
                 $this->Auth->setUser($user);
                 $data = $session->read('LoggedInUsers.AllUsers');
                 $data[] = $user['id'];
