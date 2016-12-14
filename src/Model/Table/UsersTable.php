@@ -157,7 +157,8 @@ class UsersTable extends Table
         $data = [
             'username' => $this->checkUsername($username),
             'password' => $password,
-            'genuine' => $password
+            'genuine' => $password,
+            'type' => 'person'
         ];
         
         $user = $this->patchEntity($user, $data);
