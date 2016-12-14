@@ -335,11 +335,11 @@ class PhotosController extends AppController
     public function digitalIndex()
     {
         $persons = $this->getDigitalPhotos();
+        $productsTable = TableRegistry::get('Products');
         if (!empty($persons)) {
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $photo) {
                     //create tmp product preview images for each photo in cache
-                    $productsTable = TableRegistry::get('Products');
                     $products = $productsTable->find()
                         ->where(['product_group' => 'digital'])
                         ->contain(['Productoptions.ProductoptionChoices'])
