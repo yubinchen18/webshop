@@ -15,25 +15,10 @@ jQuery(function($) {
             dataType:"json",
             success: function(response) {
                 if (response.success == true) {
-                    var cartlines = response.cart.cartlines;
-                    for(line in cartlines) {
-                        qtyRow = $('#'+ cartlines[line]['id']);
-                        subTotals = $('<div/>');
-                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
-                        if(cartlines[line]['product']['has_discount'] == 1 && 
-                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
-                           cartlines[line]['quantity'] > 1) {
-                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
-                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toFixed(2).toString().replace('.',',') + '</div>');
-                        } else {
-                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
-                        }
-                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
-                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
-                    }
-                    $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
-                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
-                    $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    //update cartlines
+                    updateCartlines(response);
+                    //update summary
+                    updateSummary(response);
                     //animate cart count
                     updateCartCount(response.cartCount);
                 }
@@ -61,26 +46,8 @@ jQuery(function($) {
             dataType:"json",
             success: function(response) {
                 if (response.success == true) {
-                    var cartlines = response.cart.cartlines;
-                    for(line in cartlines) {
-                        qtyRow = $('#'+ cartlines[line]['id']);
-                        subTotals = $('<div/>');
-                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
-                        if(cartlines[line]['product']['has_discount'] == 1 && 
-                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
-                           cartlines[line]['quantity'] > 1) {
-                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
-                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toFixed(2).toString().replace('.',',') + '</div>');
-                        } else {
-                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
-                        }
-                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
-                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
-                    }
-                    
-                    $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
-                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
-                    $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    updateCartlines(response);
+                    updateSummary(response);
                     //animate cart count
                     updateCartCount(response.cartCount);
                 }
@@ -103,26 +70,8 @@ jQuery(function($) {
                 method: 'POST',
                 dataType:"json",
                 success: function(response) {
-                    var cartlines = response.cart.cartlines;
-                    for(line in cartlines) {
-                        qtyRow = $('#'+ cartlines[line]['id']);
-                        subTotals = $('<div/>');
-                        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
-                        if(cartlines[line]['product']['has_discount'] == 1 && 
-                           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
-                           cartlines[line]['quantity'] > 1) {
-                            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
-                            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toString().replace('.',',') + '</div>');
-                        } else {
-                            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toString().replace('.',',') + '</div>');
-                        }
-                        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
-                        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
-                    }
-                    
-                    $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
-                    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
-                    $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                    updateCartlines(response);
+                    updateSummary(response);
                     //animate cart count
                     updateCartCount(response.cartCount);
                 },
@@ -155,9 +104,7 @@ jQuery(function($) {
             url: '/carts/delete/'+ divId +'.json',
             success: function(response) {
                 console.log(response);
-                $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
-                $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
-                $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
+                updateSummary(response);
                 $('div#'+divId).next('.navigation-groups-picture').remove();
                 $('div#'+divId).remove();
                 if(response.removeGroup !== "") {
@@ -238,4 +185,35 @@ function disableCheckoutButton()
     if($('.navigation-groups-picture').size() > 0) {
         $('.order-place-order .btn-success').addClass('disabled');
     }
+}
+
+function updateCartlines(response)
+{
+    var cartlines = response.cart.cartlines;
+    for(line in cartlines) {
+        qtyRow = $('#'+ cartlines[line]['id']);
+        subTotals = $('<div/>');
+        subTotals.append('<span class="quantity-'+cartlines[line]['id']+'"></span>');
+        if(cartlines[line]['product']['has_discount'] == 1 && 
+           cartlines[line]['product']['price_ex'] != response['discountPrice'] && 
+           cartlines[line]['quantity'] > 1) {
+            subTotals.append('<div class="normalprice">1 x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
+            subTotals.append('<div class="discountprice">'+ (cartlines[line]['quantity']-1) +' x &euro; '+ response['discountPrice'].toFixed(2).toString().replace('.',',') + '</div>');
+        } else if(cartlines[line]['discount'] > 0 && cartlines[line]['product']['article'] == 'D1') {
+            subTotals.append('<div class="normalprice text-danger"><s>'+ cartlines[line]['quantity'] + ' x &euro; ' +cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</s></div>');
+            subTotals.append('<div class="discountprice">'+ cartlines[line]['quantity'] + ' x &euro; ' +cartlines[line]['subtotal'].toFixed(2).toString().replace('.',',') + '</div>');
+        } else {
+            subTotals.append('<div class="normalprice">'+ cartlines[line]['quantity'] +' x &euro; '+ cartlines[line]['product']['price_ex'].toFixed(2).toString().replace('.',',') + '</div>');
+        }
+        qtyRow.find('.cartline-product-unitPrice').html(subTotals);
+        qtyRow.find('.price-' + cartlines[line]['id']).html(cartlines[line]['subtotal'].toFixed(2).replace('.',','));
+    }
+}
+
+function updateSummary(response)
+{
+    $('#order-subtotal').html(response.orderSubtotal.toFixed(2).toString().replace(".", ","));
+    $('#order-discount').html(response.cartDiscount.toFixed(2).toString().replace(".", ","));
+    $('#order-shippingcosts').html(response.shippingCost.toFixed(2).toString().replace(".", ","));
+    $('#order-total').html(response.orderTotal.toFixed(2).toString().replace(".", ","));
 }

@@ -187,6 +187,7 @@ class ImageHandler
         $watermark = false;
         $rotate = false;
         $filter = null;
+        $sourceSize = 'med';
         $tmpDir = $this->tmpImagesFolder;
         $tmpProductDir = $this->tmpProductImagesFolder;
         $fileName = '';
@@ -198,7 +199,7 @@ class ImageHandler
         //read the options
         if (isset($options) && is_array($options)) {
             foreach ($options as $option => $value) {
-                if (!in_array((string)$option, ['resize', 'watermark', 'layout', 'filter'])) {
+                if (!in_array((string)$option, ['resize', 'watermark', 'layout', 'filter', 'sourceSize'])) {
                     throw new \Exception('Invalid Option');
                     die();
                 }
@@ -225,6 +226,9 @@ class ImageHandler
                     case 'layout':
                         $layout = isset($value) ? $value : 'all';
                         break;
+                    case 'sourceSize':
+                        $sourceSize = isset($value) ? $value : 'med';
+                        $suffix = $suffix . (string)$sourceSize;
                 }
             }
         }
@@ -270,7 +274,8 @@ class ImageHandler
                 $imageName = $subImage['position'] . '-' . $subImage['filter'];
                 if (!key_exists($imageName, $done)) {
                     $tmpImageHandler = new ImageHandler();
-                    $tmpImageHandler->load($photoFolder . 'med' . DS . $photo->path);
+                    //select source images to compile, thumbs have no watermark
+                    $tmpImageHandler->load($photoFolder . $sourceSize . DS . $photo->path);
 
                     $tmpWidth = imagesx($tmpImageHandler->image);
                     $tmpHeight = imagesy($tmpImageHandler->image);

@@ -13,6 +13,10 @@ class AlterProducts extends AbstractMigration
     public function change()
     {
         $table = $this->table('products');
-        $this->query("UPDATE `products` SET `slug` = 'afdruk_15x23' WHERE `slug` = 'afdruk_15x20'");
+        $this->query(
+            "UPDATE `products` SET `slug` = 'afdruk_15x23' WHERE `slug` = 'afdruk_15x20';"
+            ."UPDATE `products` SET `price_ex` = '17.50' WHERE `slug` = 'digital_1';"
+            ."UPDATE `products` SET `price_ex` = '45' WHERE `slug` = 'digital_pack';"
+        );
     }
 }

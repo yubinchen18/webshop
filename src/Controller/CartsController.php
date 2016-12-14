@@ -279,7 +279,8 @@ class CartsController extends AppController
                 $image = $imageHandler->createProductPreview($cartline->photo, $cartline->product->product_group, [
                     'resize' => ['width' => 200, 'height' => 180],
                     'layout' => !empty($cartline->product->layout) ? $cartline->product->layout : 'all',
-                    'filter' => $filter
+                    'filter' => $filter,
+                    'sourceSize' => 'thumbs'
                 ]);
                 //add the image data to product object and calc subtotal price
                 if ($cartline->product->product_group === 'funproducts') {
@@ -362,7 +363,8 @@ class CartsController extends AppController
                 'discountPrice' => Configure::read('DiscountPrice'),
                 'orderSubtotal' => $cartTotals['products'],
                 'orderTotal' => $cartTotals['products']+$cartTotals['shippingcosts'],
-                'shippingCost' => $cartTotals['shippingcosts']
+                'shippingCost' => $cartTotals['shippingcosts'],
+                'cartDiscount' => $cartTotals['discount'],
             ];
             $this->set(compact('response'));
             $this->set('_serialize', 'response');

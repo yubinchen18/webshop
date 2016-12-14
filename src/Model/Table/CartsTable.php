@@ -133,13 +133,19 @@ class CartsTable extends Table
     public function updatePrices($cart_id)
     {
         $cart = $this->get($cart_id, [
-        'contain' => [
-         'Cartlines.Products',
-         'Cartlines.Photos.Barcodes.Persons'
+            'contain' => [
+                'Cartlines' => function ($q) {
+                    return $q
+                        ->orderAsc('Cartlines.created')
+                        ->contain('Products');
+                },
+             'Cartlines.Photos.Barcodes.Persons'
         ]
         ]);
         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
         $userDiscounts = array_map(function () {
+        }, array_flip($users));
+        $userDigitalLines = array_map(function () {
         }, array_flip($users));
         $total_lines = 0;
         $discount = 0;
@@ -159,11 +165,20 @@ class CartsTable extends Table
                 $subtotal = 1 * $cartline->product->price_ex;
                 $subtotal += ($cartline->quantity-1) * (Configure::read('DiscountPrice'));
                 $userDiscounts[$user] = true;
+                $cartline->discount = ($cartline->quantity * $cartline->product->price_ex) - $subtotal;
+            }
+            
+            //calc digital photos discount prijzen staffel
+            if ($cartline->product->article === 'D1') {
+                $userDigitalLines[$user] = isset($userDigitalLines[$user]) ? $userDigitalLines[$user]+1 : 1;
+                $discount = $this->getDigitalDiscount($userDigitalLines[$user]);
+                $subtotal = $cartline->product->price_ex - $discount;
+                $cartline->discount = $discount;
             }
             $cartline->subtotal = $subtotal;
             $this->Cartlines->save($cartline);
         }
-         
+        
         $cart = $this->get($cart_id, [
         'contain' => [
         'Cartlines' => function ($q) {
@@ -219,7 +234,8 @@ class CartsTable extends Table
             $total_lines+=$line->quantity;
             
             $totals['products'] += $line->subtotal;
-            $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
+//            $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
+            $totals['discount'] += $line->discount;
             $totals['cartCount'] += $line->quantity;
             if(!empty($line->product->high_shipping)) {
                 $high_shipping = true;
@@ -233,5 +249,18 @@ class CartsTable extends Table
             $totals['shippingcosts'] = 12.50;
         }
         return $totals;
+    }
+    
+    public function getDigitalDiscount($count)
+    {
+        if ($count <= 1) {
+            return null;
+        } elseif ($count === 2) {
+            return 7.50;
+        } elseif ($count === 3) {
+            return 10;
+        } elseif ($count >= 4) {
+            return 12.50;
+        }
     }
 }

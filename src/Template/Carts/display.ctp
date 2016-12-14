@@ -43,8 +43,8 @@
                             <div class='row'>
                                 <div class='order-subtotal col-sm-offset-6 col-sm-6'>
                                     <div class='row'>
-                                        <div class='col-sm-8'><?= __('Subtotaal: '); ?></div>
-                                        <div class='col-sm-4'>
+                                        <div class='col-sm-7'><?= __('Subtotaal: '); ?></div>
+                                        <div class='col-sm-3 text-right'>
                                             <span><?= __('€ '); ?><span class='price-<?= $cartline->id; ?>' id='order-subtotal'>
                                                 <?= $this->Number->format($orderSubtotal, [
                                                     'places' => 2
@@ -55,8 +55,8 @@
                                 </div>
                                 <div class='order-costs col-sm-offset-6 col-sm-6'>
                                     <div class='row'>
-                                        <div class='col-sm-8'><?= __('Verwerkingskosten: '); ?></div>
-                                        <div class='col-sm-4'>
+                                        <div class='col-sm-7'><?= __('Verwerkingskosten: '); ?></div>
+                                        <div class='col-sm-3 text-right'>
                                             <span><?= __('€ '); ?><span id='order-shippingcosts'>
                                                 <?= $this->Number->format($shippingCost, [
                                                     'places' => 2
@@ -68,8 +68,8 @@
                                 <div class='order-total col-sm-offset-6 col-sm-6'>
                                     <div class='row'>
                                         <b>
-                                            <div class='col-sm-8'><?= __('Totaal: '); ?></div>
-                                            <div class='col-sm-4'>
+                                            <div class='col-sm-7'><?= __('Totaal: '); ?></div>
+                                            <div class='col-sm-3 text-right'>
                                                 <span><?= __('€ '); ?><span id='order-total'>
                                                     <?= $this->Number->format($orderTotal, [
                                                         'places' => 2
@@ -77,6 +77,18 @@
                                                 </span></span>
                                             </div>
                                         </b>
+                                    </div>
+                                </div>
+                                <div class='order-korting col-sm-offset-6 col-sm-6'>
+                                    <div class='row'>
+                                        <div class='col-sm-7'><?= __('U BESPAART IN TOTAAL: '); ?></div>
+                                        <div class='col-sm-3 text-right'>
+                                            <span><?= __('€ '); ?><span class='price-<?= $cartline->id; ?>' id='order-discount'>
+                                                <?= $this->Number->format($discount, [
+                                                    'places' => 2
+                                                ]); ?>
+                                            </span></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
