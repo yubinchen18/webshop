@@ -17,6 +17,9 @@ class AlterProducts extends AbstractMigration
             "UPDATE `products` SET `slug` = 'afdruk_15x23' WHERE `slug` = 'afdruk_15x20';"
             ."UPDATE `products` SET `price_ex` = '17.50' WHERE `slug` = 'digital_1';"
             ."UPDATE `products` SET `price_ex` = '45' WHERE `slug` = 'digital_pack';"
+            ."UPDATE `products` SET `high_shipping` = '1' WHERE `slug` = 'afdruk_30x45';"
+            ."UPDATE `products` SET `high_shipping` = '1' WHERE `slug` = 'afdruk_50x75';"
+            ."UPDATE `products` SET `high_shipping` = '1' WHERE `slug` = 'afdruk_40x60';"
         );
     }
 }

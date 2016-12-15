@@ -157,8 +157,9 @@ class CartsTable extends Table
             $subtotal = $cartline->quantity * $cartline->product->price_ex;
              
             if ($cartline->product->has_discount == 1 && !empty($userDiscounts[$user])) {
-                $cartline->product->price_ex = (Configure::read('DiscountPrice'));
                 $subtotal = $cartline->quantity * (Configure::read('DiscountPrice'));
+                $cartline->discount = ($cartline->quantity * $cartline->product->price_ex) - $subtotal;
+                $cartline->product->price_ex = (Configure::read('DiscountPrice'));
             }
             
             if ($cartline->product->has_discount == 1 && empty($userDiscounts[$user])) {
@@ -224,30 +225,40 @@ class CartsTable extends Table
             'products' => 0,
             'discount' => 0,
             'tax' => 0,
-            'shippingcosts' => 8.95,
+            'shippingcosts' => 3.95,
             'cartCount' => 0,
         ];
         
         $total_lines = 0;
         $high_shipping = false;
+        $onlyDigital = true;
+        
         foreach ($cart->cartlines as $line) {
             $total_lines+=$line->quantity;
             
             $totals['products'] += $line->subtotal;
-//            $totals['discount'] += ($line->product->price_ex * $line->quantity) - $line->subtotal;
             $totals['discount'] += $line->discount;
             $totals['cartCount'] += $line->quantity;
             if(!empty($line->product->high_shipping)) {
                 $high_shipping = true;
             }
+            
+            if($line->product->product_group !== 'digital') {
+                $onlyDigital = false;
+            }
         }
         
+        if ($onlyDigital) {
+            $totals['shippingcosts'] = 0;
+        }
         if ($total_lines >= 4) {
             $totals['shippingcosts'] = 0;
         }
         if ($high_shipping) {
-            $totals['shippingcosts'] = 12.50;
+            $totals['shippingcosts'] = 8.95;
         }
+        
+        
         return $totals;
     }
     
