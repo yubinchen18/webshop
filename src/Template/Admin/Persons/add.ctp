@@ -63,7 +63,7 @@
                         <div class="col-sm-9">
                             <?= $this->Form->select(
                                     'type',
-                                    ['Student' => __('leerling'), 'Staff' => __('docent')],
+                                    ['Staff' => __('docent'), 'Student' => __('leerling')],
                                     ['empty' => __('(Kies een type)')]
                                 );
                             ?>

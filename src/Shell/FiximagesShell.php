@@ -37,9 +37,11 @@ class FiximagesShell extends Shell
         foreach($photos as $photo) {
             $path = $photosTable->getPath($photo['barcode_id']);
             $photoPath = $path . DS . basename($photo['path']);
-            $pic = new \Imagick($photoPath);
-            $photosTable->autoRotateImage($pic);
-            exit;
+            if (file_exists($photoPath)) {
+                $pic = new \Imagick($photoPath);
+                $photosTable->autoRotateImage($pic);
+            }
         }
+        exit;
     }
 }

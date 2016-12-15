@@ -156,8 +156,9 @@ class UsersTable extends Table
         $password = $this->generateRandom();
         $data = [
             'username' => $this->checkUsername($username),
-            'password' => (new DefaultPasswordHasher)->hash($password),
-            'genuine' => $password
+            'password' => $password,
+            'genuine' => $password,
+            'type' => 'person'
         ];
         
         $user = $this->patchEntity($user, $data);

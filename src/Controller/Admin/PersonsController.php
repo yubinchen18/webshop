@@ -51,7 +51,7 @@ class PersonsController extends AppController
      */
     public function add()
     {
-        $schools = $this->Persons->Groups->Projects->Schools->find('list');
+        $schools = $this->Persons->Groups->Projects->Schools->find('list')->orderAsc('name');
         $projects = [__('Selecteer een school')];
         $groups = [__('Selecteer een project')];
         

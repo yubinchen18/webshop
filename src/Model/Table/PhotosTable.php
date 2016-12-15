@@ -257,4 +257,27 @@ class PhotosTable extends BaseTable
         $image->compositeImage($watermark, \imagick::COMPOSITE_OVER, $x, $y);
         return $image;
     }
+    
+    public function returnPhotoOrientation($photo)
+    {
+        $filePath = $this->getPath($photo->barcode_id) . DS . $photo->path;
+
+        list($width, $height) = getimagesize($filePath);
+        if ($width > $height) {
+            $orientationClass = 'photos-horizontal';
+        } else {
+            $orientationClass = 'photos-vertical';
+        }
+        
+        return $orientationClass;
+    }
+    
+    public function getGroupPictures($groupBarcodeId = null)
+    {
+        $photos = $this->find()
+            ->contain('Barcodes')
+            ->where(['barcode_id' => $groupBarcodeId])
+            ->toArray();
+        return $photos;
+    }
 }

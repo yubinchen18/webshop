@@ -42,7 +42,7 @@
                                 'controller' => 'Photos',
                                 'action' => 'display',
                                 'id' => $photo->id,
-                                'size' => 'full']),
+                                'size' => 'med']),
                                 ['class' => 'img-responsive']
                             ); ?>
                             </div>
@@ -53,6 +53,8 @@
         <?php endforeach; ?>
         </div>
     <?php endif ?>
+        
+        
     </div>
     <div class="photos-index col-md-3 col-sm-12">
         <!-- Medium screen -->
@@ -74,9 +76,7 @@
                         ],
                         'url' => $this->Url->build([
                             'controller' => 'Photos', 
-                            'action' => 'productGroupIndex',
-                            'digital',
-                            $photo->id
+                            'action' => 'digitalIndex'
                         ]),
                     ]) ?>
                 </li>
@@ -97,9 +97,7 @@
                     ],
                     'url' => $this->Url->build([
                         'controller' => 'Photos', 
-                        'action' => 'productGroupIndex',
-                        'digital',
-                        $photo->id
+                        'action' => 'digitalIndex'
                     ]),
                 ]) ?>
         </div>

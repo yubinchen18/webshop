@@ -19,8 +19,7 @@
                                             <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
                                                 'class' => 'plus-sign-non-quantity addToCartPopup-addButton',
                                                 'data-cartline' => json_encode([
-                                                    'digital_product' => $digitalProduct,
-                                                    'digital_pack' => $digitalPack,
+                                                    'digital_product' => $products[0]->article,
                                                     'photo_id' => $digitalphoto->id,
                                                     'product_id' => $products[0]->id,
                                                     'product_price' => $products[0]->price_ex,
@@ -39,8 +38,7 @@
                                     </div>
                                         <?= $this->Html->image($this->Url->build([
                                             'controller' => 'Photos',
-                                            'action' => 'display',
-                                            'size' => 'thumbs',
+                                            'action' => 'displayProduct',
                                             'layout' => $products[0]->layout,
                                             'id' => $digitalphoto->id,
                                             'suffix' => $products[0]->image['suffix'],
@@ -48,6 +46,7 @@
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                        <!-- Digital complete pack -->
                         <div class="col-xxl-2 col-xl-3 col-md-4 col-xs-6 photos-product-container">
                             <div class="photos-product-label">
                                 <div class="row">
@@ -56,8 +55,8 @@
                                         <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
                                             'class' => 'plus-sign-non-quantity addToCartPopup-addButton',
                                             'data-cartline' => json_encode([
-                                                'digital_product' => $digitalProduct,
-                                                'digital_pack' => $digitalPack,
+                                                'digital_product' => $products[1]->article,
+                                                'digital_pack' => $person->barcode_id,
                                                 'photo_id' => $digitalphoto->id,
                                                 'product_id' => $products[1]->id,
                                                 'product_price' => $products[1]->price_ex,
@@ -107,5 +106,5 @@
             </div>
         </div>
     </div>
-    <?= $this->element('Frontend/productsPanel', ['photo' => $photo]); ?>
+    <?= $this->element('Frontend/productsPanel', ['photo' => $firstPhoto]); ?>
 </div>
