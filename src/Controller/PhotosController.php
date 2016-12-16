@@ -277,21 +277,13 @@ class PhotosController extends AppController
                 ->contain(['Barcodes.Persons'])
                 ->firstOrFail();
         
-        if ($productGroup == 'digital') {
-            $persons = $this->getDigitalPhotos();
-            $this->set('persons', $persons);
-            
-            if($photo->type == 'group') {
-                $this->Flash->error(__('Klassenfoto\'s kunnen niet digitaal worden besteld'));
-            }
-        }
-        
         if (!empty($photo)) {
             if ($this->isAuthForPhoto($photo)) {
                 //load products
                 $productTable = TableRegistry::get('Products');
                 $products = $productTable->find()
                         ->where(['product_group' => $productGroup])
+                        ->andWhere(['slug !=' => 'gratis_afdruk_13x18'])
                         ->contain(['Productoptions.ProductoptionChoices'])
                         ->orderAsc('article')
                         ->toArray();
