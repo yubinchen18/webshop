@@ -92,13 +92,13 @@
                             'url' => $this->Url->build([
                                 'controller' => 'Photos', 
                                 'action' => 'digitalIndex',
-//                                'digital',
-//                                $photo->id
                             ]),
                             'class' => [$photo->orientationClass.' '.$photo->orientationClass.'-overlay']
                         ]); ?>
                     </div>
-                    <?php if ($photo->selectedProduct === 'digital') : echo '<div class="selected-product-overlay"></div>'; endif; ?>
+                    <?php if ($this->request->params['controller'] == 'Photos' && $this->request->params['action'] == 'digitalIndex'): ?>
+                        <div class="selected-product-overlay"></div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="row">

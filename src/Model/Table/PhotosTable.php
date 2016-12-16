@@ -253,7 +253,7 @@ class PhotosTable extends BaseTable
         $x = ($imageWidth - $watermarkWidth) / 2;
         $y = ($imageHeight - $watermarkHeight) / 2;
         //keep transparantcy of image
-        $watermark->evaluateImage(\Imagick::EVALUATE_MULTIPLY, 0.5, \Imagick::CHANNEL_ALPHA);
+        $watermark->evaluateImage(\Imagick::EVALUATE_MULTIPLY, 0.1, \Imagick::CHANNEL_ALPHA);
         $image->compositeImage($watermark, \imagick::COMPOSITE_OVER, $x, $y);
         return $image;
     }

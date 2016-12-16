@@ -129,7 +129,7 @@
                 <?= __('Gratis verzending vanaf 4 afdrukken!'); ?>
             </div>
             <div class="cart-order-details-message">
-                <?= __('Let op! Gratis verzending alleen bij afdrukken tot en met formaat 20x30 en eronder'); ?>
+                <?= __('Let op! Gratis verzending alleen bij afdrukken tot en met formaat 20x30.'); ?>
             </div>
         </div>
     </div>
