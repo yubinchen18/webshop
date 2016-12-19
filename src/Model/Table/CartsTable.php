@@ -171,15 +171,18 @@ class CartsTable extends Table
             
             //calc digital photos discount prijzen staffel
             if ($cartline->product->article === 'D1') {
-                $userDigitalLines[$user] = isset($userDigitalLines[$user]) ? $userDigitalLines[$user]+1 : 1;
-                $discount = $this->getDigitalDiscount($userDigitalLines[$user]);
+                $userDigitalLines[$user]['count'] = isset($userDigitalLines[$user]['count']) ? $userDigitalLines[$user]['count']+1 : 1;
+                $discount = $this->getDigitalDiscount($userDigitalLines[$user]['count']);
+                $userDigitalLines[$user]['discount'] = $discount;
+                $userDigitalLines[$user]['nextProductDiscount'] = $this->getDigitalDiscount($userDigitalLines[$user]['count'] + 1);
+                $userDigitalLines[$user]['nextProductPrice'] = $cartline->product->price_ex - $this->getDigitalDiscount($userDigitalLines[$user]['count'] + 1);
                 $subtotal = $cartline->product->price_ex - $discount;
                 $cartline->discount = $discount;
             }
             $cartline->subtotal = $subtotal;
             $this->Cartlines->save($cartline);
         }
-        
+
         $cart = $this->get($cart_id, [
         'contain' => [
         'Cartlines' => function ($q) {
@@ -210,6 +213,7 @@ class CartsTable extends Table
                 }
             }
         }
+        $cart->digitalDiscounts = $userDigitalLines;
         return $cart;
     }
     

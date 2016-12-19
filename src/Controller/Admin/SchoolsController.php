@@ -22,7 +22,8 @@ class SchoolsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses']
+            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses'],
+            'order' => ['Schools.name' => 'asc']
         ];
         $schools = $this->paginate($this->Schools);
         $this->set(compact('schools'));
@@ -99,7 +100,14 @@ class SchoolsController extends AppController
     {
        
         $school = $this->Schools->get($id, [
-            'contain' => ['Contacts', 'Visitaddresses', 'Mailaddresses', 'Projects']
+            'contain' => [
+                'Contacts',
+                'Visitaddresses',
+                'Mailaddresses',
+                'Projects' => function($q) {
+                    return $q
+                        ->orderAsc('Projects.name');
+                }]
         ]);
         $project = $this->Schools->Projects->newEntity();
 

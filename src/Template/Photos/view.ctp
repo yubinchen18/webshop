@@ -18,6 +18,9 @@
                             'size' => 'med'
                         ]), ['class' => [$photo->orientationClass, 'img-responsive']]); ?>
                 </div>
+                <div class='photos-view-detail-text text-center'>
+                    <h3><?= __('1e opname per kind op 13x19 €5,95 <br>iedere volgende 13x19 van uw kind €3,98') ?></h3>
+                </div>
             </div>
             <!-- Large screen -->
             <div class="photos-view-products-buttons-md col-md-3 hidden-sm hidden-xs">
@@ -26,9 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class='photos-view-detail-text'>
-            <h3><?= __('1e opname per kind op 13x19 €5,95<br>iedere volgende 13x19 van uw kind €3,29') ?></h3>
-        </div>
+        
         
     </div>
     <!-- Right panel -->

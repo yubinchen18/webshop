@@ -116,6 +116,12 @@ jQuery(function($) {
                     },2000);
                     //add cartCount animation
                     updateCartCount(response.cartCount)
+                    //update digital page price
+                    if(response.digitalDiscounts != undefined) {
+                        for (var userid in response.digitalDiscounts) {
+                            $('.price[data-userid="'+userid+'"] span').html('&euro; '+response.digitalDiscounts[userid].nextProductPrice.toFixed(2).toString().replace('.',','));
+                        }
+                    }
                 } else {
                     $('.addToCartPopup-confirmation').addClass('alert-danger');
                     $('#msg').html(response.message);

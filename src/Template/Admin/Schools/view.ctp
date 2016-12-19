@@ -117,19 +117,19 @@
                         </a>
                     </div>
                 </div>
-                <?= $this->Form->create($project, [
-                        'class' => 'form-horizontal school',
-                        'autocomplete' => 'false',
-                        'novalidate' => true,
-                        'type' =>'file',
-                        'url' => [
-                            'controller' => 'Projects',
-                            'action' => 'add'
-                        ]
-                    ]) ?>
-                <?= $this->Form->input('school_id',['type' => 'hidden','value' => $school->id]); ?>
                 <div class="widget-body newprojectcontainer">
                     <div class="widget-main">
+                        <?= $this->Form->create($project, [
+                                'class' => 'form-horizontal school',
+                                'autocomplete' => 'false',
+                                'novalidate' => true,
+                                'type' =>'file',
+                                'url' => [
+                                    'controller' => 'Projects',
+                                    'action' => 'add'
+                                ]
+                            ]) ?>
+                        <?= $this->Form->input('school_id',['type' => 'hidden','value' => $school->id]); ?>
                         <div class="form-group">
                             <?= $this->Form->label('name', __('Projectnaam'), ['class' => 'col-sm-2 control-label no-padding-right ']);?>
                             <div class="col-sm-10">
@@ -164,18 +164,20 @@
                         <div class="form-group">
                             <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right right-fix']); ?>
                         </div>                        
-                        
+                        <?= $this->Form->end(); ?>
                     </div>
                 </div>
-                <?= $this->Form->end(); ?>
             </div>
             <?php $count = 0; ?>
             <?php foreach($school->projects as $project): ?>
-                <div class="widget-box <?php echo ($count != 0) ? 'collapsed' :''; ?> project">
+                <div class="widget-box collapsed project">
                     
                     <div class="widget-header">
-                        <h4 class="widget-title"><?= $project->name ?></h4>
-
+                        <h4 class='widget-title'>
+                            <?= $this->Html->link($project->name,
+                                ['controller' => 'Projects', 'action' => 'view', $project->id]
+                            );?>
+                        </h4>
                         <div class="widget-toolbar">
                             <a href="#" data-action="collapse">
                                 <i class="ace-icon fa fa-chevron-<?php echo ($count != 1) ? 'down' :'up'; ?>"></i>
@@ -243,9 +245,9 @@
                             <br><br>
                             <?=$this->Form->button(__('Verwijderen'), ['type' => 'button', 'class' => 'btn btn-sm btn-danger deleteproject']); ?>
                             <?=$this->Form->button(__('Opslaan'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success pull-right']); ?>
+                            <?= $this->Form->end(); ?>
                         </div>
                     </div>
-                    <?= $this->Form->end(); ?>
                 </div>
             <?php $count++; ?>
             <?php endforeach; ?>
