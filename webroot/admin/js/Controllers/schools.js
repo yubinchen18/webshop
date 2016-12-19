@@ -23,7 +23,7 @@ jQuery(function($) {
         event.preventDefault();
         var r = confirm("Weet je zeker dat je het item wilt verwijderen");
         if (r == true) {
-            var url = '/admin/schools/deleteproject/' + $(this).parent().find('.project_id').val();
+            var url = '/admin/schools/deleteproject/' + $(this).parent().find('#project-id').val();
             $.ajax({
                 url: url,
                 type: 'DELETE',
