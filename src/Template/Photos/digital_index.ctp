@@ -14,8 +14,12 @@
                             <div class="col-xxl-2 col-xl-3 col-md-4 col-xs-6 photos-product-container">
                                 <div class="photos-product-label">
                                     <div class="row">
-                                        <div class="flex-box price col-xs-5">
-                                            <?= $this->Number->currency($products[0]->price_ex, 'EUR'); ?>
+                                        <div class="flex-box price col-xs-5" data-userid=<?= $person->user_id; ?>>
+                                            <?php $nextProductDiscount = isset($digitalDiscounts[$person->user_id]['nextProductDiscount']) ? $digitalDiscounts[$person->user_id]['nextProductDiscount'] : 0; ?>
+                                            <span><?= $this->Number->currency(
+                                                ($products[0]->price_ex - $nextProductDiscount),
+                                                'EUR'); 
+                                            ?></span>
                                             <?= $this->Html->image('layout/Hoogstraten_webshop-onderdelen-21.png', [
                                                 'class' => 'plus-sign-non-quantity addToCartPopup-addButton',
                                                 'data-cartline' => json_encode([
@@ -25,6 +29,7 @@
                                                     'product_price' => $products[0]->price_ex,
                                                     'product_name' => $products[0]->name,
                                                     'product_options' => '',
+                                                    'digital_page' => $digitalPage,
                                                 ]),
                                             ])?>
                                         </div>

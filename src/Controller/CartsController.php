@@ -113,7 +113,12 @@ class CartsController extends AppController
             
             //add cart count
             $cartCount = $this->Carts->getCartTotals($cart->id)['cartCount'];
+            $updatedCart = $this->Carts->updatePrices($cart->id);
             $response['cartCount'] = $cartCount;
+            //update frontend prices for digital
+            if ($digitalProduct) {
+                $response['digitalDiscounts'] = $updatedCart->digitalDiscounts;
+            }
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
             return;

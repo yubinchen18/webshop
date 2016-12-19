@@ -328,6 +328,12 @@ class PhotosController extends AppController
     {
         $persons = $this->getDigitalPhotos();
         $productsTable = TableRegistry::get('Products');
+        $cartsTable = TableRegistry::get('Carts');
+        $cart = $cartsTable->checkExistingCart($this->Auth->user('id'));
+        $cart = $cartsTable->updatePrices($cart->id);
+        $digitalDiscounts = $cart->digitalDiscounts;
+        $digitalPage = true;
+        
         if (!empty($persons)) {
             foreach ($persons as $person) {
                 foreach ($person->barcode->photos as $photo) {
@@ -359,7 +365,7 @@ class PhotosController extends AppController
         
         
         $firstPhoto = $persons[0]->barcode->photos[0];
-        $this->set(compact('persons', 'products', 'firstPhoto'));
+        $this->set(compact('persons', 'products', 'firstPhoto', 'digitalDiscounts', 'digitalPage'));
     }
     
     public function deleteCartLine($id)
