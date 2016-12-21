@@ -147,9 +147,9 @@ class CartsController extends AppController
         ]);
         
         $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
-                
+        $totals = $this->Carts->getCartTotals($cart->id);        
         $issuers = $this->CakeIdeal->sendDirectoryRequest();
-        $this->set(compact('issuers', 'cart'));
+        $this->set(compact('issuers', 'cart', 'totals'));
     }
     
     public function confirm()
