@@ -137,7 +137,11 @@ class SidebarCell extends Cell
                         'children' => [
                         ]
                     ],
-                    
+                    [
+                        'name' => __('Coupons'),
+                        'url' => ['controller' => 'Coupons', 'action' => 'index', 'prefix' => 'admin'],
+                        'icon' => 'fa fa-gift',
+                    ]
                 ];
             case 'user':
                 return [

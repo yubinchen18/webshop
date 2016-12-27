@@ -52,6 +52,8 @@ class PersonsTable extends BaseTable
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasMany('Coupons');
     }
 
     /**
