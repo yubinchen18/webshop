@@ -70,8 +70,8 @@ class GroupImporter
             for ($row = 2; $row <= $highestRow; ++ $row) {
                 $data = [];
                 for ($col = 0; $col < $highestColumnIndex; ++ $col) {
-                    $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
-                    $column = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
+                    $value = trim($worksheet->getCellByColumnAndRow($col, $row)->getValue());
+                    $column = trim($worksheet->getCellByColumnAndRow($col, 1)->getValue());
                     if (in_array($column, $this->columns)) {
                         $data[$column] = $value;
                     }
@@ -186,7 +186,12 @@ class GroupImporter
     private function checkFile($file)
     {
         if (!empty($file['name']) && !empty($file['type']) && !empty($file['tmp_name'])) {
-            $excel = PHPExcel_IOFactory::load($file['tmp_name']);
+            $fileExtension = strtoupper(explode('.',$file['name'])[1]);
+            $obj = PHPExcel_IOFactory::createReader($fileExtension);
+            if ($fileExtension ==='CSV') {
+                $obj->setDelimiter(";");
+            }
+            $excel = $obj->load($file['tmp_name']);
             return $excel;
         }
         return false;
