@@ -109,7 +109,7 @@ class CartsTable extends Table
                },
                'Cartlines.Photos',
                'Cartlines.Products',
-               'CartCoupons'
+               'CartCoupons.Coupons'
            ]);
     }
     
