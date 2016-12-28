@@ -108,7 +108,7 @@ class CouponsController extends AppController
         if ($this->Coupons->delete($coupon)) {
             $this->Flash->success(__('De coupon is verwijderd.'));
         } else {
-            $this->Flash->error(__('Het project kon niet verwijderd worden.  Probeer het nogmaals.'));
+            $this->Flash->error(__('De coupon kon niet verwijderd worden.  Probeer het nogmaals.'));
         }
         
         return $this->redirect(['action' => 'index']);
@@ -118,7 +118,7 @@ class CouponsController extends AppController
     {
         $this->render(false);
         
-        $keys = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'o', 'p',
+        $keys = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p',
             'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 1, 2, 3, 4, 5, 6, 7, 8, 9);
         
         $couponCode = '';
