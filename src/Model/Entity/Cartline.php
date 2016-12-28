@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Cartline Entity
@@ -36,4 +37,37 @@ class Cartline extends Entity
         '*' => true,
         'id' => false
     ];
+    
+    public function processCoupons($coupons)
+    {
+        foreach ($coupons as $coupon) {
+            switch($coupon->coupon->type)
+            {
+                case 'product':
+                    $this->processProductSpecificDiscount($coupon);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    
+    private function processProductSpecificDiscount($coupon)
+    {
+        if ($this->product->id === $coupon->coupon->typedata) {
+            $this->subtotal -= $this->product->price_ex;
+            
+            if (!$coupon->coupon->processed) {
+                $this->discount += $this->product->price_ex;
+                $this->saveCoupon($coupon);
+            }
+        }
+    }
+    
+    private function saveCoupon($coupon)
+    {
+        $coupon->coupon->processed = true;
+        $couponsObj = TableRegistry::get('Coupons');
+        $couponsObj->save($coupon->coupon);
+    }
 }

@@ -43,6 +43,8 @@ class CouponsTable extends Table
             'foreignKey' => 'person_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasMany('CartCoupons');
     }
 
     /**

@@ -53,6 +53,8 @@
                     
                     <hr>
                     <?= $this->Form->input('coupon_code_hidden', ['type' => 'hidden']); ?>
+                    <?= $this->Form->input('type', ['type' => 'hidden', 'value' => 'product']); ?>
+                    <?= $this->Form->input('typedata', ['type' => 'hidden', 'value' => '9227785e-ada4-11e6-b5c0-a402b93f601a']); ?>
                     <?= $this->Html->link(__('Annuleer'),['action' => 'index'], ['class' => 'btn btn-sm']); ?>
                     <?= $this->Form->button(__('Voeg toe'), ['type' => 'submit', 'class' => 'btn btn-sm btn-success']); ?>
                 </div>

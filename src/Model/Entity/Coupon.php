@@ -29,4 +29,29 @@ class Coupon extends Entity
         '*' => true,
         'id' => false
     ];
+    
+    public function isValidCoupon($persons)
+    {
+        foreach ($persons as $person) {
+            foreach ($person->coupons as $coupon)
+            {
+                if ($coupon->coupon_code === $this->coupon_code) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    public function isCouponInCart($cart)
+    {
+        foreach ($cart->cart_coupons as $coupon) {
+            if ($coupon->coupon_id === $this->id) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

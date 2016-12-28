@@ -116,6 +116,11 @@
         ): ?>
             <div class='normalprice text-danger'><s><?= $cartline->quantity; ?> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></s></div>
             <div class='discountprice'><?= $cartline->quantity; ?> x <?= $this->Number->currency($cartline->subtotal, 'EUR'); ?></div>
+        <?php elseif($cartline->product->article === 'AF 20X30' && $cartline->discount > 0): ?>
+            <div class='normalprice'>1 x <?= $this->Number->currency(0, 'EUR'); ?></div>
+            <?php if($cartline->quantity > 1): ?>
+                <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
+            <?php endif; ?>
         <?php else: ?>
             <span class='quantity-<?= $cartline->id; ?>'><?= $cartline->quantity; ?></span>
             <span> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></span>

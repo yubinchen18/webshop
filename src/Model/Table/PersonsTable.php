@@ -163,6 +163,21 @@ class PersonsTable extends BaseTable
         return true;
     }
     
+    public function findPersons(Query $query, array $options)
+    {
+        if (empty($options['userids']) || !is_array($options['userids'])) {
+            throw new \InvalidArgumentException('Missing user ids');
+        }
+        
+        $query->where(['Persons.user_id IN' => $options['userids']]);
+        
+        if (!empty($options['contains'])) {
+            $query->contain($options['contains']);
+        }
+        
+        return $query;
+    }
+    
     /**
      *
      * @param Query $query

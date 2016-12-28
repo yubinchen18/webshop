@@ -447,4 +447,40 @@ class CartsController extends AppController
             $this->set('_serialize', 'response');
         }
     }
+    
+    public function useCoupon()
+    {
+        $coupon = $this->Carts->Users->Persons->Coupons->findByCouponCode($this->request->data['coupon_code'])->first();
+        $persons = $this->Carts->Users->Persons->find('persons', [
+            'userids' => $this->request->session()->read('LoggedInUsers.AllUsers'),
+            'contains' => ['Coupons']
+        ])->toArray();
+        
+        if(!$coupon->isValidCoupon($persons)) {
+            $this->Flash->error(__('De gebruikte coupon code is niet correct. Probeer het nogmaals.'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        $cart = $this->Carts->find('byUserid', [
+            'user_id' => $this->request->session()->read('Auth.User.id')
+        ])->first();
+        if ($coupon->isCouponInCart($cart)) {
+            $this->Flash->error(__('De gebruikte coupon code is al gebruikt op de winkelwagen.'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        $newCartCoupon = $this->Carts->CartCoupons->newEntity();
+        $this->Carts->CartCoupons->patchEntity($newCartCoupon, [
+            'cart_id' => $cart->id,
+            'coupon_id' => $coupon->id
+        ]);
+        
+        if(!$this->Carts->CartCoupons->save($newCartCoupon)) {
+            $this->Flash->error(__('Er is een probleem opgetreden bij het verwerken van de gebruikte coupon code. Probeer het nogmaals.'));
+        } else {
+            $this->Flash->success(__('De coupon code is succesvol toegepast op de winkelwagen.'));
+        }
+        
+        $this->redirect(['action' => 'display']);
+    }
 }
