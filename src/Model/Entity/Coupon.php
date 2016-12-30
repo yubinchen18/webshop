@@ -47,8 +47,23 @@ class Coupon extends Entity
     public function isCouponInCart($cart)
     {
         foreach ($cart->cart_coupons as $coupon) {
-            if ($coupon->coupon_id === $this->id) {
+            if ($coupon->coupon->processed == 1) {
                 return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public function canUseCoupon($cart)
+    {
+        foreach ($cart->cart_coupons as $coupon) {
+            switch($coupon->coupon->type)
+            {
+                case 'product':
+                    return $cart->hasProduct($coupon->coupon->typedata);
+                default:
+                    return false;
             }
         }
         

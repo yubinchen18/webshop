@@ -456,7 +456,7 @@ class CartsController extends AppController
             'contains' => ['Coupons']
         ])->toArray();
         
-        if(!$coupon->isValidCoupon($persons)) {
+        if (empty($coupon) || !$coupon->isValidCoupon($persons)) {
             $this->Flash->error(__('De gebruikte coupon code is niet correct. Probeer het nogmaals.'));
             return $this->redirect(['action' => 'display']);
         }
@@ -465,7 +465,12 @@ class CartsController extends AppController
             'user_id' => $this->request->session()->read('Auth.User.id')
         ])->first();
         if ($coupon->isCouponInCart($cart)) {
-            $this->Flash->error(__('De gebruikte coupon code is al gebruikt op de winkelwagen.'));
+            $this->Flash->error(__('De gebruikte coupon code is al geactiveerd voor deze winkelwagen.'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        if (!$coupon->canUseCoupon($cart) && $coupon->type === 'product') {
+            $this->Flash->error(__('U probeert een couponcode te gebruiken, maar u heeft nog geen gratis 20x30 afdruk gekozen'));
             return $this->redirect(['action' => 'display']);
         }
         
@@ -475,7 +480,7 @@ class CartsController extends AppController
             'coupon_id' => $coupon->id
         ]);
         
-        if(!$this->Carts->CartCoupons->save($newCartCoupon)) {
+        if (!$this->Carts->CartCoupons->save($newCartCoupon)) {
             $this->Flash->error(__('Er is een probleem opgetreden bij het verwerken van de gebruikte coupon code. Probeer het nogmaals.'));
         } else {
             $this->Flash->success(__('De coupon code is succesvol toegepast op de winkelwagen.'));

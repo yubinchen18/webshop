@@ -55,12 +55,13 @@ class Cartline extends Entity
     private function processProductSpecificDiscount($coupon)
     {
         if ($this->product->id === $coupon->coupon->typedata) {
-            $this->subtotal -= $this->product->price_ex;
-            
-            if (!$coupon->coupon->processed) {
-                $this->discount += $this->product->price_ex;
-                $this->saveCoupon($coupon);
-            }
+            pr($coupon);
+//            $this->subtotal -= $this->product->price_ex;
+//            
+//            if (!$coupon->coupon->processed) {
+//                $this->discount += $this->product->price_ex;
+////                $this->saveCoupon($coupon);
+//            }
         }
     }
     
