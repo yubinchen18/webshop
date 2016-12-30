@@ -101,7 +101,7 @@
                                          ['class' => 'btn btn-default']
                                     ); ?>
                         </div>
-                        <div class='order-place-order col-sm-3 col-sm-offset-6'>
+                        <div class='order-place-order col-sm-3 col-sm-offset-4 col-lg-offset-5 col-xl-offset-6'>
                                 <?= $this->Html->link(__('Gegevens invullen en betalen'),
                                          ['action' => 'orderInfo'],
                                          ['class' => 'btn btn-success']
