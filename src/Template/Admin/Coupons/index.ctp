@@ -14,7 +14,7 @@
             </thead>
             <tbody>
             <?php foreach ($coupons as $coupon): ?>
-                <tr ondblclick="openView('coupon', '<?= $coupon->id ?>')">
+                <tr ondblclick="openOverview('coupons')">
                     <td><?= h($coupon->coupon_code) ?></td>
                     <td><?= h($coupon->person->firstname).' '.h($coupon->person->prefix).' '.h($coupon->person->lastname) ?></td>
                     <td><?= h($coupon->created) ?></td>
