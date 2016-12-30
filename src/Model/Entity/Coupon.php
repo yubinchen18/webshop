@@ -57,14 +57,12 @@ class Coupon extends Entity
     
     public function canUseCoupon($cart)
     {
-        foreach ($cart->cart_coupons as $coupon) {
-            switch($coupon->coupon->type)
-            {
-                case 'product':
-                    return $cart->hasProduct($coupon->coupon->typedata);
-                default:
-                    return false;
-            }
+        switch($this->type)
+        {
+            case 'product':
+                return $cart->hasProduct($this->typedata);
+            default:
+                return false;
         }
         
         return false;

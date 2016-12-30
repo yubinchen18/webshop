@@ -36,11 +36,10 @@ class Cart extends Entity
     {
         foreach ($this->cartlines as $cartline) {
             if ($cartline->product->id === $productId) {
-                pr($productId);
                 return true;
             }
-            
-            return false;
         }
+        
+        return false;
     }
 }
