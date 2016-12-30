@@ -36,18 +36,6 @@
                     <?php endif; ?>
             
                 <?php endforeach; ?>
-            
-                <div class="add-coupon col-sm-12">
-                    <div class='row'>
-                        <div class='add-coupon-block col-xs-4'>
-                            <?= __('Couponcode'); ?>
-                            <?= $this->Form->create(null, ['url' => ['action' => 'useCoupon'], 'class' => 'form-horizontal', 'autocomplete' => 'false']) ?>
-                            <?= $this->Form->input('coupon_code', ['label' => false, 'required' => true]) ?>
-                            <?= $this->Form->submit('Toepassen', ['class' => 'btn btn-success']) ?>
-                            <?= $this->Form->end(); ?>
-                        </div>
-                    </div>
-                </div>
                 
                 <!-- Summary -->
                 <div class='order-summary col-sm-12'>
@@ -143,6 +131,16 @@
             </div>
             <div class="cart-order-details-message">
                 <?= __('Let op! Gratis verzending alleen bij afdrukken tot en met formaat 20x30.'); ?>
+            </div>
+            
+            <div class="add-coupon">
+                <div class='add-coupon-block'>
+                    <?= __('Couponcode'); ?>
+                    <?= $this->Form->create(null, ['url' => ['action' => 'useCoupon'], 'class' => 'form-horizontal', 'autocomplete' => 'false']) ?>
+                    <?= $this->Form->input('coupon_code', ['label' => false, 'required' => true, 'class' => 'form-control input-number']) ?>
+                    <?= $this->Form->submit('Toepassen', ['class' => 'btn btn-success']) ?>
+                    <?= $this->Form->end(); ?>
+                </div>
             </div>
         </div>
     </div>
