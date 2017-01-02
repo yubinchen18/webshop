@@ -16,7 +16,13 @@
             <?php foreach ($coupons as $coupon): ?>
                 <tr ondblclick="openOverview('coupons')">
                     <td><?= h($coupon->coupon_code) ?></td>
-                    <td><?= h($coupon->person->firstname).' '.h($coupon->person->prefix).' '.h($coupon->person->lastname) ?></td>
+                    <td>
+                        <?php
+                        if (!empty($coupon->person)) {
+                            echo h($coupon->person->firstname).' '.h($coupon->person->prefix).' '.h($coupon->person->lastname);
+                        }
+                        ?>
+                    </td>
                     <td><?= h($coupon->created) ?></td>
                     <td><?= h($coupon->modified) ?></td>
                     <td class="actions">

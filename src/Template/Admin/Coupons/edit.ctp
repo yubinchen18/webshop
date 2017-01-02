@@ -24,30 +24,39 @@
                     </div>
                     
                     <div class="form-group">
-                       <?= $this->Form->label('school_id', __('School'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                       <?= $this->Form->label('add_to_person', __('Koppel aan persoon'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
                         <div class="col-sm-9">
-                            <?= $this->Form->input('school_id', ['label' => false, 'options' => $schools, 'empty' => __('Kies een school')]); ?>
+                            <?= $this->Form->checkbox('add_to_person', ['checked' => ((!empty($coupon->person_id)) ? true : false), 'id' => 'add-to-person']); ?>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                       <?= $this->Form->label('project_id', __('Project'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->input('project_id', ['label' => false, 'options' => $projects, 'empty' => __('Selecteer een school')]); ?>
+                    <div class="find-person">
+                        <div class="form-group">
+                           <?= $this->Form->label('school_id', __('School'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                            <div class="col-sm-9">
+                                <?= $this->Form->input('school_id', ['label' => false, 'options' => $schools, 'empty' => __('Kies een school')]); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <?= $this->Form->label('group_id', __('Klas'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->input('group_id', ['label' => false, 'options' => $groups,'empty' => __('Selecteer een project')]); ?>
+                        <div class="form-group">
+                           <?= $this->Form->label('project_id', __('Project'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                            <div class="col-sm-9">
+                                <?= $this->Form->input('project_id', ['label' => false, 'options' => $projects, 'empty' => __('Selecteer een school')]); ?>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <?= $this->Form->label('person_id', __('Person'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
-                        <div class="col-sm-9">
-                            <?= $this->Form->input('person_id', ['label' => false, 'options' => $persons, 'empty' => __('Selecteer een klas')]); ?>
+
+                        <div class="form-group">
+                            <?= $this->Form->label('group_id', __('Klas'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                            <div class="col-sm-9">
+                                <?= $this->Form->input('group_id', ['label' => false, 'options' => $groups,'empty' => __('Selecteer een project')]); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <?= $this->Form->label('person_id', __('Person'), ['class' => 'col-sm-2 control-label no-padding-righ']);?>
+                            <div class="col-sm-9">
+                                <?= $this->Form->input('person_id', ['label' => false, 'options' => $persons, 'empty' => __('Selecteer een klas')]); ?>
+                            </div>
                         </div>
                     </div>
                     

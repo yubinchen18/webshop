@@ -32,6 +32,10 @@ class Coupon extends Entity
     
     public function isValidCoupon($persons)
     {
+        if (is_null($this->person_id)) {
+            return true;
+        }
+        
         foreach ($persons as $person) {
             foreach ($person->coupons as $coupon)
             {

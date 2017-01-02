@@ -41,7 +41,7 @@ class CouponsTable extends Table
 
         $this->belongsTo('Persons', [
             'foreignKey' => 'person_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
         
         $this->hasMany('CartCoupons', [
@@ -64,10 +64,6 @@ class CouponsTable extends Table
         $validator
             ->requirePresence('coupon_code', 'create')
             ->notEmpty('coupon_code');
-        
-        $validator
-            ->requirePresence('person_id', 'create')
-            ->notEmpty('person_id');
 
         return $validator;
     }
@@ -81,8 +77,6 @@ class CouponsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['person_id'], 'Persons'));
-
         return $rules;
     }
 }

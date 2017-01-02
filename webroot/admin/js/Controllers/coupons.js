@@ -56,4 +56,18 @@ jQuery(function($) {
             }
         });
     });
+    
+    $('#add-to-person').click(function() {
+        if(this.checked) {
+            $('.find-person').show();
+        } else {
+            $('.find-person').hide();
+        }
+    });
+    
+    if($('#add-to-person')[0].checked) {
+        $('.find-person').show();
+    } else {
+        $('.find-person').hide();
+    }
 });

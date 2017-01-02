@@ -475,10 +475,8 @@ class CartsController extends AppController
         }
         
         $newCartCoupon = $this->Carts->CartCoupons->newEntity();
-        $this->Carts->CartCoupons->patchEntity($newCartCoupon, [
-            'cart_id' => $cart->id,
-            'coupon_id' => $coupon->id
-        ]);
+        $newCartCoupon->cart_id = $cart->id;
+        $newCartCoupon->coupon_id = $coupon->id;
         
         if (!$this->Carts->CartCoupons->save($newCartCoupon)) {
             $this->Flash->error(__('Er is een probleem opgetreden bij het verwerken van de gebruikte coupon code. Probeer het nogmaals.'));
