@@ -41,7 +41,7 @@ class AddCoupons extends AbstractMigration
             ->addColumn('person_id', 'char', [
                 'default' => null,
                 'limit' => 36,
-                'null' => false,
+                'null' => true,
             ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
