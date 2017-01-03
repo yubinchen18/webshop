@@ -43,6 +43,11 @@ class AddCoupons extends AbstractMigration
                 'limit' => 36,
                 'null' => true,
             ])
+            ->addColumn('cart_id', 'char', [
+                'default' => null,
+                'limit' => 36,
+                'null' => true,
+            ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
                 'limit' => null,
@@ -57,24 +62,6 @@ class AddCoupons extends AbstractMigration
                 'default' => null,
                 'limit' => null,
                 'null' => true,
-            ])
-            ->create();
-        
-        $this->table('cart_coupons', ['id' => false, 'primary_key' => ['id']])
-            ->addColumn('id', 'uuid', [
-                'default' => null,
-                'limit' => null,
-                'null' => false,
-            ])
-            ->addColumn('cart_id', 'char', [
-                'default' => null,
-                'limit' => 36,
-                'null' => false,
-            ])
-            ->addColumn('coupon_id', 'char', [
-                'default' => null,
-                'limit' => 36,
-                'null' => false,
             ])
             ->create();
     }
