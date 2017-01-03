@@ -215,23 +215,6 @@
                     padding-left: 10px;
                 }
             }
-            .funproduct {
-                position: relative;
-                width: 154px;
-                height: 154px;
-                
-                .funproduct-gekozen-foto:hover + .cartline-photo-container {
-                    display: block;
-                }
-                
-                .cartline-photo-container {
-                    display: none;
-                    
-                    .cartline-photo {
-                        z-index: 2;
-                    }
-                }
-            }
         }
         .cartline-product-quantity {
             .quantity-container {
@@ -282,6 +265,24 @@
             }
         }
         
+    }
+}
+
+.funproduct {
+    position: relative;
+    width: 154px;
+    height: 154px;
+
+    .funproduct-gekozen-foto:hover + .cartline-photo-container {
+        display: block;
+    }
+
+    .cartline-photo-container {
+        display: none;
+
+        .cartline-photo {
+            z-index: 2;
+        }
     }
 }
 

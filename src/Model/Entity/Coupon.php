@@ -50,10 +50,8 @@ class Coupon extends Entity
     
     public function isCouponInCart($cart)
     {
-        foreach ($cart->cart_coupons as $coupon) {
-            if ($coupon->coupon->processed == 1) {
-                return true;
-            }
+        if ($this->cart_id === $cart->id && $this->processed === 1) {
+            return true;
         }
         
         return false;

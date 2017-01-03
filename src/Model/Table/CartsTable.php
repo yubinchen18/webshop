@@ -55,7 +55,9 @@ class CartsTable extends Table
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
-        $this->hasMany('CartCoupons');
+        $this->hasMany('Coupons', [
+            'foreignKey' => 'cart_id'
+        ]);
     }
 
     /**
@@ -109,7 +111,7 @@ class CartsTable extends Table
                },
                'Cartlines.Photos',
                'Cartlines.Products',
-               'CartCoupons.Coupons'
+               'Coupons'
            ]);
     }
     
@@ -143,7 +145,7 @@ class CartsTable extends Table
                 },
                 'Cartlines.Products',
                 'Cartlines.Photos.Barcodes.Persons',
-                'CartCoupons.Coupons'
+                'Coupons'
             ]
         ]);
         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
@@ -185,7 +187,7 @@ class CartsTable extends Table
             }
             
             $cartline->subtotal = $subtotal;
-            $cartline->processCoupons($cart->cart_coupons);
+            $cartline->processCoupons($cart->coupons);
             
             $this->Cartlines->save($cartline);
         }

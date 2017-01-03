@@ -41,7 +41,7 @@ class Cartline extends Entity
     public function processCoupons($coupons)
     {
         foreach ($coupons as $coupon) {
-            switch($coupon->coupon->type)
+            switch($coupon->type)
             {
                 case 'product':
                     $this->processProductSpecificDiscount($coupon);
@@ -54,10 +54,10 @@ class Cartline extends Entity
     
     private function processProductSpecificDiscount($coupon)
     {
-        if ($this->product->id === $coupon->coupon->typedata) {
+        if ($this->product->id === $coupon->typedata) {
             $this->subtotal -= $this->product->price_ex;
             
-            if (!$coupon->coupon->processed) {
+            if (!$coupon->processed) {
                 $this->discount += $this->product->price_ex;
                 $this->saveCoupon($coupon);
             }
@@ -66,8 +66,8 @@ class Cartline extends Entity
     
     private function saveCoupon($coupon)
     {
-        $coupon->coupon->processed = true;
+        $coupon->processed = true;
         $couponsObj = TableRegistry::get('Coupons');
-        $couponsObj->save($coupon->coupon);
+        $couponsObj->save($coupon);
     }
 }

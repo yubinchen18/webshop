@@ -44,8 +44,9 @@ class CouponsTable extends Table
             'joinType' => 'LEFT'
         ]);
         
-        $this->hasMany('CartCoupons', [
-            'dependent' => true
+        $this->belongsTo('Carts', [
+            'foreignKey' => 'cart_id',
+            'joinType' => 'INNER'
         ]);
     }
 

@@ -209,8 +209,8 @@ class OrdersController extends AppController
         $order = $this->request->session()->read('order');
         $this->request->session()->write('order', null);
         $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
-        foreach ($cart->cart_coupons as $coupon) {
-            $this->Orders->Carts->CartCoupons->Coupons->delete($coupon->coupon);
+        foreach ($cart->coupons as $coupon) {
+            $this->Orders->Carts->Coupons->delete($coupon);
         }
         $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
         $this->Orders->Carts->save($newcart);

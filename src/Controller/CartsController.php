@@ -142,13 +142,13 @@ class CartsController extends AppController
                     ->get($order->deliveryaddress_id);
             }
         }
-        $this->loadComponent('CakeIdeal.CakeIdeal', [
-            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
-        ]);
+//        $this->loadComponent('CakeIdeal.CakeIdeal', [
+//            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+//        ]);
         
         $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
         $totals = $this->Carts->getCartTotals($cart->id);        
-        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+//        $issuers = $this->CakeIdeal->sendDirectoryRequest();
         $this->set(compact('issuers', 'cart', 'totals'));
     }
     
@@ -158,10 +158,10 @@ class CartsController extends AppController
         $dataJson = json_encode($data);
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
         $cart = $this->Carts->updatePrices($cart->id);
-        $this->loadComponent('CakeIdeal.CakeIdeal', [
-            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
-        ]);
-        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+//        $this->loadComponent('CakeIdeal.CakeIdeal', [
+//            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+//        ]);
+//        $issuers = $this->CakeIdeal->sendDirectoryRequest();
 
         $orderSubtotal = 0;
         $groupSelectedArr = [];
@@ -187,8 +187,16 @@ class CartsController extends AppController
                     'layout' => !empty($cartline->product->layout) ? $cartline->product->layout : 'all',
                     'filter' => $filter
                 ]);
+                
                 //add the image data to product object and calc subtotal price
-                $cartline->product->image = $image[0];
+                if ($cartline->product->product_group === 'funproducts') {
+                    $productImage = $cartline->product->image;
+                    $cartline->product->image = $image[0];
+                    $cartline->product->image['product_image'] = $productImage;
+                } else {
+                    $cartline->product->image = $image[0];
+                }
+                
                 $cartline->discountPrice = Configure::read('DiscountPrice');
                 if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
                     && $cartline->product->has_discount === 1) {
@@ -474,11 +482,9 @@ class CartsController extends AppController
             return $this->redirect(['action' => 'display']);
         }
         
-        $newCartCoupon = $this->Carts->CartCoupons->newEntity();
-        $newCartCoupon->cart_id = $cart->id;
-        $newCartCoupon->coupon_id = $coupon->id;
+        $coupon->cart_id = $cart->id;
         
-        if (!$this->Carts->CartCoupons->save($newCartCoupon)) {
+        if (!$this->Carts->Coupons->save($coupon)) {
             $this->Flash->error(__('Er is een probleem opgetreden bij het verwerken van de gebruikte coupon code. Probeer het nogmaals.'));
         } else {
             $this->Flash->success(__('De coupon code is succesvol toegepast op de winkelwagen.'));

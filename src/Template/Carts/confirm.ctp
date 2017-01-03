@@ -148,7 +148,7 @@
     </div>
     <!-- right panel -->
     <div class="cart-order-details col-md-3 hidden-sm hidden-xs">
-        
+        <div class="photos-view-products-fixed"></div>
     </div>
 </div>
 
