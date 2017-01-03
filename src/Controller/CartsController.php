@@ -142,13 +142,13 @@ class CartsController extends AppController
                     ->get($order->deliveryaddress_id);
             }
         }
-//        $this->loadComponent('CakeIdeal.CakeIdeal', [
-//            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
-//        ]);
+        $this->loadComponent('CakeIdeal.CakeIdeal', [
+            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+        ]);
         
         $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
         $totals = $this->Carts->getCartTotals($cart->id);        
-//        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+        $issuers = $this->CakeIdeal->sendDirectoryRequest();
         $this->set(compact('issuers', 'cart', 'totals'));
     }
     
@@ -158,10 +158,10 @@ class CartsController extends AppController
         $dataJson = json_encode($data);
         $cart = $this->Carts->checkExistingCart($this->Auth->user('id'));
         $cart = $this->Carts->updatePrices($cart->id);
-//        $this->loadComponent('CakeIdeal.CakeIdeal', [
-//            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
-//        ]);
-//        $issuers = $this->CakeIdeal->sendDirectoryRequest();
+        $this->loadComponent('CakeIdeal.CakeIdeal', [
+            'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
+        ]);
+        $issuers = $this->CakeIdeal->sendDirectoryRequest();
 
         $orderSubtotal = 0;
         $groupSelectedArr = [];
