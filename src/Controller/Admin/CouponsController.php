@@ -51,9 +51,9 @@ class CouponsController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             
-            $projects = $this->getProjectsForSchool($this->request->data['school_id']);
-            $groups = $this->getGroupsForProject($this->request->data['project_id']);
-            $persons = $this->getPersonsForGroup($this->request->data['group_id']);
+            $projects = $this->Coupons->Persons->Groups->Projects->getProjectsForSchool($this->request->data['school_id']);
+            $groups = $this->Coupons->Persons->Groups->getGroupsForProject($this->request->data['project_id']);
+            $persons = $this->Coupons->Persons->getPersonsForGroup($this->request->data['group_id']);
             
             $this->Flash->error(__('De coupon kon niet opgeslagen worden. Probeer het nogmaals.'));
         }
@@ -88,9 +88,9 @@ class CouponsController extends AppController
         $groups = [];
         $persons = [];
         if (!is_null($coupon->person_id)) {
-            $projects = $this->getProjectsForSchool($coupon->school_id);
-            $groups = $this->getGroupsForProject($coupon->project_id);
-            $persons = $this->getPersonsForGroup($coupon->group_id);
+            $projects = $this->Coupons->Persons->Groups->Projects->getProjectsForSchool($coupon->school_id);
+            $groups = $this->Coupons->Persons->Groups->getGroupsForProject($coupon->project_id);
+            $persons = $this->Coupons->Persons->getPersonsForGroup($coupon->group_id);
         }
         
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -107,9 +107,9 @@ class CouponsController extends AppController
             }
             
             if ($coupon->add_to_person == 1) {
-                $projects = $this->getProjectsForSchool($this->request->data['school_id']);
-                $groups = $this->getGroupsForProject($this->request->data['project_id']);
-                $persons = $this->getPersonsForGroup($this->request->data['group_id']);
+                $projects = $this->Coupons->Persons->Groups->Projects->getProjectsForSchool($this->request->data['school_id']);
+                $groups = $this->Coupons->Persons->Groups->getGroupsForProject($this->request->data['project_id']);
+                $persons = $this->Coupons->Persons->getPersonsForGroup($this->request->data['group_id']);
             }
             
             $this->Flash->error(__('De coupon kon niet opgeslagen worden. Probeer het nogmaals.'));
@@ -150,35 +150,6 @@ class CouponsController extends AppController
         }
         
         echo json_encode(array('coupon_code' => strtoupper($couponCode)));
-    }
-    
-    private function getProjectsForSchool($school_id)
-    {
-        return $this->Coupons->Persons->Groups->Projects->find('list')
-            ->where(['Projects.school_id' => $school_id])
-            ->orderAsc('Projects.name');
-    }
-    
-    private function getGroupsForProject($project_id)
-    {
-        return $this->Coupons->Persons->Groups->find('list')
-            ->where(['Groups.project_id' => $project_id])
-            ->orderAsc('Groups.name');
-    }
-    
-    private function getPersonsForGroup($group_id)
-    {
-        $persons = $this->Coupons->Persons->find('all')
-            ->select(['id', 'firstname', 'prefix', 'lastname'])
-            ->where(['group_id' => $group_id])
-            ->orderAsc('firstname');
-        
-        $fixedPersons = [];
-        foreach ($persons as $person) {
-            $fixedPersons[$person['id']] = $person->firstname.' '.$person->prefix.' '.$person->lastname;
-        }
-        
-        return $fixedPersons;
     }
 }
 ?>

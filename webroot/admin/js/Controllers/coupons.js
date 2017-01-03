@@ -44,13 +44,13 @@ jQuery(function($) {
     
     $('#group-id').on('change', function() {
         $.ajax({
-            url: '/admin/persons/' + $(this).val() +'.json',
+            url: '/admin/groups/getStudentsByGroup/' + $(this).val(),
             dataType: 'json',
             success: function(response) {
                 $('#person-id').html('<option value="">Kies een persoon</option>');
-                for(item in response.persons) {
-                    var name = response.persons[item].firstname + ' ' + response.persons[item].prefix + ' ' + response.persons[item].lastname;
-                    option = $('<option>').val(response.persons[item].id).html(name);
+                for(item in response.groups.persons) {
+                    var name = response.groups.persons[item].firstname + ' ' + response.groups.persons[item].prefix + ' ' + response.groups.persons[item].lastname;
+                    option = $('<option>').val(response.groups.persons[item].id).html(name);
                     $('#person-id').append(option);
                 }
             }
@@ -58,16 +58,15 @@ jQuery(function($) {
     });
     
     $('#add-to-person').click(function() {
+        $('.find-person').hide();
+        
         if(this.checked) {
             $('.find-person').show();
-        } else {
-            $('.find-person').hide();
         }
     });
     
+    $('.find-person').hide();
     if($('#add-to-person')[0].checked) {
         $('.find-person').show();
-    } else {
-        $('.find-person').hide();
     }
 });

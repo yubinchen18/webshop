@@ -196,4 +196,19 @@ class PersonsTable extends BaseTable
                 ->limit(6)
                 ->order(['Persons.lastname' => 'asc']);
     }
+    
+    public function getPersonsForGroup($group_id)
+    {
+        $persons = $this->Coupons->Persons->find('all')
+            ->select(['id', 'firstname', 'prefix', 'lastname'])
+            ->where(['group_id' => $group_id])
+            ->orderAsc('firstname');
+        
+        $fixedPersons = [];
+        foreach ($persons as $person) {
+            $fixedPersons[$person['id']] = $person->firstname.' '.$person->prefix.' '.$person->lastname;
+        }
+        
+        return $fixedPersons;
+    }
 }

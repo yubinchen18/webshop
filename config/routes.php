@@ -158,17 +158,6 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['controller' => 'Persons', 'action' => 'showPhotosStudent'],
             ['id' => RouteBuilder::UUID, 'pass' => ['id']]
         );
-        $routes->connect(
-            '/persons/:project_id',
-            [
-            'controller' => 'Persons',
-            'action' => 'grouppersons'
-            ],
-            [
-                'project_id' => RouteBuilder::UUID,
-                'pass' => ['project_id']
-            ]
-        );
 
         $routes->connect(
             '/photos/:size/:path/:rotate',

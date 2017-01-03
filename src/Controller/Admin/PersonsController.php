@@ -150,18 +150,4 @@ class PersonsController extends AppController
         ]);
         new PDFCardCreator($data);
     }
-    
-    /**
-     * Fetches all persons for a group
-     * @param type $group_id
-     */
-    public function grouppersons($group_id)
-    {
-        $persons = $this->Persons->find('all')
-                ->select(['id', 'firstname', 'prefix', 'lastname'])
-                ->where(['group_id' => $group_id])
-                ->orderAsc('firstname');
-        
-        $this->set(compact('persons'));
-    }
 }

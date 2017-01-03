@@ -189,12 +189,10 @@ class CartsController extends AppController
                 ]);
                 
                 //add the image data to product object and calc subtotal price
+                $productImage = $cartline->product->image;
+                $cartline->product->image = $image[0];
                 if ($cartline->product->product_group === 'funproducts') {
-                    $productImage = $cartline->product->image;
-                    $cartline->product->image = $image[0];
                     $cartline->product->image['product_image'] = $productImage;
-                } else {
-                    $cartline->product->image = $image[0];
                 }
                 
                 $cartline->discountPrice = Configure::read('DiscountPrice');
@@ -296,12 +294,10 @@ class CartsController extends AppController
                     'sourceSize' => 'thumbs'
                 ]);
                 //add the image data to product object and calc subtotal price
+                $productImage = $cartline->product->image;
+                $cartline->product->image = $image[0];
                 if ($cartline->product->product_group === 'funproducts') {
-                    $productImage = $cartline->product->image;
-                    $cartline->product->image = $image[0];
                     $cartline->product->image['product_image'] = $productImage;
-                } else {
-                    $cartline->product->image = $image[0];
                 }
                         
                 $cartline->discountPrice = Configure::read('DiscountPrice');
