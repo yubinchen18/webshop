@@ -151,13 +151,16 @@ class UsersTable extends Table
     public function newUser($data)
     {
         $user = $this->newEntity();
-        
-        $username = substr($data['firstname'], 0, 4) . substr($data['zipcode'], 0, 2). substr($data['type'], 1, 3);
-        $password = $this->generateRandom();
+        if(empty($data['username'])) {
+            $data['username'] = substr($data['firstname'], 0, 4) . substr($data['zipcode'], 0, 2). substr($data['type'], 1, 3);
+        }
+        if(empty($data['password'])) {
+            $data['password'] = $this->generateRandom();
+        }
         $data = [
-            'username' => $this->checkUsername($username),
-            'password' => $password,
-            'genuine' => $password,
+            'username' => $this->checkUsername($data['username']),
+            'password' => $data['password'],
+            'genuine' => $data['password'],
             'type' => 'person'
         ];
         

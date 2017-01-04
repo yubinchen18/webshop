@@ -125,12 +125,13 @@ class GroupsTable extends BaseTable
     
     public function checkGroups($object)
     {
-        $existingGroup = $this->find()
-                ->where([
-                    'Groups.project_id' => $object['Groups']['project_id'],
-                    'Groups.name' => 'Onbekend'])
-                ->first();
-
+        if(!empty($object['Groups']['project_id'])) {
+            $existingGroup = $this->find()
+                    ->where([
+                        'Groups.project_id' => $object['Groups']['project_id'],
+                        'Groups.name' => 'Onbekend'])
+                    ->first();
+        }
         if (!empty($existingGroup)) {
             $data = [
                 'BarcodeId' => $existingGroup->barcode_id,

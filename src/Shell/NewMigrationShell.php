@@ -64,6 +64,7 @@ class NewMigrationShell extends Shell
             case 'production':
                 //production is default in app.php
                 //But load extra configurations
+                ConnectionManager::drop('default');
                 Configure::load('environments/production');
                 break;
         }
