@@ -24,7 +24,7 @@ class FetchSchooldataTask extends Shell
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => 'server2.it-plus.nl',
+            'host' => '217.18.74.108',
             'username' => 'hoogstraten',
             'password' => '2caKfj7P',
             'database' => 'admin_hoogstraten',
