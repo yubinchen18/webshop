@@ -63,14 +63,15 @@ class GroupsTable extends BaseTable
             ->notEmpty('name')
             ->add('name', 'custom', [
                 'rule' => function ($value, $context) {
+                    if($context['newRecord'] == 1) {
+                        return true;
+                    }
                     $exists = $this->exists(['name' => $value, 'project_id' => $context['data']['project_id']]);
                     
                     if ($exists && isset($context['data']['id'])) {
-                        $result = $this->find('all', [
-                            'conditions' => [
+                        $result = $this->find()->where([
                                 'name' => $value,
                                 'project_id' => $context['data']['project_id']
-                            ]
                         ])->first();
                         
                         if ($result->id == $context['data']['id']) {

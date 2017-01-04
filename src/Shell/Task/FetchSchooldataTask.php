@@ -52,6 +52,10 @@ class FetchSchooldataTask extends Shell
         $this->Barcodes->removeBehavior('Deletable');
         $this->Barcodes->deleteAll(['created > ' => '2016-11-30']);
         
+        $this->Barcodes = TableRegistry::get('Contacts');
+        $this->Barcodes->removeBehavior('Deletable');
+        $this->Barcodes->deleteAll(['created > ' => '2016-11-30']);
+        
         $this->Schools = TableRegistry::get('Schools');
         $this->Schools->removeBehavior('Deletable');
         $this->Schools->deleteAll(['created > ' => '2016-11-30']);
@@ -141,7 +145,7 @@ class FetchSchooldataTask extends Shell
                     'prefix' => $school['prefix'],
                     'last_name' => !empty($school['lastname']) ? $school['lastname'] : ' ',
                     'phone' => $school['phone'],
-                    'email' => $school['email'],
+                    'email' => !empty($school['email']) ? $school['email'] : null,
                 ],
                 'visitaddress' => [
                     'firstname' => $school['firstname'],
@@ -170,7 +174,7 @@ class FetchSchooldataTask extends Shell
         $s = 0;
         foreach($entities as $entity) {
             if(!$this->Schools->save($entity, ['associated' => ['Visitaddresses','Mailaddresses','Contacts']])) {
-                pr($entity);
+                print_r($entity); die();
                 continue;
             }
             $s++;
@@ -213,7 +217,7 @@ class FetchSchooldataTask extends Shell
         $entities = $this->Projects->newEntities($newProjects, ['associated' => ['Groups']]);
         foreach($entities as $entity) {
             if(!$this->Projects->save($entity, ['associated' => ['Groups']])) {
-                pr($entity);
+                print_r($entity); die();
                 continue;
             }
         }
