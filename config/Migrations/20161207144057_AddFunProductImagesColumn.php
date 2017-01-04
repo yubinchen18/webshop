@@ -20,7 +20,7 @@ class AddFunProductImagesColumn extends AbstractMigration
             'after' => 'description'
         ])->update();
         
-        $this->query("UPDATE `products` SET `image` = 'DSC_0479.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FBEER'");
+        $this->query("UPDATE `products` SET `image` = 'DSC_0479.JPG' WHERE `product_group` = 'funproducts' AND `article` = 'FBEER'");
         $this->query("UPDATE `products` SET `image` = 'Img117860.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FBEKER_BLAUW'");
         $this->query("UPDATE `products` SET `image` = 'Img117857.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FBEKER_GEEL'");
         $this->query("UPDATE `products` SET `image` = 'Img117848.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FBEKER_ROZE'");
@@ -36,19 +36,20 @@ class AddFunProductImagesColumn extends AbstractMigration
         $this->query("UPDATE `products` SET `image` = 'Img118013.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPORTLEDER'");
         $this->query("UPDATE `products` SET `image` = 'Img117913.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPORTBLUE'");
         $this->query("UPDATE `products` SET `image` = 'Img117933.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPUZZEL'");
-        $this->query("UPDATE `products` SET `image` = 'Img117941.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPUZZEL120'");
-        $this->query("UPDATE `products` SET `image` = 'Img117942.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPUZZEL252'");
+        $this->query("UPDATE `products` SET `image` = 'Img117941.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPUZ120'");
+        $this->query("UPDATE `products` SET `image` = 'Img117942.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPUZ252'");
         $this->query("UPDATE `products` SET `image` = 'Img118009.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FTASGROOT'");
         $this->query("UPDATE `products` SET `image` = 'Img117924.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FSLAB_BLAUW'");
         $this->query("UPDATE `products` SET `image` = 'Img117925.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FSLAB_ROZE'");
         $this->query("UPDATE `products` SET `image` = 'Img117725.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FSLEUTELHANGER'");
         $this->query("UPDATE `products` SET `image` = 'Img117999.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FTAS'");
-        $this->query("UPDATE `products` SET `image` = 'DSC_0522.jpg' WHERE `product_group` = 'funproducts' AND `article` LIKE 'FTSHIRT%'");
+        $this->query("UPDATE `products` SET `image` = 'DSC_0522.JPG' WHERE `product_group` = 'funproducts' AND `article` LIKE 'FTSHIRT%'");
         $this->query("UPDATE `products` SET `image` = 'Img117713.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FKNUFSLEUTELH'");
         $this->query("UPDATE `products` SET `image` = 'Img118057.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FSLEUTEL_FOTO_RND'");
         $this->query("UPDATE `products` SET `image` = 'Img117903.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FSLEUTEL_FOTO_HRT'");
         $this->query("UPDATE `products` SET `image` = 'Img117969.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FIPAD_HOES'");
         $this->query("UPDATE `products` SET `image` = 'Img117987.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FPLACEMAT'");
+        $this->query("UPDATE `products` SET `image` = 'Img117874.jpg' WHERE `product_group` = 'funproducts' AND `article` = 'FTEGEL'");
         
     }
 }
