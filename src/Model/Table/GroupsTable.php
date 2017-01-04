@@ -161,11 +161,4 @@ class GroupsTable extends BaseTable
                 ->limit(6)
                 ->order(['Groups.name' => 'asc']);
     }
-    
-    public function getGroupsForProject($project_id)
-    {
-        return $this->find('list')
-            ->where(['Groups.project_id' => $project_id])
-            ->orderAsc('Groups.name');
-    }
 }

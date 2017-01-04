@@ -103,11 +103,4 @@ class ProjectsTable extends BaseTable
                 ->limit(6)
                 ->order(['Projects.name' => 'asc']);
     }
-    
-    public function getProjectsForSchool($school_id)
-    {
-        return $this->find('list')
-            ->where(['school_id' => $school_id])
-            ->orderAsc('Projects.name');
-    }
 }

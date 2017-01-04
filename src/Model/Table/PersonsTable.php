@@ -30,7 +30,7 @@ class PersonsTable extends BaseTable
         parent::initialize($config);
 
         $this->table('persons');
-        $this->displayField('id');
+        $this->displayField('full_name');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -197,18 +197,13 @@ class PersonsTable extends BaseTable
                 ->order(['Persons.lastname' => 'asc']);
     }
     
-    public function getPersonsForGroup($group_id)
+    public function findForGroup(Query $query, array $options)
     {
-        $persons = $this->Coupons->Persons->find('all')
-            ->select(['id', 'firstname', 'prefix', 'lastname'])
-            ->where(['group_id' => $group_id])
-            ->orderAsc('firstname');
-        
-        $fixedPersons = [];
-        foreach ($persons as $person) {
-            $fixedPersons[$person['id']] = $person->firstname.' '.$person->prefix.' '.$person->lastname;
+        if (empty($options['groupId'])) {
+            throw new \InvalidArgumentException('Missing group id');
         }
         
-        return $fixedPersons;
+        return $query
+                ->where(['Persons.group_id' => $options['groupId']]);
     }
 }
