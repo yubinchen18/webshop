@@ -166,10 +166,16 @@ class FetchPhotosTask extends Shell
         if(empty($photos[0])) {
             return false;
         }
+        
+        $slug = !empty($photos[0]['Person']) ? $photos[0]['Person']['slug'] : $photos[0]['Group']['slug'];
+        if(substr($slug, -1) == "_") {
+            $slug = substr($slug, 0, -1);
+        }
+        
         if(!empty($photos[0]['Person'])) {
-            $this->out('<info>Download photos for ' . $photos[0]['Person']['slug'] . "</info>");
+            $this->out('<info>Download photos for ' . $slug . "</info>");
         } else {
-            $this->out('<info>Download photos for group ' . $photos[0]['Group']['slug']."</info>");
+            $this->out('<info>Download photos for group ' . $slug ."</info>");
         }
         
         $remote_folder = "/var/www/vhosts/hoogstratenfotografie.nl/httpdocs/app/userphotos";
@@ -183,7 +189,7 @@ class FetchPhotosTask extends Shell
                     . $photo['Group']['id']."_".$photo['Group']['slug']."/";
             
             if($barcode->type !== 'group') {
-                    $remote_path .= $photo['Person']['id']."_".$photo['Person']['slug']."/";
+                    $remote_path .= $photo['Person']['id']."_".$slug."/";
             }
             
             $remote_path .= $photo['Photos']['path'];
@@ -203,6 +209,7 @@ class FetchPhotosTask extends Shell
             $scp = new SCP($ssh);
             if(!$scp->get($remote_path, $local_path)) {
                 $this->out('<error>Photo download mislukt ('. $photo['Photos']['path'].")</error>");
+                continue;
             }
             
             $pic = new \Imagick($local_path);
@@ -217,7 +224,7 @@ class FetchPhotosTask extends Shell
         $entities = $this->Barcodes->Photos->newEntities($photoData);
         foreach($entities as $entity) {
             if(!$this->Barcodes->Photos->save($entity)) {
-                pr($entity);
+                print_r($entity); die();
                 continue;
             }
         }
