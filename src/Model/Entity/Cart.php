@@ -31,4 +31,15 @@ class Cart extends Entity
         '*' => true,
         'id' => false
     ];
+    
+    public function hasProduct($productId)
+    {
+        foreach ($this->cartlines as $cartline) {
+            if ($cartline->product->id === $productId) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

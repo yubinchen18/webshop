@@ -55,6 +55,9 @@ class CartsTable extends Table
         $this->hasMany('Cartlines', [
             'foreignKey' => 'cart_id'
         ]);
+        $this->hasMany('Coupons', [
+            'foreignKey' => 'cart_id'
+        ]);
     }
 
     /**
@@ -107,7 +110,8 @@ class CartsTable extends Table
                            ]);
                },
                'Cartlines.Photos',
-               'Cartlines.Products'
+               'Cartlines.Products',
+               'Coupons'
            ]);
     }
     
@@ -139,8 +143,10 @@ class CartsTable extends Table
                         ->orderAsc('Cartlines.created')
                         ->contain('Products');
                 },
-             'Cartlines.Photos.Barcodes.Persons'
-        ]
+                'Cartlines.Products',
+                'Cartlines.Photos.Barcodes.Persons',
+                'Coupons'
+            ]
         ]);
         $users = array_unique(Hash::extract($cart, "cartlines.{n}.photo.barcode.person.user_id"));
         $userDiscounts = array_map(function () {
@@ -150,7 +156,7 @@ class CartsTable extends Table
         $total_lines = 0;
         $discount = 0;
         $high_shipping = false;
-         
+        
         foreach ($cart->cartlines as $cartline) {
             $total_lines++;
             $user = isset($cartline->photo->barcode->person->user_id) ? $cartline->photo->barcode->person->user_id : '';
@@ -179,7 +185,10 @@ class CartsTable extends Table
                 $subtotal = $cartline->product->price_ex - $discount;
                 $cartline->discount = $discount;
             }
+            
             $cartline->subtotal = $subtotal;
+            $cartline->processCoupons($cart->coupons);
+            
             $this->Cartlines->save($cartline);
         }
 

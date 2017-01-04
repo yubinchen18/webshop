@@ -301,6 +301,10 @@ Router::scope('/', function (RouteBuilder $routes) {
         'controller' => 'Carts',
         'action' => 'updateFreeProductInCartline'
     ]);
+    $routes->connect('/carts/useCoupon', [
+        'controller' => 'Carts',
+        'action' => 'useCoupon'
+    ]);
     $routes->connect(
         '/carts/delete/:id',
         ['controller' => 'Carts','action' => 'delete'],

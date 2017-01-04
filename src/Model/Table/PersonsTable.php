@@ -30,7 +30,7 @@ class PersonsTable extends BaseTable
         parent::initialize($config);
 
         $this->table('persons');
-        $this->displayField('id');
+        $this->displayField('full_name');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -52,6 +52,8 @@ class PersonsTable extends BaseTable
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasMany('Coupons');
     }
 
     /**
@@ -161,6 +163,21 @@ class PersonsTable extends BaseTable
         return true;
     }
     
+    public function findPersons(Query $query, array $options)
+    {
+        if (empty($options['userids']) || !is_array($options['userids'])) {
+            throw new \InvalidArgumentException('Missing user ids');
+        }
+        
+        $query->where(['Persons.user_id IN' => $options['userids']]);
+        
+        if (!empty($options['contains'])) {
+            $query->contain($options['contains']);
+        }
+        
+        return $query;
+    }
+    
     /**
      *
      * @param Query $query
@@ -178,5 +195,15 @@ class PersonsTable extends BaseTable
                 ->contain('Groups.Projects.Schools')
                 ->limit(6)
                 ->order(['Persons.lastname' => 'asc']);
+    }
+    
+    public function findForGroup(Query $query, array $options)
+    {
+        if (empty($options['groupId'])) {
+            throw new \InvalidArgumentException('Missing group id');
+        }
+        
+        return $query
+                ->where(['Persons.group_id' => $options['groupId']]);
     }
 }

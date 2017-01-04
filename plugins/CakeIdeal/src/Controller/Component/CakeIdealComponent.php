@@ -66,10 +66,10 @@ class CakeIdealComponent extends Component
             $settings['certificatesFolder'] =
             dirname(dirname(dirname(__FILE__))) . DS . 'Config' . DS . 'certificates' . DS;
         }
-
+        
         // Merge the given settings with the default.
         $settings = array_merge($this->defaults, $settings);
-
+        
         // Call the parent constructor if this is a CakePHP component
         // otherwise set the settings property
         if (is_subclass_of($this, 'Component')) {
@@ -299,9 +299,10 @@ class CakeIdealComponent extends Component
         
         $doc->formatOutput = true;
         $request = $doc->C14N(true);
-
+        
         $result = '';
         $parsedUrl = parse_url($this->settings['url']);
+        
         if ($this->connection) {
             fputs($this->connection, "POST " . $parsedUrl['path'] . " HTTP/1.0\r\n");
             fputs($this->connection, "Accept: text/html\r\n");
@@ -310,14 +311,14 @@ class CakeIdealComponent extends Component
             fputs($this->connection, "Content-Length:" . strlen($request) . "\r\n");
             fputs($this->connection, "Content-Type: text/xml; charset=utf-8\r\n\r\n");
             fputs($this->connection, $request, strlen($request));
-
+            
             $passedHeader = false;
             while (!feof($this->connection)) {
                 $line = fgets($this->connection, 128);
                 if ($passedHeader === false) {
                     $passedHeader = strpos($line, '<?xml') !== false;
                 }
-
+                
                 if ($passedHeader) {
                     $result .= $line;
                 }

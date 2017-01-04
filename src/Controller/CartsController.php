@@ -187,8 +187,14 @@ class CartsController extends AppController
                     'layout' => !empty($cartline->product->layout) ? $cartline->product->layout : 'all',
                     'filter' => $filter
                 ]);
+                
                 //add the image data to product object and calc subtotal price
+                $productImage = $cartline->product->image;
                 $cartline->product->image = $image[0];
+                if ($cartline->product->product_group === 'funproducts') {
+                    $cartline->product->image['product_image'] = $productImage;
+                }
+                
                 $cartline->discountPrice = Configure::read('DiscountPrice');
                 if (!empty($userDiscounts[$cartline->photo->barcode->person->user_id])
                     && $cartline->product->has_discount === 1) {
@@ -288,12 +294,10 @@ class CartsController extends AppController
                     'sourceSize' => 'thumbs'
                 ]);
                 //add the image data to product object and calc subtotal price
+                $productImage = $cartline->product->image;
+                $cartline->product->image = $image[0];
                 if ($cartline->product->product_group === 'funproducts') {
-                    $productImage = $cartline->product->image;
-                    $cartline->product->image = $image[0];
                     $cartline->product->image['product_image'] = $productImage;
-                } else {
-                    $cartline->product->image = $image[0];
                 }
                         
                 $cartline->discountPrice = Configure::read('DiscountPrice');
@@ -446,5 +450,42 @@ class CartsController extends AppController
             $this->set(compact('response'));
             $this->set('_serialize', 'response');
         }
+    }
+    
+    public function useCoupon()
+    {
+        $coupon = $this->Carts->Users->Persons->Coupons->findByCouponCode($this->request->data['coupon_code'])->first();
+        $persons = $this->Carts->Users->Persons->find('persons', [
+            'userids' => $this->request->session()->read('LoggedInUsers.AllUsers'),
+            'contains' => ['Coupons']
+        ])->toArray();
+        
+        if (empty($coupon) || !$coupon->isValidCoupon($persons)) {
+            $this->Flash->error(__('De gebruikte coupon code is niet correct. Probeer het nogmaals.'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        $cart = $this->Carts->find('byUserid', [
+            'user_id' => $this->request->session()->read('Auth.User.id')
+        ])->first();
+        if ($coupon->isCouponInCart($cart)) {
+            $this->Flash->error(__('De gebruikte coupon code is al geactiveerd voor deze winkelwagen.'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        if (!$coupon->canUseCoupon($cart) && $coupon->type === 'product') {
+            $this->Flash->error(__('U probeert een couponcode te gebruiken, maar u heeft nog geen gratis 20x30 afdruk gekozen'));
+            return $this->redirect(['action' => 'display']);
+        }
+        
+        $coupon->cart_id = $cart->id;
+        
+        if (!$this->Carts->Coupons->save($coupon)) {
+            $this->Flash->error(__('Er is een probleem opgetreden bij het verwerken van de gebruikte coupon code. Probeer het nogmaals.'));
+        } else {
+            $this->Flash->success(__('De coupon code is succesvol toegepast op de winkelwagen.'));
+        }
+        
+        $this->redirect(['action' => 'display']);
     }
 }

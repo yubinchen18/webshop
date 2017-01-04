@@ -36,6 +36,7 @@
                     <?php endif; ?>
             
                 <?php endforeach; ?>
+                
                 <!-- Summary -->
                 <div class='order-summary col-sm-12'>
                     <div class='row'>
@@ -100,7 +101,7 @@
                                          ['class' => 'btn btn-default']
                                     ); ?>
                         </div>
-                        <div class='order-place-order col-sm-3 col-sm-offset-6'>
+                        <div class='order-place-order col-sm-3 col-sm-offset-4 col-lg-offset-5 col-xl-offset-6'>
                                 <?= $this->Html->link(__('Gegevens invullen en betalen'),
                                          ['action' => 'orderInfo'],
                                          ['class' => 'btn btn-success']
@@ -130,6 +131,16 @@
             </div>
             <div class="cart-order-details-message">
                 <?= __('Let op! Gratis verzending alleen bij afdrukken tot en met formaat 20x30.'); ?>
+            </div>
+            
+            <div class="add-coupon">
+                <div class='add-coupon-block'>
+                    <?= __('Couponcode'); ?>
+                    <?= $this->Form->create(null, ['url' => ['action' => 'useCoupon'], 'class' => 'form-horizontal', 'autocomplete' => 'false']) ?>
+                    <?= $this->Form->input('coupon_code', ['label' => false, 'required' => true, 'class' => 'form-control input-number']) ?>
+                    <?= $this->Form->submit('Toepassen', ['class' => 'btn btn-success']) ?>
+                    <?= $this->Form->end(); ?>
+                </div>
             </div>
         </div>
     </div>

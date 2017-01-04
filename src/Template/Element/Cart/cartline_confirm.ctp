@@ -3,21 +3,59 @@
         <div class='cartline-photo'>
             <div class="<?= $cartline->photo->orientationClass.' '.$cartline->photo->orientationClass.'-background' ?>">
             </div>
-            <?= $this->Html->image($this->Url->build([
-                'controller' => 'Photos',
-                'action' => 'displayProduct',
-                'layout' => $cartline->product->layout,
-                'id' => $cartline->photo_id,
-                'suffix' => $cartline->product->image['suffix'],
-            ]), [
-                'alt' => $cartline->photo->path,
-                'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
-                'class' => [$cartline->photo->orientationClass, 'img-responsive']
-            ]); ?>
+            <?php
+            if ($cartline->product->product_group === 'funproducts') {
+                echo $this->Html->image('layout/funartikelen/'.$cartline->product->image['product_image'], [
+                    'alt' => $cartline->product->name,
+                    'url' => $this->Url->build([
+                        'controller' => 'Photos',
+                        'action' => 'productGroupIndex',
+                        'productGroup' => 'funproducts',
+                        'id' => $cartline->photo_id]),
+                    'class' => [$cartline->photo->orientationClass, 'img-responsive']
+                ]);
+            } else {
+                echo $this->Html->image($this->Url->build([
+                    'controller' => 'Photos',
+                    'action' => 'displayProduct',
+                    'layout' => $cartline->product->layout,
+                    'id' => $cartline->photo_id,
+                    'suffix' => $cartline->product->image['suffix'],
+                ]), [
+                    'alt' => $cartline->photo->path,
+                    'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
+                    'class' => [$cartline->photo->orientationClass, 'img-responsive']
+                ]);
+            }
+            ?>
         </div>
     </div>
     <div class='cartline-product-details col-xs-4'>
         <div class='cartline-product-name'><b><?= $cartline->product->name; ?></b></div>
+        <?php if ($cartline->product->product_group === 'funproducts') : ?>
+            <div class="funproduct">
+                <div class="funproduct-gekozen-foto">
+                    <?= $this->Html->link('Gekozen foto', '#', array('class' => 'gekozen-foto-funproduct-link')); ?>
+                </div>
+                <div class="cartline-photo-container">
+                    <div class='cartline-photo'>
+                        <div class="<?= $cartline->photo->orientationClass.' '.$cartline->photo->orientationClass.'-background' ?>"></div>
+                        <?= $this->Html->image($this->Url->build([
+                                'controller' => 'Photos',
+                                'action' => 'displayProduct',
+                                'layout' => 'LoosePrintLayout1',
+                                'id' => $cartline->photo_id,
+                                'suffix' => $cartline->product->image['suffix'],
+                            ]), [
+                                'alt' => $cartline->photo->path,
+                                'url' => ['controller' => 'Photos', 'action' => 'view', $cartline->photo_id],
+                                'class' => [$cartline->photo->orientationClass, 'img-responsive']
+                            ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if ($cartline->product->article === 'GAF 13x19') : ?>
             <p>
                 <?= $this->Html->link(
@@ -56,6 +94,11 @@
         <span class='quantity-<?= $cartline->id; ?>'></span>
             <div class='normalprice'>1 x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
             <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->discountPrice, 'EUR'); ?></div>
+        <?php elseif($cartline->product->article === 'AF 20X30' && $cartline->discount > 0): ?>
+            <div class='normalprice'>1 x <?= $this->Number->currency(0, 'EUR'); ?></div>
+            <?php if($cartline->quantity > 1): ?>
+                <div class='discountprice'><?= $cartline->quantity-1; ?> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></div>
+            <?php endif; ?>
         <?php else: ?>
         <span class='quantity-<?= $cartline->id; ?>'><?= $cartline->quantity; ?></span>
         <span> x <?= $this->Number->currency($cartline->product->price_ex, 'EUR'); ?></span>
