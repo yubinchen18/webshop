@@ -69,10 +69,6 @@ class PersonsTable extends BaseTable
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('studentnumber', 'create')
-            ->notEmpty('studentnumber');
-
-        $validator
             ->requirePresence('firstname', 'create')
             ->notEmpty('firstname');
 

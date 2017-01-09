@@ -24,13 +24,13 @@ class FetchPhotosTask extends Shell
      */
     public function main()
     {
-        $this->truncateTables();
+//        $this->truncateTables();
         
         ConnectionManager::config('old_application', [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => '217.18.74.108',
+            'host' => 'localhost',
             'username' => 'hoogstraten',
             'password' => '2caKfj7P',
             'database' => 'admin_hoogstraten',
@@ -50,18 +50,19 @@ class FetchPhotosTask extends Shell
     {
         $this->Photos = TableRegistry::get('Photos');
         $this->Photos->removeBehavior('Deletable');
-        $this->Photos->deleteAll(['created > ' => '2016-11-30']);
+        $this->Photos->deleteAll(['created > ' => '2017-01-09']);
     }
     
     private function getNewBarcodes()
     {
         $this->Barcodes = TableRegistry::get('Barcodes');
-        $barcodes = $this->Barcodes->find();
+        
+        $barcodes = $this->Barcodes->find()->where(['Barcodes.id NOT IN (SELECT `barcode_id` FROM `photos`)']);
         
         foreach($barcodes as $barcode) {
             $photos = $this->parseResults($this->fetchOldData($barcode, $barcode->type));
             if(!$this->savePhotos($photos, $barcode)) {
-                $this->out('<error>Saving of photos for barcode #' . $barcode->id . " failed</error>");
+                $this->out('<error>No photos found for barcode #' . $barcode->id . " failed</error>");
             } else {
                 $this->out('<info>Photos saved for barcode #' . $barcode->id . "</info>");
             }
@@ -161,15 +162,20 @@ class FetchPhotosTask extends Shell
         return $parsed;
     }
     
-    private function savePhotos($photos,$barcode)
+    private function savePhotos($photos,$barcode, $retry = false)
     {
         if(empty($photos[0])) {
             return false;
         }
         
         $slug = !empty($photos[0]['Person']) ? $photos[0]['Person']['slug'] : $photos[0]['Group']['slug'];
-        if(substr($slug, -1) == "_") {
-            $slug = substr($slug, 0, -1);
+        
+        if($retry) {
+            if(substr($slug, -1) == "_") {
+                $slug = substr($slug, 0, -1);
+            } else {
+                $slug .= "_";
+            }
         }
         
         if(!empty($photos[0]['Person'])) {
@@ -201,7 +207,7 @@ class FetchPhotosTask extends Shell
                 die('Could not create local dir');
             }
             
-            $ssh = new SSH2('bestellen.hoogstratenfotografie.nl');
+            $ssh = new SSH2('www.hoogstratenfotografie.nl');
             if(!$ssh->login('hoogstraten', 'sy74NdLHGw')) {
                 die('SSH login failed');
             }
@@ -209,11 +215,17 @@ class FetchPhotosTask extends Shell
             $scp = new SCP($ssh);
             if(!$scp->get($remote_path, $local_path)) {
                 $this->out('<error>Photo download mislukt ('. $photo['Photos']['path'].")</error>");
+                $this->out('<info>Path: '. $remote_path."</info>");
+                if(!$retry) {
+                    $this->out('Retry');
+                    $this->savePhotos($photos, $barcode, true);
+                }
                 continue;
             }
             
             $pic = new \Imagick($local_path);
             $this->Photos->autoRotateImage($pic);
+            
             $photoData[] = [
                 'path' => $photo['Photos']['path'],
                 'type' => $photo['Photos']['type'],

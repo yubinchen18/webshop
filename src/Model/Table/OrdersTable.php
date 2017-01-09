@@ -64,9 +64,6 @@ class OrdersTable extends Table
             'joinType' => 'INNER',
             'className' => 'Addresses'
         ]);
-        $this->belongsTo('Trxes', [
-            'foreignKey' => 'trx_id'
-        ]);
         $this->belongsTo('Carts', [
             'foreignKey' => 'order_id',
             'joinType' => 'LEFT'
@@ -140,17 +137,17 @@ class OrdersTable extends Table
     
     private function createIdent()
     {
-        $ident = $this->find()->select(['ident' => 'MAX(`ident`)'])->first();
+        $ident = $this->find()->select(['ident'])->order(['created' => 'DESC'])->first();
         
         if (empty($ident)) {
             return 100000;
         }
-        return $ident->ident+1;
+        return (int)$ident->ident+1;
     }
     
     public function beforeSave($event, $entity, $options)
     {
-        if ($entity->isNew()) {
+        if ($entity->isNew() && empty($entity->ident)) {
             $entity->ident = $this->createIdent();
         }
         return $entity;
