@@ -13,8 +13,7 @@
         "twbs/bootstrap": "^3.3",
         "phpoffice/phpexcel": "^1.8",
         "setasign/fpdf": "1.8.1",
-        "mikey179/vfsStream": "^1.6",
-        "itbz/fpdf": "^1.7"
+        "mikey179/vfsStream": "^1.6"
     },
     "require-dev": {
         "psy/psysh": "@stable",
