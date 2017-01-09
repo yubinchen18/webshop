@@ -125,7 +125,7 @@ class FetchOrdersTask extends Shell
                 ->contain(['OldUsers','OldStatuses' => function($q) {
                     return $q->order(['created' => 'DESC'])->limit(1);
                 },'OldClients','OldDeliveries','OldOrderlines' => ['OldProducts','OldPhotos']])
-                ->where(['OldOrders.created >' => date('Y-m-d',strtotime("-3 months"))]);
+                ->where(['OldOrders.created >' => date('Y-m-d',strtotime("-6 months"))]);
         
         $this->out('<info>' . $old_orders->count() . ' orders found</info>');
         return $old_orders->toArray();
@@ -274,10 +274,6 @@ class FetchOrdersTask extends Shell
                 'created' => $order->created->format('Y-m-d'),
                 'modified' => $order->modified->format('Y-m-d')
             ];
-            
-            if(count($new_orders) == 50) {
-                break;
-            }
         }
         
         $entities = $this->Orders->newEntities($new_orders, ['associated' => ['Invoiceaddresses','Deliveryaddresses','Users','Orderlines']]);
