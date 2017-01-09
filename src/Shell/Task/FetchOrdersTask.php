@@ -7,6 +7,8 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use PDO;
 
+ini_set('memory_limit','512M');
+
 /**
  * FetchSchooldata shell task.
  */
@@ -27,7 +29,7 @@ class FetchOrdersTask extends Shell
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => 'localhost',
+            'host' => '217.18.74.108',
             'username' => 'hoogstraten',
             'password' => '2caKfj7P',
             'database' => 'admin_hoogstraten',
@@ -46,15 +48,15 @@ class FetchOrdersTask extends Shell
     {
         $this->Orders = TableRegistry::get('Orders');
         $this->Orders->removeBehavior('Deletable');
-        $this->Orders->deleteAll(['created > ' => '2015-01-08']);
+        $this->Orders->deleteAll(['created > ' => '2015-01-01']);
 //        
         $this->Addresses = TableRegistry::get('Addresses');
         $this->Addresses->removeBehavior('Deletable');
-        $this->Addresses->deleteAll(['created > ' => '2017-01-08']);
+        $this->Addresses->deleteAll(['created > ' => '2017-01-05']);
         
         $this->Orderstatuses = TableRegistry::get('OrdersOrderstatuses');
         $this->Orderstatuses->removeBehavior('Deletable');
-        $this->Orderstatuses->deleteAll(['created > ' => '2017-01-09']);
+        $this->Orderstatuses->deleteAll(['created > ' => '2017-01-01']);
 //        
 //        $this->Users = TableRegistry::get('Users');
 //        $this->Users->removeBehavior('Deletable');
@@ -118,12 +120,13 @@ class FetchOrdersTask extends Shell
         $orders->belongsTo('OldDeliveries',['type' => 'LEFT','foreignKey' => 'delivery_id']);
         $orders->belongsTo('OldUsers',['type' => 'INNER','foreignKey' => 'user_id']);
         $orders->hasMany('OldOrderlines', ['type' => 'INNER', 'foreignKey' => 'order_id']);
-        $orders->hasMany('OldStatuses', ['type' => 'INNER', 'foreignKey' => 'order_id']);
+        $orders->hasMany('OldStatuses', ['type' => 'LEFT', 'foreignKey' => 'order_id']);
         
         $old_orders = $orders
                 ->find()
                 ->contain(['OldUsers','OldStatuses','OldClients','OldDeliveries','OldOrderlines' => ['OldProducts','OldPhotos']])
-                ->where(['OldOrders.created >' => date('Y-m-d',strtotime("-6 months"))]);
+                ->where(['OldOrders.created >' => date('Y-m-d',strtotime("-6 months"))])
+                ->order(['OldOrders.created' => 'DESC']);
         
         $this->out('<info>' . $old_orders->count() . ' orders found</info>');
         return $old_orders->toArray();
@@ -135,9 +138,28 @@ class FetchOrdersTask extends Shell
         $statuses = [
             1 => '6b0ec84f-d27e-11e6-a9f6-00163e5e884d', // new
             2 => '6b0ec8fa-d27e-11e6-a9f6-00163e5e884d', // in behandeling
+            3 => 'f0f7aa7c-d6bd-11e6-a9f6-00163e5e884d', // Klaar voor verzending
             4 => '6b0ec786-d27e-11e6-a9f6-00163e5e884d', // verzonden naar klant
             6 => '6b0ec8d9-d27e-11e6-a9f6-00163e5e884d', // Geannuleerd
             9 => '6b0ec6dc-d27e-11e6-a9f6-00163e5e884d', // Gedownload naar Photex
+        ];
+        
+        $productMapping = [
+            'SLEUTELHANGER' => 'FSLEUTELHANGER',
+            'C 30 X 45 CM' => 'C 30X45',
+            'Mok blauw' => 'FBEKER_BLAUW',
+            'Mok wit' => 'FBEKER_WIT',
+            'C 20 X 30 CM' => 'C 20X30',
+            'C 40 X 60 CM.' => 'C 40X60',
+            'Kussen 45x45 cm' => 'FKUSSEN',
+            'Juwelendoos' => 'FJUWELEN',
+            'Spaarpot' => 'FSPAARPOT',
+            'C  70x100 cm' => 'C 70X100',
+            'portemonnee' => 'FPORTLEDER',
+            'C 50 X 75 CM.' => 'C 50X75',
+            'WENSKAARTEN' => 'FWENSKAARTEN',
+            'Bierpul' => 'FBIERPUL',
+            'Schoudertas 19 x 20 cm' => 'FTAS'
         ];
         
         $new_orders = [];
@@ -239,6 +261,13 @@ class FetchOrdersTask extends Shell
                 }
                 
                 if(empty($product->id)) {
+                    
+                    $product = $this->Products->find()
+                            ->where(['article' => $productMapping[$line->old_product->article_number]])
+                            ->first();
+                }
+                
+                if(empty($product->id)) {
                     $this->err("(".$checked.") no product found : " . $line->old_product->article_number);
                     continue;
                 }
@@ -257,7 +286,8 @@ class FetchOrdersTask extends Shell
             }
             
             $count++;
-            $new_orders[] = [
+            
+            $new_orders[$order->id] = [
                 'user_id' => $user->id,
                 'orderlines' => $orderlines,
                 'deliveryaddress_id' => empty($delivery) ? $invoice->id : $delivery->id,
@@ -270,33 +300,28 @@ class FetchOrdersTask extends Shell
                 'payment_method' => $order->paymentmethod,
                 'ideal_status' => $order->ideal_endstate,
                 'created' => $order->created->format('Y-m-d H:i:s'),
-                'modified' => $order->modified->format('Y-m-d H:i:s')
+                'modified' => $order->modified->format('Y-m-d H:i:s'),
+                'orders_orderstatuses' => $order->old_statuses
             ];
         }
         
-        $entities = $this->Orders->newEntities($new_orders, ['associated' => ['Invoiceaddresses','Deliveryaddresses','Users','Orderlines']]);
+        $entities = $this->Orders->newEntities($new_orders, ['associated' => ['Invoiceaddresses','Deliveryaddresses','Users','Orderlines', 'OrdersOrderstatuses']]);
         $s = 0;
         foreach($entities as $entity) {
-            if(!$this->Orders->save($entity, ['associated' => ['Invoiceaddresses','Deliveryaddresses','Users','Orderlines']])) {
-                print_r($entity); die();
+            if(!$this->Orders->save($entity, ['associated' => ['Invoiceaddresses','Deliveryaddresses','Users','Orderlines', 'OrdersOrderstatuses']])) {
                 continue;
             }
             
-            if(empty($order->old_statuses[0])) {
-                $order->old_statuses[0]['status_id'] = 1;
-            }
-            
-            foreach($order->old_statuses as $status) {
+            foreach($new_orders[$entity->ident]['orders_orderstatuses'] as $status) {
                 $statusrecord = [
                     'order_id' => $entity->id,
-                    'orderstatus_id' => $statuses[$status['status_id']],
-                    'created' => $status['created']->format('Y-m-d H:i:s')
+                    'orderstatus_id' => $statuses[$status->status_id],
+                    'created' => $status->created->format('Y-m-d H:i:s')
                 ];
-                $statusEntity = $this->Orders->OrdersOrderstatuses->newEntity($statusrecord);
-                if(!$this->Orders->OrdersOrderstatuses->save($statusEntity)) {
-                    pr($statusEntity); die();
-                }
+                $history = $this->Orders->OrdersOrderstatuses->newEntity($statusrecord);
+                $this->Orders->OrdersOrderstatuses->save($history);
             }
+            
             $s++;
         }
         

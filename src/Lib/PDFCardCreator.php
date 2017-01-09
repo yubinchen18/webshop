@@ -4,7 +4,7 @@ namespace App\Lib;
 
 use Cake\Core\Configure;
 use Cake\Utility\Security;
-use FPDF;
+use \fpdf\FPDF;
 
 class PDFCardCreator
 {

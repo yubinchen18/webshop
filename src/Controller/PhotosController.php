@@ -95,34 +95,33 @@ class PhotosController extends AppController
                 ->contain(['Barcodes.Persons'])
                 ->first();
         
-        if (!empty($photo)) {
-            if ($this->isAuthForPhoto($photo)) {
-                //add the orientation data to the photos array
-                $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
-                
-                list($width, $height) = getimagesize($filePath);
-                if ($width > $height) {
-                    $orientationClass = 'photos-horizontal';
-                } else {
-                    $orientationClass = 'photos-vertical';
-                }
-                $photo->orientationClass = $orientationClass;
+        if (empty($photo->id)) {
+            throw new NotFoundException('De foto kon niet worden gevonden');
+        }
+        
+        if ($this->isAuthForPhoto($photo)) {
+            //add the orientation data to the photos array
+            $filePath = $this->Photos->getPath($photo->barcode_id) . DS . $photo->path;
 
-                $this->set(compact('photo'));
-                $this->set('_serialize', ['photo']);
+            list($width, $height) = getimagesize($filePath);
+            if ($width > $height) {
+                $orientationClass = 'photos-horizontal';
             } else {
-                throw new NotFoundException('Not authorized to view this photo');
+                $orientationClass = 'photos-vertical';
             }
+            $photo->orientationClass = $orientationClass;
+
+            $this->set(compact('photo'));
+            $this->set('_serialize', ['photo']);
         } else {
-            throw new NotFoundException('Photo not found');
+            throw new NotFoundException('Not authorized to view this photo');
         }
     }
 
     private function isAuthForPhoto($photo)
     {
         $loggedInUsersIds = $this->request->session()->read('LoggedInUsers.AllUsers');
-        
-        if ($photo->type === 'group') {
+        if ($photo->type === 'group' || $photo->type == 'class') {
             $enabledGroups = [];
             foreach ($loggedInUsersIds as $user_id) {
                 $enabledGroups[] = $this->Photos->Barcodes->Persons
