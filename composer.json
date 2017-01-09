@@ -12,9 +12,9 @@
         "cakephp/plugin-installer": "*",
         "twbs/bootstrap": "^3.3",
         "phpoffice/phpexcel": "^1.8",
-        "setasign/fpdf": "1.8.1",
         "mikey179/vfsStream": "^1.6",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0",
+        "itbz/fpdf": "^1.7"
     },
     "require-dev": {
         "psy/psysh": "@stable",
