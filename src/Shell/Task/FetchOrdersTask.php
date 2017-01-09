@@ -122,9 +122,7 @@ class FetchOrdersTask extends Shell
         
         $old_orders = $orders
                 ->find()
-                ->contain(['OldUsers','OldStatuses' => function($q) {
-                    return $q->order(['created' => 'DESC'])->limit(1);
-                },'OldClients','OldDeliveries','OldOrderlines' => ['OldProducts','OldPhotos']])
+                ->contain(['OldUsers','OldStatuses','OldClients','OldDeliveries','OldOrderlines' => ['OldProducts','OldPhotos']])
                 ->where(['OldOrders.created >' => date('Y-m-d',strtotime("-6 months"))]);
         
         $this->out('<info>' . $old_orders->count() . ' orders found</info>');
@@ -271,8 +269,8 @@ class FetchOrdersTask extends Shell
                 'ident' => $order->id,
                 'payment_method' => $order->paymentmethod,
                 'ideal_status' => $order->ideal_endstate,
-                'created' => $order->created->format('Y-m-d'),
-                'modified' => $order->modified->format('Y-m-d')
+                'created' => $order->created->format('Y-m-d H:i:s'),
+                'modified' => $order->modified->format('Y-m-d H:i:s')
             ];
         }
         
@@ -288,13 +286,16 @@ class FetchOrdersTask extends Shell
                 $order->old_statuses[0]['status_id'] = 1;
             }
             
-            $statusrecord = [
-                'order_id' => $entity->id,
-                'orderstatus_id' => $statuses[$order->old_statuses[0]['status_id']]
-            ];
-            $statusEntity = $this->Orders->OrdersOrderstatuses->newEntity($statusrecord);
-            if(!$this->Orders->OrdersOrderstatuses->save($statusEntity)) {
-                pr($statusEntity); die();
+            foreach($order->old_statuses as $status) {
+                $statusrecord = [
+                    'order_id' => $entity->id,
+                    'orderstatus_id' => $statuses[$status['status_id']],
+                    'created' => $status['created']->format('Y-m-d H:i:s')
+                ];
+                $statusEntity = $this->Orders->OrdersOrderstatuses->newEntity($statusrecord);
+                if(!$this->Orders->OrdersOrderstatuses->save($statusEntity)) {
+                    pr($statusEntity); die();
+                }
             }
             $s++;
         }
