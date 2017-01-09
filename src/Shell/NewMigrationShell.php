@@ -70,9 +70,9 @@ class NewMigrationShell extends Shell
         }
         ConnectionManager::config(Configure::consume('Datasources'));
         
-//        $this->FetchOrders->main();
+        $this->FetchOrders->main();
 //        $this->FetchSchooldata->main();
-        $this->FetchPhotos->main();
+//        $this->FetchPhotos->main();
         $this->out('<info>Finished at ' . date('d-m-Y H:i:s') .'</info>');
     }
 }
