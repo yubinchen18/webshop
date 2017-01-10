@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 <?php foreach ($orders as $order): ?>
-                <tr ondblclick="openView('orders', '<?= $order->id ?>')">
+                <tr ondblclick="openSupplierView('orders', '<?= $order->id ?>')">
                     <td><?= h($order->ident) ?></td>
                     <td><?= h($order->deliveryaddress->full_address) ?></td>
                     <td><?= h($order->invoiceaddress->full_address) ?></td>

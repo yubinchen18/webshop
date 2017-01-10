@@ -18,7 +18,7 @@
             </thead>
             <tbody>
             <?php foreach ($orders as $order): ?>
-                <tr ondblclick="openView('orders', '<?= $order->id ?>')">
+                <tr ondblclick="openSupplierView('orders', '<?= $order->id ?>')">
                     <td><?= h($order->ident) ?></td>
                     <td><?= h($order->invoiceaddress->fullName) ?></td>
                     <td><?= h($order->user->persons[0]->group->project->school->name) ?></td>

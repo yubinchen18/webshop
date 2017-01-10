@@ -7,10 +7,117 @@ Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function (RouteBuilder $routes) {
 
+    $routes->extensions(['csv','json']);
+     
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+   
+    $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
+    $routes->connect(
+        '/photos/:size/:id',
+        [
+            'controller' => 'Photos',
+            'action' => 'display',
+        ],
+        ['path', 'id', 'pass' => ['size','id']]
+    );
+    $routes->connect(
+        '/photos/view/:id',
+        ['controller' => 'Photos', 'action' => 'view'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/product-group/digital',
+        ['controller' => 'Photos', 'action' => 'digitalIndex']
+    );
+    $routes->connect(
+        '/photos/product-group/:productGroup/:id/**',
+        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
+        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id', 'filter']]
+    );
+    $routes->connect(
+        '/photos/product/:layout/:id/:suffix',
+        [
+            'controller' => 'Photos',
+            'action' => 'displayProduct',
+        ],
+        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
+    );
+    $routes->connect(
+        '/photos/filter',
+        ['controller' => 'Photos', 'action' => 'filterProductGroupIndex']
+    );
+    $routes->connect(
+        '/photos/pickfreegroupspicture/:id',
+        ['controller' => 'Photos', 'action' => 'pickFreeGroupsPicture'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect(
+        '/photos/changefreegroupspicture/:id/:orderlineid',
+        ['controller' => 'Photos', 'action' => 'changeFreeGroupsPicture'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]
+    );
+    $routes->connect(
+        '/orders/download/:id',
+        ['controller' => 'Orders', 'action' => 'download'],
+        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
+    );
+    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
+    
+    $routes->connect('/carts/beforeAdd', [
+        'controller' => 'Carts',
+        'action' => 'beforeAdd',
+    ]);
+    $routes->connect('/carts/add', [
+        'controller' => 'Carts',
+        'action' => 'add'
+    ]);
+    $routes->connect('/carts/display', [
+        'controller' => 'Carts',
+        'action' => 'display'
+    ]);
+    $routes->connect('/carts/update', [
+        'controller' => 'Carts',
+        'action' => 'update'
+    ]);
+    $routes->connect('/carts/updateFreeProductInCartline', [
+        'controller' => 'Carts',
+        'action' => 'updateFreeProductInCartline'
+    ]);
+    $routes->connect('/carts/useCoupon', [
+        'controller' => 'Carts',
+        'action' => 'useCoupon'
+    ]);
+    $routes->connect(
+        '/carts/delete/:id',
+        ['controller' => 'Carts','action' => 'delete'],
+        ['pass' => ['model','id']]
+    );
+    $routes->connect('/carts/orderInfo', [
+        'controller' => 'Carts',
+        'action' => 'orderInfo'
+    ]);
+    $routes->connect('/carts/confirm', [
+        'controller' => 'Carts',
+        'action' => 'confirm'
+    ]);
+    $routes->connect(
+        '/carts/zipcode/:zipcode',
+        ['controller' => 'Carts', 'action' => 'zipcode'],
+        ['zipcode', 'pass' => ['zipcode']]
+    );
+    $routes->connect(
+        '/orders/:action',
+        ['controller' => 'Orders'],
+        []
+    );
+    
     Router::prefix('admin', function ($routes) {
         
         $routes->extensions(['csv','json']);
         
+        $routes->connect('/', ['controller' => 'Orders', 'action' => 'index']);
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
         $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
@@ -223,111 +330,6 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->fallbacks('InflectedRoute');
     });
     
-    $routes->extensions(['csv','json']);
-     
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-   
-    $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
-    $routes->connect(
-        '/photos/:size/:id',
-        [
-            'controller' => 'Photos',
-            'action' => 'display',
-        ],
-        ['path', 'id', 'pass' => ['size','id']]
-    );
-    $routes->connect(
-        '/photos/view/:id',
-        ['controller' => 'Photos', 'action' => 'view'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-    );
-    $routes->connect(
-        '/photos/product-group/digital',
-        ['controller' => 'Photos', 'action' => 'digitalIndex']
-    );
-    $routes->connect(
-        '/photos/product-group/:productGroup/:id/**',
-        ['controller' => 'Photos', 'action' => 'productGroupIndex'],
-        ['productGroup', 'id' => RouteBuilder::UUID, 'pass' => ['productGroup', 'id', 'filter']]
-    );
-    $routes->connect(
-        '/photos/product/:layout/:id/:suffix',
-        [
-            'controller' => 'Photos',
-            'action' => 'displayProduct',
-        ],
-        ['layout', 'id', 'suffix', 'pass' => ['layout','id' ,'suffix']]
-    );
-    $routes->connect(
-        '/photos/filter',
-        ['controller' => 'Photos', 'action' => 'filterProductGroupIndex']
-    );
-    $routes->connect(
-        '/photos/pickfreegroupspicture/:id',
-        ['controller' => 'Photos', 'action' => 'pickFreeGroupsPicture'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-    );
-    $routes->connect(
-        '/photos/changefreegroupspicture/:id/:orderlineid',
-        ['controller' => 'Photos', 'action' => 'changeFreeGroupsPicture'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id', 'orderlineid']]
-    );
-    $routes->connect(
-        '/orders/download/:id',
-        ['controller' => 'Orders', 'action' => 'download'],
-        ['id' => RouteBuilder::UUID, 'pass' => ['id']]
-    );
-    $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
-    $routes->connect('/logout', ['controller' => 'Users', 'action' => 'logout']);
-    
-    $routes->connect('/carts/beforeAdd', [
-        'controller' => 'Carts',
-        'action' => 'beforeAdd',
-    ]);
-    $routes->connect('/carts/add', [
-        'controller' => 'Carts',
-        'action' => 'add'
-    ]);
-    $routes->connect('/carts/display', [
-        'controller' => 'Carts',
-        'action' => 'display'
-    ]);
-    $routes->connect('/carts/update', [
-        'controller' => 'Carts',
-        'action' => 'update'
-    ]);
-    $routes->connect('/carts/updateFreeProductInCartline', [
-        'controller' => 'Carts',
-        'action' => 'updateFreeProductInCartline'
-    ]);
-    $routes->connect('/carts/useCoupon', [
-        'controller' => 'Carts',
-        'action' => 'useCoupon'
-    ]);
-    $routes->connect(
-        '/carts/delete/:id',
-        ['controller' => 'Carts','action' => 'delete'],
-        ['pass' => ['model','id']]
-    );
-    $routes->connect('/carts/orderInfo', [
-        'controller' => 'Carts',
-        'action' => 'orderInfo'
-    ]);
-    $routes->connect('/carts/confirm', [
-        'controller' => 'Carts',
-        'action' => 'confirm'
-    ]);
-    $routes->connect(
-        '/carts/zipcode/:zipcode',
-        ['controller' => 'Carts', 'action' => 'zipcode'],
-        ['zipcode', 'pass' => ['zipcode']]
-    );
-    $routes->connect(
-        '/orders/:action',
-        ['controller' => 'Orders'],
-        []
-    );
     Router::prefix('api', function ($routes) {
         $routes->extensions(['json']);
 

@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta charset="utf-8" />
-        <title>Hoogstraten Fotografie Admin - <?= __($this->request->params['controller']) .' - '. __($this->request->params['action']) ?></title>
+        <title>Hoogstraten Fotografie Leverancier - <?= __($this->request->params['controller']) .' - '. __($this->request->params['action']) ?></title>
 
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
