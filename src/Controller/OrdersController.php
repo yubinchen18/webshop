@@ -104,13 +104,14 @@ class OrdersController extends AppController
                 return $this->redirect(['controller' => 'carts', 'action' => 'orderInfo']);
             }
         }
+        
+        $this->request->session()->write('order', $order);
         switch ($order->payment_method) {
             default:
                 return $this->redirect(['controller' => 'orders', 'action' => 'success']);
                 break;
                 
             case "ideal":
-                $this->request->session()->write('order', $order);
                 $this->request->session()->write('ideal-issuer', $data['issuerId']);
                 return $this->redirect(['controller' => 'orders', 'action' => 'payment']);
                 break;
@@ -207,13 +208,18 @@ class OrdersController extends AppController
     public function success()
     {
         $order = $this->request->session()->read('order');
+        if(empty($order)) {
+            return $this->redirect(['controller' => 'photos']);
+        }
         $this->request->session()->write('order', null);
-        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')])->first();
+        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL'])->first();
+        
         foreach ($cart->coupons as $coupon) {
             $this->Orders->Carts->Coupons->delete($coupon);
         }
         $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
         $this->Orders->Carts->save($newcart);
+        pr($order);
         $this->set(compact('order'));
     }
     

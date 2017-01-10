@@ -93,7 +93,7 @@ class AppController extends Controller
         }
         
         $this->Carts = TableRegistry::get('Carts');
-        $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id')]);
+        $cart = $this->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL']);
         if ($cart) {
             $cart = $cart->first();
             if (!empty($cart['cartlines'])) {
