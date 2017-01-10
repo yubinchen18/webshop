@@ -32,12 +32,13 @@
                                 ['escape' => false, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'false']
                         );  ?>
                         <ul class="dropdown-menu pull-right" aria-labelledby="dropdown">
-                          <li><?= $this->Html->link(__('Hoe werkt het'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
-                          <li><?= $this->Html->link(__('Opties'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
-                          <li><?= $this->Html->link(__('Info voor scholen'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
-                          <li><?= $this->Html->link(__('Klantenservice'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
-                          <li><?= $this->Html->link(__('Veelgestelde'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
-                          <li><?= $this->Html->link(__('Uitloggen'), ['controller' => 'Users', 'action' => 'logout', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Over Hoogstraten'), ['controller' => 'Pages', 'action' => 'display','hoogstraten', 'prefix' => false], ['class' => 'even']); ?></li>  
+                          <li><?= $this->Html->link(__('Hoe werkt het'), ['controller' => 'Pages', 'action' => 'display','hoe_werkt_het', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Contact'), ['controller' => 'Pages', 'action' => 'display','contact', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Info voor scholen'), ['controller' => 'Pages', 'action' => 'display','info_voor_scholen', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Voorwaarden'), ['controller' => 'Pages', 'action' => 'display','voorwaarden', 'prefix' => false], ['class' => 'even']); ?></li>
+                          <li><?= $this->Html->link(__('Veelgestelde vragen'), ['controller' => 'Pages', 'action' => 'display','veelgestelde_vragen', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Uitloggen'), ['controller' => 'Users', 'action' => 'logout', 'prefix' => false], ['class' => 'even']); ?></li>
                         </ul>
                     </div>
                     <div class="small-cart">
