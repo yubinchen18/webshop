@@ -51,7 +51,7 @@ class SendDownloadlinksShell extends Shell
             
             if($this->Orders->sendDownloadlink($order)) {
                 $patched = $this->Orders->patchEntity($order, ['link_sent' => 1]);
-//                $this->Orders->save($patched);
+                $this->Orders->save($patched);
                 
                 $this->out('Link send for order #'. $order->ident);
             }
