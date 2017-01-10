@@ -172,6 +172,24 @@ class OrdersTable extends Table
         return $this->send($cakeMail);
     }
     
+    
+    public function sendDownloadlink($order)
+    {
+        $order = $this->get($order->id, ['contain' => ['Invoiceaddresses']]);
+        
+        $cakeMail = new Email();
+        $cakeMail->from([Configure::read('App.email') => Configure::read('App.title')]);
+        $cakeMail
+            ->to($order->invoiceaddress->email)
+            ->subject(__('U kunt uw bestanden nu downloaden'))
+            ->template('download_digital_prints')
+            ->emailFormat('html')
+            ->viewVars(compact('order'))
+            ->returnPath([Configure::read('App.email') => Configure::read('App.title')]);
+        
+        return $this->send($cakeMail);
+    }
+    
     public function send($cakeMail)
     {
         return $cakeMail->send();

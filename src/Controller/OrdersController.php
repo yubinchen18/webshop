@@ -25,6 +25,7 @@ class OrdersController extends AppController
         $this->loadComponent('CakeIdeal.CakeIdeal', [
             'certificatesFolder' => ROOT . DS . 'plugins' . DS . 'CakeIdeal' . DS . 'config' . DS . 'certificates' . DS
         ]);
+        $this->Auth->allow(['download']);
     }
     
     /**
@@ -209,17 +210,17 @@ class OrdersController extends AppController
     public function success()
     {
         $order = $this->request->session()->read('order');
-//        if(empty($order)) {
-//            return $this->redirect(['controller' => 'photos']);
-//        }
-//        $this->request->session()->write('order', null);
-//        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL'])->first();
-//        
-//        foreach ($cart->coupons as $coupon) {
-//            $this->Orders->Carts->Coupons->delete($coupon);
-//        }
-//        $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
-//        $this->Orders->Carts->save($newcart);
+        if(empty($order)) {
+            return $this->redirect(['controller' => 'photos']);
+        }
+        $this->request->session()->write('order', null);
+        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL'])->first();
+        
+        foreach ($cart->coupons as $coupon) {
+            $this->Orders->Carts->Coupons->delete($coupon);
+        }
+        $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
+        $this->Orders->Carts->save($newcart);
         $this->Orders->sendConfirmation($order);
         $this->set(compact('order'));
     }
@@ -260,9 +261,9 @@ class OrdersController extends AppController
         }
         
         //add files to zip
-        $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->toArray();
+        $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->contain(['Products']);
         foreach ($orderlines as $line) {
-            if ($line->article === 'GAF 13x19') {
+            if ($line->product->product_group !== 'digital') {
                 continue;
             }
             $photoId = $line['photo_id'];
@@ -291,7 +292,7 @@ class OrdersController extends AppController
         //send zip to the customer through response
         header("Content-Type: application/zip");
         header("Content-Length: " . filesize($fileName));
-        header("Content-Disposition: attachment; filename= . $fileName");
+        header("Content-Disposition: attachment; filename=fotos.zip");
         readfile($fileName);
 
         unlink($fileName);
