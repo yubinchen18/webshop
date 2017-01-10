@@ -45,7 +45,7 @@ class CsvView extends AppView
 
     protected function _header($header)
     {
-        fputcsv($this->csv, $header);
+        fputcsv($this->csv, $header, ";");
     }
 
     protected function _map($row)
@@ -74,7 +74,7 @@ class CsvView extends AppView
         foreach ($this->viewVars[$serialize] as $row) {
             $mapped = $this->_map($row);
 
-            fputcsv($this->csv, $mapped);
+            fputcsv($this->csv, $mapped, ";");
         }
     }
 }
