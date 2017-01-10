@@ -37,6 +37,7 @@
                           <li><?= $this->Html->link(__('Info voor scholen'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
                           <li><?= $this->Html->link(__('Klantenservice'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false], ['class' => 'even']); ?></li>
                           <li><?= $this->Html->link(__('Veelgestelde'), ['controller' => 'Pages', 'action' => 'display', 'prefix' => false]); ?></li>
+                          <li><?= $this->Html->link(__('Uitloggen'), ['controller' => 'Users', 'action' => 'logout', 'prefix' => false]); ?></li>
                         </ul>
                     </div>
                     <div class="small-cart">
