@@ -11,7 +11,9 @@ Router::scope('/', function (RouteBuilder $routes) {
      
     $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/inloggen', ['controller' => 'Users', 'action' => 'login']);
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    $routes->connect('/pages/:page', 
+            ['controller' => 'Pages', 'action' => 'display'],
+            ['pass' => ['page']]);
    
     $routes->connect('/photos', ['controller' => 'Photos', 'action' => 'index']);
     $routes->connect(
