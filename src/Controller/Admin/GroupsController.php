@@ -152,7 +152,9 @@ class GroupsController extends AppController
     public function getStudentsByGroup($id = null)
     {
         $groups =  $this->Groups->get($id, [
-           'contain' => ['Persons', 'Projects']
+           'contain' => ['Persons' => function($q) {
+            return $q->order(['firstname' => 'ASC']);
+           }, 'Projects']
         ]);
         $this->set(compact('groups', $groups));
     }
