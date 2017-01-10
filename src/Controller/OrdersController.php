@@ -208,24 +208,25 @@ class OrdersController extends AppController
     public function success()
     {
         $order = $this->request->session()->read('order');
-        if(empty($order)) {
-            return $this->redirect(['controller' => 'photos']);
-        }
-        $this->request->session()->write('order', null);
-        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL'])->first();
-        
-        foreach ($cart->coupons as $coupon) {
-            $this->Orders->Carts->Coupons->delete($coupon);
-        }
-        $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
-        $this->Orders->Carts->save($newcart);
-        pr($order);
+//        if(empty($order)) {
+//            return $this->redirect(['controller' => 'photos']);
+//        }
+//        $this->request->session()->write('order', null);
+//        $cart = $this->Orders->Carts->find('byUserid', ['user_id' => $this->Auth->user('id'), 'order_id IS NULL'])->first();
+//        
+//        foreach ($cart->coupons as $coupon) {
+//            $this->Orders->Carts->Coupons->delete($coupon);
+//        }
+//        $newcart = $this->Orders->Carts->patchEntity($cart, ['order_id' => $order->id]);
+//        $this->Orders->Carts->save($newcart);
+        $this->Orders->sendConfirmation($order);
         $this->set(compact('order'));
     }
     
     public function failure()
     {
         $order = $this->request->session()->read('order');
+        $this->Orders->sendConfirmation($order, 'failed');
         $this->set(compact('order'));
     }
     

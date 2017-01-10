@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Mailer\Email;
+use Cake\Core\Configure;
 
 // @codingStandardsIgnoreStart
 /**
@@ -151,6 +153,28 @@ class OrdersTable extends Table
             $entity->ident = $this->createIdent();
         }
         return $entity;
+    }
+    
+    public function sendConfirmation($order, $payment_status = '')
+    {
+        $order = $this->get($order->id, ['contain' => ['Invoiceaddresses','Deliveryaddresses','Orderlines.Products']]);
+
+        $cakeMail = new Email('default');
+        $cakeMail->from([Configure::read('App.email') => Configure::read('App.title')]);
+        $cakeMail
+            ->to($order->invoiceaddress->email)
+            ->subject(__('Bevestiging van uw bestelling'))
+            ->domain('bestellen.hoogstratenfotografie.nl')
+            ->template('order_confirmation')
+            ->emailFormat('html')
+            ->viewVars(compact('order','payment_status'))
+            ->returnPath([Configure::read('App.email') => Configure::read('App.title')]);
+        return $this->send($cakeMail);
+    }
+    
+    public function send($cakeMail)
+    {
+        return $cakeMail->send();
     }
     
     /**

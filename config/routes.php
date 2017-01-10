@@ -117,8 +117,8 @@ Router::scope('/', function (RouteBuilder $routes) {
         
         $routes->extensions(['csv','json']);
         
-        $routes->connect('/', ['controller' => 'Orders', 'action' => 'index']);
         $routes->connect('/login', ['controller' => 'Users', 'action' => 'login']);
+        $routes->connect('/inloggen', ['controller' => 'Users', 'action' => 'login']);
         $routes->connect('/users/logout', ['controller' => 'Users', 'action' => 'logout']);
         $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
         $routes->connect('/users/add', ['controller' => 'Users', 'action' => 'add']);

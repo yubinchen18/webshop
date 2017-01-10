@@ -3,6 +3,8 @@ use Cake\Core\Configure;
 use Cake\Network\Request;
 
 Configure::write('DiscountPrice', 3.98);
+Configure::write('App.email','info@hoogstratenfotografie.nl');
+Configure::write('App.title','Hoogstraten Fotografie B.V.');
 
 $config = [
     'debug' => true,
