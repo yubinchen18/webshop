@@ -35,21 +35,21 @@ class CakeIdealComponent extends Component
      */
     public $defaults = array(
         'authenticationType' => 'SHA1_RSA', // Authentication type to use
-        'acquirersCertificate' => 'simulator/simulator-2048.cer', // Acquirer's certificate
+        'acquirersCertificate' => 'production/ideal.cer', // Acquirer's certificate
         'currency' => 'EUR', // Do not change currenty unless you have specific reasons to do so
         'description' => 'default description', // Used when you do not want to use transaction specific descriptions
         'entranceCode' => '123456789', // Used when you do not want to use transaction specific entrance codes
         'expirationPeriod' => 'PT1H', // PT1H (1 hour)
-        'url' => 'ssl://www.ideal-checkout.nl:443/simulator/', // Address of the iDEAL acquiring server
+        'url' => 'ssl://ideal.rabobank.nl:443/ideal/iDEALv3', // Address of the iDEAL acquiring server
         'language' => 'nl', // Used only for showing errormessages in the prefered language
-        'merchantId' => '123456789', // Merchant ID can be retrieved via the iDEAL Dashboard
-        'privateKey' => 'simulator/private-2048.key', // Private key file
-        'privateKeyPass' => 'Password', // Private key file password
-        'privateCert' => 'simulator/private-2048.cer', // Private certificate
+        'merchantId' => '002091281', // Merchant ID can be retrieved via the iDEAL Dashboard
+        'privateKey' => 'production/private.key', // Private key file
+        'privateKeyPass' => 'x533ded', // Private key file password
+        'privateCert' => 'production/private.cer', // Private certificate
         'subId' => 0, // Do not change subID unless you have specific reasons to do so
         'timeout' => 10, // Do not change AcquirerTimeout unless you have specific reasons to do so
-        'merchantReturnUrl' => false,
-        'certificatesFolder' => false
+        'automatic' => false, // Status request and transaction request are handled automatic
+        'merchantReturnUrl' => false
     );
 
     /**
