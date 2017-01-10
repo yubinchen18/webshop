@@ -9,6 +9,7 @@ use App\Lib\ImageHandler;
 use ZipArchive;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\Core\Configure;
 
 /**
  * Orders Controller

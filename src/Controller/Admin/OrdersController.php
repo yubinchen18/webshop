@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController\Admin;
 use Cake\Network\Exception\NotFoundException;
+use Cake\Core\Configure;
 
 /**
  * Orders Controller
@@ -70,7 +71,7 @@ class OrdersController extends AppController
         }
         foreach ($order->orderlines as $orderline) {
             if ($orderline->product->has_discount === 1) {
-                $orderline->discountprice = Configure::read('DiscountPrice');;
+                $orderline->discountprice = Configure::read('DiscountPrice');
             }
         }
         

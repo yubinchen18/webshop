@@ -196,13 +196,15 @@
                                             <span class='quantity-<?= $orderline->id; ?>'></span>
                                             <div class='normalprice'>1 x <?= $this->Number->currency($orderline->product->price_ex, 'EUR'); ?></div>
                                             <div class='discountprice'><?= $orderline->quantity-1; ?> x <?= $this->Number->currency($orderline->discountprice, 'EUR'); ?></div>
+                                            <?php $subtotal = $orderline->product->price_ex + (($orderline->quantity-1)*$orderline->discountprice); ?>
                                         <?php else: ?>
                                             <span class='quantity-<?= $orderline->id; ?>'><?= $orderline->quantity; ?></span>
                                             <span> x <?= $this->Number->currency($orderline->product->price_ex, 'EUR'); ?></span>
+                                            <?php $subtotal = $orderline->product->price_ex*$orderline->quantity; ?>
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?= $this->Number->currency($orderline->price_ex, 'EUR'); ?>
+                                        <?= $this->Number->currency(!empty($orderline->price_ex) ? $orderline->price_ex : $subtotal, 'EUR'); ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
