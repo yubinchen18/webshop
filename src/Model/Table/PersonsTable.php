@@ -186,12 +186,20 @@ class PersonsTable extends BaseTable
         if (empty($options['searchTerm'])) {
             throw new \InvalidArgumentException('Missing search term');
         }
-        return $query
-                ->where(['Persons.lastname LIKE' => "%".$options['searchTerm']."%"])
-                ->orWhere(['Persons.firstname LIKE' => "%".$options['searchTerm']."%"])
-                ->contain('Groups.Projects.Schools')
-                ->limit(6)
+        
+        $searchTerms = explode(' ', $options['searchTerm']);
+        
+        foreach($searchTerms as $term) {
+            $query->andWhere(['OR' => [
+                                'Persons.firstname LIKE' => "%".$term."%",
+                                'Persons.lastname LIKE' => "%".$term."%"]
+                            ]);
+        }
+        
+        return $query->contain('Groups.Projects.Schools')
+                ->limit(12)
                 ->order(['Persons.lastname' => 'asc']);
+        
     }
     
     public function findForGroup(Query $query, array $options)
