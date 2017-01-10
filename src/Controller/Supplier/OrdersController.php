@@ -3,6 +3,7 @@ namespace App\Controller\Supplier;
 
 use App\Controller\AppController\Supplier;
 use Cake\Network\Exception\NotFoundException;
+use Cake\Core\Configure;
 
 /**
  * Orders Controller
