@@ -70,7 +70,7 @@ class OrdersController extends AppController
         }
         foreach ($order->orderlines as $orderline) {
             if ($orderline->product->has_discount === 1) {
-                $orderline->discountprice = 3.78;
+                $orderline->discountprice = Configure::read('DiscountPrice');;
             }
         }
         

@@ -75,10 +75,10 @@ class OrdersController extends AppController
             
             $lineprice = 0;
             if ($line->product->has_discount === 1) {
-                $line->discountprice = 3.78;
+                $line->discountprice = Configure::read('DiscountPrice');
                 $lineprice = $line->product->price_ex;
                 for ($n=2; $n<=$line->quantity; $n++) {
-                    $lineprice += 3.78;
+                    $lineprice += Configure::read('DiscountPrice');
                 }
             }
             
