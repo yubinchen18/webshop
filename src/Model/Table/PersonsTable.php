@@ -188,6 +188,7 @@ class PersonsTable extends BaseTable
         }
         return $query
                 ->where(['Persons.lastname LIKE' => "%".$options['searchTerm']."%"])
+                ->orWhere(['Persons.firstname LIKE' => "%".$options['searchTerm']."%"])
                 ->contain('Groups.Projects.Schools')
                 ->limit(6)
                 ->order(['Persons.lastname' => 'asc']);
