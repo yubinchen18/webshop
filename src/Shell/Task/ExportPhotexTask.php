@@ -288,9 +288,9 @@ class ExportPhotexTask extends Shell
             $this->server['port'] = 21;
             $this->server['user'] = 'ftpuser';
             $this->server['pass'] = '2141314';
-            $connection = ftp_connect($photexHost, 21);
             $this->ftpPackingslipsFolder = "/ftp/hoogstraten pakbonnen";
             $this->ftpPhotosFolder = "/ftp/hoogstraten";
+            $connection = ftp_connect($this->server['host'], 21);
         }
         if( $this->ftpConfig === 'xseeding') {
             $this->server['host'] = "ftp.xseeding.nl";	// Test
