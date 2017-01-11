@@ -259,7 +259,7 @@ class PDFCardCreator
             "KvKnr: 244875300000" . PHP_EOL .
             "IBAN: NL87783666" . PHP_EOL
         );
-        $pdf = $this->pdf->Output("F", $path);
+        $pdf = $this->pdf->Output($path, "F");
     }
     
     private function createDir($path)
