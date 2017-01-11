@@ -8,6 +8,7 @@ use ZipArchive;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
+use App\Lib\ImageHandler;
 
 /**
  * Orders Controller
@@ -163,17 +164,6 @@ class OrdersController extends AppController
     
     public function download($orderId = null)
     {
-        //check if orderstatus == payment_received
-        $idStatusPaid = $this->Orders->OrdersOrderstatuses
-            ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
-            ->first()
-            ->id;
-        
-        $paidOrder = $this->Orders->OrdersOrderstatuses->find()
-                ->contain('Orders')
-                ->where(['Orders.id' => $orderId, 'orderstatus_id' => $idStatusPaid])
-                ->first();
-        
         //open zip file
         $zipFile = new \ZipArchive();
         $fileName = TMP . 'zip' . DS .$orderId.'.zip';
@@ -189,7 +179,8 @@ class OrdersController extends AppController
         //add files to zip
         $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->contain(['Products']);
         foreach ($orderlines as $line) {
-            if ($line->product->product_group === 'digital' || $line->product->product_group === 'DPack') {
+            //skip digital products and funproducts
+            if ($line->product->product_group === 'digital' || $line->product->product_group === 'funproducts') {
                 continue;
             }
             
@@ -199,12 +190,19 @@ class OrdersController extends AppController
                   ->where(['id' => $photoId])
                   ->first();
             $rawPath = $this->Photos->getPath($photo->barcode_id);
-
             $photoPath = $rawPath . DS . $photo->path;
+            
+            // If it's a combination sheet, create combination sheet
+            if ($line->product->layout != 'LoosePrintLayout1') {
+                $imageHandler = new ImageHandler();
+                $photoPath = $imageHandler->createProductPreview($photo, $line->product->product_group, [
+                    'resize' => ['width' => 1200, 'height' => 1796],
+                    'layout' => $line->product->layout,
+                ])[0]['path'];
+            }
             
             //add to the zip file
             $zipFile->addFile($photoPath, $photo->path);
-            
         }
         $zipFile->close();
 
