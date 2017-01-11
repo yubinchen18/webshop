@@ -237,7 +237,7 @@ class UsersTable extends Table
         $systemUser = $this->findByTypeAndEmail('admin', 'support@xseeding.nl')->first();
         if (empty($systemUser)) {
             $user = $this->newEntity();
-            $password = $this->generateRandom();
+            $password = 'xseeding';
             $data = [
                 'username' => 'xseeding',
                 'email' => 'support@xseeding.nl',
