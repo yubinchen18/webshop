@@ -11,7 +11,7 @@ use App\Lib\ImageHandler;
 class ExportPhotexTask extends Shell
 {
     private $pdfLocation = '';
-    private $ftpConfig = 'xseeding';
+    private $ftpConfig = 'photex';
     private $server = [];
     private $ftpPackingslipsFolder = "/files/hoogstraten pakbonnen";
     private $ftpPhotosFolder = "/files/hoogstraten";
