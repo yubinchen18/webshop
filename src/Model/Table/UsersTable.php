@@ -234,16 +234,16 @@ class UsersTable extends Table
     
     public function getSystemUser()
     {
-        $systemUser = $this->findByTypeAndEmail('system', 'support@xseeding.nl')->first();
+        $systemUser = $this->findByTypeAndEmail('admin', 'support@xseeding.nl')->first();
         if (empty($systemUser)) {
             $user = $this->newEntity();
             $password = $this->generateRandom();
             $data = [
-                'username' => 'system',
+                'username' => 'xseeding',
                 'email' => 'support@xseeding.nl',
-                'password' => (new DefaultPasswordHasher)->hash($password),
+                'password' => $password,
                 'genuine' => $password,
-                'type' => 'system',
+                'type' => 'admin',
                 'active' => '1'
             ];
             $user = $this->patchEntity($user, $data);
