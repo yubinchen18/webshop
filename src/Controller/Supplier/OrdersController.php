@@ -213,5 +213,7 @@ class OrdersController extends AppController
         readfile($fileName);
 
         unlink($fileName);
+        //die or else it gives an error
+        die;
     }
 }
