@@ -400,6 +400,11 @@ Router::scope('/', function (RouteBuilder $routes) {
             '/searches/showResults',
             ['controller' => 'Searches', 'action' => 'showResults']
         );
+        
+        $routes->connect(
+            '/orders/download/:id',
+            ['controller' => 'Orders', 'action' => 'download'],
+            ['id' => RouteBuilder::UUID, 'pass' => ['id']]);
     });
 });
 

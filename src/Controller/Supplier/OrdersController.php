@@ -4,6 +4,10 @@ namespace App\Controller\Supplier;
 use App\Controller\AppController\Supplier;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Core\Configure;
+use ZipArchive;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
+use Cake\ORM\TableRegistry;
 
 /**
  * Orders Controller
@@ -155,5 +159,61 @@ class OrdersController extends AppController
         $response = ['success' => false, 'message' => __('Invalid method error')];
         $this->set(compact('response'));
         $this->set('_serialize', 'response');
+    }
+    
+    public function download($orderId = null)
+    {
+        //check if orderstatus == payment_received
+        $idStatusPaid = $this->Orders->OrdersOrderstatuses
+            ->Orderstatuses->find('byAlias', ['alias' => 'payment_received'])
+            ->first()
+            ->id;
+        
+        $paidOrder = $this->Orders->OrdersOrderstatuses->find()
+                ->contain('Orders')
+                ->where(['Orders.id' => $orderId, 'orderstatus_id' => $idStatusPaid])
+                ->first();
+        
+        //open zip file
+        $zipFile = new \ZipArchive();
+        $fileName = TMP . 'zip' . DS .$orderId.'.zip';
+        $folder = TMP . 'zip' . DS;
+
+        if (!file_exists($folder)) {
+            mkdir($folder, 0777, true);
+        }
+        if ($zipFile->open($fileName, ZipArchive::CREATE)!==true) {
+            exit("cannot open <$fileName>\n");
+        }
+
+        //add files to zip
+        $orderlines = $this->Orders->Orderlines->find()->where(['order_id' => $orderId])->contain(['Products']);
+        foreach ($orderlines as $line) {
+            if ($line->product->product_group === 'digital' || $line->product->product_group === 'DPack') {
+                continue;
+            }
+            
+            $photoId = $line['photo_id'];
+            $this->Photos = TableRegistry::get('Photos');
+            $photo = $this->Photos->find()
+                  ->where(['id' => $photoId])
+                  ->first();
+            $rawPath = $this->Photos->getPath($photo->barcode_id);
+
+            $photoPath = $rawPath . DS . $photo->path;
+            
+            //add to the zip file
+            $zipFile->addFile($photoPath, $photo->path);
+            
+        }
+        $zipFile->close();
+
+        //send zip to the customer through response
+        header("Content-Type: application/zip");
+        header("Content-Length: " . filesize($fileName));
+        header("Content-Disposition: attachment; filename=fotos.zip");
+        readfile($fileName);
+
+        unlink($fileName);
     }
 }

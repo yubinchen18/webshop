@@ -107,6 +107,29 @@
         </div>
     </div>
     
+    <div class='col-md-3'>
+        <div class='widget-box'>
+            <div class='widget-header'>
+                <h4 class='widget-title'><?=__('Download');?></h4>
+                <div class='widget-toolbar'>
+                    <a href='#' data-action='collapse'>
+                        <i class='ace-icon fa fa-chevron-up'></i>
+                    </a>
+                </div>
+            </div>
+            <div class='widget-body'>
+                <div class="widget-main">
+                     <?= $this->Html->link('Klik hier om de foto\'s te downloaden', [
+                        'controller' => 'orders',
+                        'action' => 'download',
+                        'id' => $order->id,
+                        '_full' => true
+                        ],['escape' => false]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!--<?php if ($order->invoiceaddress->id !== $order->deliveryaddress->id) : ?>-->
         <div class='col-md-3'>
             <div class='widget-box'>
