@@ -275,7 +275,11 @@ class ImageHandler
                 if (!key_exists($imageName, $done)) {
                     $tmpImageHandler = new ImageHandler();
                     //select source images to compile, thumbs have no watermark
-                    $tmpImageHandler->load($photoFolder . $sourceSize . DS . $photo->path);
+                    $sourcePath = $photoFolder . $sourceSize . DS . $photo->path;
+                    if ($sourceSize === 'full') {
+                        $sourcePath = $photoFolder . $photo->path;
+                    }
+                    $tmpImageHandler->load($sourcePath);
 
                     $tmpWidth = imagesx($tmpImageHandler->image);
                     $tmpHeight = imagesy($tmpImageHandler->image);

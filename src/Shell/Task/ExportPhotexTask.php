@@ -131,6 +131,7 @@ class ExportPhotexTask extends Shell
                     $sourcePath = $imageHandler->createProductPreview($orderline->photo, $orderline->product->product_group, [
                         'resize' => ['width' => 1200, 'height' => 1796],
                         'layout' => $orderline->product->layout,
+                        'sourceSize' => 'full'
                     ])[0]['path'];
                     $orderPackage['cachedPaths'][] = $sourcePath;
                 // If normal pictures, get the original photo
