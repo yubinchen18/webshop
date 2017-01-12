@@ -284,6 +284,8 @@ class ExportPhotexTask extends Shell
     }
     
     private function connectFtp() {
+        ini_set('memory_limit','-1');
+        
         if( $this->ftpConfig === 'photex') {
             $this->server['host'] = "188.204.242.61";	// Live
             $this->server['port'] = 21;
